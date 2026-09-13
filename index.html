@@ -13,6 +13,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
 
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <link rel="alternate icon" href="assets/logo.png">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -21,8 +23,15 @@
   <header class="header">
     <div class="container header-inner">
       <div class="brand">
-        <span class="brand-name">AGEVO<span class="brand-dot">.</span></span>
-        <span class="brand-sub">Bram Verhoeff</span>
+        <a href="./" class="brand-link" title="AgevoDev">
+          <picture>
+            <source srcset="assets/logo.svg" type="image/svg+xml">
+            <img src="assets/logo.png" alt="AgevoDev Software Development" class="brand-logo" height="38">
+          </picture>
+        </a>
+        <div class="brand-sub-badge">
+          <span class="brand-author">Bram Verhoeff</span>
+        </div>
       </div>
       <div class="server-status">
         <span class="status-dot"></span>

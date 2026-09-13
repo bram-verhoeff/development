@@ -62,26 +62,42 @@ body {
 
 .brand {
   display: flex;
-  align-items: baseline;
-  gap: 0.6rem;
+  align-items: center;
+  gap: 1rem;
 }
 
-.brand-name {
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  color: #ffffff;
+.brand-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
 }
 
-.brand-dot {
-  color: var(--cyan);
+.brand-logo {
+  height: 38px;
+  width: auto;
+  max-width: 170px;
+  display: block;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
-.brand-sub {
-  font-size: 0.85rem;
+.brand-link:hover .brand-logo {
+  transform: translateY(-1px);
+  opacity: 0.95;
+}
+
+.brand-sub-badge {
+  display: flex;
+  align-items: center;
+  border-left: 1px solid var(--border);
+  padding-left: 0.85rem;
+}
+
+.brand-author {
+  font-family: var(--font-body);
+  font-size: 0.84rem;
   color: var(--text-secondary);
   font-weight: 500;
+  letter-spacing: 0.02em;
 }
 
 .server-status {
@@ -309,5 +325,14 @@ body {
   .branch-btn {
     width: 100%;
     justify-content: center;
+  }
+}
+
+@media (max-width: 540px) {
+  .brand-sub-badge {
+    display: none;
+  }
+  .brand-logo {
+    height: 32px;
   }
 }

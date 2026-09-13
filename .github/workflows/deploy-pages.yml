@@ -30,6 +30,7 @@ jobs:
           
           # Copy portal files from main
           cp index.html style.css main.js dist/
+          [ -d assets ] && cp -r assets dist/ || true
           [ -f branches.json ] && cp branches.json dist/ || true
 
           # Fetch all branches from remote
