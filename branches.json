@@ -1,0 +1,12 @@
+{
+  "branches": [
+    {
+      "branch": "whammy",
+      "commit": "ff8bcf9",
+      "title": "Whammy | Gitaar Services & Afstellen Zoetermeer",
+      "description": "Goed onderhoud is de basis van een goede gitaar. Bij Whammy Gitaar Services in Zoetermeer zorg ik ervoor dat jouw gitaar perfect speelt en langer meegaat. Snaren vervangen vanaf 15 min, complete setups en reparatie.",
+      "url": "./branches/whammy/",
+      "status": "ONLINE"
+    }
+  ]
+}
