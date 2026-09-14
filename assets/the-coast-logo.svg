@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 60" fill="none">
+  <!-- Sun / Horizon Wave Graphic -->
+  <circle cx="28" cy="30" r="16" stroke="#D4A373" stroke-width="2" stroke-dasharray="2 2" opacity="0.6"/>
+  <path d="M16 32 C 22 26, 26 36, 32 30 C 36 26, 40 34, 44 32" stroke="#E76F51" stroke-width="2.5" stroke-linecap="round"/>
+  
+  <!-- Text Brand -->
+  <text x="56" y="31" font-family="'Plus Jakarta Sans', -apple-system, sans-serif" font-weight="800" font-size="22" letter-spacing="1.5" fill="#0E2A38">THE COAST</text>
+  <text x="57" y="44" font-family="'Inter', -apple-system, sans-serif" font-weight="600" font-size="8" letter-spacing="3.5" fill="#D4A373">BEACH HOUSE &bull; MONSTER</text>
+</svg>

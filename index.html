@@ -3,110 +3,1434 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agevo // Bram Verhoeff</title>
-  <meta name="description" content="Agevo development testserver van Bram Verhoeff.">
-  <meta name="author" content="Bram Verhoeff">
-  <meta name="robots" content="noindex, nofollow">
+
+  <!-- Primary SEO Meta Tags -->
+  <title>Beach House The Coast | Strandpaviljoen op Palen in Monster</title>
+  <meta name="title" content="Beach House The Coast | Strandpaviljoen op Palen in Monster">
+  <meta name="description" content="Welkom bij Beach House The Coast aan strandopgang Molenslag in Monster. Geniet jaarrond van een adembenemend 360° uitzicht over zee, verse vis en seizoensgerechten, borrels en onvergetelijke strandfeesten en bruiloften.">
+  <meta name="keywords" content="The Coast Monster, strandpaviljoen Monster, beach club Westland, eten aan zee, strandtent op palen, Zandmotor Monster, bruiloft aan zee, bedrijfsfeest strand, terras aan zee, Molenslag Monster">
+  <meta name="author" content="Beach House The Coast">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://www.thecoast.nl/">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="restaurant">
+  <meta property="og:url" content="https://www.thecoast.nl/">
+  <meta property="og:title" content="Beach House The Coast | Strandpaviljoen op Palen in Monster">
+  <meta property="og:description" content="360° uitzicht over zee en zand, heerlijke verse gerechten en een relaxte strandvibe. Jaarrond geopend aan strandopgang Molenslag, Monster.">
+  <meta property="og:image" content="assets/hero-beach.jpg">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
-  <link rel="alternate icon" href="assets/logo.png">
+  <link rel="icon" type="image/svg+xml" href="assets/the-coast-logo.svg">
   <link rel="stylesheet" href="style.css">
+
+  <!-- Structured Data / Schema.org -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Restaurant",
+    "name": "Beach House The Coast",
+    "image": "https://www.thecoast.nl/assets/hero-beach.jpg",
+    "url": "https://www.thecoast.nl/",
+    "telephone": "+31850879977",
+    "email": "aanvragen@thecoast.nl",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Molenslag",
+      "addressLocality": "Monster",
+      "postalCode": "2681 VP",
+      "addressCountry": "NL"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 52.035525,
+      "longitude": 4.17113
+    },
+    "servesCuisine": "Modern European, Seafood, Beach Dining",
+    "priceRange": "€€",
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        "opens": "10:30",
+        "closes": "21:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Saturday", "Sunday"],
+        "opens": "10:00",
+        "closes": "21:00"
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 
-  <!-- Top Header -->
-  <header class="header">
-    <div class="container header-inner">
-      <div class="brand">
-        <a href="./" class="brand-link" title="AgevoDev">
-          <picture>
-            <source srcset="assets/logo.svg" type="image/svg+xml">
-            <img src="assets/logo.png" alt="AgevoDev Software Development" class="brand-logo" height="38">
-          </picture>
-        </a>
-        <div class="brand-sub-badge">
-          <span class="brand-author">Bram Verhoeff</span>
+  <!-- Scroll Progress Indicator -->
+  <div class="scroll-progress-bar" id="scrollProgressBar"></div>
+
+  <!-- ==================== TOP COASTAL INTELLIGENCE BAR ==================== -->
+  <aside class="announcement-bar" id="announcementBar" aria-label="Status en getijden">
+    <div class="container announcement-inner">
+      <div class="announcement-left">
+        <div class="status-pill" id="liveStatusPill">
+          <span class="status-dot" id="liveStatusDot"></span>
+          <span id="liveStatusText">Nu Geopend tot 21:00</span>
+        </div>
+        <div class="tide-sunset-pill" id="tideSunsetPill">
+          <span>🌊 Getijde: Vloed (15:20)</span>
+          <span>&bull;</span>
+          <span>🌅 Zonsondergang: 20:04 uur</span>
         </div>
       </div>
-      <div class="server-status">
-        <span class="status-dot"></span>
-        <span>Testserver Actief</span>
+
+      <div class="announcement-right">
+        <div class="weather-badge" id="monsterWeatherBadge">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          <span>Monster Strand: 22°C &bull; ZW 14 kts</span>
+        </div>
+
+        <button class="sound-toggle-btn" id="soundToggleBtn" aria-label="Kustgeluid aan of uitzetten">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+          <span id="soundBtnText">Zeegeluid</span>
+        </button>
+
+        <a href="tel:+31850879977" class="announcement-phone" style="color:var(--c-sand-200);">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          <span>085 - 087 99 77</span>
+        </a>
       </div>
+    </div>
+  </aside>
+
+  <!-- ==================== HEADER & NAVBAR ==================== -->
+  <header class="site-header" id="siteHeader">
+    <div class="container nav-container">
+      <a href="#home" class="brand-link" aria-label="The Coast Beach House Home">
+        <img src="assets/the-coast-logo.svg" alt="The Coast Beach House Monster" class="brand-logo-img" height="46">
+      </a>
+
+      <!-- Navigation Menu -->
+      <nav class="main-nav" id="mainNav">
+        <ul class="nav-menu">
+          <li><a href="#beleving" class="nav-link">Beleving</a></li>
+          <li><a href="#menukaart" class="nav-link">Menukaart</a></li>
+          <li><a href="#zandmotor" class="nav-link">Strand &amp; Zandmotor</a></li>
+          <li><a href="#events" class="nav-link">Events &amp; Bruiloften</a></li>
+          <li><a href="#galerij" class="nav-link">Sfeerbeelden</a></li>
+          <li><a href="#locatie" class="nav-link">Locatie &amp; Route</a></li>
+          <li><a href="#faq" class="nav-link">FAQ</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <button class="btn btn-primary btn-sm open-booking-btn" id="navBookBtn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            <span>Tafel Reserveren</span>
+          </button>
+          <button class="btn btn-outline btn-sm open-quote-btn" id="navQuoteBtn">
+            <span>Event Offerte</span>
+          </button>
+        </div>
+      </nav>
+
+      <!-- Mobile Hamburger -->
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Menu openen" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
     </div>
   </header>
 
-  <!-- Main Content -->
-  <main class="main-content">
-    <div class="container">
-      
-      <!-- Intro / Title -->
-      <div class="title-area">
-        <h1 class="page-title">Git Branches</h1>
-        <p class="page-subtitle">Kies een branch om het bijbehorende testproduct te openen:</p>
+  <main>
+    <!-- ==================== HERO SECTION ==================== -->
+    <section class="hero" id="home">
+      <div class="hero-bg">
+        <img src="assets/hero-beach.jpg" alt="Panoramisch uitzicht over de Noordzee bij The Coast in Monster" class="hero-img">
       </div>
+      <div class="hero-overlay"></div>
 
-      <!-- Branches Grid -->
-      <div class="branches-grid" id="branches-container">
-        <!-- Dynamically loaded via main.js -->
-        <div class="loading">Bezig met laden van branches...</div>
-      </div>
-
-      <!-- Custom Project Call to Action -->
-      <section class="cta-card">
-        <div class="cta-text">
-          <div class="cta-pill">
-            <span class="cta-pill-dot"></span>
-            <span>Maatwerk Software &amp; Web</span>
+      <div class="container">
+        <div class="hero-content">
+          
+          <div class="hero-top-badges">
+            <span class="hero-time-greeting" id="heroGreeting">Goedemiddag aan de kust</span>
+            <span class="hero-location-badge">Strandopgang Molenslag &bull; Monster</span>
           </div>
-          <h2 class="cta-heading">Een eigen website of programma laten bouwen?</h2>
-          <p class="cta-sub">
-            Wil je ook een moderne website, webapplicatie of software op maat laten maken? Vraag vrijblijvend een offerte of kennismaking aan via <strong>agevodev.nl</strong>.
+
+          <h1 class="hero-title">
+            Everything’s better at <span>The Coast</span>
+          </h1>
+
+          <p class="hero-desc">
+            Een uitzicht over zee en zand, zover je oog reikt. Het ritme van de branding en de geur van zilt. Welkom in ons iconische strandpaviljoen op hoge palen, waar je 365 dagen per jaar geniet van ontbijt, lunch, diner, cocktails en onvergetelijke strandfeesten.
+          </p>
+
+          <div class="hero-buttons">
+            <button class="btn btn-primary btn-lg open-booking-btn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+              <span>Binnen Tafel Reserveren</span>
+            </button>
+            <a href="#menukaart" class="btn btn-white btn-lg">
+              <span>Bekijk de Menukaart</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg>
+            </a>
+            <a href="#events" class="btn btn-outline btn-lg" style="color:#fff; border-color:rgba(255,255,255,0.4);">
+              <span>Events &amp; Bruiloften</span>
+            </a>
+          </div>
+
+          <!-- Feature Highlights Bar -->
+          <div class="hero-features-bar">
+            <div class="hero-feature-item">
+              <div class="feature-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
+              </div>
+              <div class="feature-text">
+                <h4>360° Zeezicht</h4>
+                <p>Verheven op hoge palen</p>
+              </div>
+            </div>
+
+            <div class="hero-feature-item">
+              <div class="feature-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+              </div>
+              <div class="feature-text">
+                <h4>Jaarrond Geopend</h4>
+                <p>365 dagen per jaar open</p>
+              </div>
+            </div>
+
+            <div class="hero-feature-item">
+              <div class="feature-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              </div>
+              <div class="feature-text">
+                <h4>Terras op Inloop</h4>
+                <p>Buiten geen reservering nodig</p>
+              </div>
+            </div>
+
+            <div class="hero-feature-item">
+              <div class="feature-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 5.172a2 2 0 0 0-2.828 0L2.828 9.515a2 2 0 0 0 0 2.828l7.072 7.072a2 2 0 0 0 2.828 0l7.072-7.072a2 2 0 0 0 0-2.828L12.657 5.172a2 2 0 0 0-2.657 0z"></path></svg>
+              </div>
+              <div class="feature-text">
+                <h4>Honden Welkom</h4>
+                <p>Gezellig mee na de wandeling</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TERRACE INLOOP NOTICE ==================== -->
+    <section class="walkin-banner">
+      <div class="container">
+        <div class="walkin-card">
+          <div class="walkin-content">
+            <div class="walkin-icon-wrap">☀️</div>
+            <div class="walkin-text">
+              <h3>Zomers Terras op Vrije Inloop</h3>
+              <p>
+                Geen tafel meer beschikbaar binnen? Op mooie dagen ben je altijd van harte welkom op ons zonneterras. Ons terras werkt <strong>uitsluitend op inloopbasis</strong>, vooraf reserveren voor buiten is dus niet nodig!
+              </p>
+            </div>
+          </div>
+          <button class="btn btn-white btn-sm open-booking-btn">
+            <span>Binnen Tafel Reserveren</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== DE BELEVING (4 SEIZOENEN) ==================== -->
+    <section class="section section-bg-sand" id="beleving">
+      <div class="container">
+        <div class="grid-2">
+          
+          <div class="about-text">
+            <span class="section-tag">De Ultieme Kustbeleving</span>
+            <h2 class="section-title">Gebouwd op palen: 360 graden panorama over de Noordzee</h2>
+            <p>
+              Beach House The Coast staat op stevige houten palen aan de voet van de Monsterse duinen. Hierdoor kijk je altijd over het strand en de golven heen, zonder dat iets je blik belemmert. Een spektakel dat in elk seizoen een compleet ander gezicht toont.
+            </p>
+
+            <!-- Interactive 4-Seasons Switcher -->
+            <div class="seasons-selector">
+              <div class="season-tabs-header">
+                <button class="season-btn active" data-season="lente">🌸 Lente</button>
+                <button class="season-btn" data-season="zomer">☀️ Zomer</button>
+                <button class="season-btn" data-season="herfst">🍂 Herfst</button>
+                <button class="season-btn" data-season="winter">❄️ Winter</button>
+              </div>
+              <div class="season-content-box" id="seasonContent">
+                <h4>Lente: De eerste strandzon &amp; verse seizoensproducten</h4>
+                <p>Als de zon doorbreekt gaan de schuifpuien open. Geniet van de eerste warme terrasdagen, dagverse asperges en verfrissende spritzes met uitzicht op kitesurfers bij de Zandmotor.</p>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+              <a href="#menukaart" class="btn btn-primary">Bekijk de Menukaart</a>
+              <a href="#zandmotor" class="btn btn-outline">Ontdek De Zandmotor</a>
+            </div>
+          </div>
+
+          <div class="about-images">
+            <div class="image-main">
+              <img src="assets/terrace.jpg" alt="Het zonneterras van The Coast Beach House in Monster" id="aboutMainImg">
+            </div>
+            <div class="image-floating">
+              <img src="assets/interior.jpg" alt="Stijlvol interieur van The Coast met natuurlijk hout en zeezicht">
+            </div>
+            <div class="experience-badge">
+              <strong>365</strong>
+              <span>Dagen Geopend</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== MENUKAART ==================== -->
+    <section class="section section-bg-white" id="menukaart">
+      <div class="container">
+        
+        <div class="section-header">
+          <span class="section-tag">Culinair Genieten Aan Zee</span>
+          <h2 class="section-title">The food tastes better at The Coast</h2>
+          <p class="section-subtitle">
+            Van barista koffie en ontbijt in de ochtendzon tot een luxe lunch, borrelen met shared plates of een uitgebreid à la carte diner bij zonsondergang.
           </p>
         </div>
-        <div class="cta-action">
-          <a href="https://agevodev.nl" target="_blank" rel="noopener noreferrer" class="cta-btn">
-            <span>Aanvragen op agevodev.nl</span>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <path d="M7 17L17 7"></path>
-              <path d="M7 7h10v10"></path>
-            </svg>
-          </a>
-        </div>
-      </section>
 
-    </div>
+        <!-- Menu Controls: Search, Tabs & Dietary Toggles -->
+        <div class="menu-controls">
+          <!-- Search Bar -->
+          <div class="menu-search-wrap">
+            <svg class="menu-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="menuSearchInput" class="menu-search-input" placeholder="Zoek op gerecht of ingrediënt (bijv. zeebaars, burger, oesters)...">
+          </div>
+
+          <!-- Category Tabs -->
+          <div class="menu-tabs" id="menuTabs">
+            <button class="menu-tab-btn active" data-category="all">Alle Gerechten</button>
+            <button class="menu-tab-btn" data-category="lunch">Ontbijt &amp; Lunch</button>
+            <button class="menu-tab-btn" data-category="diner">Signature Diner</button>
+            <button class="menu-tab-btn" data-category="shared">Bites &amp; Borrel</button>
+            <button class="menu-tab-btn" data-category="drinks">Cocktails &amp; Bar</button>
+          </div>
+
+          <!-- Dietary Filter Bar -->
+          <div class="diet-filter-bar" id="dietFilterBar">
+            <button class="diet-toggle-btn active" data-diet="all">Alles</button>
+            <button class="diet-toggle-btn" data-diet="vis">🐟 Dagverse Vis</button>
+            <button class="diet-toggle-btn" data-diet="vlees">🥩 Kwaliteitsvlees</button>
+            <button class="diet-toggle-btn" data-diet="vega">🌱 Vegetarisch / Vegan</button>
+            <button class="diet-toggle-btn" data-diet="gluten">🌾 Glutenvrij</button>
+          </div>
+        </div>
+
+        <!-- Dynamic Menu Grid -->
+        <div class="menu-grid" id="menuContainer">
+          
+          <!-- Item 1: Burgers -->
+          <article class="menu-card" data-category="diner" data-diet="vlees">
+            <div class="menu-card-img-wrap">
+              <img src="assets/dish-burger.jpg" alt="Signature Mini Burgers van The Coast" class="menu-card-img">
+              <span class="menu-card-tag">Signature Favoriet</span>
+              <span class="menu-card-price">€ 22,50</span>
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-header">
+                <h3 class="menu-card-title">The Coast Mini Burgers Trio</h3>
+              </div>
+              <p class="menu-card-desc">
+                Drie ambachtelijke brioche mini-burgers van biologisch rundvlees met gerijpte cheddar, truffelcrème, krokante uitjes en geserveerd met boerenfriet.
+              </p>
+              <div class="menu-card-footer">
+                <div class="diet-tags">
+                  <span class="diet-badge">Chef's Special</span>
+                  <span class="diet-badge">Inclusief Frites</span>
+                </div>
+                <span>Klassieker</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Item 2: Zeebaars -->
+          <article class="menu-card" data-category="diner" data-diet="vis gluten">
+            <div class="menu-card-img-wrap">
+              <img src="assets/dish-seafood.jpg" alt="Noordzee Zeebaars op de huid gebakken" class="menu-card-img">
+              <span class="menu-card-tag">Dagverse Vis</span>
+              <span class="menu-card-price">€ 26,50</span>
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-header">
+                <h3 class="menu-card-title">Op de Huid Gebakken Zeebaars</h3>
+              </div>
+              <p class="menu-card-desc">
+                Filet van verse Noordzee zeebaars met saffraan beurre-blanc, geroosterde seizoensgroenten, zilte zeekraal en zachte bintjes mousseline.
+              </p>
+              <div class="menu-card-footer">
+                <div class="diet-tags">
+                  <span class="diet-badge vis">Verse Vis</span>
+                  <span class="diet-badge">Glutenvrij</span>
+                </div>
+                <span>Direct van de afslag</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Item 3: Club Zalm -->
+          <article class="menu-card" data-category="lunch" data-diet="vis">
+            <div class="menu-card-img-wrap">
+              <img src="assets/dish-plate.jpg" alt="The Coast Club Sandwich Zalm" class="menu-card-img">
+              <span class="menu-card-tag">Luxe Lunch</span>
+              <span class="menu-card-price">€ 17,50</span>
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-header">
+                <h3 class="menu-card-title">Coast Club Gerookte Zalm</h3>
+              </div>
+              <p class="menu-card-desc">
+                Getoast oerbrood met ambachtelijk gerookte Noorse zalm, guacamole, scharreleitje, komkommerlinten en limoen-dille crème.
+              </p>
+              <div class="menu-card-footer">
+                <div class="diet-tags">
+                  <span class="diet-badge vis">Vis</span>
+                  <span class="diet-badge">Tot 17:00</span>
+                </div>
+                <span>Lunch favoriet</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Item 4: Oesters -->
+          <article class="menu-card" data-category="shared" data-diet="vis gluten">
+            <div class="menu-card-img-wrap">
+              <img src="assets/oysters-dish.jpg" alt="Oesters Fine de Claire aan zee" class="menu-card-img">
+              <span class="menu-card-tag">Puur Zilt</span>
+              <span class="menu-card-price">€ 19,50</span>
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-header">
+                <h3 class="menu-card-title">Oesters Fine de Claire (6 stuks)</h3>
+              </div>
+              <p class="menu-card-desc">
+                Dagverse oesters geserveerd op crushed ice met klassieke rode wijn-sjalotten vinaigrette, citroen en Tabasco.
+              </p>
+              <div class="menu-card-footer">
+                <div class="diet-tags">
+                  <span class="diet-badge vis">Zeevruchten</span>
+                  <span class="diet-badge">Glutenvrij</span>
+                </div>
+                <span>Per 6 of 12 stuks</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Item 5: Borrelplank -->
+          <article class="menu-card" data-category="shared" data-diet="vlees">
+            <div class="menu-card-img-wrap">
+              <img src="assets/coastal-vibe.jpg" alt="Grote Borrelplank The Coast" class="menu-card-img">
+              <span class="menu-card-tag">Sharing Bites</span>
+              <span class="menu-card-price">€ 28,50</span>
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-header">
+                <h3 class="menu-card-title">Grote Borrelplank The Coast</h3>
+              </div>
+              <p class="menu-card-desc">
+                Rijk gevuld voor 2 à 3 personen: calamaris met knoflookaioli, Serrano ham, Holtkamp garnalenkroketjes, oude boerenkaas, olijven en warm breekbrood.
+              </p>
+              <div class="menu-card-footer">
+                <div class="diet-tags">
+                  <span class="diet-badge">Voor 2-3 pers</span>
+                </div>
+                <span>Bestseller</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Item 6: Sunset Spritz Cocktail -->
+          <article class="menu-card" data-category="drinks" data-diet="vega gluten">
+            <div class="menu-card-img-wrap">
+              <img src="assets/bar.jpg" alt="The Coast Sunset Spritz Cocktail" class="menu-card-img">
+              <span class="menu-card-tag">Cocktail Special</span>
+              <span class="menu-card-price">€ 12,50</span>
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-header">
+                <h3 class="menu-card-title">The Coast Sunset Spritz</h3>
+              </div>
+              <p class="menu-card-desc">
+                Aperol, vlierbloesemlikeur, prosecco, bruiswater, verse grapefruit en een takje rozemarijn. De ultieme zonsondergang-cocktail.
+              </p>
+              <div class="menu-card-footer">
+                <div class="diet-tags">
+                  <span class="diet-badge vega">Cocktail</span>
+                  <span class="diet-badge">Ook 0.0 Mocktail</span>
+                </div>
+                <span>Beach Bar Favorite</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Item 7: Burrata Salade -->
+          <article class="menu-card" data-category="lunch" data-diet="vega gluten">
+            <div class="menu-card-img-wrap">
+              <img src="assets/terrace.jpg" alt="Burrata di Puglia Salade" class="menu-card-img">
+              <span class="menu-card-tag">Zomer Favoriet</span>
+              <span class="menu-card-price">€ 16,50</span>
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-header">
+                <h3 class="menu-card-title">Burrata di Puglia &amp; Gegrilde Perzik</h3>
+              </div>
+              <p class="menu-card-desc">
+                Romige burrata met gekonfijte trostomaten, gegrilde zoete perzik, geroosterde pijnboompitten, rucola en vijgen-balsamico glaze.
+              </p>
+              <div class="menu-card-footer">
+                <div class="diet-tags">
+                  <span class="diet-badge vega">Vegetarisch</span>
+                  <span class="diet-badge">Glutenvrij</span>
+                </div>
+                <span>Fris &amp; zomers</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Item 8: Tournedos -->
+          <article class="menu-card" data-category="diner" data-diet="vlees gluten">
+            <div class="menu-card-img-wrap">
+              <img src="assets/evening-vibe.jpg" alt="Tournedos van Black Angus rundvlees" class="menu-card-img">
+              <span class="menu-card-tag">Chef's Diner</span>
+              <span class="menu-card-price">€ 32,50</span>
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-header">
+                <h3 class="menu-card-title">Gegrilde Black Angus Tournedos</h3>
+              </div>
+              <p class="menu-card-desc">
+                Malse ossenhaas met Westlandse kruidenboter of truffeljus, geroosterde bospaddenstoelen en knapperige boerenfriet.
+              </p>
+              <div class="menu-card-footer">
+                <div class="diet-tags">
+                  <span class="diet-badge">Black Angus</span>
+                  <span class="diet-badge">Glutenvrij</span>
+                </div>
+                <span>Topkwaliteit vlees</span>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- Menu PDF Banner -->
+        <div class="menu-cta-banner">
+          <div>
+            <h3 style="font-family: var(--font-serif); font-size: 1.55rem; color: var(--c-ocean-950); margin-bottom: 4px;">Benieuwd naar onze complete menukaart &amp; wijnselectie?</h3>
+            <p style="color: var(--c-text-muted); font-size: 0.95rem;">Download de officiële Zomerkaart 2026 inclusief ontbijt-, lunch-, borrel- en kindermenu.</p>
+          </div>
+          <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <a href="https://www.thecoast.nl/media/1719/zomerkaart-2026.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <span>Download Menukaart (PDF)</span>
+            </a>
+            <button class="btn btn-primary open-booking-btn">
+              <span>Tafel Binnen Reserveren</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== DE ZANDMOTOR & STRAND ==================== -->
+    <section class="section zandmotor-section" id="zandmotor">
+      <div class="container">
+        
+        <div class="section-header">
+          <span class="section-tag">Natuurgebied &amp; Kustinnovatie</span>
+          <h2 class="section-title">Pal naast De Zandmotor: een uniek strandparadijs</h2>
+          <p class="section-subtitle">
+            The Coast ligt direct aan het begin van de wereldberoemde Zandmotor. Dit kunstmatige schiereiland heeft van Monster de meest veelzijdige strandlocatie van Nederland gemaakt.
+          </p>
+        </div>
+
+        <div class="zandmotor-features-grid">
+          
+          <div class="zm-card">
+            <div class="zm-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h20M2 17h20M2 7h20"></path></svg>
+            </div>
+            <h3>Kitesurf &amp; Watersport</h3>
+            <p>
+              Dankzij de beschutte binnenlagune en de ruime branding is de Zandmotor dé hotspot voor kitesurfers, suppers en windsurfers uit heel Europa.
+            </p>
+          </div>
+
+          <div class="zm-card">
+            <div class="zm-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+            </div>
+            <h3>Zeehonden &amp; Mammoetfossielen</h3>
+            <p>
+              Bij afgaand water rusten regelmatig zeehonden op de zandbanken. Op het opgespoten diepzeezand vinden wandelaars geregeld mammoetkiezen uit de ijstijd!
+            </p>
+          </div>
+
+          <div class="zm-card">
+            <div class="zm-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 5.172a2 2 0 0 0-2.828 0L2.828 9.515a2 2 0 0 0 0 2.828l7.072 7.072a2 2 0 0 0 2.828 0l7.072-7.072a2 2 0 0 0 0-2.828L12.657 5.172a2 2 0 0 0-2.657 0z"></path></svg>
+            </div>
+            <h3>Hondenparadijs Monster</h3>
+            <p>
+              The Coast is de ultieme uitvalsbasis voor hondenliefhebbers. Van oktober t/m april mogen honden de hele dag los; 's zomers voor 09:00 en na 19:00 uur. Bij ons altijd welkom!
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== EVENTS, BRUILOFTEN & ZAKELIJK ==================== -->
+    <section class="section events-section" id="events">
+      <div class="container">
+        
+        <div class="section-header">
+          <span class="section-tag" style="color: var(--c-gold-300);">Exclusieve Strandlocatie</span>
+          <h2 class="section-title">Your event is better at The Coast</h2>
+          <p class="section-subtitle">
+            Van sprookjesachtige strandbruiloften en intieme diners tot grote bedrijfsfeesten van 75 tot 400+ personen. Alles is mogelijk aan de kust van Monster.
+          </p>
+        </div>
+
+        <div class="events-cards-grid">
+          
+          <article class="event-card">
+            <div class="event-card-img-wrap">
+              <img src="assets/wedding.jpg" alt="Strandbruiloft bij Beach House The Coast" class="event-card-img">
+            </div>
+            <div class="event-card-body">
+              <span class="event-card-tag">Trouwen aan Zee</span>
+              <h3 class="event-card-title">Strandbruiloften</h3>
+              <p class="event-card-desc">
+                Elkaar het ja-woord geven met je voeten bijna in het zand, toosten bij zonsondergang en feesten onder de sterrenhemel met onze resident DJ's.
+              </p>
+              <ul class="event-features">
+                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Officiële trouwlocatie Gemeente Westland</li>
+                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Compleet huwelijksarrangement &amp; live BBQ</li>
+                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Feest met open bar en professionele geluidsset</li>
+              </ul>
+              <button class="btn btn-outline btn-sm open-quote-btn" style="color:#fff; border-color:rgba(255,255,255,0.3); width: 100%;">Bruiloft Brochure Aanvragen</button>
+            </div>
+          </article>
+
+          <article class="event-card">
+            <div class="event-card-img-wrap">
+              <img src="assets/events.jpg" alt="Bedrijfsfeesten en personeelsuitjes bij The Coast" class="event-card-img">
+            </div>
+            <div class="event-card-body">
+              <span class="event-card-tag">Vanaf 75 tot 400+ personen</span>
+              <h3 class="event-card-title">Bedrijfsfeesten &amp; Relaties</h3>
+              <p class="event-card-desc">
+                Een inspirerende vergadersessie met 360° uitzicht over zee, gevolgd door een spectaculaire beach barbecue of exclusieve afhuur van het paviljoen.
+              </p>
+              <ul class="event-features">
+                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Exclusieve afhuur van het gehele paviljoen</li>
+                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Live food stations &amp; walking dinners</li>
+                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Volledige AV-ondersteuning voor presentaties</li>
+              </ul>
+              <button class="btn btn-outline btn-sm open-quote-btn" style="color:#fff; border-color:rgba(255,255,255,0.3); width: 100%;">Zakelijk Voorstel Ontvangen</button>
+            </div>
+          </article>
+
+          <article class="event-card">
+            <div class="event-card-img-wrap">
+              <img src="assets/exterior-stilts.jpg" alt="Strandactiviteiten bij de Zandmotor" class="event-card-img">
+            </div>
+            <div class="event-card-body">
+              <span class="event-card-tag">Teambuilding &amp; Fun</span>
+              <h3 class="event-card-title">Activiteiten &amp; Zandmotor</h3>
+              <p class="event-card-desc">
+                Samen met onze vaste partners verzorgen we blokarten (strandzeilen), Expeditie Robinson, mountainbiken door de duinen en kitesurf clinics.
+              </p>
+              <ul class="event-features">
+                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Blokarten over het brede Monsterse strand</li>
+                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Expeditie Robinson teamuitdaging</li>
+                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Aansluitend borrelen op het zonneterras</li>
+              </ul>
+              <button class="btn btn-outline btn-sm open-quote-btn" style="color:#fff; border-color:rgba(255,255,255,0.3); width: 100%;">Teambuilding Plannen</button>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- 3-Step Interactive Event Calculator -->
+        <div class="event-calculator-box">
+          <div class="calculator-grid">
+            <div class="calc-inputs">
+              <h3 style="font-family: var(--font-serif); font-size: 1.65rem; color: #fff;">Stel je evenement samen &amp; bereken direct een indicatie</h3>
+              <p style="color: var(--c-sand-300); font-size: 0.92rem;">Selecteer je type feest, het aantal gasten en gewenste arrangementen voor een realistische richtprijs.</p>
+
+              <div class="calc-field">
+                <label for="calcEventType">Type Evenement</label>
+                <select id="calcEventType" class="calc-select">
+                  <option value="bedrijf">Bedrijfsfeest / Zomer Event</option>
+                  <option value="bruiloft">Strandbruiloft Compleet</option>
+                  <option value="jubileum">Jubileum / Verjaardag</option>
+                  <option value="teambuilding">Teambuilding &amp; Strandactiviteiten</option>
+                </select>
+              </div>
+
+              <div class="calc-field">
+                <label>Aantal Personen: <span id="calcGuestCount" class="range-val">75</span> gasten</label>
+                <div class="range-wrap">
+                  <input type="range" id="calcRangeGuests" min="25" max="350" step="5" value="75">
+                </div>
+              </div>
+
+              <div class="calc-field">
+                <label>Arrangementen &amp; Opties</label>
+                <div class="calc-options-grid">
+                  <label class="calc-option-label">
+                    <input type="checkbox" id="calcOptBbq" checked>
+                    <span>Luxe Beach BBQ / Buffet (+€38,50)</span>
+                  </label>
+                  <label class="calc-option-label">
+                    <input type="checkbox" id="calcOptBar" checked>
+                    <span>Open Bar 4 uur (+€26,00)</span>
+                  </label>
+                  <label class="calc-option-label">
+                    <input type="checkbox" id="calcOptCocktails">
+                    <span>Welkomstcocktail (+€9,50)</span>
+                  </label>
+                  <label class="calc-option-label">
+                    <input type="checkbox" id="calcOptActivity">
+                    <span>Strandactiviteit / Blokarten (+€25,00)</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="calc-result-card">
+              <div class="calc-result-title">Indicatie per gast</div>
+              <div class="calc-price-est" id="calcPricePerPerson">€ 65,-</div>
+              <div class="calc-price-sub" id="calcTotalPrice">Totaal indicatie: ca. € 4.875,-</div>
+              <p style="color: var(--c-sand-200); font-size: 0.82rem; margin-bottom: 24px; line-height: 1.5;">
+                * Indicatieve richtprijs inclusief bediening, sfeervolle opzet en btw. Wij stellen met plezier een offerte op maat samen.
+              </p>
+              <button class="btn btn-primary btn-lg open-quote-btn" style="width: 100%;">
+                <span>Vrijblijvende Offerte Ontvangen</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== PHOTO GALLERY ==================== -->
+    <section class="section section-bg-sand" id="galerij">
+      <div class="container">
+        
+        <div class="section-header">
+          <span class="section-tag">Sfeerimpressie</span>
+          <h2 class="section-title">The Coast in beeld</h2>
+          <p class="section-subtitle">
+            Bekijk de relaxte sfeer, het unieke panorama op palen, de zonnige terrassen en onze gerechten. Klik op een foto voor een vergroting.
+          </p>
+        </div>
+
+        <div class="gallery-filters" id="galleryFilters">
+          <button class="gallery-filter-btn active" data-filter="all">Alle Foto's</button>
+          <button class="gallery-filter-btn" data-filter="locatie">Locatie &amp; Terras</button>
+          <button class="gallery-filter-btn" data-filter="interieur">Interieur &amp; Bar</button>
+          <button class="gallery-filter-btn" data-filter="food">Gerechten &amp; Bites</button>
+          <button class="gallery-filter-btn" data-filter="feest">Events &amp; Bruiloften</button>
+        </div>
+
+        <div class="gallery-masonry" id="galleryContainer">
+          
+          <div class="gallery-item" data-category="locatie" data-img="assets/hero-beach.jpg" data-caption="Uitzicht over het uitgestrekte zandstrand van Monster vanaf The Coast">
+            <img src="assets/hero-beach.jpg" alt="Strand en branding The Coast">
+            <div class="gallery-overlay">
+              <div class="gallery-overlay-text">
+                <h4>Strand &amp; Branding</h4>
+                <span>Locatie &amp; Terras</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="gallery-item" data-category="interieur" data-img="assets/interior.jpg" data-caption="Warme houten elementen en panoramisch zeezicht vanuit het paviljoen">
+            <img src="assets/interior.jpg" alt="Interieur The Coast Beach House">
+            <div class="gallery-overlay">
+              <div class="gallery-overlay-text">
+                <h4>Sfeervol Interieur</h4>
+                <span>Interieur &amp; Bar</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="gallery-item" data-category="interieur" data-img="assets/bar.jpg" data-caption="Cocktailbar en barista station bij The Coast">
+            <img src="assets/bar.jpg" alt="De Bar van The Coast">
+            <div class="gallery-overlay">
+              <div class="gallery-overlay-text">
+                <h4>De Cocktailbar</h4>
+                <span>Interieur &amp; Bar</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="gallery-item" data-category="locatie" data-img="assets/terrace.jpg" data-caption="Genieten op het houten terras op hoge palen">
+            <img src="assets/terrace.jpg" alt="Zonneterras The Coast">
+            <div class="gallery-overlay">
+              <div class="gallery-overlay-text">
+                <h4>Het Zonneterras</h4>
+                <span>Locatie &amp; Terras</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="gallery-item" data-category="food" data-img="assets/dish-burger.jpg" data-caption="Mini burgers en verse frietjes geserveerd aan zee">
+            <img src="assets/dish-burger.jpg" alt="Mini burgers The Coast">
+            <div class="gallery-overlay">
+              <div class="gallery-overlay-text">
+                <h4>Signature Burgers</h4>
+                <span>Gerechten &amp; Bites</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="gallery-item" data-category="food" data-img="assets/dish-seafood.jpg" data-caption="Verse zeebaars met zeekraal van de afslag">
+            <img src="assets/dish-seafood.jpg" alt="Verse zeebaars">
+            <div class="gallery-overlay">
+              <div class="gallery-overlay-text">
+                <h4>Dagverse Zeebaars</h4>
+                <span>Gerechten &amp; Bites</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="gallery-item" data-category="food" data-img="assets/oysters-dish.jpg" data-caption="Oesters Fine de Claire op crushed ice aan het strand">
+            <img src="assets/oysters-dish.jpg" alt="Oesters bij The Coast">
+            <div class="gallery-overlay">
+              <div class="gallery-overlay-text">
+                <h4>Oesters Fine de Claire</h4>
+                <span>Gerechten &amp; Bites</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="gallery-item" data-category="feest" data-img="assets/wedding.jpg" data-caption="Trouwen op het strand bij The Coast">
+            <img src="assets/wedding.jpg" alt="Huwelijk op het strand">
+            <div class="gallery-overlay">
+              <div class="gallery-overlay-text">
+                <h4>Strandbruiloft</h4>
+                <span>Events &amp; Bruiloften</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="gallery-item" data-category="feest" data-img="assets/events.jpg" data-caption="Bruisend bedrijfsfeest bij Beach House The Coast">
+            <img src="assets/events.jpg" alt="Bedrijfsuitje en feest">
+            <div class="gallery-overlay">
+              <div class="gallery-overlay-text">
+                <h4>Feestavond aan Zee</h4>
+                <span>Events &amp; Bruiloften</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== DUAL HIGHLIGHT: GIFTCARD & CAREERS ==================== -->
+    <section class="section section-bg-white">
+      <div class="container">
+        <div class="dual-banner-grid">
+          
+          <!-- GiftCard Card -->
+          <div class="dual-banner-card giftcard">
+            <div class="dual-banner-header">
+              <span class="section-tag" style="color: var(--c-gold-300);">Cadeautip</span>
+              <h3>The Coast GiftCard</h3>
+              <p>
+                Geef een onvergetelijke beleving aan zee cadeau. Te besteden voor ontbijt, lunch, borrel of een romantisch diner bij zonsondergang.
+              </p>
+            </div>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+              <a href="https://service2.loyaltyinabox.com/CardBalanceChecker/2/paymentapi.aspx?cmd=showbalance&username=70101&lang=nl-NL&return=https://www.givacard.nl" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="color:#fff; border-color: rgba(255,255,255,0.4);">
+                <span>Saldo Checker</span>
+              </a>
+              <button class="btn btn-primary open-booking-btn">
+                <span>Direct Cadeau Doen</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Careers Card -->
+          <div class="dual-banner-card careers">
+            <div class="dual-banner-header">
+              <span class="section-tag" style="color: #fff;">Kom bij ons strandteam!</span>
+              <h3>Werken bij The Coast</h3>
+              <p>
+                Elke dag werken met het mooiste uitzicht van Nederland? Wij zoeken enthousiaste toppers voor de bediening, bar, zelfstandig werkend kok en strandcrew!
+              </p>
+            </div>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+              <a href="https://wa.me/31850879977?text=Hallo%20The%20Coast,%20ik%20heb%20interesse%20in%20een%20baan%20bij%20jullie!" target="_blank" rel="noopener noreferrer" class="btn btn-white">
+                <span>Solliciteer via WhatsApp</span>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg>
+              </a>
+              <a href="mailto:aanvragen@thecoast.nl?subject=Sollicitatie%20The%20Coast" class="btn btn-outline" style="color:#fff; border-color: rgba(255,255,255,0.5);">
+                <span>Stuur Open Sollicitatie</span>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== LOCATION & ROUTE ==================== -->
+    <section class="section section-bg-sand" id="locatie">
+      <div class="container">
+        
+        <div class="location-grid">
+          
+          <div class="location-info">
+            <span class="section-tag">Locatie &amp; Bereikbaarheid</span>
+            <h2 class="section-title">Pal aan strandopgang Molenslag in Monster</h2>
+            <p>
+              Je vindt Beach House The Coast direct bovenaan de strandopgang Molenslag in Monster, midden in de Zuid-Hollandse duinen en direct grenzend aan het beschermde natuurgebied de <strong>Zandmotor</strong>.
+            </p>
+
+            <div class="location-highlights">
+              <div class="loc-item">
+                <div class="loc-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                </div>
+                <div class="loc-detail">
+                  <h4>Adres</h4>
+                  <p>Molenslag, 2681 VP Monster (Gemeente Westland)</p>
+                </div>
+              </div>
+
+              <div class="loc-item">
+                <div class="loc-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                </div>
+                <div class="loc-detail">
+                  <h4>Parkeren</h4>
+                  <p>Grote openbare parkeerplaats direct aan de voet van de duinopgang Molenslag (ruime capaciteit voor auto's).</p>
+                </div>
+              </div>
+
+              <div class="loc-item">
+                <div class="loc-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5.5" cy="17.5" r="3.5"></circle><circle cx="18.5" cy="17.5" r="3.5"></circle><path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-3 11.5V14l-3-3 4-3 2 3h4"></path></svg>
+                </div>
+                <div class="loc-detail">
+                  <h4>Fiets &amp; Wandelen</h4>
+                  <p>Gelegen aan de LF Kustroute en wandelroutes over de Zandmotor naar Kijkduin en 's-Gravenzande.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Route Form -->
+            <div class="route-calculator-card">
+              <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--c-ocean-900);">Plan direct je route naar The Coast</h4>
+              <p style="font-size: 0.88rem; color: var(--c-text-muted); margin-bottom: 12px;">Vul je vertrekadres in om direct de snelste route via Google Maps te openen:</p>
+              
+              <form class="route-form" id="routeForm" onsubmit="return handleRouteSubmit(event)">
+                <input type="text" id="routeOriginInput" class="route-input" placeholder="Bijv: Rotterdam, Den Haag, Delft, Naaldwijk..." required>
+                <button type="submit" class="btn btn-secondary btn-sm">
+                  <span>Open Route</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                </button>
+              </form>
+            </div>
+
+          </div>
+
+          <div class="map-embed-wrap">
+            <iframe 
+              src="https://maps.google.com/maps?q=The%20Coast%20Molenslag%20Monster&t=&z=14&ie=UTF8&iwloc=&output=embed" 
+              loading="lazy" 
+              title="Locatie van The Coast Beach House in Monster" 
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== REVIEWS ==================== -->
+    <section class="section section-bg-white">
+      <div class="container">
+        
+        <div class="section-header">
+          <span class="section-tag">Ervaringen van Gasten</span>
+          <h2 class="section-title">Wat anderen zeggen over The Coast</h2>
+          <p class="section-subtitle">
+            Met meer dan 1.000 tevreden gasten, feestvierders en strandgenieters (Google Review Score: 4.4 ★).
+          </p>
+        </div>
+
+        <div class="reviews-grid">
+          
+          <div class="review-card">
+            <div class="stars">★★★★★</div>
+            <p class="review-quote">
+              "Wat een geweldige plek! Het feit dat The Coast op palen staat geeft je een adembenemend panorama over de Noordzee. De mini-burgers en de verse zeebaars waren fantastisch. Zeker een aanrader na een wandeling over de Zandmotor."
+            </p>
+            <div class="review-author">
+              <div class="author-avatar">SV</div>
+              <div class="author-info">
+                <h4>Sander van Dijk</h4>
+                <span>Google Review &bull; 5 sterren</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="review-card">
+            <div class="stars">★★★★★</div>
+            <p class="review-quote">
+              "Onze bruiloft gevierd bij The Coast en het was van begin tot eind een droom. Trouwen op het strand, een heerlijke beach barbecue en aansluitend een topfeest met de DJ. Onze gasten praten er nog steeds over."
+            </p>
+            <div class="review-author">
+              <div class="author-avatar">EL</div>
+              <div class="author-info">
+                <h4>Emma &amp; Lars</h4>
+                <span>Bruidspaar &bull; Westland</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="review-card">
+            <div class="stars">★★★★★</div>
+            <p class="review-quote">
+              "Fijne en ontspannen sfeer, vriendelijke bediening en ook heel fijn dat onze hond gewoon welkom was na een flinke strandronde. Het terras op inloopbasis werkt ideaal op mooie dagen!"
+            </p>
+            <div class="review-author">
+              <div class="author-avatar">MK</div>
+              <div class="author-info">
+                <h4>Mirjam Koster</h4>
+                <span>Google Review &bull; 5 sterren</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== FAQ ACCORDION ==================== -->
+    <section class="section section-bg-sand" id="faq">
+      <div class="container">
+        
+        <div class="section-header">
+          <span class="section-tag">Alles Wat Je Wilt Weten</span>
+          <h2 class="section-title">Veelgestelde Vragen</h2>
+          <p class="section-subtitle">
+            Antwoorden op veelgestelde vragen over reserveren, terras, honden en parkeren.
+          </p>
+        </div>
+
+        <div class="faq-container">
+          
+          <div class="faq-item active">
+            <div class="faq-header">
+              <h3>Moet ik vooraf reserveren voor het terras?</h3>
+              <div class="faq-chevron">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </div>
+            </div>
+            <div class="faq-body">
+              Nee! Ons ruime zonneterras is <strong>volledig op inloopbasis</strong>. Op zonnige dagen ben je altijd van harte welkom om spontaan aan te schuiven voor ontbijt, lunch, borrel of diner. Binnen reserveren is wel mogelijk via ons online reserveringssysteem of telefonisch.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-header">
+              <h3>Zijn honden toegestaan bij The Coast?</h3>
+              <div class="faq-chevron">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </div>
+            </div>
+            <div class="faq-body">
+              Zeker! Honden zijn bij ons van harte welkom, zowel op het buitenterras als binnen in het paviljoen. Wel vragen we om je hond netjes aangelijnd te houden. We zetten graag een bak vers water klaar!
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-header">
+              <h3>Zijn jullie het hele jaar geopend?</h3>
+              <div class="faq-chevron">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </div>
+            </div>
+            <div class="faq-body">
+              Ja, The Coast is <strong>jaarrond geopend</strong>! Ons paviljoen op palen is stormvast en voorzien van sfeervolle verwarming, waardoor je ook in de herfst en winter kunt genieten van woeste branding, warme chocolademelk, glühwein of een intiem diner aan zee.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-header">
+              <h3>Waar kan ik parkeren bij Molenslag?</h3>
+              <div class="faq-chevron">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </div>
+            </div>
+            <div class="faq-body">
+              Onderaan de strandopgang Molenslag ligt een zeer ruime openbare parkeerplaats. Vanaf daar wandel je in slechts 2 minuten over het verharde duinpad naar The Coast.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-header">
+              <h3>Kunnen we The Coast exclusief afhuren voor een feest of bruiloft?</h3>
+              <div class="faq-chevron">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </div>
+            </div>
+            <div class="faq-body">
+              Ja, vanaf 75 personen organiseren we grote zakelijke evenementen, personeelsfeesten en bruiloften. Voor gezelschappen is het mogelijk om een eigen gedeelte of het gehele strandpaviljoen exclusief te reserveren inclusief bar, DJ-booth en beach BBQ. Vraag hiervoor gerust een vrijblijvende offerte aan.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-header">
+              <h3>Zijn er glutenvrije of vegetarische gerechten?</h3>
+              <div class="faq-chevron">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </div>
+            </div>
+            <div class="faq-body">
+              Jazeker, onze keuken werkt met dagverse ingrediënten en heeft ruime keuze aan vegetarische, veganistische en glutenvrije gerechten. Geef eventuele allergieën gerust door bij je reservering of bestelling.
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
   </main>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container footer-inner">
-      <div class="footer-brand-info">
-        <span>&copy; 2026 <strong>Agevo</strong> &bull; Bram Verhoeff</span>
-        <span class="footer-divider">&bull;</span>
-        <span class="footer-kvk font-mono">KvK: <strong>42160840</strong></span>
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        
+        <div class="footer-brand">
+          <img src="assets/the-coast-logo-white.svg" alt="Beach House The Coast" height="42">
+          <p>
+            Het iconische strandpaviljoen op palen in Monster. Jaarrond geopend voor lekker eten, verse zeelucht en onvergetelijke strandfeesten en bruiloften.
+          </p>
+          <div class="footer-socials">
+            <a href="https://www.instagram.com/thecoastbeachhouse/" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Instagram">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+            </a>
+            <a href="https://www.facebook.com/thecoastbeachhouse" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Facebook">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Snel Naar</h4>
+          <ul class="footer-links">
+            <li><a href="#beleving">Over The Coast</a></li>
+            <li><a href="#menukaart">Menukaart &amp; Prijzen</a></li>
+            <li><a href="#zandmotor">Strand &amp; Zandmotor</a></li>
+            <li><a href="#events">Events &amp; Bruiloften</a></li>
+            <li><a href="#galerij">Sfeerbeelden</a></li>
+            <li><a href="#locatie">Locatie &amp; Route</a></li>
+            <li><a href="https://service2.loyaltyinabox.com/CardBalanceChecker/2/paymentapi.aspx?cmd=showbalance&username=70101&lang=nl-NL&return=https://www.givacard.nl" target="_blank" rel="noopener noreferrer">GiftCard Saldo Checker</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Openingstijden</h4>
+          <ul class="opening-hours-list" id="openingHoursList">
+            <li data-day="1"><span>Maandag</span> <span>10:30 - 21:00</span></li>
+            <li data-day="2"><span>Dinsdag</span> <span>10:30 - 21:00</span></li>
+            <li data-day="3"><span>Woensdag</span> <span>10:30 - 21:00</span></li>
+            <li data-day="4"><span>Donderdag</span> <span>10:30 - 21:00</span></li>
+            <li data-day="5"><span>Vrijdag</span> <span>10:30 - 21:00</span></li>
+            <li data-day="6"><span>Zaterdag</span> <span>10:00 - 21:00</span></li>
+            <li data-day="0"><span>Zondag</span> <span>10:00 - 21:00</span></li>
+          </ul>
+          <p style="font-size: 0.78rem; color: var(--c-gold-300); margin-top: 10px;">
+            * Keuken geopend tot ca. 20:30 uur. Buitenterras bij mooi weer op vrije inloop.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <div class="footer-contact-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <span>Molenslag, 2681 VP Monster</span>
+          </div>
+          <div class="footer-contact-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            <a href="tel:+31850879977" style="color: #fff;">+31 85 087 9977</a>
+          </div>
+          <div class="footer-contact-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            <a href="mailto:aanvragen@thecoast.nl" style="color: #fff;">aanvragen@thecoast.nl</a>
+          </div>
+          <div style="margin-top: 20px;">
+            <button class="btn btn-primary btn-sm open-booking-btn" style="width: 100%;">Tafel Reserveren</button>
+          </div>
+        </div>
+
       </div>
 
-      <div class="footer-contact-links">
-        <a href="https://agevodev.nl" target="_blank" rel="noopener noreferrer" class="footer-link">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-          <span>agevodev.nl</span>
-        </a>
-        <a href="mailto:info@agevodev.nl" class="footer-link">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-          <span>info@agevodev.nl</span>
-        </a>
-        <a href="https://instagram.com/agevodev" target="_blank" rel="noopener noreferrer" class="footer-link">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-          <span>@agevodev</span>
-        </a>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Beach House The Coast &bull; Alle rechten voorbehouden.</span>
+        <span>Strandopgang Molenslag &bull; Monster (Westland)</span>
       </div>
     </div>
   </footer>
+
+  <!-- ==================== FLOATING WHATSAPP CONCIERGE ==================== -->
+  <div class="floating-concierge">
+    <div class="concierge-bubble">
+      <span class="concierge-avatar"></span>
+      <span>Vragen? Vraag het ons direct!</span>
+    </div>
+    <a href="https://wa.me/31850879977?text=Hallo%20The%20Coast,%20ik%20heb%20een%20vraag%20over..." target="_blank" rel="noopener noreferrer" class="concierge-btn" aria-label="Direct chatten via WhatsApp">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+    </a>
+  </div>
+
+  <!-- ==================== BOOKING MODAL ==================== -->
+  <div class="modal" id="bookingModal" aria-hidden="true" role="dialog">
+    <div class="modal-backdrop"></div>
+    <div class="modal-container">
+      <button class="modal-close-btn" aria-label="Sluiten">&times;</button>
+      
+      <div id="bookingFormWrapper">
+        <div class="modal-header">
+          <h2 class="modal-title">Binnen Tafel Reserveren</h2>
+          <p class="modal-subtitle">Reserveer eenvoudig je tafel in ons sfeervolle paviljoen met 360° zeezicht.</p>
+        </div>
+
+        <div class="modal-notice">
+          <strong>Terras inloop:</strong> Ons zonneterras buiten werkt uitsluitend op vrije inloop. Deze online reservering is voor een gegarandeerde tafel in ons restaurant binnen.
+        </div>
+
+        <form class="modal-form" id="bookingForm" onsubmit="return handleBookingSubmit(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="bookDate">Datum</label>
+              <input type="date" id="bookDate" class="form-input" required>
+            </div>
+            <div class="form-group">
+              <label for="bookTime">Tijdslot</label>
+              <select id="bookTime" class="form-select" required>
+                <option value="">Kies tijd...</option>
+                <option value="10:30">10:30 (Ontbijt / Barista)</option>
+                <option value="11:30">11:30 (Vroege Lunch)</option>
+                <option value="12:30">12:30 (Lunch)</option>
+                <option value="13:30">13:30 (Lunch)</option>
+                <option value="15:00">15:00 (Middagborrel &amp; Bites)</option>
+                <option value="16:30">16:30 (Borrel aan Zee)</option>
+                <option value="17:30">17:30 (Vroeg Diner)</option>
+                <option value="18:30">18:30 (Diner)</option>
+                <option value="19:30">19:30 (Diner bij Zonsondergang)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="bookGuests">Aantal Personen</label>
+              <select id="bookGuests" class="form-select" required>
+                <option value="2">2 personen</option>
+                <option value="3">3 personen</option>
+                <option value="4" selected>4 personen</option>
+                <option value="5">5 personen</option>
+                <option value="6">6 personen</option>
+                <option value="8">8 personen</option>
+                <option value="10+">10 of meer personen (Groepsreservering)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="bookSeating">Zitplek Voorkeur</label>
+              <select id="bookSeating" class="form-select">
+                <option value="raam">Aan het raam (Zeezicht)</option>
+                <option value="restaurant">Sfeervol in het restaurant</option>
+                <option value="lounge">In de lounge / bij de haard</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="bookName">Naam</label>
+              <input type="text" id="bookName" class="form-input" placeholder="Je volledige naam" required>
+            </div>
+            <div class="form-group">
+              <label for="bookPhone">Telefoonnummer</label>
+              <input type="tel" id="bookPhone" class="form-input" placeholder="06 - 12345678" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="bookEmail">E-mailadres</label>
+            <input type="email" id="bookEmail" class="form-input" placeholder="naam@voorbeeld.nl" required>
+          </div>
+
+          <div class="form-group">
+            <label for="bookNotes">Opmerkingen &amp; Dieetwensen (Optioneel)</label>
+            <textarea id="bookNotes" class="form-textarea" rows="2" placeholder="Bijv. kinderstoel, allergieën, verjaardag..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 10px;">
+            <span>Reservering Bevestigen</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Ticket Confirmation Card -->
+      <div class="ticket-card" id="bookingTicketCard">
+        <div class="ticket-header">
+          <div style="font-size: 2.2rem; margin-bottom: 8px;">🎉</div>
+          <h3>Tafel Gereserveerd!</h3>
+          <p style="color: var(--c-text-muted); font-size: 0.92rem;">We kijken uit naar je komst bij Beach House The Coast.</p>
+        </div>
+
+        <div class="ticket-details-grid">
+          <div class="ticket-item">
+            <strong>Gast</strong>
+            <span id="ticketName">Bram Verhoeff</span>
+          </div>
+          <div class="ticket-item">
+            <strong>Datum &amp; Tijd</strong>
+            <span id="ticketDateTime">15 sep &bull; 18:30</span>
+          </div>
+          <div class="ticket-item">
+            <strong>Gezelschap</strong>
+            <span id="ticketGuests">4 personen</span>
+          </div>
+          <div class="ticket-item">
+            <strong>Locatie</strong>
+            <span>Molenslag, Monster</span>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+          <button class="btn btn-primary btn-sm" id="downloadCalBtn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            <span>Opslaan in Agenda (.ics)</span>
+          </button>
+          <button class="btn btn-outline btn-sm" id="ticketCloseBtn">
+            <span>Sluiten</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== EVENT QUOTE MODAL ==================== -->
+  <div class="modal" id="quoteModal" aria-hidden="true" role="dialog">
+    <div class="modal-backdrop"></div>
+    <div class="modal-container">
+      <button class="modal-close-btn" aria-label="Sluiten">&times;</button>
+      <div class="modal-header">
+        <h2 class="modal-title">Offerte Evenement Aanvragen</h2>
+        <p class="modal-subtitle">Organiseer een onvergetelijk feest, bruiloft of bedrijfsevenement aan zee.</p>
+      </div>
+
+      <form class="modal-form" id="quoteForm" onsubmit="return handleQuoteSubmit(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="quoteType">Soort Evenement</label>
+            <select id="quoteType" class="form-select" required>
+              <option value="bedrijfsfeest">Bedrijfsfeest / Borrel (75+ pers)</option>
+              <option value="bruiloft">Strandbruiloft</option>
+              <option value="jubileum">Verjaardag / Jubileum</option>
+              <option value="teambuilding">Teambuilding &amp; Strandactiviteiten</option>
+              <option value="afhuur">Exclusieve Afhuur Gehele Paviljoen</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="quoteGuests">Verwacht Aantal Gasten</label>
+            <input type="number" id="quoteGuests" class="form-input" min="20" max="600" placeholder="Bijv. 80" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="quoteDate">Gewenste Datum</label>
+            <input type="date" id="quoteDate" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label for="quoteCompany">Bedrijf / Organisatie (Optioneel)</label>
+            <input type="text" id="quoteCompany" class="form-input" placeholder="Bedrijfsnaam">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="quoteName">Contactpersoon</label>
+            <input type="text" id="quoteName" class="form-input" placeholder="Voor- en achternaam" required>
+          </div>
+          <div class="form-group">
+            <label for="quotePhone">Telefoonnummer</label>
+            <input type="tel" id="quotePhone" class="form-input" placeholder="06 - 12345678" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="quoteEmail">E-mailadres</label>
+          <input type="email" id="quoteEmail" class="form-input" placeholder="email@bedrijf.nl" required>
+        </div>
+
+        <div class="form-group">
+          <label for="quoteMessage">Wensen en ideeën</label>
+          <textarea id="quoteMessage" class="form-textarea" rows="3" placeholder="Vertel ons meer over het programma, catering (BBQ, buffet, borrel), DJ of activiteiten..."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 10px;">
+          <span>Vrijblijvende Offerte Aanvragen</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== LIGHTBOX MODAL ==================== -->
+  <div class="modal lightbox-modal" id="lightboxModal" aria-hidden="true" role="dialog">
+    <div class="modal-backdrop"></div>
+    <div class="modal-container">
+      <button class="modal-close-btn" aria-label="Sluiten" style="color:#fff; background: rgba(255,255,255,0.15);">&times;</button>
+      <div class="lightbox-img-wrap">
+        <img src="" alt="The Coast Gallery" id="lightboxImage" class="lightbox-img">
+      </div>
+      <div class="lightbox-caption" id="lightboxCaption"></div>
+    </div>
+  </div>
 
   <script src="main.js"></script>
 </body>
