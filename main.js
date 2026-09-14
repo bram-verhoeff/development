@@ -422,13 +422,17 @@ function initMenuSystem() {
   function filterMenu() {
     cards.forEach(card => {
       const cardCat = card.getAttribute('data-category') || '';
-      const cardDiet = card.getAttribute('data-diet') || '';
+      const cardDiet = (card.getAttribute('data-diet') || '').split(/\s+/);
       const title = (card.querySelector('.menu-card-title')?.textContent || '').toLowerCase();
       const desc = (card.querySelector('.menu-card-desc')?.textContent || '').toLowerCase();
+      const ingredients = (card.querySelector('.menu-card-ingredients')?.textContent || '').toLowerCase();
 
       const matchCat = (activeCategory === 'all' || cardCat === activeCategory);
       const matchDiet = (activeDiet === 'all' || cardDiet.includes(activeDiet));
-      const matchSearch = (!searchTerm || title.includes(searchTerm) || desc.includes(searchTerm));
+      const matchSearch = (!searchTerm || 
+                           title.includes(searchTerm) || 
+                           desc.includes(searchTerm) || 
+                           ingredients.includes(searchTerm));
 
       if (matchCat && matchDiet && matchSearch) {
         card.style.display = 'flex';

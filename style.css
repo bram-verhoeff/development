@@ -1377,9 +1377,63 @@ button, input, select, textarea {
   color: #2E7D32;
 }
 
+.diet-badge.vegan {
+  background: #E0F2F1;
+  color: #00796B;
+}
+
 .diet-badge.vis {
   background: #E1F5FE;
   color: #0277BD;
+}
+
+.menu-card-ingredients {
+  font-size: 0.82rem;
+  color: var(--c-ocean-800);
+  background: #F8F6F2;
+  border: 1px solid var(--c-sand-200);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.menu-card-ingredients svg {
+  flex-shrink: 0;
+  color: var(--c-sunset);
+}
+
+.menu-allergy-bar {
+  background: rgba(226, 106, 77, 0.08);
+  border: 1.5px dashed rgba(226, 106, 77, 0.35);
+  border-radius: var(--radius-md);
+  padding: 16px 24px;
+  margin: 40px 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.menu-allergy-bar-text {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--c-ocean-950);
+}
+
+.menu-allergy-bar-tags {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 0.82rem;
+  font-weight: 700;
 }
 
 /* ==========================================================================
