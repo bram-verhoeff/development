@@ -59,16 +59,37 @@ function initMobileNav() {
   const nav = document.getElementById('mainNav');
   if (!toggle || !nav) return;
 
-  toggle.addEventListener('click', () => {
+  function closeMenu() {
+    nav.classList.remove('open');
+    toggle.classList.remove('active');
+    toggle.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('menu-open');
+  }
+
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
     const isOpen = nav.classList.toggle('open');
-    toggle.setAttribute('aria-expanded', isOpen);
+    toggle.classList.toggle('active', isOpen);
+    toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    document.body.classList.toggle('menu-open', isOpen);
   });
 
   nav.querySelectorAll('.nav-link, .btn').forEach(link => {
     link.addEventListener('click', () => {
-      nav.classList.remove('open');
-      toggle.setAttribute('aria-expanded', 'false');
+      closeMenu();
     });
+  });
+
+  document.addEventListener('click', (e) => {
+    if (nav.classList.contains('open') && !nav.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 960 && nav.classList.contains('open')) {
+      closeMenu();
+    }
   });
 }
 
@@ -176,27 +197,39 @@ function initHeroSlider() {
     }
   });
 
-  // Touch Swipe Support
+  // Touch Swipe Support (with vertical scroll safety)
   let touchStartX = 0;
+  let touchStartY = 0;
   let touchEndX = 0;
+  let touchEndY = 0;
 
   slider.addEventListener('touchstart', (e) => {
-    touchStartX = e.changedTouches[0].screenX;
+    if (!e.changedTouches || !e.changedTouches[0]) return;
+    touchStartX = e.changedTouches[0].clientX;
+    touchStartY = e.changedTouches[0].clientY;
   }, { passive: true });
 
   slider.addEventListener('touchend', (e) => {
-    touchEndX = e.changedTouches[0].screenX;
+    if (!e.changedTouches || !e.changedTouches[0]) return;
+    touchEndX = e.changedTouches[0].clientX;
+    touchEndY = e.changedTouches[0].clientY;
     handleSwipe();
   }, { passive: true });
 
   function handleSwipe() {
-    const swipeThreshold = 50;
-    if (touchEndX < touchStartX - swipeThreshold) {
-      // Swiped Left -> Next
-      showSlide(currentIndex + 1);
-    } else if (touchEndX > touchStartX + swipeThreshold) {
-      // Swiped Right -> Prev
-      showSlide(currentIndex - 1);
+    const diffX = touchEndX - touchStartX;
+    const diffY = touchEndY - touchStartY;
+    const swipeThreshold = 40;
+
+    // Only swipe if horizontal movement is clearly greater than vertical scrolling
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > swipeThreshold) {
+      if (diffX < 0) {
+        // Swiped Left -> Next
+        showSlide(currentIndex + 1);
+      } else {
+        // Swiped Right -> Prev
+        showSlide(currentIndex - 1);
+      }
     }
   }
 
@@ -595,6 +628,21 @@ function initModals() {
   const ticketCloseBtn = document.getElementById('ticketCloseBtn');
   const downloadCalBtn = document.getElementById('downloadCalBtn');
 
+  function openModal(modal) {
+    if (!modal) return;
+    modal.classList.add('active');
+    document.body.classList.add('modal-open');
+  }
+
+  function closeModal(modal) {
+    if (!modal) return;
+    modal.classList.remove('active');
+    const anyOpen = allModals.some(m => m && m.classList.contains('active'));
+    if (!anyOpen) {
+      document.body.classList.remove('modal-open');
+    }
+  }
+
   // Open triggers
   document.querySelectorAll('.open-booking-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
@@ -616,14 +664,14 @@ function initModals() {
       }
       e.preventDefault();
       resetBookingModal();
-      if (bookingModal) bookingModal.classList.add('active');
+      openModal(bookingModal);
     });
   });
 
   document.querySelectorAll('.open-quote-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
-      if (quoteModal) quoteModal.classList.add('active');
+      openModal(quoteModal);
     });
   });
 
@@ -634,12 +682,12 @@ function initModals() {
     const closeBtn = modal.querySelector('.modal-close-btn');
     const backdrop = modal.querySelector('.modal-backdrop');
 
-    if (closeBtn) closeBtn.addEventListener('click', () => modal.classList.remove('active'));
-    if (backdrop) backdrop.addEventListener('click', () => modal.classList.remove('active'));
+    if (closeBtn) closeBtn.addEventListener('click', () => closeModal(modal));
+    if (backdrop) backdrop.addEventListener('click', () => closeModal(modal));
   });
 
   if (ticketCloseBtn && bookingModal) {
-    ticketCloseBtn.addEventListener('click', () => bookingModal.classList.remove('active'));
+    ticketCloseBtn.addEventListener('click', () => closeModal(bookingModal));
   }
 
   if (downloadCalBtn) {
@@ -650,7 +698,7 @@ function initModals() {
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-      allModals.forEach(m => m && m.classList.remove('active'));
+      allModals.forEach(m => closeModal(m));
     }
   });
 }

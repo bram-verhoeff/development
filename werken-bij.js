@@ -36,12 +36,88 @@ const JOB_DETAILS = {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+  initScrollProgress();
+  initStickyHeader();
+  initMobileNav();
   initJobFilters();
   initJobModals();
   initApplyButtons();
   initApplyForm();
   initFlyerLightbox();
 });
+
+/* ==========================================================================
+   SCROLL PROGRESS BAR
+   ========================================================================== */
+function initScrollProgress() {
+  const bar = document.getElementById('scrollProgressBar');
+  if (!bar) return;
+
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = (scrollTop / (docHeight || 1)) * 100;
+    bar.style.width = `${progress}%`;
+  }, { passive: true });
+}
+
+/* ==========================================================================
+   STICKY HEADER & SCROLL BEHAVIOR
+   ========================================================================== */
+function initStickyHeader() {
+  const header = document.getElementById('siteHeader');
+  if (!header) return;
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 40) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  }, { passive: true });
+}
+
+/* ==========================================================================
+   MOBILE NAVIGATION
+   ========================================================================== */
+function initMobileNav() {
+  const toggle = document.getElementById('mobileToggle');
+  const nav = document.getElementById('mainNav');
+  if (!toggle || !nav) return;
+
+  function closeMenu() {
+    nav.classList.remove('open');
+    toggle.classList.remove('active');
+    toggle.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('menu-open');
+  }
+
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = nav.classList.toggle('open');
+    toggle.classList.toggle('active', isOpen);
+    toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    document.body.classList.toggle('menu-open', isOpen);
+  });
+
+  nav.querySelectorAll('.nav-link, .btn').forEach(link => {
+    link.addEventListener('click', () => {
+      closeMenu();
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    if (nav.classList.contains('open') && !nav.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 960 && nav.classList.contains('open')) {
+      closeMenu();
+    }
+  });
+}
 
 /* Filter Job Cards by Category */
 function initJobFilters() {
@@ -88,6 +164,12 @@ function initJobModals() {
 
   function closeModal() {
     modal.classList.remove('active');
+    document.body.classList.remove('modal-open');
+  }
+
+  function openModal() {
+    modal.classList.add('active');
+    document.body.classList.add('modal-open');
   }
 
   if (closeBtn) closeBtn.addEventListener('click', closeModal);
@@ -146,7 +228,7 @@ function initJobModals() {
         </div>
       `;
 
-      modal.classList.add('active');
+      openModal();
 
       // Bind modal apply button
       const modalApplyBtn = modalContent.querySelector('.apply-from-modal-btn');
@@ -242,6 +324,7 @@ function initFlyerLightbox() {
 
   function closeLightbox() {
     lightbox.classList.remove('active');
+    document.body.classList.remove('modal-open');
   }
 
   if (closeBtn) closeBtn.addEventListener('click', closeLightbox);
@@ -256,5 +339,6 @@ function initFlyerLightbox() {
       lightboxCaption.innerHTML = '<strong>Meewerkend Keukenbegeleider Gezocht!</strong> &bull; Beach House The Coast Monster &bull; WhatsApp: 06 55 16 05 77';
     }
     lightbox.classList.add('active');
+    document.body.classList.add('modal-open');
   });
 }
