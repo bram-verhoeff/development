@@ -5,29 +5,32 @@
 
 const JOB_DETAILS = {
   keukenbegeleider: {
-    title: "Meewerkend Keukenbegeleider / Sous-Chef",
+    title: "Meewerkend Keukenbegeleider Gezocht!",
     hours: "32 - 38 uur per week (Fulltime / Parttime)",
-    dept: "Keuken & Beleving",
-    intro: "Als Meewerkend Keukenbegeleider ben je de rots in de branding van onze keuken. Samen met de chef-kok stuur je het keukenteam aan, inspireer je jonge koks en zorg je dat onze dagverse vis- en seizoensgerechten altijd van topkwaliteit zijn.",
+    dept: "Keuken & Begeleiding",
+    phone: "06 55 16 05 77",
+    waPhone: "31655160577",
+    intro: "Heb jij passie voor koken en vind je het leuk om jongeren het vak te leren? Dan zijn wij op zoek naar jou! Bij Beach House The Coast werk je op een toplocatie aan het strand in een gezellig team waar elke dag anders is.",
     tasks: [
-      "Mee koken op hoog niveau tijdens lunch, borrel en diner",
-      "Aansturen, coachen en motiveren van het keukenteam en leerling-koks",
-      "Voorraadbeheer, bestellingen plaatsen en mise-en-place plannen",
-      "Kwaliteitsbewaking en toezien op naleving van HACCP-richtlijnen",
-      "Meedenken over nieuwe seizoenskaarten en chef specials"
+      "Zelf meewerken in de keuken tijdens lunch, borrel en diner",
+      "Jongeren begeleiden en het vak leren",
+      "Gerechten en kwaliteit controleren",
+      "Meedenken over gerechten en verbeteringen",
+      "Zorgen voor een goede sfeer en structuur"
     ],
     requirements: [
-      "Aantoonbare ervaring in een professionele horecakeuken als zelfstandig werkend kok of sous-chef",
-      "Goede communicatieve vaardigheden en een natuurlijk leiderschap",
-      "Stressbestendig tijdens zonnige strandpieken",
-      "Passie voor verse producten, vis en moderne kooktechnieken"
+      "Ervaring in de keuken",
+      "Leuk vinden om jongeren te begeleiden",
+      "Flexibel, sociaal en zelfstandig",
+      "Meedenkend en kwaliteitsgericht",
+      "Hands-on mentaliteit"
     ],
     benefits: [
-      "Bovengemiddeld salaris conform kennis en ervaring",
+      "Werken op een unieke toplocatie op palen direct aan het strand",
+      "Bovengemiddeld salaris afgestemd op jouw ervaring",
       "Wekelijks meedelen in de royale fooienpot",
-      "Vaste vrije dagen en goede balans tussen werk en privé",
-      "20% personeelskorting op de hele menukaart",
-      "Werken in een modern ingerichte keuken met uitzicht op zee"
+      "Gezellig team, goede sfeer en veel collegialiteit",
+      "20% personeelskorting op de hele menukaart"
     ]
   },
   bediening: {
@@ -161,6 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initJobModals();
   initApplyButtons();
   initApplyForm();
+  initFlyerLightbox();
 });
 
 /* Filter Job Cards by Category */
@@ -342,5 +346,35 @@ function initApplyForm() {
         p.innerHTML = `Bedankt <strong>${name}</strong>! We hebben je sollicitatie voor <strong>${job}</strong> ontvangen. Onze bedrijfsleider neemt binnen 24 uur contact met je op via WhatsApp of telefonisch voor een gezellige kennismaking!`;
       }
     }, 600);
+  });
+}
+
+/* Open Original Flyer in Lightbox */
+function initFlyerLightbox() {
+  const flyerCard = document.getElementById('openFlyerModalBtn');
+  const lightbox = document.getElementById('lightboxModal');
+  const lightboxImg = document.getElementById('lightboxImage');
+  const lightboxCaption = document.getElementById('lightboxCaption');
+  if (!flyerCard || !lightbox || !lightboxImg) return;
+
+  const closeBtn = lightbox.querySelector('.modal-close-btn');
+  const backdrop = lightbox.querySelector('.modal-backdrop');
+
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+  }
+
+  if (closeBtn) closeBtn.addEventListener('click', closeLightbox);
+  if (backdrop) backdrop.addEventListener('click', closeLightbox);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && lightbox.classList.contains('active')) closeLightbox();
+  });
+
+  flyerCard.addEventListener('click', () => {
+    lightboxImg.src = 'assets/vacature-keukenbegeleider.jpg';
+    if (lightboxCaption) {
+      lightboxCaption.innerHTML = '<strong>Meewerkend Keukenbegeleider Gezocht!</strong> &bull; Beach House The Coast Monster &bull; WhatsApp: 06 55 16 05 77';
+    }
+    lightbox.classList.add('active');
   });
 }
