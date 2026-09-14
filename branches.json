@@ -1,6 +1,14 @@
 {
   "branches": [
     {
+      "branch": "thecoast",
+      "commit": "a9f0aa1",
+      "title": "Beach House The Coast | Strandpaviljoen op Palen in Monster",
+      "description": "Welkom bij Beach House The Coast aan strandopgang Molenslag in Monster. 360° uitzicht over zee, verse vis en seizoensgerechten, jaarrond geopend.",
+      "url": "./branches/thecoast/",
+      "status": "ONLINE"
+    },
+    {
       "branch": "whammy",
       "commit": "ff8bcf9",
       "title": "Whammy | Gitaar Services & Afstellen Zoetermeer",

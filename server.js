@@ -167,6 +167,23 @@ const server = http.createServer((req, res) => {
   });
 });
 
-server.listen(PORT, () => {
-  console.log(`[AGEVO GIT BRANCH SERVER] Online op http://localhost:${PORT}`);
+function startServer(port) {
+  server.listen(port, () => {
+    console.log(`[AGEVO GIT BRANCH SERVER] Online op http://localhost:${port}`);
+  });
+}
+
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    const fallbackPort = 3001;
+    console.log(`Poort ${PORT} is bezet, probeer poort ${fallbackPort}...`);
+    setTimeout(() => {
+      startServer(fallbackPort);
+    }, 200);
+  } else {
+    console.error('[AGEVO GIT BRANCH SERVER] Fout:', err);
+  }
 });
+
+startServer(PORT);
+
