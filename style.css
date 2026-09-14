@@ -2203,8 +2203,8 @@ button, input, select, textarea {
    ========================================================================== */
 .floating-concierge {
   position: fixed;
-  bottom: 28px;
-  right: 28px;
+  bottom: 96px;
+  right: 24px;
   z-index: 99;
   display: flex;
   align-items: center;

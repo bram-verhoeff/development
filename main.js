@@ -598,6 +598,22 @@ function initModals() {
   // Open triggers
   document.querySelectorAll('.open-booking-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
+      // Check if official Guestplan reservation widget is available
+      if (window._gstpln && typeof window._gstpln.openBookingWidget === 'function') {
+        e.preventDefault();
+        window._gstpln.openBookingWidget();
+        return;
+      }
+      if (window._gstpln && typeof window._gstpln.openWidget === 'function') {
+        e.preventDefault();
+        window._gstpln.openWidget();
+        return;
+      }
+      // If element has #gstpln_openBookingWidget href, allow native Guestplan listener
+      const href = btn.getAttribute('href');
+      if (href && href.includes('gstpln')) {
+        return;
+      }
       e.preventDefault();
       resetBookingModal();
       if (bookingModal) bookingModal.classList.add('active');
