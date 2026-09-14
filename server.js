@@ -25,23 +25,38 @@ const server = http.createServer((req, res) => {
   let safePath = path.normalize(reqUrl).replace(/^(\.\.[\/\\])+/, '');
   let filePath = path.join(PUBLIC_DIR, safePath === '/' || safePath === '\\' ? 'index.html' : safePath);
 
-  fs.stat(filePath, (err, stats) => {
-    if (err || !stats.isFile()) {
+    const serveFile = (target) => {
+      const ext = path.extname(target).toLowerCase();
+      const contentType = MIME_TYPES[ext] || 'application/octet-stream';
+      res.writeHead(200, {
+        'Content-Type': contentType,
+        'Access-Control-Allow-Origin': '*'
+      });
+      fs.createReadStream(target).pipe(res);
+    };
+
+    fs.stat(filePath, (err, stats) => {
+      if (!err && stats.isFile()) {
+        return serveFile(filePath);
+      }
+
+      // Check clean URL with .html extension
+      if (!path.extname(filePath)) {
+        const htmlPath = filePath + '.html';
+        fs.stat(htmlPath, (err2, stats2) => {
+          if (!err2 && stats2.isFile()) {
+            return serveFile(htmlPath);
+          }
+          res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+          res.end('404 Niet gevonden: ' + reqUrl);
+        });
+        return;
+      }
+
       res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
       res.end('404 Niet gevonden: ' + reqUrl);
-      return;
-    }
-
-    const ext = path.extname(filePath).toLowerCase();
-    const contentType = MIME_TYPES[ext] || 'application/octet-stream';
-
-    res.writeHead(200, {
-      'Content-Type': contentType,
-      'Access-Control-Allow-Origin': '*'
     });
-    fs.createReadStream(filePath).pipe(res);
   });
-});
 
 function startServer(port) {
   server.listen(port, () => {
