@@ -19,142 +19,18 @@ const JOB_DETAILS = {
       "Zorgen voor een goede sfeer en structuur"
     ],
     requirements: [
-      "Ervaring in de keuken",
+      "Ervaring in de horecakeuken",
       "Leuk vinden om jongeren te begeleiden",
       "Flexibel, sociaal en zelfstandig",
       "Meedenkend en kwaliteitsgericht",
       "Hands-on mentaliteit"
     ],
     benefits: [
-      "Werken op een unieke toplocatie op palen direct aan het strand",
+      "Werken op een unieke toplocatie direct aan het strand (Monster)",
       "Bovengemiddeld salaris afgestemd op jouw ervaring",
       "Wekelijks meedelen in de royale fooienpot",
       "Gezellig team, goede sfeer en veel collegialiteit",
       "20% personeelskorting op de hele menukaart"
-    ]
-  },
-  bediening: {
-    title: "Bedieningsmedewerker & Gastheer / Gastvrouw",
-    hours: "16 - 38 uur per week (Parttime of Fulltime)",
-    dept: "Bediening & Terras",
-    intro: "Als gastheer of gastvrouw ben jij het stralende gezicht van The Coast. Met een weids uitzicht over de Noordzee serveer je verfrissende drankjes, verse oesters en dinergerechten. Je voelt aan wat gasten wensen en zorgt voor een ontspannen, luxe strandbeleving.",
-    tasks: [
-      "Warm en gastvrij ontvangen van gasten op het terras of in het paviljoen",
-      "Opnemen van bestellingen en adviseren over wijnen, bieren en gerechten",
-      "Uitserveren van lunch, borrelplateaus en diner met zorg en finesse",
-      "Zorgen voor een opgeruimd, stijlvol restaurant en zonneterras"
-    ],
-    requirements: [
-      "Je bent minimaal 16 of 17 jaar oud",
-      "Enthousiaste, zonnige en gastvrije instelling",
-      "Beschikbaar voor minimaal één weekenddag of avonddienst",
-      "Ervaring is een pré, maar enthousiasme en leergierigheid vinden wij belangrijker!"
-    ],
-    benefits: [
-      "Aantrekkelijk uurloon met wekelijkse fooiverdeling",
-      "Flexibele werkuren ideaal te combineren met studie of sport",
-      "Gratis personeelseten tijdens lange shifts",
-      "Leuke trainingen via The Coast Hospitality Academy",
-      "Gezellige nazit met een koud drankje op het mooiste terras van Monster"
-    ]
-  },
-  kok: {
-    title: "Zelfstandig Werkend Kok",
-    hours: "24 - 38 uur per week (Fulltime / Parttime)",
-    dept: "Keuken",
-    intro: "Koken met een briesje van de zee! In onze keuken bereiden we smaakvolle gerechten met dagverse ingrediënten, van krokante kibbeling en The Coast burgers tot malse tournedos en fruit de mer.",
-    tasks: [
-      "Zelfstandig draaien van de koude of warme kant tijdens service",
-      "Mise-en-place verzorgen voor lunch, borrel en diner",
-      "Nieuwe gerechten uitproberen en creatief meedenken",
-      "Schoonhouden van de werkplek en naleven van hygiëneregels"
-    ],
-    requirements: [
-      "Ervaring als zelfstandig werkend kok in een restaurant",
-      "Oog voor detail, smaak en mooie presentatie",
-      "Flexibel inzetbaar in het weekend en tijdens seizoenspieken",
-      "Teamspeler die rust bewaart in de spits"
-    ],
-    benefits: [
-      "Goed salaris passend bij je ervaring en kunde",
-      "Wekelijkse fooi gelijkwaardig verdeeld onder keuken en bediening",
-      "Reiskostenvergoeding en goede pensioenregeling",
-      "20% personeelskorting voor jou en je gezelschap",
-      "Fijne werkomgeving met een hecht team van koks"
-    ]
-  },
-  barista: {
-    title: "Barista & Cocktail Bartender",
-    hours: "16 - 28 uur per week (Parttime & Weekend)",
-    dept: "Bar & Lounge",
-    intro: "Ben jij een meester in latte art en shake je met gemak de lekkerste spritzes en mojito's? Achter onze royale bar ben jij de spil van alle dranken tijdens zonnige middagen en gouden zonsondergangen.",
-    tasks: [
-      "Bereiden van kwaliteitskoffies en espresso's met latte art",
-      "Tappen van speciaalbieren en bereiden van cocktails en mocktails",
-      "Bijhouden van de drankvoorraad, koelingen en barattributen",
-      "Sfeervolle interactie met gasten aan de bar"
-    ],
-    requirements: [
-      "Passie voor koffie, cocktails en gastvrijheid",
-      "Snel en efficiënt kunnen werken in drukke momenten",
-      "Beschikbaar in de weekenden en/of zwoele zomeravonden",
-      "Representatief, sociaal en verzorgd"
-    ],
-    benefits: [
-      "Lekker uurloon + wekelijkse fooi",
-      "Cocktail- en baristaworkshops",
-      "Toffe werkplek met uitzicht over de golven",
-      "Flexibele uren en gezellige borrels na sluitingstijd"
-    ]
-  },
-  spoelkeuken: {
-    title: "Spoelkeuken Hero & Keukenhulp (Vanaf 15 jaar!)",
-    hours: "8 - 20 uur per week (Ideale Bijbaan!)",
-    dept: "Spoelkeuken & Keuken",
-    intro: "Zonder de afwas staat alles stil! Als Spoelkeuken Hero zorg jij dat koks en bediening altijd schoon servies, pannen en glaswerk hebben. De perfecte eerste horecabaan waarin je goed verdient en kunt doorgroeien!",
-    tasks: [
-      "Sorteren en machinaal reinigen van borden, bestek en pannen",
-      "Netjes opruimen van schoon servies in restaurant en keuken",
-      "Koks ondersteunen met eenvoudige snij- en schoonmaaktaken",
-      "Muziekje aan en lekker meters maken in een gezellig team"
-    ],
-    requirements: [
-      "Je bent 15 jaar of ouder",
-      "Niet bang om de handen uit de mouwen te steken",
-      "Beschikbaar in weekenden, vakanties of doordeweekse avonden",
-      "Betrouwbaar en enthousiast"
-    ],
-    benefits: [
-      "Goed salaris (boven minimum jeugdloon!)",
-      "Eerlijk meedelen in de royale fooienpot — dat tikt lekker aan!",
-      "Gratis eten & drinken tijdens je dienst",
-      "Doorgroeien naar keukenhulp of bediening als je dat leuk vindt",
-      "Heel veel gezelligheid met leeftijdsgenoten"
-    ]
-  },
-  runner: {
-    title: "Zomer- & Terrasrunner (Strandseizoen)",
-    hours: "Flexibel: 10 - 35 uur per week",
-    dept: "Terras & Lounge",
-    intro: "Genieten van de zon en ondertussen flink cashen! Als terrasrunner breng je drankjes en bites vliegensvlug naar onze loungebanken en zonneterras. De ultieme zomerbaan voor energieke doeners.",
-    tasks: [
-      "Borden en drankplateaus uitlopen over het verhoogde zonneterras",
-      "Tafels afruimen, schoonmaken en gereedmaken voor nieuwe gasten",
-      "Gasten voorzien van extra servetten, sausjes en bestek",
-      "Actief meewerken tijdens zonnige stranddagen en evenementen"
-    ],
-    requirements: [
-      "Vanaf 15 of 16 jaar",
-      "Fit, energiek en graag buiten in beweging",
-      "Stressbestendig en collegiaal",
-      "Vakanties en zonnige weekenden beschikbaar"
-    ],
-    benefits: [
-      "Top uurloon + mooie fooi",
-      "Werken in de zon met uitzicht op zee",
-      "Super flexibele uren via handige rooster-app",
-      "Korting op onze menukaart",
-      "De leukste zomer van je leven met ons team!"
     ]
   }
 };
@@ -298,8 +174,12 @@ function selectJobInForm(jobTitle) {
   const select = document.getElementById('applyJob');
   if (!select) return;
 
+  const target = (jobTitle || '').toLowerCase();
   for (let i = 0; i < select.options.length; i++) {
-    if (select.options[i].value.includes(jobTitle) || jobTitle.includes(select.options[i].value)) {
+    const optVal = select.options[i].value.toLowerCase();
+    if (optVal.includes(target) || target.includes(optVal) ||
+        (target.includes('keuken') && optVal.includes('keuken')) ||
+        (target.includes('open') && optVal.includes('open'))) {
       select.selectedIndex = i;
       break;
     }

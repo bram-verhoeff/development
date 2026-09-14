@@ -3439,3 +3439,83 @@ button, input, select, textarea {
   .hiring-actions { width: 100%; flex-direction: column; }
   .hiring-actions .btn { width: 100%; justify-content: center; }
 }
+
+/* ==========================================================================
+   OPEN APPLICATION BANNER (TALENT POOL)
+   ========================================================================== */
+.open-application-banner {
+  background: var(--c-sand-50);
+  border: 2px dashed rgba(226, 106, 77, 0.35);
+  border-radius: var(--radius-lg);
+  padding: 32px 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  margin-top: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+}
+
+.open-app-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.open-app-icon {
+  width: 54px;
+  height: 54px;
+  background: rgba(226, 106, 77, 0.12);
+  color: var(--c-sunset);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.open-app-tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--c-sunset);
+  margin-bottom: 4px;
+}
+
+.open-app-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--c-ocean-deep);
+  margin-bottom: 6px;
+}
+
+.open-app-desc {
+  font-size: 0.95rem;
+  color: var(--c-text-muted);
+  line-height: 1.55;
+  max-width: 650px;
+}
+
+.open-app-actions {
+  flex-shrink: 0;
+}
+
+@media (max-width: 900px) {
+  .open-application-banner {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 24px 20px;
+  }
+  .open-app-content {
+    flex-direction: column;
+  }
+  .open-app-actions {
+    margin-top: 10px;
+  }
+  .open-app-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
