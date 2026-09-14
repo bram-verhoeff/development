@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollProgress();
   initStickyHeader();
   initMobileNav();
+  initHeroSlider();
   initLiveCoastalIntelligence();
   initAmbientOceanSynth();
   initSeasonalSwitcher();
@@ -69,6 +70,138 @@ function initMobileNav() {
       toggle.setAttribute('aria-expanded', 'false');
     });
   });
+}
+
+/* ==========================================================================
+   IMMERSIVE HERO SLIDER
+   Full-screen multi-slide crossfade with Ken Burns zoom, autoplay,
+   touch swipe, keyboard navigation & progress synchronization
+   ========================================================================== */
+function initHeroSlider() {
+  const slider = document.getElementById('heroSlider');
+  if (!slider) return;
+
+  const slides = slider.querySelectorAll('.hero-slide');
+  const dots = document.querySelectorAll('#heroDots .hero-dot');
+  const prevBtn = document.getElementById('heroPrevBtn');
+  const nextBtn = document.getElementById('heroNextBtn');
+
+  if (slides.length === 0) return;
+
+  let currentIndex = 0;
+  let autoplayTimer = null;
+  const slideDuration = 6500; // 6.5 seconds
+
+  function showSlide(index) {
+    // Wrap index safely
+    if (index < 0) {
+      currentIndex = slides.length - 1;
+    } else if (index >= slides.length) {
+      currentIndex = 0;
+    } else {
+      currentIndex = index;
+    }
+
+    // Toggle active slide
+    slides.forEach((slide, i) => {
+      if (i === currentIndex) {
+        slide.classList.add('active');
+      } else {
+        slide.classList.remove('active');
+      }
+    });
+
+    // Toggle active dot
+    dots.forEach((dot, i) => {
+      if (i === currentIndex) {
+        dot.classList.add('active');
+      } else {
+        dot.classList.remove('active');
+      }
+    });
+
+    resetAutoplay();
+  }
+
+  function startAutoplay() {
+    stopAutoplay();
+    autoplayTimer = setInterval(() => {
+      showSlide(currentIndex + 1);
+    }, slideDuration);
+  }
+
+  function stopAutoplay() {
+    if (autoplayTimer) {
+      clearInterval(autoplayTimer);
+      autoplayTimer = null;
+    }
+  }
+
+  function resetAutoplay() {
+    startAutoplay();
+  }
+
+  // Arrow Clicks
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      showSlide(currentIndex - 1);
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      showSlide(currentIndex + 1);
+    });
+  }
+
+  // Dot Clicks
+  dots.forEach((dot, i) => {
+    dot.addEventListener('click', () => {
+      showSlide(i);
+    });
+  });
+
+  // Pause on hover
+  slider.addEventListener('mouseenter', stopAutoplay);
+  slider.addEventListener('mouseleave', startAutoplay);
+
+  // Keyboard navigation when near top of page
+  window.addEventListener('keydown', (e) => {
+    if (window.scrollY < 600) {
+      if (e.key === 'ArrowLeft') {
+        showSlide(currentIndex - 1);
+      } else if (e.key === 'ArrowRight') {
+        showSlide(currentIndex + 1);
+      }
+    }
+  });
+
+  // Touch Swipe Support
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  slider.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+
+  slider.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+  }, { passive: true });
+
+  function handleSwipe() {
+    const swipeThreshold = 50;
+    if (touchEndX < touchStartX - swipeThreshold) {
+      // Swiped Left -> Next
+      showSlide(currentIndex + 1);
+    } else if (touchEndX > touchStartX + swipeThreshold) {
+      // Swiped Right -> Prev
+      showSlide(currentIndex - 1);
+    }
+  }
+
+  // Initialize first slide and start timer
+  showSlide(0);
 }
 
 /* ==========================================================================
