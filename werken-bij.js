@@ -83,7 +83,16 @@ function initStickyHeader() {
 function initMobileNav() {
   const toggle = document.getElementById('mobileToggle');
   const nav = document.getElementById('mainNav');
+  const header = document.getElementById('siteHeader');
   if (!toggle || !nav) return;
+
+  function updateNavPosition() {
+    if (header) {
+      const rect = header.getBoundingClientRect();
+      const bottom = Math.max(0, Math.round(rect.bottom));
+      document.documentElement.style.setProperty('--mobile-header-offset', `${bottom}px`);
+    }
+  }
 
   function closeMenu() {
     nav.classList.remove('open');
@@ -94,6 +103,7 @@ function initMobileNav() {
 
   toggle.addEventListener('click', (e) => {
     e.stopPropagation();
+    updateNavPosition();
     const isOpen = nav.classList.toggle('open');
     toggle.classList.toggle('active', isOpen);
     toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
@@ -115,8 +125,18 @@ function initMobileNav() {
   window.addEventListener('resize', () => {
     if (window.innerWidth > 960 && nav.classList.contains('open')) {
       closeMenu();
+    } else if (nav.classList.contains('open')) {
+      updateNavPosition();
     }
   });
+
+  window.addEventListener('scroll', () => {
+    if (nav.classList.contains('open')) {
+      updateNavPosition();
+    }
+  }, { passive: true });
+
+  updateNavPosition();
 }
 
 /* Filter Job Cards by Category */

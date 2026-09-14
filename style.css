@@ -99,7 +99,6 @@ body {
 body.menu-open,
 body.modal-open {
   overflow: hidden !important;
-  touch-action: none;
 }
 
 /* Custom Selection */
@@ -1000,56 +999,76 @@ button, input, select, textarea {
 @media (max-width: 768px) {
   .hero-slider-wrap {
     height: auto;
-    min-height: 580px;
-    min-height: calc(100svh - 72px);
-    max-height: 880px;
+    min-height: 520px;
+    min-height: calc(100svh - 68px);
+    min-height: calc(100dvh - 68px);
+    max-height: none;
     display: flex;
     align-items: center;
-    padding: 20px 0 54px;
+    padding: 16px 0 48px;
   }
   .hero-slide-overlay {
     background: 
-      linear-gradient(180deg, rgba(8, 23, 32, 0.65) 0%, rgba(8, 23, 32, 0.45) 45%, rgba(8, 23, 32, 0.9) 100%),
-      linear-gradient(90deg, rgba(8, 23, 32, 0.7) 0%, rgba(8, 23, 32, 0.3) 100%);
+      linear-gradient(180deg, rgba(8, 23, 32, 0.7) 0%, rgba(8, 23, 32, 0.5) 45%, rgba(8, 23, 32, 0.92) 100%),
+      linear-gradient(90deg, rgba(8, 23, 32, 0.75) 0%, rgba(8, 23, 32, 0.4) 100%);
   }
   .hero-content {
-    padding: 10px 0 24px;
+    padding: 12px 0 32px;
     max-width: 580px;
     width: 100%;
   }
   .hero-top-badges {
-    gap: 8px;
+    gap: 6px;
     margin-bottom: 12px;
   }
   .hero-time-greeting, .hero-badge-tag {
-    font-size: 0.76rem;
-    padding: 4px 12px;
+    font-size: 0.74rem;
+    padding: 4px 10px;
   }
   .hero-location-badge {
     font-size: 0.72rem;
     padding: 4px 10px;
-    letter-spacing: 0.8px;
+    letter-spacing: 0.6px;
   }
   .hero-title {
-    font-size: clamp(1.75rem, 6.2vw, 2.45rem);
-    line-height: 1.15;
+    font-size: clamp(1.65rem, 5.8vw, 2.25rem);
+    line-height: 1.18;
     margin-bottom: 12px;
   }
   .hero-desc {
-    font-size: clamp(0.88rem, 2.5vw, 1.02rem);
+    font-size: clamp(0.88rem, 2.4vw, 1rem);
     line-height: 1.55;
-    margin-bottom: 22px;
+    margin-bottom: 20px;
     max-width: 520px;
   }
   .hero-arrow {
     display: none;
   }
   .hero-features-section {
-    padding: 20px 0;
+    padding: 16px 0;
   }
   .hero-features-bar {
-    grid-template-columns: 1fr;
-    padding: 18px 20px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 16px 18px;
+  }
+  .hero-feature-item {
+    gap: 10px;
+    align-items: center;
+  }
+  .hero-feature-item .feature-icon {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+  }
+  .hero-feature-item .feature-text h4 {
+    font-size: 0.88rem;
+    line-height: 1.25;
+    margin-bottom: 2px;
+  }
+  .hero-feature-item .feature-text p {
+    font-size: 0.75rem;
+    line-height: 1.35;
   }
 }
 
@@ -2689,22 +2708,23 @@ button, input, select, textarea {
 
   .main-nav {
     position: fixed;
-    top: 72px;
+    top: var(--mobile-header-offset, 72px);
     left: 0;
     width: 100%;
-    height: calc(100vh - 72px);
-    height: calc(100dvh - 72px);
+    height: calc(100vh - var(--mobile-header-offset, 72px));
+    height: calc(100dvh - var(--mobile-header-offset, 72px));
     background: #ffffff;
     flex-direction: column;
     align-items: flex-start;
-    padding: 24px 20px calc(24px + env(safe-area-inset-bottom, 0px));
-    gap: 18px;
+    padding: 20px 20px calc(28px + env(safe-area-inset-bottom, 0px));
+    gap: 14px;
     transform: translateX(100%);
     opacity: 1;
     pointer-events: auto;
     transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   }
 
@@ -2716,14 +2736,26 @@ button, input, select, textarea {
     flex-direction: column;
     align-items: flex-start;
     width: 100%;
-    gap: 8px;
+    gap: 4px;
   }
 
   .nav-link {
-    font-size: 1.15rem;
-    padding: 8px 0;
+    display: flex;
+    align-items: center;
+    font-size: 1.08rem;
+    font-weight: 600;
+    padding: 11px 12px;
     width: 100%;
+    border-radius: var(--radius-sm);
     border-bottom: 1px solid rgba(13, 35, 48, 0.05);
+    color: var(--c-ocean-950);
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .nav-link:active,
+  .nav-link:hover {
+    background: var(--c-sand-100);
+    color: var(--c-sunset);
   }
 
   .nav-actions {
@@ -2731,14 +2763,17 @@ button, input, select, textarea {
     flex-direction: column;
     gap: 10px;
     margin-left: 0;
-    padding-top: 18px;
+    padding-top: 14px;
+    padding-bottom: 8px;
     border-top: 1px solid var(--c-sand-200);
   }
 
   .nav-actions .btn {
     width: 100%;
     justify-content: center;
-    padding: 13px 20px;
+    padding: 14px 20px;
+    font-size: 0.95rem;
+    font-weight: 700;
   }
 
   .nav-actions .btn-outline {
@@ -2749,34 +2784,31 @@ button, input, select, textarea {
 /* --- 768px: Tablets Portrait & Larger Phones --- */
 @media (max-width: 768px) {
   .hero-buttons {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 10px;
     width: 100%;
   }
   
-  .hero-buttons .btn:first-child {
-    grid-column: 1 / -1;
+  .hero-buttons .btn {
     width: 100%;
     justify-content: center;
+    text-align: center;
     padding: 14px 20px;
-    font-size: 0.98rem;
+    font-size: 0.94rem;
     font-weight: 700;
+    white-space: normal;
   }
 
-  .hero-buttons .btn:not(:first-child) {
-    grid-column: auto;
-    width: 100%;
-    justify-content: center;
-    padding: 12px 10px;
-    font-size: 0.84rem;
-    white-space: nowrap;
-    text-align: center;
+  .hero-buttons .btn:first-child {
+    padding: 15px 22px;
+    font-size: 1rem;
   }
   
   .hero-features-bar {
-    grid-template-columns: 1fr;
-    padding: 18px 20px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 16px 18px;
   }
 
   .walkin-card {
@@ -2844,7 +2876,8 @@ button, input, select, textarea {
 
   .floating-concierge {
     bottom: calc(18px + env(safe-area-inset-bottom, 0px));
-    right: calc(16px + env(safe-area-inset-right, 0px));
+    left: calc(16px + env(safe-area-inset-left, 0px));
+    right: auto;
   }
 
   .floating-concierge .concierge-bubble {
@@ -2852,13 +2885,13 @@ button, input, select, textarea {
   }
 
   .concierge-btn {
-    width: 50px;
-    height: 50px;
+    width: 48px;
+    height: 48px;
   }
 
   .concierge-btn svg {
-    width: 25px;
-    height: 25px;
+    width: 24px;
+    height: 24px;
   }
 }
 
@@ -2919,13 +2952,31 @@ button, input, select, textarea {
   }
 
   .menu-controls {
-    margin-bottom: 30px;
-    gap: 16px;
+    margin-bottom: 24px;
+    gap: 14px;
   }
 
   .menu-tabs {
     width: 100%;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-full);
+    padding: 5px 6px;
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .menu-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .menu-tab-btn {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+    padding: 8px 14px;
+    font-size: 0.82rem;
   }
   
   .event-calculator-box {
@@ -2969,7 +3020,7 @@ button, input, select, textarea {
   }
 
   .review-card {
-    padding: 22px 18px;
+    padding: 20px 16px;
   }
 
   .dual-banner-card {
@@ -2981,12 +3032,13 @@ button, input, select, textarea {
   }
 
   .gallery-masonry {
-    grid-template-columns: 1fr;
-    gap: 16px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
   }
 
   .gallery-item {
-    height: 230px;
+    height: 155px;
+    border-radius: var(--radius-md);
   }
 
   .gallery-filters {
@@ -3018,19 +3070,21 @@ button, input, select, textarea {
   }
 
   .main-nav {
-    top: 64px;
-    height: calc(100vh - 64px);
-    height: calc(100dvh - 64px);
+    top: var(--mobile-header-offset, 64px);
+    height: calc(100vh - var(--mobile-header-offset, 64px));
+    height: calc(100dvh - var(--mobile-header-offset, 64px));
   }
 
   .hero-slider-wrap {
-    min-height: 600px;
-    padding: 20px 0 40px;
+    min-height: 480px;
+    min-height: calc(100svh - 64px);
+    min-height: calc(100dvh - 64px);
+    padding: 10px 0 40px;
   }
 
   .hero-top-badges {
     gap: 6px;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
   }
 
   .hero-time-greeting, .hero-badge-tag, .hero-location-badge {
@@ -3044,7 +3098,7 @@ button, input, select, textarea {
   }
 
   .section-title {
-    font-size: clamp(1.6rem, 5.5vw, 2.1rem);
+    font-size: clamp(1.5rem, 5.5vw, 1.95rem);
   }
 
   .season-btn {
@@ -3067,7 +3121,7 @@ button, input, select, textarea {
 
   .menu-tab-btn {
     padding: 8px 14px;
-    font-size: 0.84rem;
+    font-size: 0.82rem;
   }
 
   .diet-toggle-btn {
@@ -3104,30 +3158,41 @@ button, input, select, textarea {
   }
 
   .hero-slider-wrap {
-    min-height: 560px;
-    padding: 10px 0 50px;
+    min-height: 460px;
+    min-height: calc(100svh - 60px);
+    min-height: calc(100dvh - 60px);
+    padding: 8px 0 36px;
   }
 
   .hero-title {
-    font-size: 1.55rem;
+    font-size: 1.45rem;
   }
 
   .hero-desc {
-    font-size: 0.85rem;
-    line-height: 1.5;
-    margin-bottom: 16px;
+    font-size: 0.84rem;
+    line-height: 1.45;
+    margin-bottom: 14px;
   }
 
   .hero-buttons {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 8px;
+    width: 100%;
   }
 
-  .hero-buttons .btn:not(:first-child) {
-    grid-column: 1 / -1;
-    font-size: 0.86rem;
-    padding: 11px 14px;
+  .hero-buttons .btn {
+    width: 100%;
+    font-size: 0.88rem;
+    padding: 12px 14px;
     white-space: normal;
+    text-align: center;
+  }
+
+  .hero-features-bar {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 12px 14px;
   }
 
   .menu-card {
@@ -3136,6 +3201,56 @@ button, input, select, textarea {
 
   .calc-result-card {
     padding: 18px 12px;
+  }
+}
+
+/* ==========================================================================
+   MENUKAART PAGE HERO BANNER
+   ========================================================================== */
+.menu-page-hero {
+  position: relative;
+  width: 100%;
+  min-height: 480px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background-color: var(--c-ocean-950);
+  padding: 80px 0 90px;
+}
+
+.menu-page-hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.menu-page-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+  filter: brightness(0.68) saturate(1.15);
+}
+
+.menu-page-hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: 
+    linear-gradient(180deg, rgba(8, 23, 32, 0.6) 0%, rgba(8, 23, 32, 0.4) 50%, rgba(8, 23, 32, 0.94) 100%),
+    linear-gradient(90deg, rgba(8, 23, 32, 0.8) 0%, rgba(8, 23, 32, 0.5) 60%, rgba(8, 23, 32, 0.25) 100%);
+}
+
+.menu-page-hero-content {
+  position: relative;
+  z-index: 3;
+  max-width: 820px;
+}
+
+@media (max-width: 768px) {
+  .menu-page-hero {
+    min-height: 400px;
+    padding: 40px 0 50px;
   }
 }
 
@@ -3349,8 +3464,8 @@ button, input, select, textarea {
 /* Job Cards Grid */
 .job-cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 28px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: 24px;
   margin-top: 40px;
 }
 

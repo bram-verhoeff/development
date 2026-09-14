@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initAmbientOceanSynth();
   initSeasonalSwitcher();
   initMenuSystem();
-  initEventCalculator();
   initGalleryLightbox();
   initFaqAccordion();
   initModals();
@@ -57,7 +56,16 @@ function initStickyHeader() {
 function initMobileNav() {
   const toggle = document.getElementById('mobileToggle');
   const nav = document.getElementById('mainNav');
+  const header = document.getElementById('siteHeader');
   if (!toggle || !nav) return;
+
+  function updateNavPosition() {
+    if (header) {
+      const rect = header.getBoundingClientRect();
+      const bottom = Math.max(0, Math.round(rect.bottom));
+      document.documentElement.style.setProperty('--mobile-header-offset', `${bottom}px`);
+    }
+  }
 
   function closeMenu() {
     nav.classList.remove('open');
@@ -68,6 +76,7 @@ function initMobileNav() {
 
   toggle.addEventListener('click', (e) => {
     e.stopPropagation();
+    updateNavPosition();
     const isOpen = nav.classList.toggle('open');
     toggle.classList.toggle('active', isOpen);
     toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
@@ -89,8 +98,18 @@ function initMobileNav() {
   window.addEventListener('resize', () => {
     if (window.innerWidth > 960 && nav.classList.contains('open')) {
       closeMenu();
+    } else if (nav.classList.contains('open')) {
+      updateNavPosition();
     }
   });
+
+  window.addEventListener('scroll', () => {
+    if (nav.classList.contains('open')) {
+      updateNavPosition();
+    }
+  }, { passive: true });
+
+  updateNavPosition();
 }
 
 /* ==========================================================================
@@ -504,47 +523,7 @@ function initMenuSystem() {
   }
 }
 
-/* ==========================================================================
-   EVENT CALCULATOR
-   ========================================================================== */
-function initEventCalculator() {
-  const rangeInput = document.getElementById('calcRangeGuests');
-  const guestDisplay = document.getElementById('calcGuestCount');
-  const priceDisplay = document.getElementById('calcPricePerPerson');
-  const totalDisplay = document.getElementById('calcTotalPrice');
 
-  const optBbq = document.getElementById('calcOptBbq');
-  const optBar = document.getElementById('calcOptBar');
-  const optCocktails = document.getElementById('calcOptCocktails');
-  const optActivity = document.getElementById('calcOptActivity');
-
-  if (!rangeInput || !priceDisplay) return;
-
-  function recalculate() {
-    const guests = parseInt(rangeInput.value, 10);
-    guestDisplay.textContent = guests;
-
-    let perPerson = 0;
-    if (optBbq && optBbq.checked) perPerson += 38.50;
-    if (optBar && optBar.checked) perPerson += 26.00;
-    if (optCocktails && optCocktails.checked) perPerson += 9.50;
-    if (optActivity && optActivity.checked) perPerson += 25.00;
-
-    if (perPerson === 0) perPerson = 25.00;
-
-    const total = Math.round(guests * perPerson);
-
-    priceDisplay.textContent = `€ ${Math.round(perPerson)},-`;
-    totalDisplay.textContent = `Totaal indicatie: ca. € ${total.toLocaleString('nl-NL')},-`;
-  }
-
-  rangeInput.addEventListener('input', recalculate);
-  [optBbq, optBar, optCocktails, optActivity].forEach(cb => {
-    if (cb) cb.addEventListener('change', recalculate);
-  });
-
-  recalculate();
-}
 
 /* ==========================================================================
    GALLERY LIGHTBOX WITH KEYBOARD NAVIGATION
