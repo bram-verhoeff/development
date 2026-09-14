@@ -276,13 +276,22 @@ button, input, select, textarea {
 }
 
 .brand-logo-img {
-  height: 46px;
+  height: 50px;
   width: auto;
+  max-width: 170px;
+  object-fit: contain;
   transition: transform 0.3s ease;
 }
 
 .brand-link:hover .brand-logo-img {
-  transform: scale(1.02);
+  transform: scale(1.03);
+}
+
+.footer-logo-img {
+  height: 48px;
+  width: auto;
+  max-width: 170px;
+  object-fit: contain;
 }
 
 .main-nav {
