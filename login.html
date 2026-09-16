@@ -544,7 +544,7 @@
         // Fallback for static GitHub Pages hosting
         if (!loggedIn) {
           const hashedInput = await sha256(password);
-          const defaultHash = 'c675b00119bb361e1e369634ee97d81ba16bb41ef13c86078228594875597982'; // Ju8o3Ca6
+          const defaultHash = 'c675b00119bb361e1e369634ee97d81ba16bb41ef13c86078228594875597982';
           const customHash = localStorage.getItem('highflow_custom_hash');
 
           if (hashedInput === defaultHash || (customHash && hashedInput === customHash)) {

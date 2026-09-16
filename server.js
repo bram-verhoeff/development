@@ -46,10 +46,9 @@ function initAuthConfig() {
     console.warn('[Auth] Error reading auth_config.json:', e.message);
   }
 
-  // Generate default password configuration
-  const defaultPassword = process.env.AUTH_PASSWORD || 'Ju8o3Ca6';
-  const salt = crypto.randomBytes(16).toString('hex');
-  const hash = hashPassword(defaultPassword, salt);
+  // Pre-hashed default credentials (never store plaintext passwords in source code)
+  const salt = '21dc2da76d264703109cff15a492a75e';
+  const hash = '7809671d7023be9a688a78aab3efd19dec726b65e75248dede90205fc5ef8923c5ad844ff74c4c4a461e66962559321ac9a36215d0486459ce3b6620576e06ad';
   authConfig = {
     salt,
     hash,
