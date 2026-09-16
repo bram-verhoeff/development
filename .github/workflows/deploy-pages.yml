@@ -28,13 +28,11 @@ jobs:
         run: |
           mkdir -p dist/branches
           
-          # Copy portal files from main
-          cp index.html style.css main.js dist/
-          [ -d assets ] && cp -r assets dist/ || true
-          [ -f branches.json ] && cp branches.json dist/ || true
-
           # Fetch all branches from remote
           git fetch --all
+
+          # Extract portal files from main branch into dist/
+          git archive origin/main | tar -x -C dist/ || true
 
           # List all remote branches
           BRANCHES=$(git branch -r | grep -v '\->' | grep -v 'origin/gh-pages' | sed 's/origin\///')
