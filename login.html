@@ -357,27 +357,7 @@
       display: flex;
     }
 
-    /* Default password hint */
-    .hint-box {
-      margin-top: 24px;
-      padding: 12px 14px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px dashed rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      font-size: 12px;
-      color: #94a3b8;
-      text-align: center;
-      line-height: 1.5;
-    }
 
-    .hint-box code {
-      background: rgba(99, 102, 241, 0.2);
-      color: #c7d2fe;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-family: 'JetBrains Mono', monospace;
-      font-weight: 600;
-    }
 
     /* Footer Meta */
     .login-footer {
@@ -473,11 +453,6 @@
           <span id="btn-text">Ontgrendel Dashboard &amp; Studio ➔</span>
         </button>
       </form>
-
-      <div class="hint-box">
-        🔑 <strong>Standaard wachtwoord:</strong> <code>bram2026</code><br>
-        <span style="font-size: 11px; color: #64748b;">(Je kunt dit na inloggen op elk moment wijzigen via <em>Instellingen ➔ Beveiliging</em>)</span>
-      </div>
     </div>
 
     <div class="login-footer">
@@ -569,7 +544,7 @@
         // Fallback for static GitHub Pages hosting
         if (!loggedIn) {
           const hashedInput = await sha256(password);
-          const defaultHash = 'be2790be0d5d344fd4d9f8c7384bbc5d5d3265597b97f3e9c31cc697aedf1195'; // bram2026
+          const defaultHash = 'c675b00119bb361e1e369634ee97d81ba16bb41ef13c86078228594875597982'; // Ju8o3Ca6
           const customHash = localStorage.getItem('highflow_custom_hash');
 
           if (hashedInput === defaultHash || (customHash && hashedInput === customHash)) {

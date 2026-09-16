@@ -47,7 +47,7 @@ function initAuthConfig() {
   }
 
   // Generate default password configuration
-  const defaultPassword = process.env.AUTH_PASSWORD || 'bram2026';
+  const defaultPassword = process.env.AUTH_PASSWORD || 'Ju8o3Ca6';
   const salt = crypto.randomBytes(16).toString('hex');
   const hash = hashPassword(defaultPassword, salt);
   authConfig = {
