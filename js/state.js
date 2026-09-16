@@ -159,12 +159,20 @@ class StateManager {
         if (!parsed.settings.linkedinAccessToken) parsed.settings.linkedinAccessToken = '';
         if (!parsed.settings.linkedinAuthorUrn) parsed.settings.linkedinAuthorUrn = '';
         if (!parsed.aiPosts) parsed.aiPosts = [];
-        // Clean out legacy misaligned CRM posts for AgevoDev
-        parsed.aiPosts = parsed.aiPosts.filter(p => 
-          !p.content.includes('CRM-automatiseringen') && 
-          !p.content.includes('GoHighLevel') && 
-          !p.content.includes('administratie en copy-paste')
-        );
+        // Ensure all built-in workflows (including ad campaign workflow) exist
+        if (!parsed.automations) parsed.automations = [];
+        INITIAL_DATA.automations.forEach(initWf => {
+          const index = parsed.automations.findIndex(a => a.id === initWf.id);
+          if (index === -1) {
+            parsed.automations.unshift(JSON.parse(JSON.stringify(initWf)));
+          } else {
+            parsed.automations[index] = {
+              ...JSON.parse(JSON.stringify(initWf)),
+              runs: parsed.automations[index].runs || initWf.runs || 0,
+              status: parsed.automations[index].status || initWf.status
+            };
+          }
+        });
         return parsed;
       }
     } catch (e) {

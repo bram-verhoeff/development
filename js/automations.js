@@ -43,7 +43,7 @@ class AutomationsEngine {
     if (!container) return;
 
     const automations = window.crmState.getAutomations();
-    const categories = ['all', 'Lead Gen', 'Afspraken', 'Onboarding', 'Sales'];
+    const categories = ['all', 'Sales', 'Marketing', 'Lead Gen', 'Afspraken', 'Onboarding'];
     const logs = window.crmState.getExecutionLogs();
 
     const filtered = automations.filter(wf => {

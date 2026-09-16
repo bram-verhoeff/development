@@ -65,8 +65,8 @@ class HighFlowApp {
         window.contactsModule?.init();
         break;
       case 'automations':
-        if (targetTab && window.automationsEngine) {
-          window.automationsEngine.activeTab = targetTab;
+        if (window.automationsEngine) {
+          window.automationsEngine.activeTab = targetTab || 'workflows';
         }
         window.automationsEngine?.init();
         break;
