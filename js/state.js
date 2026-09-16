@@ -69,6 +69,59 @@ const INITIAL_DATA = {
           }
         }
       ]
+    },
+    {
+      id: 'wf_ad_leads_webplatform',
+      name: '⚡ Ad Campagne: Maatwerk Webplatform Leads (Instant Opvolging)',
+      description: 'Wordt getriggerd zodra een potentiële klant je advertentieformulier invult. Stuurt direct een SMS en e-mailbevestiging, maakt een opportunity aan (€ 4.500) in de pipeline en geeft Bram een notificatie om binnen 15 minuten te bellen.',
+      status: 'active',
+      runs: 4,
+      category: 'Sales',
+      trigger: {
+        id: 't_ad_form',
+        type: 'form_submitted',
+        title: 'Nieuwe Lead via Meta / Website Advertentie',
+        config: { formName: 'Maatwerk Webplatform Intake' }
+      },
+      steps: [
+        {
+          id: 's_ad_1',
+          type: 'create_deal',
+          title: 'Opportunity Aanmaken in Pipeline (€ 4.500)',
+          config: {
+            title: 'Maatwerk Webplatform - {{contact.name}}',
+            value: 4500,
+            pipelineStage: 'qualified'
+          }
+        },
+        {
+          id: 's_ad_2',
+          type: 'send_sms',
+          title: 'Directe SMS naar Lead (Binnen 30 sec)',
+          config: {
+            message: 'Hoi {{contact.first_name}}! Bram van AgevoDev hier. Bedankt voor je interesse in een modern Next.js webplatform. Ik bekijk momenteel je aanvraag en bel je zo even om kort kennis te maken. Schikt dat?'
+          }
+        },
+        {
+          id: 's_ad_3',
+          type: 'send_email',
+          title: 'E-mail met Portfolio & Belofte naar Klant',
+          config: {
+            subject: 'Je aanvraag voor een modern maatwerk webplatform bij AgevoDev',
+            body: 'Beste {{contact.first_name}},\n\nBedankt voor je aanvraag voor een maatwerk webplatform!\n\nBij AgevoDev bouwen we uitsluitend op moderne enterprise-technologie (Next.js 16, TypeScript en Supabase), zodat jouw platform:\n• Binnen 100 milliseconden laadt\n• 100/100 scoort op Google Core Web Vitals\n• 100% jouw intellectueel eigendom is (geen trage plugins of vendor lock-in)\n\nWil je direct alvast een 20-minuten strategiegesprek claimen? Dat kan via: https://agevodev.nl\n\nMet vriendelijke groet,\nBram Verhoeff\nFounder @ AgevoDev.nl'
+          }
+        },
+        {
+          id: 's_ad_4',
+          type: 'create_task',
+          title: 'Directe Bel-Taak voor Bram (Bel binnen 15 min!)',
+          config: {
+            taskTitle: '🔥 Bel nieuwe lead {{contact.name}} ({{contact.phone}})! Leads binnen 15 min converteren 4x sneller.',
+            assignee: 'Bram Verhoeff',
+            dueDays: 0
+          }
+        }
+      ]
     }
   ],
   conversations: [],
