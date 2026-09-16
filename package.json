@@ -1,0 +1,12 @@
+{
+  "name": "highflow-crm",
+  "version": "1.0.0",
+  "description": "GoHighLevel-style CRM & Marketing Automation Platform with Visual Workflow Builder",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["crm", "gohighlevel", "automations", "pipeline", "kanban", "inbox"],
+  "author": "Bram Verhoeff",
+  "license": "MIT"
+}

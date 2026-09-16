@@ -1,113 +1,189 @@
 <!DOCTYPE html>
-<html lang="nl-NL">
+<html lang="nl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agevo // Bram Verhoeff</title>
-  <meta name="description" content="Agevo development testserver van Bram Verhoeff.">
-  <meta name="author" content="Bram Verhoeff">
-  <meta name="robots" content="noindex, nofollow">
-
-  <!-- Google Fonts -->
+  <title>HighFlow CRM | GoHighLevel Automation & Sales Platform</title>
+  <meta name="description" content="All-in-one GoHighLevel alternatief met een visuele workflow builder, sales pipelines, omnichannel inbox en contactbeheer.">
+  
+  <!-- Modern Google Fonts: Plus Jakarta Sans & Outfit -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
-
-  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
-  <link rel="alternate icon" href="assets/logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236366f1'><polygon points='13 2 3 14 12 14 11 22 21 10 12 10 13 2'/></svg>">
 </head>
 <body>
-
-  <!-- Top Header -->
-  <header class="header">
-    <div class="container header-inner">
-      <div class="brand">
-        <a href="./" class="brand-link" title="AgevoDev">
-          <picture>
-            <source srcset="assets/logo.svg" type="image/svg+xml">
-            <img src="assets/logo.png" alt="AgevoDev Software Development" class="brand-logo" height="38">
-          </picture>
-        </a>
-        <div class="brand-sub-badge">
-          <span class="brand-author">Bram Verhoeff</span>
-        </div>
-      </div>
-      <div class="server-status">
-        <span class="status-dot"></span>
-        <span>Testserver Actief</span>
-      </div>
-    </div>
-  </header>
-
-  <!-- Main Content -->
-  <main class="main-content">
-    <div class="container">
-      
-      <!-- Intro / Title -->
-      <div class="title-area">
-        <h1 class="page-title">Git Branches</h1>
-        <p class="page-subtitle">Kies een branch om het bijbehorende testproduct te openen:</p>
-      </div>
-
-      <!-- Branches Grid -->
-      <div class="branches-grid" id="branches-container">
-        <!-- Dynamically loaded via main.js -->
-        <div class="loading">Bezig met laden van branches...</div>
-      </div>
-
-      <!-- Custom Project Call to Action -->
-      <section class="cta-card">
-        <div class="cta-text">
-          <div class="cta-pill">
-            <span class="cta-pill-dot"></span>
-            <span>Maatwerk Software &amp; Web</span>
-          </div>
-          <h2 class="cta-heading">Een eigen website of programma laten bouwen?</h2>
-          <p class="cta-sub">
-            Wil je ook een moderne website, webapplicatie of software op maat laten maken? Vraag vrijblijvend een offerte of kennismaking aan via <strong>agevodev.nl</strong>.
-          </p>
-        </div>
-        <div class="cta-action">
-          <a href="https://agevodev.nl" target="_blank" rel="noopener noreferrer" class="cta-btn">
-            <span>Aanvragen op agevodev.nl</span>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <path d="M7 17L17 7"></path>
-              <path d="M7 7h10v10"></path>
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <div class="brand-box">
+          <div class="brand-logo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
             </svg>
-          </a>
+          </div>
+          <div class="brand-info">
+            <span class="brand-name">HighFlow</span>
+            <span class="brand-badge">CRM & Workflows</span>
+          </div>
         </div>
-      </section>
 
-    </div>
-  </main>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container footer-inner">
-      <div class="footer-brand-info">
-        <span>&copy; 2026 <strong>Agevo</strong> &bull; Bram Verhoeff</span>
-        <span class="footer-divider">&bull;</span>
-        <span class="footer-kvk font-mono">KvK: <strong>42160840</strong></span>
+        <!-- Subaccount pill -->
+        <div class="subaccount-card">
+          <div class="subaccount-indicator"></div>
+          <div class="subaccount-details">
+            <small>Sub-Account</small>
+            <strong id="topbar-subaccount-label">AgevoDev & StudyElite BV</strong>
+          </div>
+        </div>
       </div>
 
-      <div class="footer-contact-links">
-        <a href="https://agevodev.nl" target="_blank" rel="noopener noreferrer" class="footer-link">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-          <span>agevodev.nl</span>
+      <!-- Main Navigation Links -->
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">OVERZICHT & MARKETING</div>
+        <a href="#dashboard" class="nav-item" data-view="dashboard" id="nav-dashboard">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+          <span>Dashboard</span>
         </a>
-        <a href="mailto:info@agevodev.nl" class="footer-link">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-          <span>info@agevodev.nl</span>
-        </a>
-        <a href="https://instagram.com/agevodev" target="_blank" rel="noopener noreferrer" class="footer-link">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-          <span>@agevodev</span>
-        </a>
-      </div>
-    </div>
-  </footer>
 
-  <script src="main.js"></script>
+        <a href="#automations" class="nav-item active" data-view="automations" id="nav-automations">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+          <span>Automations</span>
+          <span class="nav-pill-highlight">GHL Flows</span>
+        </a>
+
+        <div class="nav-section-title">SALES & CRM</div>
+        <a href="#contacts" class="nav-item" data-view="contacts" id="nav-contacts">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          <span>Contacten</span>
+          <span class="nav-counter" id="contacts-count-badge">0</span>
+        </a>
+
+        <a href="#pipeline" class="nav-item" data-view="pipeline" id="nav-pipeline">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+          <span>Opportunities / Deals</span>
+        </a>
+
+        <div class="nav-section-title">COMMUNICATIE</div>
+        <a href="#conversations" class="nav-item" data-view="conversations" id="nav-conversations">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+          <span>Gesprekken</span>
+          <span class="nav-unread-dot"></span>
+        </a>
+
+        <a href="#calendar" class="nav-item" data-view="calendar" id="nav-calendar">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          <span>Kalender</span>
+        </a>
+
+        <div class="nav-section-title">BEHEER</div>
+        <a href="#settings" class="nav-item" data-view="settings" id="nav-settings">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          <span>Instellingen</span>
+        </a>
+      </nav>
+
+      <!-- Sidebar Footer -->
+      <div class="sidebar-footer">
+        <div class="user-profile-widget">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" class="avatar-sm" alt="Bram">
+          <div class="user-info">
+            <strong>Bram Verhoeff</strong>
+            <small>Administrator</small>
+          </div>
+        </div>
+        <button class="btn-sidebar-reset" id="btn-reset-demo" title="Herstel standaard demo data">
+          ⟲ Reset Demo
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="app-main">
+      <!-- Global Top Bar -->
+      <header class="app-topbar">
+        <!-- Global Search / Command Palette Shortcut -->
+        <div class="topbar-search">
+          <svg class="icon search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="global-search-input" placeholder="Zoek contacten, flows, deals... (Ctrl + K)" readonly>
+          <kbd class="kbd-badge">Ctrl K</kbd>
+        </div>
+
+        <!-- Topbar Right Actions -->
+        <div class="topbar-actions">
+          <!-- Quick Add Button with Dropdown -->
+          <div class="quick-add-wrapper">
+            <button class="btn btn-primary" id="btn-global-quick-add">
+              <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="12" y2="12"></line></svg>
+              <span>+ Nieuw</span>
+            </button>
+            <div class="quick-add-menu" id="quick-add-menu">
+              <div class="menu-item" id="action-add-wf">
+                <svg class="icon-sm text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                <span>Nieuwe Workflow</span>
+              </div>
+              <div class="menu-item" id="action-add-contact">
+                <svg class="icon-sm text-sky" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+                <span>Nieuw Contact</span>
+              </div>
+              <div class="menu-item" id="action-add-deal">
+                <svg class="icon-sm text-emerald" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                <span>Nieuwe Opportunity</span>
+              </div>
+              <div class="menu-item" id="action-add-app">
+                <svg class="icon-sm text-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                <span>Afspraak Inplannen</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Notification Bell -->
+          <div class="icon-action-btn" title="Meldingen">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            <span class="notification-badge">3</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- View Containers -->
+      <main class="view-content-container">
+        <section id="dashboard-view" class="view-pane"></section>
+        <section id="automations-view" class="view-pane active"></section>
+        <section id="contacts-view" class="view-pane"></section>
+        <section id="pipeline-view" class="view-pane"></section>
+        <section id="conversations-view" class="view-pane"></section>
+        <section id="calendar-view" class="view-pane"></section>
+        <section id="settings-view" class="view-pane"></section>
+      </main>
+    </div>
+  </div>
+
+  <!-- Command Palette Modal (Ctrl + K) -->
+  <div class="modal-backdrop" id="command-palette-modal">
+    <div class="palette-content">
+      <div class="palette-input-row">
+        <svg class="icon text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="palette-input" placeholder="Type om te zoeken in heel HighFlow...">
+        <button class="icon-btn-sm" id="palette-close">&times;</button>
+      </div>
+      <div class="palette-results" id="palette-results"></div>
+    </div>
+  </div>
+
+  <!-- Global Toast Notifications Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Module Scripts in dependency order -->
+  <script src="js/state.js"></script>
+  <script src="js/automations.js"></script>
+  <script src="js/contacts.js"></script>
+  <script src="js/pipeline.js"></script>
+  <script src="js/conversations.js"></script>
+  <script src="js/calendar.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>
