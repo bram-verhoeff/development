@@ -78,7 +78,7 @@ class AutomationsEngine {
           ⚡ Workflows (${automations.length})
         </button>
         <button class="automation-tab-btn ${this.activeTab === 'linkedin' ? 'active' : ''}" id="tab-linkedin">
-          🤖 LinkedIn AI Studio (StudyElite & AgevoDev)
+          🤖 LinkedIn AI Studio (Bram Verhoeff, AgevoDev & StudyElite)
         </button>
         <button class="automation-tab-btn ${this.activeTab === 'history' ? 'active' : ''}" id="tab-history">
           📜 Live Uitvoeringslogboek (${logs.length})
@@ -117,7 +117,7 @@ class AutomationsEngine {
                 </span>
               </div>
               <h2>Dagelijkse LinkedIn Content Autopilot</h2>
-              <p>Deze automation genereert beurtelings waardevolle content over <strong>StudyElite.nl</strong> (studietips & examens) en <strong>AgevoDev.nl</strong> (maatwerk software & automatisering).</p>
+              <p>Genereert beurtelings waardevolle content voor <strong>Bram Verhoeff</strong> (persoonlijk profiel: founder journey & tech insights), <strong>AgevoDev.nl</strong> (Next.js software & venture building) en <strong>StudyElite.nl</strong> (AI studieplanner).</p>
               
               <div class="linkedin-info-alert" style="background: rgba(99, 102, 241, 0.12); border-left: 4px solid var(--accent-primary); border-radius: 6px; padding: 12px 16px; margin: 14px 0;">
                 <h4 style="margin: 0 0 6px 0; font-size: 13px; color: #fff;">💡 Hoe komt een bericht op je echte LinkedIn account?</h4>
@@ -127,32 +127,70 @@ class AutomationsEngine {
                 </p>
               </div>
 
-              <div class="linkedin-quick-actions">
-                <button class="btn btn-primary" id="btn-gen-study">
-                  ⚡ Genereer Post voor StudyElite.nl
+              <div class="linkedin-quick-actions" style="display: flex; flex-wrap: wrap; gap: 10px;">
+                <button class="btn btn-primary" id="btn-gen-bram" style="background: linear-gradient(135deg, #8b5cf6, #6366f1); border: none; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);">
+                  👤 Genereer voor Bram Verhoeff (Persoonlijk)
                 </button>
                 <button class="btn btn-secondary" id="btn-gen-agevo">
-                  ⚡ Genereer Post voor AgevoDev.nl
+                  🏢 Genereer voor AgevoDev.nl
+                </button>
+                <button class="btn btn-secondary" id="btn-gen-study">
+                  🎓 Genereer voor StudyElite.nl
                 </button>
                 <button class="btn btn-outline" id="btn-trigger-daily-wf">
                   🚀 Voer Volledige Dagelijkse Workflow Uit
                 </button>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 14px; width: 100%; flex-wrap: wrap; background: rgba(0,0,0,0.25); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-subtle);">
+                <span style="font-size: 12px; color: #fff; font-weight: 600; white-space: nowrap;">🎯 Thema / Focus voor AI Post:</span>
+                <select id="select-agevo-topic" class="form-control" style="width: auto; min-width: 290px; font-size: 12px; padding: 6px 10px;">
+                  <option value="">Wisselend (Alle Specialismen &amp; Inzichten)</option>
+                  <optgroup label="👤 Bram Verhoeff (Persoonlijk Profiel)">
+                    <option value="Founder Journey &amp; Bootstrappen">Founder Journey: Zolderkamer naar eigen SaaS &amp; Studio</option>
+                    <option value="Tech Stack Keuzes (Next.js &amp; Supabase)">Tech Stack: Waarom Next.js &amp; Supabase boven AWS microservices</option>
+                    <option value="Discipline &amp; Productiviteit van een Jonge Founder">Discipline: Studeren combineren met softwarebedrijven</option>
+                    <option value="Venture Studio Filosofie: Zelf Bouwen vs Uurtje-Factuurtje">Venture Studio: Waarom klassieke bureaus verdwijnen</option>
+                    <option value="Lessen over Echte AI Integraties in de Praktijk">AI Mythes: Waarom 90% van de chatbots faalt</option>
+                  </optgroup>
+                  <optgroup label="🏢 AgevoDev.nl (Tech Studio)">
+                    <option value="Venture Studio &amp; Founder-led Development">Venture Studio: Zelf SaaS runnen vs Bureau-theorie</option>
+                    <option value="Next.js 16 &amp; Web Platformen vs WordPress/No-Code">Next.js 16 &amp; React 19 Maatwerk vs Trage No-Code</option>
+                    <option value="SaaS &amp; MVP Ontwikkeling (Van Idee naar Betalende Klanten)">SaaS MVP: Multi-tenant, Supabase &amp; Stripe</option>
+                    <option value="Echte AI &amp; Autonome Agents (Voorbij de ChatGPT Hype)">Echte AI: LLM Orchestration &amp; Autonome Background Workers</option>
+                    <option value="Direct Contact met Engineers &amp; 100% Code Eigendom">Direct Contact met Senior Engineers &amp; 100% Code Eigendom</option>
+                  </optgroup>
+                  <optgroup label="🎓 StudyElite.nl (AI EdTech SaaS)">
+                    <option value="Studie-efficiëntie &amp; Active Recall">Active Recall &amp; Spaced Repetition vs Inefficiënt Leren</option>
+                    <option value="Tentamens &amp; Nachtrust">Nachtrust &amp; Tentamensucces zonder Nachtmerries</option>
+                    <option value="AI Study Scheduler &amp; ECTS Tracking">AI Study Scheduler &amp; ECTS Voorspelling</option>
+                  </optgroup>
+                </select>
+                <input type="text" id="input-custom-agevo-topic" class="form-control" placeholder="Of typ een eigen specifiek onderwerp / prompt (optioneel)..." style="flex: 1; min-width: 220px; font-size: 12px; padding: 6px 10px;">
               </div>
             </div>
           </div>
 
           <!-- Webhook / API Configuration Panel for 100% Hands-free Posting -->
           <div class="linkedin-webhook-card">
-            <div class="webhook-card-info">
-              <h4>🔗 Hands-free Autopilot Koppeling (Make.com, Zapier of LinkedIn API)</h4>
-              <p class="text-muted">
-                Wil je dat HighFlow elke ochtend om 09:00 uur <em>zonder jouw tussenkomst</em> op je live LinkedIn profiel of bedrijfspagina plaatst? Koppel hieronder eenvoudig een gratis Webhook of je LinkedIn API token:
-              </p>
+            <div class="webhook-card-info" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px;">
+              <div>
+                <h4 style="margin: 0 0 6px 0;">🔗 Hands-free Autopilot Koppeling (Make.com, Zapier of LinkedIn API)</h4>
+                <p class="text-muted" style="margin: 0;">
+                  Wil je dat HighFlow elke ochtend om 09:00 uur <em>zonder jouw tussenkomst</em> op je live LinkedIn profiel of bedrijfspagina plaatst? Koppel hieronder eenvoudig een gratis Webhook of je LinkedIn API token:
+                </p>
+              </div>
+              <button class="btn btn-outline btn-sm" id="btn-open-linkedin-guide" style="white-space: nowrap; border-color: var(--accent-primary); color: #fff;">
+                📖 Bekijk Stap-voor-stap Koppelgids
+              </button>
             </div>
 
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 14px;">
               <div style="background: rgba(0,0,0,0.2); padding: 14px; border-radius: 8px; border: 1px solid var(--border-subtle);">
-                <label style="font-weight: 600; font-size: 13px; display: block; margin-bottom: 6px;">Optie 1: Make.com / Zapier Webhook (Aanbevolen)</label>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <label style="font-weight: 600; font-size: 13px;">Optie 1: Make.com / Zapier Webhook (Aanbevolen)</label>
+                  <span class="badge badge-success" style="font-size: 10px;">2 min • 100% Gratis</span>
+                </div>
                 <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 10px;">
                   1. Maak in Make.com een scenario: <strong>Custom Webhook ➔ LinkedIn 'Create a Share'</strong>.<br>
                   2. Plak hieronder je Webhook URL:
@@ -165,13 +203,19 @@ class AutomationsEngine {
               </div>
 
               <div style="background: rgba(0,0,0,0.2); padding: 14px; border-radius: 8px; border: 1px solid var(--border-subtle);">
-                <label style="font-weight: 600; font-size: 13px; display: block; margin-bottom: 6px;">Optie 2: Directe LinkedIn Developer OAuth API</label>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <label style="font-weight: 600; font-size: 13px;">Optie 2: Directe LinkedIn Developer OAuth API</label>
+                  <span class="badge badge-secondary" style="font-size: 10px;">Voor Developers</span>
+                </div>
                 <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 10px;">
                   Voor LinkedIn Developer App gebruikers met <code>w_member_social</code> permissie:
                 </p>
                 <input type="password" id="input-linkedin-token" class="form-control" placeholder="LinkedIn Access Token (Bearer)" value="${window.crmState.data.settings?.linkedinAccessToken || ''}" style="margin-bottom: 8px;">
                 <input type="text" id="input-linkedin-urn" class="form-control" placeholder="Author URN (bijv. urn:li:person:abcdef123)" value="${window.crmState.data.settings?.linkedinAuthorUrn || ''}" style="margin-bottom: 8px;">
-                <button class="btn btn-primary btn-sm" id="btn-save-linkedin-token">API Gegevens Opslaan</button>
+                <div style="display: flex; gap: 8px;">
+                  <button class="btn btn-primary btn-sm" id="btn-save-linkedin-token">API Gegevens Opslaan</button>
+                  <button class="btn btn-secondary btn-sm" id="btn-test-live-token">Test Directe API</button>
+                </div>
               </div>
             </div>
           </div>
@@ -188,9 +232,9 @@ class AutomationsEngine {
                   <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" class="avatar-sm" alt="Bram">
                   <div class="linkedin-author-info">
                     <strong>Bram Verhoeff</strong>
-                    <small>Founder @ AgevoDev.nl & StudyElite.nl • ${post.formattedTime}</small>
+                    <small>${post.target === 'Bram Verhoeff' ? 'Persoonlijk Profiel • <a href="https://www.linkedin.com/in/bram-verhoeff/" target="_blank" style="color: var(--accent-sky); text-decoration: underline;">linkedin.com/in/bram-verhoeff</a>' : 'Founder @ AgevoDev.nl & StudyElite.nl'} • ${post.formattedTime}</small>
                   </div>
-                  <span class="badge ${post.target === 'StudyElite.nl' ? 'badge-primary' : 'badge-success'}">${post.target}</span>
+                  <span class="badge ${post.target === 'StudyElite.nl' ? 'badge-primary' : (post.target === 'Bram Verhoeff' ? 'badge-info' : 'badge-success')}" style="${post.target === 'Bram Verhoeff' ? 'background: rgba(139, 92, 246, 0.2); color: #c084fc; border: 1px solid rgba(139, 92, 246, 0.4);' : ''}">${post.target === 'Bram Verhoeff' ? '👤 Bram Verhoeff' : post.target}</span>
                 </div>
                 <div class="linkedin-post-body">
                   <pre class="linkedin-text">${post.content}</pre>
@@ -297,6 +341,15 @@ class AutomationsEngine {
         }
       };
 
+      container.querySelector('#btn-gen-bram')?.addEventListener('click', () => {
+        const selectTopic = document.getElementById('select-agevo-topic')?.value;
+        const customTopic = document.getElementById('input-custom-agevo-topic')?.value?.trim();
+        const chosenTopic = customTopic || selectTopic || null;
+        const post = window.crmState.generateLinkedInContent('Bram Verhoeff', chosenTopic);
+        this.renderList();
+        this.showLinkedInPublishModal(post);
+      });
+
       container.querySelector('#btn-gen-study')?.addEventListener('click', () => {
         const post = window.crmState.generateLinkedInContent('StudyElite.nl');
         this.renderList();
@@ -304,7 +357,10 @@ class AutomationsEngine {
       });
 
       container.querySelector('#btn-gen-agevo')?.addEventListener('click', () => {
-        const post = window.crmState.generateLinkedInContent('AgevoDev.nl');
+        const selectTopic = document.getElementById('select-agevo-topic')?.value;
+        const customTopic = document.getElementById('input-custom-agevo-topic')?.value?.trim();
+        const chosenTopic = customTopic || selectTopic || null;
+        const post = window.crmState.generateLinkedInContent('AgevoDev.nl', chosenTopic);
         this.renderList();
         this.showLinkedInPublishModal(post);
       });
@@ -388,6 +444,40 @@ class AutomationsEngine {
         } catch (e) {
           window.highflowApp?.showToast('Netwerkfout bij webhook: ' + e.message, 'warning');
         }
+      });
+
+      container.querySelector('#btn-test-live-token')?.addEventListener('click', async () => {
+        const token = document.getElementById('input-linkedin-token')?.value.trim();
+        const urn = document.getElementById('input-linkedin-urn')?.value.trim();
+        if (!token || !urn) {
+          alert('Vul eerst zowel een LinkedIn Access Token als een Author URN in!');
+          return;
+        }
+        window.highflowApp?.showToast('Test post verzenden naar officiële LinkedIn API...', 'info');
+        try {
+          const res = await fetch('/api/linkedin/publish', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              accessToken: token,
+              authorUrn: urn,
+              target: 'AgevoDev.nl & StudyElite.nl Test',
+              content: '🚀 Test post direct via officiële LinkedIn API vanaf HighFlow CRM!'
+            })
+          });
+          const data = await res.json();
+          if (data.success) {
+            window.highflowApp?.showToast('✓ Test post direct live geplaatst op LinkedIn!', 'success');
+          } else {
+            window.highflowApp?.showToast('Fout bij LinkedIn API: ' + (data.error || 'Onbekend'), 'warning');
+          }
+        } catch (e) {
+          window.highflowApp?.showToast('Netwerkfout bij LinkedIn API: ' + e.message, 'warning');
+        }
+      });
+
+      container.querySelector('#btn-open-linkedin-guide')?.addEventListener('click', () => {
+        this.showLinkedInGuideModal();
       });
     }
 
@@ -628,7 +718,7 @@ class AutomationsEngine {
             <div>
               <h2 style="font-size: 18px; margin: 0; display: flex; align-items: center; gap: 8px;">
                 🚀 LinkedIn Post Gegenereerd
-                <span class="badge ${post.target === 'StudyElite.nl' ? 'badge-primary' : 'badge-success'}">${post.target}</span>
+                <span class="badge ${post.target === 'StudyElite.nl' ? 'badge-primary' : (post.target === 'Bram Verhoeff' ? 'badge-info' : 'badge-success')}" style="${post.target === 'Bram Verhoeff' ? 'background: rgba(139, 92, 246, 0.2); color: #c084fc; border: 1px solid rgba(139, 92, 246, 0.4);' : ''}">${post.target === 'Bram Verhoeff' ? '👤 Bram Verhoeff' : post.target}</span>
               </h2>
               <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--text-secondary);">Gereed voor publicatie • ${post.formattedTime}</p>
             </div>
@@ -730,6 +820,186 @@ class AutomationsEngine {
           el.focus();
         }
       }, 150);
+    });
+  }
+
+  showLinkedInGuideModal() {
+    const modalHtml = `
+      <div class="modal-backdrop active" id="linkedin-guide-modal">
+        <div class="modal-content" style="max-width: 720px; border: 1px solid var(--border-subtle); box-shadow: var(--shadow-xl); max-height: 90vh; overflow-y: auto;">
+          <div class="modal-header">
+            <div>
+              <h2 style="font-size: 18px; margin: 0; display: flex; align-items: center; gap: 8px;">
+                💼 Hoe Koppel Je Jouw Echte LinkedIn Account?
+              </h2>
+              <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--text-secondary);">Kies de methode die het beste bij jou past om posts automatisch te publiceren.</p>
+            </div>
+            <button class="icon-btn" onclick="document.getElementById('linkedin-guide-modal').remove()">&times;</button>
+          </div>
+
+          <div class="modal-body" style="padding: 20px;">
+            <div style="display: flex; gap: 8px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 12px; margin-bottom: 16px; flex-wrap: wrap;">
+              <button class="btn btn-sm btn-primary guide-tab-btn active" data-guide="make">
+                ⚡ Optie 1: Make.com (Aanbevolen • 2 min)
+              </button>
+              <button class="btn btn-sm btn-outline guide-tab-btn" data-guide="api">
+                🔑 Optie 2: Officiële LinkedIn API
+              </button>
+              <button class="btn btn-sm btn-outline guide-tab-btn" data-guide="direct">
+                🔗 Optie 3: 1-Klik Delen (Geen Setup)
+              </button>
+            </div>
+
+            <!-- Make.com Tab -->
+            <div id="guide-tab-make" class="guide-tab-pane">
+              <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 12px 16px; margin-bottom: 16px;">
+                <strong style="color: #34d399;">Waarom Make.com de beste keuze is:</strong>
+                <p style="margin: 4px 0 0 0; font-size: 13px; color: var(--text-secondary);">
+                  LinkedIn's eigen API vereist ontwikkelaars-goedkeuring en tokens verlopen elke 60 dagen. Met Make.com (gratis) klik je 1x op "Log in met LinkedIn" en je posts worden 24/7 direct en permanent op je persoonlijke profiel of bedrijfspagina geplaatst!
+                </p>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 14px; font-size: 13px; line-height: 1.6;">
+                <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 14px;">
+                  <strong>Stap 1: Maak een gratis account op Make.com</strong>
+                  <p style="margin: 4px 0 0 0; color: var(--text-secondary);">
+                    Ga naar <a href="https://www.make.com" target="_blank" style="color: var(--accent-primary); text-decoration: underline;">Make.com</a> (gratis tot 1.000 acties per maand, ruim voldoende voor dagelijks posten).
+                  </p>
+                </div>
+
+                <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 14px;">
+                  <strong>Stap 2: Maak een nieuw scenario met een Webhook</strong>
+                  <p style="margin: 4px 0 0 0; color: var(--text-secondary);">
+                    • Klik op <strong>"Create a new scenario"</strong>.<br>
+                    • Klik op het grote plus-icoon en zoek naar <strong>"Webhooks"</strong>.<br>
+                    • Kies trigger: <strong>"Custom webhook"</strong>.<br>
+                    • Klik op "Add", noem hem bijvoorbeeld <em>"HighFlow LinkedIn"</em> en klik op "Save".<br>
+                    • Klik op <strong>"Copy address to clipboard"</strong>.
+                  </p>
+                </div>
+
+                <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 14px;">
+                  <strong>Stap 3: Voeg de LinkedIn module toe</strong>
+                  <p style="margin: 4px 0 0 0; color: var(--text-secondary);">
+                    • Klik op het plusje naast de webhook module en zoek <strong>"LinkedIn"</strong>.<br>
+                    • Kies actie: <strong>"Create a Text Post"</strong> (of "Create a Share").<br>
+                    • Klik bij Connection op <strong>"Add"</strong>: er opent een venster waarin je inlogt met je eigen LinkedIn account.<br>
+                    • Selecteer bij <em>Author</em> je eigen profiel of bedrijfspagina (bijv. StudyElite / AgevoDev).<br>
+                    • Klik in het veld <em>Content</em> of <em>Text</em> en selecteer het veld <code>content</code> (of <code>text</code>) uit de Webhook.
+                  </p>
+                </div>
+
+                <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 14px;">
+                  <strong>Stap 4: Plak de Webhook URL in HighFlow CRM</strong>
+                  <p style="margin: 4px 0 0 0; color: var(--text-secondary);">
+                    • Plak de gekopieerde URL in het veld <strong>"Optie 1: Make.com Webhook"</strong> hier in HighFlow.<br>
+                    • Klik op <strong>"Webhook Opslaan"</strong> en daarna op <strong>"Test Webhook"</strong>.<br>
+                    • Zet in Make.com je scenario rechtsonder op <strong>ON</strong> (Immediately). Klaar!
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- API Tab -->
+            <div id="guide-tab-api" class="guide-tab-pane" style="display: none;">
+              <div style="background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 8px; padding: 12px 16px; margin-bottom: 16px;">
+                <strong style="color: #818cf8;">Voor Developers & LinkedIn Developer Apps:</strong>
+                <p style="margin: 4px 0 0 0; font-size: 13px; color: var(--text-secondary);">
+                  Als je beschikt over een goedgekeurde LinkedIn Developer App met de <code>w_member_social</code> scope kun je rechtstreeks via OAuth tokens publiceren.
+                </p>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 14px; font-size: 13px; line-height: 1.6;">
+                <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 14px;">
+                  <strong>1. Ga naar LinkedIn Developer Portal</strong>
+                  <p style="margin: 4px 0 0 0; color: var(--text-secondary);">
+                    Open <a href="https://developer.linkedin.com" target="_blank" style="color: var(--accent-primary); text-decoration: underline;">developer.linkedin.com</a> en maak een App aan gekoppeld aan je LinkedIn pagina.
+                  </p>
+                </div>
+
+                <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 14px;">
+                  <strong>2. Vraag "Share on LinkedIn" permissie aan</strong>
+                  <p style="margin: 4px 0 0 0; color: var(--text-secondary);">
+                    Onder het tabblad <strong>Products</strong> voeg je "Share on LinkedIn" of "Sign In with LinkedIn using OpenID Connect" toe voor de <code>w_member_social</code> rechten.
+                  </p>
+                </div>
+
+                <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 14px;">
+                  <strong>3. Genereer je Access Token & URN</strong>
+                  <p style="margin: 4px 0 0 0; color: var(--text-secondary);">
+                    Gebruik de <strong>OAuth 2.0 Tools</strong> om een Bearer Token te genereren. Je Author URN vind je via een GET op <code>/v2/userinfo</code> (bijv. <code>urn:li:person:abc123xyz</code>).
+                  </p>
+                </div>
+
+                <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 14px;">
+                  <strong>4. Opslaan & Testen</strong>
+                  <p style="margin: 4px 0 0 0; color: var(--text-secondary);">
+                    Vul het token en URN in bij Optie 2 in HighFlow en klik op <strong>"Test Directe API"</strong>. HighFlow ondersteunt automatisch zowel de UGC API als de 2024 Versioned REST API.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Direct Share Tab -->
+            <div id="guide-tab-direct" class="guide-tab-pane" style="display: none;">
+              <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px; padding: 12px 16px; margin-bottom: 16px;">
+                <strong style="color: #fbbf24;">Geen enkele setup vereist (Nu direct live posten):</strong>
+                <p style="margin: 4px 0 0 0; font-size: 13px; color: var(--text-secondary);">
+                  Wil je vandaag meteen je eerste post live zetten zonder webhooks of API keys? Gebruik de 1-klik deelknop!
+                </p>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 14px; font-size: 13px; line-height: 1.6;">
+                <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 14px;">
+                  <strong>1. Klik op "Genereer Post"</strong>
+                  <p style="margin: 4px 0 0 0; color: var(--text-secondary);">
+                    Kies voor <strong>StudyElite.nl</strong> of <strong>AgevoDev.nl</strong>. AI genereert direct een professionele, converterende post met sterke hook en hashtags.
+                  </p>
+                </div>
+
+                <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 14px;">
+                  <strong>2. Klik op "🔗 Direct Delen op LinkedIn (1-Klik)"</strong>
+                  <p style="margin: 4px 0 0 0; color: var(--text-secondary);">
+                    HighFlow kopieert direct de volledige tekst naar je klembord en opent automatisch de LinkedIn feed in een nieuw tabblad.
+                  </p>
+                </div>
+
+                <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 14px;">
+                  <strong>3. Druk Ctrl+V (plakken) & Plaatsen</strong>
+                  <p style="margin: 4px 0 0 0; color: var(--text-secondary);">
+                    In het geopende LinkedIn venster druk je simpelweg op <code>Ctrl+V</code> en klik je op "Plaatsen". Binnen 3 seconden staat je post online!
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer" style="display: flex; justify-content: flex-end;">
+            <button class="btn btn-primary" onclick="document.getElementById('linkedin-guide-modal').remove()">Begrepen</button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('linkedin-guide-modal')?.remove();
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+    // Guide Tab switching
+    const modal = document.getElementById('linkedin-guide-modal');
+    modal?.querySelectorAll('.guide-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        modal.querySelectorAll('.guide-tab-btn').forEach(b => {
+          b.classList.remove('active', 'btn-primary');
+          b.classList.add('btn-outline');
+        });
+        btn.classList.add('active', 'btn-primary');
+        btn.classList.remove('btn-outline');
+
+        const target = btn.dataset.guide;
+        modal.querySelectorAll('.guide-tab-pane').forEach(p => p.style.display = 'none');
+        const targetPane = modal.querySelector(`#guide-tab-${target}`);
+        if (targetPane) targetPane.style.display = 'block';
+      });
     });
   }
 

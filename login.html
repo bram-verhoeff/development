@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HighFlow CRM | Beveiligde Toegang</title>
+  <meta name="description" content="Beveiligd toegangspunt voor HighFlow CRM, LinkedIn AI Studio en Automations.">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236366f1'><polygon points='13 2 3 14 12 14 11 22 21 10 12 10 13 2'/></svg>">
+
+  <style>
+    :root {
+      --bg-dark: #070a12;
+      --bg-card: rgba(15, 22, 36, 0.85);
+      --border-card: rgba(255, 255, 255, 0.08);
+      --accent-primary: #6366f1;
+      --accent-purple: #8b5cf6;
+      --accent-sky: #38bdf8;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --danger: #ef4444;
+      --success: #10b981;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Ambient Background Glows */
+    .ambient-glow {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      opacity: 0.35;
+      z-index: 0;
+    }
+
+    .glow-1 {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, #6366f1 0%, transparent 70%);
+      top: -100px;
+      left: -100px;
+      animation: float1 14s ease-in-out infinite alternate;
+    }
+
+    .glow-2 {
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, #8b5cf6 0%, transparent 70%);
+      bottom: -100px;
+      right: -100px;
+      animation: float2 18s ease-in-out infinite alternate;
+    }
+
+    .glow-3 {
+      width: 350px;
+      height: 350px;
+      background: radial-gradient(circle, #0284c7 0%, transparent 70%);
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0.15;
+    }
+
+    @keyframes float1 {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(60px, 40px) scale(1.1); }
+    }
+
+    @keyframes float2 {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(-50px, -50px) scale(1.15); }
+    }
+
+    /* Login Card Container */
+    .login-container {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 460px;
+    }
+
+    .login-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--border-card);
+      border-radius: 20px;
+      padding: 38px 36px;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 40px rgba(99, 102, 241, 0.1);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .login-card.shake {
+      animation: shakeCard 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+
+    @keyframes shakeCard {
+      10%, 90% { transform: translate3d(-2px, 0, 0); }
+      20%, 80% { transform: translate3d(4px, 0, 0); }
+      30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
+      40%, 60% { transform: translate3d(6px, 0, 0); }
+    }
+
+    /* Brand Header */
+    .brand-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .brand-icon-wrap {
+      width: 58px;
+      height: 58px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
+    }
+
+    .brand-icon-wrap svg {
+      width: 30px;
+      height: 30px;
+      color: #ffffff;
+    }
+
+    .brand-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    .company-pills {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .pill {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-muted);
+    }
+
+    .pill.active-pill {
+      background: rgba(99, 102, 241, 0.15);
+      border-color: rgba(99, 102, 241, 0.3);
+      color: #a5b4fc;
+    }
+
+    /* Form Fields */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin-bottom: 8px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      width: 18px;
+      height: 18px;
+      color: #64748b;
+      pointer-events: none;
+      transition: color 0.2s;
+    }
+
+    .form-input {
+      width: 100%;
+      height: 48px;
+      background: rgba(10, 15, 28, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 0 44px 0 44px;
+      font-size: 14px;
+      color: #ffffff;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .form-input:focus {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+      background: rgba(10, 15, 28, 0.95);
+    }
+
+    .form-input:focus + .input-icon {
+      color: var(--accent-primary);
+    }
+
+    .toggle-pwd-btn {
+      position: absolute;
+      right: 12px;
+      background: none;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      padding: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      transition: color 0.2s;
+    }
+
+    .toggle-pwd-btn:hover {
+      color: #cbd5e1;
+    }
+
+    /* Options Row (Remember Me) */
+    .options-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 22px;
+      font-size: 13px;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .checkbox-label input {
+      accent-color: var(--accent-primary);
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    /* Submit Button */
+    .btn-login {
+      width: 100%;
+      height: 48px;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-purple));
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 4px 18px rgba(99, 102, 241, 0.35);
+      transition: all 0.2s ease;
+    }
+
+    .btn-login:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 22px rgba(99, 102, 241, 0.5);
+      filter: brightness(1.06);
+    }
+
+    .btn-login:active {
+      transform: translateY(0);
+    }
+
+    .btn-login:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* Spinner */
+    .spinner {
+      display: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Error Message Box */
+    .alert-box {
+      display: none;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #fca5a5;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      margin-bottom: 18px;
+      line-height: 1.4;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .alert-box.visible {
+      display: flex;
+    }
+
+    /* Default password hint */
+    .hint-box {
+      margin-top: 24px;
+      padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px dashed rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      font-size: 12px;
+      color: #94a3b8;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .hint-box code {
+      background: rgba(99, 102, 241, 0.2);
+      color: #c7d2fe;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+    }
+
+    /* Footer Meta */
+    .login-footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 12px;
+      color: #475569;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .login-footer svg {
+      width: 14px;
+      height: 14px;
+      color: var(--success);
+    }
+  </style>
+</head>
+<body>
+  <!-- Ambient background lighting -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+  <div class="ambient-glow glow-3"></div>
+
+  <div class="login-container">
+    <div class="login-card" id="login-card">
+      <div class="brand-header">
+        <div class="brand-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+        </div>
+        <h1 class="brand-title">HighFlow CRM</h1>
+        <p class="brand-subtitle">Voer je wachtwoord in om toegang te krijgen tot het dashboard en de LinkedIn AI Studio.</p>
+        
+        <div class="company-pills">
+          <span class="pill active-pill">👤 Bram Verhoeff</span>
+          <span class="pill">🏢 AgevoDev</span>
+          <span class="pill">🎓 StudyElite</span>
+        </div>
+      </div>
+
+      <!-- Error feedback -->
+      <div class="alert-box" id="error-alert">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <span id="error-text">Onjuist wachtwoord.</span>
+      </div>
+
+      <form id="login-form" autocomplete="off">
+        <div class="form-group">
+          <div class="form-label">
+            <span>Toegangswachtwoord</span>
+            <span style="font-size: 11px; color: var(--text-muted);">Privé Dashboard</span>
+          </div>
+          <div class="input-wrapper">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            <input 
+              type="password" 
+              id="input-password" 
+              class="form-input" 
+              placeholder="Typ je wachtwoord..." 
+              required 
+              autofocus 
+              autocomplete="current-password"
+            >
+            <button type="button" class="toggle-pwd-btn" id="btn-toggle-pwd" title="Wachtwoord tonen/verbergen">
+              <svg id="eye-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="options-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="check-remember" checked>
+            <span>Onthoud mij op dit apparaat (30 dagen)</span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn-login" id="btn-submit">
+          <span class="spinner" id="btn-spinner"></span>
+          <span id="btn-text">Ontgrendel Dashboard &amp; Studio ➔</span>
+        </button>
+      </form>
+
+      <div class="hint-box">
+        🔑 <strong>Standaard wachtwoord:</strong> <code>bram2026</code><br>
+        <span style="font-size: 11px; color: #64748b;">(Je kunt dit na inloggen op elk moment wijzigen via <em>Instellingen ➔ Beveiliging</em>)</span>
+      </div>
+    </div>
+
+    <div class="login-footer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+      </svg>
+      <span>256-bit beveiligde sessie • Lokale &amp; Webhook isolatie</span>
+    </div>
+  </div>
+
+  <script>
+    const loginForm = document.getElementById('login-form');
+    const pwdInput = document.getElementById('input-password');
+    const togglePwdBtn = document.getElementById('btn-toggle-pwd');
+    const eyeIcon = document.getElementById('eye-icon');
+    const submitBtn = document.getElementById('btn-submit');
+    const btnSpinner = document.getElementById('btn-spinner');
+    const btnText = document.getElementById('btn-text');
+    const errorAlert = document.getElementById('error-alert');
+    const errorText = document.getElementById('error-text');
+    const loginCard = document.getElementById('login-card');
+    const checkRemember = document.getElementById('check-remember');
+
+    // Toggle password visibility
+    togglePwdBtn.addEventListener('click', () => {
+      if (pwdInput.type === 'password') {
+        pwdInput.type = 'text';
+        eyeIcon.innerHTML = `
+          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+          <line x1="1" y1="1" x2="23" y2="23"></line>
+        `;
+      } else {
+        pwdInput.type = 'password';
+        eyeIcon.innerHTML = `
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        `;
+      }
+    });
+
+    // Form submit handler
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const password = pwdInput.value;
+      const remember = checkRemember.checked;
+
+      errorAlert.classList.remove('visible');
+      loginCard.classList.remove('shake');
+      submitBtn.disabled = true;
+      btnSpinner.style.display = 'inline-block';
+      btnText.textContent = 'Verifiëren...';
+
+      // Helper to compute sha256 in browser
+      async function sha256(str) {
+        const buffer = new TextEncoder().encode(str);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      }
+
+      try {
+        let loggedIn = false;
+        
+        // Try server API first if available
+        try {
+          const res = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password, rememberMe: remember })
+          });
+
+          if (res.ok) {
+            const data = await res.json();
+            if (data.success) {
+              loggedIn = true;
+            } else {
+              showError(data.error || 'Onjuist wachtwoord. Probeer het opnieuw.');
+              return;
+            }
+          } else if (res.status === 401) {
+            const data = await res.json().catch(() => ({}));
+            showError(data.error || 'Onjuist wachtwoord. Probeer het opnieuw.');
+            return;
+          }
+        } catch (serverErr) {
+          // Server offline or static hosting (e.g. GitHub Pages) - fallback to client hash
+        }
+
+        // Fallback for static GitHub Pages hosting
+        if (!loggedIn) {
+          const hashedInput = await sha256(password);
+          const defaultHash = 'be2790be0d5d344fd4d9f8c7384bbc5d5d3265597b97f3e9c31cc697aedf1195'; // bram2026
+          const customHash = localStorage.getItem('highflow_custom_hash');
+
+          if (hashedInput === defaultHash || (customHash && hashedInput === customHash)) {
+            loggedIn = true;
+          } else {
+            showError('Onjuist wachtwoord. Probeer het opnieuw.');
+            return;
+          }
+        }
+
+        if (loggedIn) {
+          localStorage.setItem('highflow_auth_session', 'active_' + Date.now());
+          btnText.textContent = '✓ Toegang verleend!';
+          submitBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+          setTimeout(() => {
+            window.location.href = './index.html';
+          }, 350);
+        }
+      } catch (err) {
+        showError('Fout bij verifiëren: ' + err.message);
+      } finally {
+        if (!submitBtn.disabled) return;
+        submitBtn.disabled = false;
+        btnSpinner.style.display = 'none';
+        btnText.textContent = 'Ontgrendel Dashboard & Studio ➔';
+      }
+    });
+
+    function showError(msg) {
+      errorText.textContent = msg;
+      errorAlert.classList.add('visible');
+      loginCard.classList.add('shake');
+      setTimeout(() => loginCard.classList.remove('shake'), 500);
+      pwdInput.select();
+      pwdInput.focus();
+    }
+  </script>
+</body>
+</html>

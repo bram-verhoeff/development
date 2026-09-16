@@ -2,3 +2,5 @@ node_modules/
 branches/
 .DS_Store
 *.log
+auth_config.json
+

@@ -16,8 +16,8 @@ const INITIAL_DATA = {
   automations: [
     {
       id: 'wf_linkedin_ai',
-      name: '🤖 Dagelijkse LinkedIn AI Content Generator (StudyElite.nl & AgevoDev.nl)',
-      description: 'Genereert elke ochtend automatisch boeiende LinkedIn berichten met AI over StudyElite.nl en AgevoDev.nl en publiceert deze direct.',
+      name: '🤖 Dagelijkse LinkedIn AI Content Generator (Bram Verhoeff, StudyElite & AgevoDev)',
+      description: 'Genereert elke ochtend automatisch boeiende LinkedIn berichten voor het persoonlijke profiel van Bram Verhoeff, StudyElite.nl en AgevoDev.nl.',
       status: 'active',
       runs: 0,
       category: 'Marketing',
@@ -33,7 +33,7 @@ const INITIAL_DATA = {
           type: 'ai_generate_linkedin',
           title: 'AI Genereert LinkedIn Post',
           config: {
-            targets: ['StudyElite.nl', 'AgevoDev.nl'],
+            targets: ['Bram Verhoeff', 'AgevoDev.nl', 'StudyElite.nl'],
             tone: 'Inspirerend, B2B en data-driven',
             includeHashtags: true,
             includeCTA: true
@@ -106,6 +106,12 @@ class StateManager {
         if (!parsed.settings.linkedinAccessToken) parsed.settings.linkedinAccessToken = '';
         if (!parsed.settings.linkedinAuthorUrn) parsed.settings.linkedinAuthorUrn = '';
         if (!parsed.aiPosts) parsed.aiPosts = [];
+        // Clean out legacy misaligned CRM posts for AgevoDev
+        parsed.aiPosts = parsed.aiPosts.filter(p => 
+          !p.content.includes('CRM-automatiseringen') && 
+          !p.content.includes('GoHighLevel') && 
+          !p.content.includes('administratie en copy-paste')
+        );
         return parsed;
       }
     } catch (e) {
@@ -630,7 +636,7 @@ class StateManager {
         }
 
         case 'ai_generate_linkedin': {
-          const targets = step.config?.targets || ['StudyElite.nl', 'AgevoDev.nl'];
+          const targets = step.config?.targets || ['Bram Verhoeff', 'AgevoDev.nl', 'StudyElite.nl'];
           const target = targets[Math.floor(Math.random() * targets.length)];
           const post = this.generateLinkedInContent(target);
           lastGeneratedAIPost = post;
@@ -732,48 +738,161 @@ class StateManager {
     return this.data.aiPosts || [];
   }
 
-  generateLinkedInContent(specificTarget) {
-    const targets = ['StudyElite.nl', 'AgevoDev.nl'];
+  generateLinkedInContent(specificTarget, specificTopic = null) {
+    const targets = ['Bram Verhoeff', 'AgevoDev.nl', 'StudyElite.nl'];
     const target = specificTarget || targets[Math.floor(Math.random() * targets.length)];
 
     const templatesData = {
-      'StudyElite.nl': [
+      'Bram Verhoeff': [
         {
-          hook: 'Studenten besteden gemiddeld 4 uur per dag aan inefficiënt studeren. Dat kan anders 👇',
-          body: 'We zien het keer op keer: urenlang markeren in dikke studieboeken en eindeloos samenvattingen overschrijven. Het voelt productief, maar wetenschappelijk onderzoek toont aan dat active recall en slimme herhaling tot 3x effectiever zijn.\n\nMet StudyElite.nl helpen we studenten om:\n1. Binnen minuten gestructureerde samenvattingen en examenvragen te genereren\n2. Moeilijke concepten direct visueel te begrijpen\n3. Meer tijd over te houden voor ontspanning zonder studiestress',
-          cta: 'Klaar om slimmer te leren en betere cijfers te halen? Neem een kijkje op 👉 https://studyelite.nl',
-          tags: '#StudyElite #Studietips #Examentips #Onderwijs #Productiviteit #StudentLife #ActiveRecall'
+          topic: 'Founder Journey & Bootstrappen',
+          hook: '3 jaar geleden begon ik met coderen vanuit een zolderkamer. Vandaag runnen we onze eigen AI SaaS en bouwen we software voor ambitieuze bedrijven 🚀',
+          body: 'Toen ik begon met StudyElite.nl had ik één doel: bewijzen dat je met de juiste tech stack en focus een echt probleem kunt oplossen.\n\nWat ik onderweg heb geleerd als jonge founder:\n1. Perfectie is de vijand van tractie: Bouw snel een MVP, praat met echte gebruikers en itereer wekelijks.\n2. Eigenaarschap boven alles: Wij bouwen bij AgevoDev software alsof het onze eigen startup is. Geen corporate bureaucratie, maar directe impact.\n3. Bouw wat je zelf begrijpt: StudyElite ontstond uit mijn eigen frustratie met inefficiënt studeren. Die passie voelen gebruikers direct in het product.\n\nOndernemen in tech is een marathon. Maar elke dag bouwen aan producten waar duizenden mensen waarde uit halen verveelt nooit.',
+          cta: 'Volg mijn reis hier op LinkedIn of connect als je ook bouwt in tech! Connecten mag altijd 👉 https://www.linkedin.com/in/bram-verhoeff/',
+          tags: '#BramVerhoeff #FounderJourney #BuildingInPublic #SaaS #Ondernemerschap #TechFounder #AgevoDev #StudyElite'
         },
         {
-          hook: 'Waarom blokken tot 03:00 uur \'s nachts je tentamencijfer saboteert 🧠',
-          body: 'Slaaptekort verlaagt je geheugenretentie met meer dan 40%. De studenten die tienen halen, werken met een geautomatiseerd studiesysteem en een strakke planning.\n\nStudyElite.nl combineert slimme AI-studieassistentie met beproefde leermethodes, zodat je in de helft van de tijd klaar bent met je voorbereiding.',
-          cta: 'Bespaar jezelf de tentamennachtmerries. Ontdek het platform op 👉 https://studyelite.nl',
-          tags: '#StudyElite #Studenten #Studeren #Tentamens #Mindset #HighPerformance #LerenLeren'
+          topic: 'Tech Stack Keuzes (Next.js & Supabase)',
+          hook: 'De grootste fout die ik technische founders zie maken bij het bouwen van hun eerste SaaS 🛠️',
+          body: 'Ze besteden 3 maanden aan het ontwerpen van een \'perfecte\' microservice-architectuur op AWS... nog voordat ze 1 betalende klant hebben.\n\nToen ik StudyElite.nl en later projecten voor klanten bij AgevoDev opzette, koos ik bewust voor radicale eenvoud en executiekracht:\n• Next.js 16 App Router: Frontend & backend in één type-safe TypeScript codebase\n• Supabase (PostgreSQL): Direct ingebouwde auth, row-level security en database zonder DevOps hoofdpijn\n• Vercel Edge: Zero-maintenance serverless deployment met sub-100ms laadtijden wereldwijd\n\nResultaat? Binnen 4 weken van een leeg git-repo naar een live, schaalbare SaaS met betalende gebruikers.\n\nTech moet je business versnellen, niet vertragen.',
+          cta: 'Aan welke stack bouw jij momenteel? Deel het in de reacties 👇 | Connect met mij op https://www.linkedin.com/in/bram-verhoeff/',
+          tags: '#SoftwareEngineering #Nextjs #Supabase #WebDev #TypeScript #SaaSArchitecture #BramVerhoeff #DevCommunity'
+        },
+        {
+          topic: 'Discipline & Productiviteit van een Jonge Founder',
+          hook: '"Hoe combineer je studeren met het runnen van een softwarebedrijf?" is de vraag die ik het vaakst krijg 👇',
+          body: 'Mijn eerlijke antwoord: niet met 80-urige werkweken of \'grind culture\', maar met meedogenloze systemen en focus.\n\n3 gewoontes die mijn productiviteit verdrievoudigd hebben:\n1. Time-blocking: Mijn ochtenden zijn heilig voor Deep Work (complexe features coderen of strategische keuzes). Geen notificaties, geen mail.\n2. Eet je eigen dogfood: Ik gebruik StudyElite.nl zelf dagelijks om studiestof en deadlines strak te plannen.\n3. Zeg 9 van de 10 keer \'nee\': Focus alleen op de 20% taken die 80% van de klantwaarde en omzet opleveren.\n\nAls jonge ondernemer dwingt tijdsdruk je juist om de slimste en meest efficiënte route te kiezen.',
+          cta: 'Herkenbaar voor andere founders of studenten? Hoe bescherm jij je focus? Laat het weten in de comments!',
+          tags: '#Productiviteit #Mindset #StudentFounder #DeepWork #Ondernemen #Focus #BramVerhoeff #StudyElite'
+        },
+        {
+          topic: 'Venture Studio Filosofie: Zelf Bouwen vs Uurtje-Factuurtje',
+          hook: 'Waarom traditionele softwarebureaus over 5 jaar niet meer bestaan in hun huidige vorm 📉',
+          body: 'De meeste traditionele softwarebureaus verkopen uren. Zoveel mogelijk declarabele uren maken op een klantproject, ongeacht of de software converteert of aanslaat.\n\nToen ik AgevoDev oprichtte, wilde ik het tegenovergestelde:\nEen Tech Studio én Venture Builder.\n\nOmdat we zelf eigen SaaS-ventures zoals StudyElite.nl bouwen en opschalen, weten we precies hoe pijnlijk churn is, hoe belangrijk een intuïtieve onboarding is en waarom seconden laadtijd conversie kosten.\n\nAls we voor een klant bouwen, denken we als investeerder en mede-ondernemer mee, niet als uurtje-factuurtje programmeurs. Dat verschil voel je in elke regel code.',
+          cta: 'Heb je een tof software-concept of wil je sparren? Mijn DM staat altijd open 👉 https://www.linkedin.com/in/bram-verhoeff/',
+          tags: '#AgevoDev #VentureStudio #SoftwareDevelopment #AgencyLife #SaaSFounders #BramVerhoeff #TechNL'
+        },
+        {
+          topic: 'Lessen over Echte AI Integraties in de Praktijk',
+          hook: 'De 3 grootste mythes over AI die ik als developer dagelijks tegenkom 🤖',
+          body: 'Sinds de opkomst van LLM\'s wil elk bedrijf \'iets met AI\'. Maar 90% van de implementaties die ik voorbij zie komen zijn gimmick-chatbots die na 2 weken vergeten worden.\n\nWat we in de praktijk bij StudyElite en AgevoDev hebben geleerd over echte AI-waarde:\n1. Context is koning: RAG (Retrieval-Augmented Generation) en vector embeddings maken het verschil tussen onzin en pure magie.\n2. Betrouwbaarheid > Creativiteit: In zakelijke software wil je gestructureerde, gevalideerde JSON-outputs en fallbacks, geen hallucinerende essays.\n3. AI moet handelingen overnemen, niet alleen praten: De echte revolutie zit in autonome background workers die data verwerken terwijl jij slaapt.\n\nAI is geen vervanging van goede software-architectuur; het is een hefboom voor goede software-architectuur.',
+          cta: 'Hoe zet jij AI momenteel in binnen jouw projecten? Connect met mij op 👉 https://www.linkedin.com/in/bram-verhoeff/',
+          tags: '#ArtificialIntelligence #LLM #AIAgents #TechInsights #OpenAI #BramVerhoeff #AgevoDev #Innovation'
+        }
+      ],
+      'StudyElite.nl': [
+        {
+          topic: 'Studie-efficiëntie & Active Recall',
+          hook: 'Studenten besteden gemiddeld 4 uur per dag aan inefficiënt studeren. Dat kan anders 👇',
+          body: 'We zien het keer op keer: urenlang markeren in dikke studieboeken en eindeloos samenvattingen overschrijven. Het voelt productief, maar wetenschappelijk onderzoek toont aan dat active recall en spaced repetition tot 3x effectiever zijn voor tentamensucces.\n\nMet StudyElite.nl (onze AI-gedreven educatieve SaaS) helpen we studenten om:\n1. Binnen seconden scherpe samenvattingen en oefenvragen te genereren uit colleges en PDF\'s\n2. Moeilijke concepten direct visueel te begrijpen via de StudyElite AI Copilot\n3. Een dynamisch dag-tot-dag studieschema te volgen dat automatisch meebeweegt wanneer je planning verandert',
+          cta: 'Klaar om slimmer te studeren en stressvrij tentamens te halen? Ontdek het platform op 👉 https://studyelite.nl',
+          tags: '#StudyElite #EdTech #Studietips #ActiveRecall #Examentips #AIInEducation #StudentLife #Productiviteit'
+        },
+        {
+          topic: 'Tentamens & Nachtrust',
+          hook: 'Waarom blokken tot 03:00 uur \'s nachts je tentamencijfer gegarandeerd saboteert 🧠',
+          body: 'Slaaptekort verlaagt je geheugenretentie met meer dan 40%. De studenten die tienen halen, werken niet met nachtelijke panieksessies, maar met een geautomatiseerd studiesysteem en een strakke planning.\n\nStudyElite.nl combineert AI-studieassistentie met geavanceerde leermethodologieën (zoals spaced repetition en actieve recall), zodat je in de helft van de tijd klaar bent met je voorbereiding en vol zelfvertrouwen je examenzaal inloopt.',
+          cta: 'Bespaar jezelf de tentamennachtmerries. Bekijk hoe het werkt via 👉 https://studyelite.nl',
+          tags: '#StudyElite #Studeren #Tentamens #Mindset #HighPerformance #LerenLeren #StudentenNL #EdTech'
+        },
+        {
+          topic: 'AI Study Scheduler & ECTS Tracking',
+          hook: 'Nooit meer stress over je ECTS: Hoe onze AI Study Scheduler studenten op koers houdt 📊',
+          body: 'Deadlines die tegelijk vallen, onoverzichtelijke syllabi en geen idee waar je moet beginnen. Het overkomt 80% van de studenten in het hoger onderwijs.\n\nOnze AI Scheduler berekent op basis van je tentamendata, pagina-aantallen en eerdere quizresultaten precies wat je vandaag moet doen. Inclusief realtime voorspelling van je slagingskansen.\n\nGebouwd vanuit de praktijk door de engineers van AgevoDev om studeren écht overzichtelijk te maken.',
+          cta: 'Probeer het vandaag nog uit via 👉 https://studyelite.nl',
+          tags: '#StudyElite #AIPlanner #ECTS #Universiteit #Hogeschool #Studenten #StudySmart #AgevoDev'
         }
       ],
       'AgevoDev.nl': [
         {
-          hook: 'Verliest jouw team nog steeds uren per week aan handmatige administratie en copy-paste werk? 🚀',
-          body: 'Veel groeiende bedrijven lopen vast op verouderde software of 10 verschillende losse tools die niet met elkaar communiceren. Het resultaat: dubbel werk, gemiste leads en gefrustreerde medewerkers.\n\nBij AgevoDev.nl bouwen we:\n• Maatwerk CRM- & workflow automatiseringssystemen\n• Schaalbare web- en mobiele applicaties\n• Slimme AI-koppelingen die je bedrijfsprocessen 24/7 laten draaien',
-          cta: 'Wil je ontdekken hoeveel uur jouw team kan besparen met maatwerk software? Plan een vrijblijvend adviesgesprek via 👉 https://agevodev.nl',
-          tags: '#AgevoDev #SoftwareDevelopment #Automatisering #SaaS #AIInBusiness #WebApps #DigitalScaling'
+          topic: 'Venture Studio & Founder-led Development',
+          hook: 'De meeste traditionele softwarebureaus bouwen vanuit theorie. Wij bouwen vanuit de praktijk als SaaS-founders. 👇',
+          body: 'Het klassieke softwarebureau-model rammelt:\nJe pitcht een ambitieus idee, een accountmanager schrijft een offerte van 40 pagina\'s, en junior developers bouwen een project dat ze zelf nooit hoeven te onderhouden of te verkopen.\n\nBij AgevoDev (Tech Studio & Venture Builder) pakken we het fundamenteel anders aan:\nWij bouwen niet alleen voor ambitieuze organisaties, we runnen en schalen onze eigen SaaS-bedrijven — zoals ons educatieve AI-platform StudyElite.nl.\n\nWat betekent dat voor de bedrijven die met ons bouwen?\n1. Ondernemersmentaliteit: Code is slechts een middel. We denken proactief mee over je businessmodel, conversie en retentie.\n2. 0% ruis: Direct sparren met senior full-stack engineers, zonder tussenlagen.\n3. Productie-geteste tech stack: Geen trage experimenten, maar beproefde Next.js, Supabase en AI-infrastructuur die pieken moeiteloos aankan.\n\nSoftware moet gebouwd worden alsof het je eigen startup is: snel, robuust en ontworpen voor maximale impact.',
+          cta: 'Heb je een concreet SaaS-concept of wil je sparren over schaalbare maatwerk software? Bekijk onze werkwijze via 👉 https://agevodev.nl',
+          tags: '#AgevoDev #TechStudio #VentureBuilder #SaaS #SoftwareDevelopment #Nextjs #StartupFounder #StudyElite'
         },
         {
-          hook: '3 CRM-automatiseringen die onze klanten direct 12+ uur per week besparen ⏱️',
-          body: '1. Instant Lead Follow-up: Binnen 60 seconden contact opnemen via SMS en e-mail zodra een formulier binnenkomt.\n2. No-show Preventie: Automatische herinneringen voor afspraken met slimme rescheduling links.\n3. Klant-onboarding Drip: Facturatie, welkomstmail en taaktoewijzing volledig hands-free zodra een deal gesloten is.\n\nSoftware moet vóór je werken, niet tegen je.',
-          cta: 'Klaar om jouw verkoopcyclus te versnellen? Bekijk onze cases op 👉 https://agevodev.nl',
-          tags: '#AgevoDev #WorkflowAutomation #CRM #GoHighLevel #BusinessAutomation #CustomSoftware #Agency'
+          topic: 'Next.js 16 & Web Platformen vs WordPress/No-Code',
+          hook: 'Waarom serieuze digitale platformen WordPress en trage no-code tools achter zich laten ⚡',
+          body: 'In de prototypefase is no-code verleidelijk. Maar zodra je serieuze gebruikersaantallen en bedrijfsprocessen moet ondersteunen, loop je tegen de muur:\n❌ Vendor lock-in en onbetaalbare maandelijkse plugin-kosten\n❌ Trage laadtijden die je Google SEO en Core Web Vitals slopen\n❌ Beperkingen in complexe business-logica, multi-tenant auth en maatwerk databases\n\nBij AgevoDev bouwen we 100% maatwerk webplatformen op de modernste enterprise stack van dit moment:\n• Next.js 16 App Router & React 19 met Server-Side Rendering (SSR)\n• Sub-100ms TTFB dankzij slimme Edge caching\n• 100/100 Core Web Vitals voor maximale organische vindbaarheid\n• 100% jouw intellectueel eigendom en schone, modulaire TypeScript code\n\nGeen spaghetti-code of logge templates. Alleen pure, schaalbare software.',
+          cta: 'Wil je weten hoe een high-performance Next.js applicatie jouw time-to-market versnelt? Kijk op 👉 https://agevodev.nl',
+          tags: '#AgevoDev #Nextjs #React19 #TypeScript #WebDevelopment #Performance #CleanCode #FullStack #TechStudio'
+        },
+        {
+          topic: 'SaaS & MVP Ontwikkeling (Van Idee naar Betalende Klanten)',
+          hook: 'Van idee naar een marktklare SaaS met abonnementsmodel in weken in plaats van maanden 🚀',
+          body: 'Als makers van StudyElite.nl hebben we de complete SaaS-funnel van A tot Z zelf doorleefd en geoptimaliseerd.\n\nVeel ondernemers met een geniaal software-idee stranden in een ontwikkeltraject van 9+ maanden. Tegen de tijd dat versie 1.0 live staat, is het budget op en de markt veranderd.\n\nBij AgevoDev bouwen we jouw SaaS-MVP direct op enterprise-niveau:\n🔒 Multi-tenant authenticatie met PostgreSQL Row Level Security (RLS) via Supabase\n💳 Geautomatiseerde Stripe & Mollie abonnementsstromen en facturatie\n📊 Realtime analytics dashboards en conversie-funnels\n⚡ Schaalbare serverless hosting op Vercel Edge met 99.98% uptime SLA\n\nZo lanceer je binnen no-time een robuust product waarmee je direct betalende gebruikers kunt onboarden.',
+          cta: 'Heb jij een software-idee dat klaar is voor de markt? Plan een vrijblijvende kennismaking via 👉 https://agevodev.nl',
+          tags: '#AgevoDev #SaaSDevelopment #MVP #Supabase #Stripe #StartupNL #MicroSaaS #SoftwareBuilder #Nextjs'
+        },
+        {
+          topic: 'Echte AI & Autonome Agents (Voorbij de ChatGPT Hype)',
+          hook: 'Stop met simpele chatbots. Dit is hoe échte AI-automatisering er in 2026 uitziet 🧠',
+          body: 'Veel bedrijven denken bij AI nog steeds aan een standaard ChatGPT widget op de homepage. Maar de echte bedrijfswaarde zit vele malen dieper:\n\nBij AgevoDev integreren we autonome AI-agents en slimme LLM orchestration (OpenAI & Anthropic Claude) rechtstreeks in je core databases en workflows:\n\n✓ Intelligente Document Analyse: Inkomende documenten, facturen of aanvragen automatisch extraheren, valideren en synchroniseren met je database.\n✓ Vector Embeddings & Semantisch Zoeken: Complexe kennisbanken direct doorzoekbaar maken met vlijmscherpe context.\n✓ Autonome Background Workers: Processen die 24/7 op de achtergrond draaien zonder menselijke frictie of vertraging.\n\nZo transformeer je handmatige, foutgevoelige processen in een zelfsturend digitaal fundament.',
+          cta: 'Klaar om te ontdekken welke processen binnen jouw organisatie geoptimaliseerd kunnen worden met AI? Neem contact op 👉 https://agevodev.nl',
+          tags: '#AgevoDev #AIInBusiness #AIAgents #MachineLearning #OpenAI #Claude #Automation #EnterpriseTech'
+        },
+        {
+          topic: 'Direct Contact met Engineers & 100% Code Eigendom',
+          hook: 'Waarom wij bij AgevoDev bewust géén accountmanagers hebben aangenomen 🤝',
+          body: 'Iedereen die wel eens software heeft laten ontwikkelen kent de frustratie:\nJe legt je visie uit aan een accountmanager, die vertaalt het naar een projectmanager, en tegen de tijd dat het bij de programmeur aankomt, is de helft verloren gegaan in ruis.\n\nBij AgevoDev hanteren we één glasheldere regel:\n👉 Je zit direct aan tafel met de senior full-stack engineers die jouw software ontwerpen en programmeren.\n\nDat betekent:\n• 0% ruis op de lijn en razendsnelle iteraties\n• Eerlijk technisch advies: we vertellen je ook wanneer een eenvoudigere oplossing beter en voordeliger is\n• 100% eigendom: alle broncode, datamodellen en intellectueel eigendom worden volledig jouw eigendom (incl. NDA vooraf)\n\nMomenteel hebben we capaciteit voor 1 nieuw maatwerktraject.',
+          cta: 'Benieuwd wat we voor jouw platform kunnen betekenen? Plan direct een afspraak in via 👉 https://agevodev.nl',
+          tags: '#AgevoDev #SoftwareStudio #FullStackEngineering #Ondernemerschap #Transparantie #NextjsDevelopers'
         }
       ]
     };
 
-    const templates = templatesData[target] || templatesData['AgevoDev.nl'];
-    const selected = templates[Math.floor(Math.random() * templates.length)];
+    const templates = templatesData[target] || templatesData['Bram Verhoeff'] || templatesData['AgevoDev.nl'];
+    let selected;
+
+    if (specificTopic && specificTopic.trim()) {
+      const topicLower = specificTopic.toLowerCase();
+      const matched = templates.find(t => 
+        t.topic.toLowerCase().includes(topicLower) || 
+        t.hook.toLowerCase().includes(topicLower) || 
+        t.body.toLowerCase().includes(topicLower)
+      );
+
+      if (matched) {
+        selected = matched;
+      } else {
+        // Custom topic dynamically drafted in personal or company brand voice
+        if (target === 'Bram Verhoeff') {
+          selected = {
+            topic: specificTopic,
+            hook: `Mijn visie als software engineer en founder op ${specificTopic} 👇`,
+            body: `In de afgelopen jaren waarin we StudyElite.nl hebben opgeschaald en bij AgevoDev maatwerk platformen hebben gebouwd, zie ik één patroon telkens terugkomen rondom ${specificTopic}:\n\nDe bedrijven die winnen, kiezen niet voor de meeste code of de grootste teams, maar voor de slimste architectuur en meedogenloze focus op gebruikerswaarde.\n\n3 lessen die ik hieruit meeneem:\n1. Focus op impact: codeer alleen wat direct waarde toevoegt.\n2. Bouw modulair met Next.js en Supabase voor maximale wendbaarheid.\n3. Blijf continu in gesprek met je eindgebruikers.\n\nOndernemen in tech blijft elke dag een geweldige leerschool.`,
+            cta: `Hoe kijk jij aan tegen ${specificTopic}? Ik hoor graag je gedachten in de reacties of connect via 👉 https://www.linkedin.com/in/bram-verhoeff/`,
+            tags: '#BramVerhoeff #FounderLife #SoftwareEngineering #BuildingInPublic #TechFounder #Ondernemen'
+          };
+        } else if (target === 'AgevoDev.nl') {
+          selected = {
+            topic: specificTopic,
+            hook: `Waarom ${specificTopic} het verschil maakt voor moderne digitale platformen 🚀`,
+            body: `In het huidige softwarelandschap winnen de bedrijven die technologische voorsprong omzetten in klantervaring en snelheid.\n\nAls Tech Studio & Venture Builder (en makers van StudyElite.nl) zien we dagelijks hoe ${specificTopic} doorslaggevend is voor schaalbaarheid, performance en conversie.\n\nOnze aanpak bij AgevoDev:\n• 100% maatwerk architectuur in Next.js 16, TypeScript en PostgreSQL/Supabase\n• Geen trage templates of no-code concessies\n• Direct contact met de engineers die de code schrijven\n\nSoftware gebouwd vanuit praktijkervaring als founders, niet vanuit theorie.`,
+            cta: `Wil je sparren over ${specificTopic} of een maatwerktraject starten? Neem contact op via 👉 https://agevodev.nl`,
+            tags: '#AgevoDev #SoftwareDevelopment #TechStudio #VentureBuilder #Nextjs #SaaS #Innovation'
+          };
+        } else {
+          selected = {
+            topic: specificTopic,
+            hook: `Hoe studenten met ${specificTopic} tot 3x effectiever studeren 📚`,
+            body: `Traditioneel studeren kost bakken met tijd en levert vaak onnodige stress op. Met StudyElite.nl zetten we moderne technologie en AI in rondom ${specificTopic}.\n\nZo houd je grip op je tentamenplanning, verhoog je je retentie en haal je met vertrouwen je ECTS.`,
+            cta: `Ervaar het zelf op 👉 https://studyelite.nl`,
+            tags: '#StudyElite #Studeren #EdTech #StudyTips #StudentenNL #AI'
+          };
+        }
+      }
+    } else {
+      selected = templates[Math.floor(Math.random() * templates.length)];
+    }
+
     const fullText = `${selected.hook}\n\n${selected.body}\n\n${selected.cta}\n\n${selected.tags}`;
 
     const newPost = {
       id: 'post_' + Date.now(),
       target: target,
+      topic: selected.topic,
       title: `${target} - ${selected.hook.slice(0, 45)}...`,
       content: fullText,
       status: 'published',
