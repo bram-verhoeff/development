@@ -619,8 +619,8 @@ class AutomationsEngine {
             ${isActive ? 'Pauzeren' : 'Activeren'}
           </button>
           <div class="footer-btn-group">
-            <button class="btn btn-sm btn-outline btn-real-run-wf" data-id="${wf.id}" title="Voer nu direct uit voor een contact">
-              ⚡ Uitvoeren
+            <button class="btn btn-sm ${wf.id === 'wf_ad_leads_webplatform' ? 'btn-primary' : 'btn-outline'} btn-real-run-wf" data-id="${wf.id}" title="${wf.id === 'wf_ad_leads_webplatform' ? 'Simuleer een klantaanvraag via het advertentieformulier' : 'Voer nu direct uit voor een contact'}">
+              ${wf.id === 'wf_ad_leads_webplatform' ? '📝 Test Formulier Invullen' : '⚡ Uitvoeren'}
             </button>
             <button class="btn btn-sm btn-secondary btn-test-wf" data-id="${wf.id}">
               <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
@@ -647,6 +647,106 @@ class AutomationsEngine {
       window.crmState.executeWorkflow(wf, { name: 'AgevoDev / StudyElite Volgers', email: 'bram@agevodev.nl' }, 'Handmatig gestart');
       const latestPost = window.crmState.getAIPosts()[0];
       this.showLinkedInPublishModal(latestPost);
+      return;
+    }
+
+    // Specialized direct execution for Ad Campaign Lead Form!
+    if (workflowId === 'wf_ad_leads_webplatform') {
+      const modalHtml = `
+        <div class="modal-backdrop active" id="direct-run-modal">
+          <div class="modal-content" style="max-width: 580px; border: 1px solid var(--border-subtle); box-shadow: var(--shadow-xl);">
+            <div class="modal-header">
+              <div>
+                <h2 style="font-size: 18px; margin: 0; display: flex; align-items: center; gap: 8px;">
+                  📝 Meta Advertentie Intake Formulier
+                  <span class="badge badge-primary">Ad Lead Simulatie</span>
+                </h2>
+                <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--text-secondary);">Dit is het formulier dat potentiële klanten te zien krijgen als ze op je Instagram/Facebook advertentie klikken.</p>
+              </div>
+              <button class="icon-btn" onclick="document.getElementById('direct-run-modal').remove()">&times;</button>
+            </div>
+            <div class="modal-body" style="padding: 20px;">
+              <div style="background: rgba(99, 102, 241, 0.12); border-left: 4px solid var(--accent-primary); padding: 10px 14px; border-radius: 6px; margin-bottom: 16px; font-size: 12px; color: #c7d2fe; line-height: 1.5;">
+                💡 <strong>Hoe dit werkt:</strong> Vul hieronder een testaanvraag in (bijv. een fictieve ondernemer). Zodra je op <em>"Verstuur Aanvraag"</em> klikt, start HighFlow direct de workflow: stuurt een SMS en e-mail, maakt een deal van € 4.500 aan en zet een bel-taak voor je klaar!
+              </div>
+              <form id="form-simulate-ad-lead">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                  <div class="form-group" style="margin: 0;">
+                    <label style="font-size: 12px; font-weight: 600;">Volledige Naam:</label>
+                    <input type="text" id="ad-lead-name" class="form-control" value="Daan van Leeuwen" required>
+                  </div>
+                  <div class="form-group" style="margin: 0;">
+                    <label style="font-size: 12px; font-weight: 600;">Bedrijfsnaam:</label>
+                    <input type="text" id="ad-lead-company" class="form-control" value="Leeuwen Media & Tech B.V." required>
+                  </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                  <div class="form-group" style="margin: 0;">
+                    <label style="font-size: 12px; font-weight: 600;">Telefoonnummer (voor 15-min call):</label>
+                    <input type="tel" id="ad-lead-phone" class="form-control" value="06 28 49 11 02" required>
+                  </div>
+                  <div class="form-group" style="margin: 0;">
+                    <label style="font-size: 12px; font-weight: 600;">Zakelijk E-mailadres:</label>
+                    <input type="email" id="ad-lead-email" class="form-control" value="daan@leeuwenmedia.nl" required>
+                  </div>
+                </div>
+                <div class="form-group" style="margin-bottom: 12px;">
+                  <label style="font-size: 12px; font-weight: 600;">Wat voor platform of website gebruik je momenteel?</label>
+                  <select id="ad-lead-platform" class="form-control">
+                    <option value="Trage WordPress website met veel plugins">Trage WordPress website met veel plugins</option>
+                    <option value="No-Code platform (Wix / Webflow) dat vastloopt">No-Code platform (Wix / Webflow) dat vastloopt</option>
+                    <option value="Verouderd maatwerk platform toe aan vernieuwing">Verouderd maatwerk platform toe aan vernieuwing</option>
+                    <option value="Helemaal nieuw idee / project">Helemaal nieuw idee / project</option>
+                  </select>
+                </div>
+                <div class="form-group" style="margin-bottom: 16px;">
+                  <label style="font-size: 12px; font-weight: 600;">Gewenste doorlooptijd:</label>
+                  <select id="ad-lead-timing" class="form-control">
+                    <option value="Binnen 1 maand (Hoge prioriteit)">Binnen 1 maand (Hoge prioriteit)</option>
+                    <option value="Binnen 2 tot 3 maanden">Binnen 2 tot 3 maanden</option>
+                    <option value="Oriënterend">Oriënterend</option>
+                  </select>
+                </div>
+                <div class="modal-footer" style="padding: 12px 0 0 0; display: flex; justify-content: space-between;">
+                  <button type="button" class="btn btn-outline" onclick="document.getElementById('direct-run-modal').remove()">Annuleren</button>
+                  <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, #6366f1, #8b5cf6); border: none;">
+                    🚀 Verstuur Intake (Activeer Workflow)
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+      document.getElementById('form-simulate-ad-lead')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('ad-lead-name').value.trim();
+        const company = document.getElementById('ad-lead-company').value.trim();
+        const phone = document.getElementById('ad-lead-phone').value.trim();
+        const email = document.getElementById('ad-lead-email').value.trim();
+        const platform = document.getElementById('ad-lead-platform').value;
+        const timing = document.getElementById('ad-lead-timing').value;
+
+        const contact = window.crmState.addContact({
+          name,
+          company,
+          phone,
+          email,
+          stage: 'qualified',
+          tags: ['Meta Ad Lead', 'Next.js Webplatform', platform],
+          value: 4500
+        });
+
+        window.crmState.executeWorkflow(wf, contact, `Meta Advertentieformulier [${platform}]`);
+
+        document.getElementById('direct-run-modal')?.remove();
+        window.highflowApp?.showToast(`✓ Nieuwe aanvraag van "${name}" ontvangen! Workflow succesvol geactiveerd.`, 'success');
+
+        this.activeTab = 'history';
+        this.renderList();
+      });
       return;
     }
 
