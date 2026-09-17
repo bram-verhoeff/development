@@ -38,11 +38,17 @@ async function loadBranches() {
       // Fallback naar embedded data
       branches = [
         {
-          branch: "whammy",
-          commit: "ff8bcf9",
-          title: "Whammy | Gitaar Services & Afstellen Zoetermeer",
-          description: "Goed onderhoud is de basis van een goede gitaar. Bij Whammy Gitaar Services in Zoetermeer zorg ik ervoor dat jouw gitaar perfect speelt en langer meegaat. Snaren vervangen vanaf 15 min, complete setups en reparatie.",
-          url: "./branches/whammy/",
+          branch: "CRMSYSTEM",
+          title: "HighFlow CRM | GoHighLevel Automation & Sales Platform",
+          description: "All-in-one GoHighLevel alternatief met een visuele workflow builder, sales pipelines, omnichannel inbox, LinkedIn AI Studio en contactbeheer.",
+          url: "./branches/CRMSYSTEM/",
+          status: "ONLINE"
+        },
+        {
+          branch: "thecoast",
+          title: "Beach House The Coast | Strandpaviljoen op Palen in Monster",
+          description: "Welkom bij Beach House The Coast aan strandopgang Molenslag in Monster. 360° uitzicht over zee, verse vis en seizoensgerechten, jaarrond geopend.",
+          url: "./branches/thecoast/",
           status: "ONLINE"
         }
       ];
