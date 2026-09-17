@@ -1,113 +1,360 @@
 <!DOCTYPE html>
-<html lang="nl-NL">
+<html lang="nl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agevo // Bram Verhoeff</title>
-  <meta name="description" content="Agevo development testserver van Bram Verhoeff.">
-  <meta name="author" content="Bram Verhoeff">
-  <meta name="robots" content="noindex, nofollow">
+  <title>HHS BPMN Modeler | De Haagse Hogeschool</title>
+  <meta name="description" content="Moderne, snelle en gebruiksvriendelijke BPMN 2.0 Modeler voor studenten van het vak Business Process Management aan De Haagse Hogeschool.">
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
 
-  <!-- Google Fonts -->
+  <!-- Google Fonts: Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
-  <link rel="alternate icon" href="assets/logo.png">
+  <!-- bpmn-js styles -->
+  <link rel="stylesheet" href="https://unpkg.com/bpmn-js@18.28.0/dist/assets/diagram-js.css">
+  <link rel="stylesheet" href="https://unpkg.com/bpmn-js@18.28.0/dist/assets/bpmn-js.css">
+  <link rel="stylesheet" href="https://unpkg.com/bpmn-js@18.28.0/dist/assets/bpmn-font/css/bpmn.css">
+
+  <!-- Application styles -->
   <link rel="stylesheet" href="style.css">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-
-  <!-- Top Header -->
-  <header class="header">
-    <div class="container header-inner">
-      <div class="brand">
-        <a href="./" class="brand-link" title="AgevoDev">
-          <picture>
-            <source srcset="assets/logo.svg" type="image/svg+xml">
-            <img src="assets/logo.png" alt="AgevoDev Software Development" class="brand-logo" height="38">
-          </picture>
-        </a>
-        <div class="brand-sub-badge">
-          <span class="brand-author">Bram Verhoeff</span>
-        </div>
-      </div>
-      <div class="server-status">
-        <span class="status-dot"></span>
-        <span>Testserver Actief</span>
-      </div>
-    </div>
-  </header>
-
-  <!-- Main Content -->
-  <main class="main-content">
-    <div class="container">
-      
-      <!-- Intro / Title -->
-      <div class="title-area">
-        <h1 class="page-title">Git Branches</h1>
-        <p class="page-subtitle">Kies een branch om het bijbehorende testproduct te openen:</p>
-      </div>
-
-      <!-- Branches Grid -->
-      <div class="branches-grid" id="branches-container">
-        <!-- Dynamically loaded via main.js -->
-        <div class="loading">Bezig met laden van branches...</div>
-      </div>
-
-      <!-- Custom Project Call to Action -->
-      <section class="cta-card">
-        <div class="cta-text">
-          <div class="cta-pill">
-            <span class="cta-pill-dot"></span>
-            <span>Maatwerk Software &amp; Web</span>
-          </div>
-          <h2 class="cta-heading">Een eigen website of programma laten bouwen?</h2>
-          <p class="cta-sub">
-            Wil je ook een moderne website, webapplicatie of software op maat laten maken? Vraag vrijblijvend een offerte of kennismaking aan via <strong>agevodev.nl</strong>.
-          </p>
-        </div>
-        <div class="cta-action">
-          <a href="https://agevodev.nl" target="_blank" rel="noopener noreferrer" class="cta-btn">
-            <span>Aanvragen op agevodev.nl</span>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <path d="M7 17L17 7"></path>
-              <path d="M7 7h10v10"></path>
+  <div id="app" class="app-container">
+    <!-- Top Navigation & Toolbar -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="brand">
+          <div class="brand-logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="4" width="7" height="6" rx="1.5" stroke="#10b981" stroke-width="2"/>
+              <rect x="14" y="14" width="7" height="6" rx="1.5" stroke="#3b82f6" stroke-width="2"/>
+              <circle cx="6.5" cy="17" r="3" stroke="#f59e0b" stroke-width="2"/>
+              <path d="M10 7H17.5V14M6.5 14V10" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-          </a>
+          </div>
+          <div class="brand-text">
+            <span class="brand-title">BPMN Modeler</span>
+            <span class="brand-badge">HHS • BPM</span>
+          </div>
         </div>
-      </section>
 
-    </div>
-  </main>
+        <div class="divider-v"></div>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container footer-inner">
-      <div class="footer-brand-info">
-        <span>&copy; 2026 <strong>Agevo</strong> &bull; Bram Verhoeff</span>
-        <span class="footer-divider">&bull;</span>
-        <span class="footer-kvk font-mono">KvK: <strong>42160840</strong></span>
+        <!-- Diagram Name Input -->
+        <div class="diagram-meta">
+          <input type="text" id="diagram-title" class="diagram-title-input" value="Mijn Bedrijfsproces" placeholder="Naam van proces..." title="Klik om diagramnaam te wijzigen">
+          <span id="save-status" class="save-status" title="Wijzigingen worden lokaal automatisch bewaard">
+            <i data-lucide="check-circle-2" class="status-icon"></i>
+            <span class="status-text">Opgeslagen</span>
+          </span>
+        </div>
       </div>
 
-      <div class="footer-contact-links">
-        <a href="https://agevodev.nl" target="_blank" rel="noopener noreferrer" class="footer-link">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-          <span>agevodev.nl</span>
-        </a>
-        <a href="mailto:info@agevodev.nl" class="footer-link">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-          <span>info@agevodev.nl</span>
-        </a>
-        <a href="https://instagram.com/agevodev" target="_blank" rel="noopener noreferrer" class="footer-link">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-          <span>@agevodev</span>
-        </a>
+      <div class="header-actions">
+        <!-- Bestand & Nieuw -->
+        <div class="action-group">
+          <button id="btn-new" class="btn btn-secondary" title="Nieuw blanco diagram aanmaken">
+            <i data-lucide="file-plus" class="btn-icon"></i>
+            <span>Nieuw</span>
+          </button>
+          
+          <button id="btn-open-file" class="btn btn-secondary" title="Bestaand .bpmn of .xml bestand openen">
+            <i data-lucide="folder-open" class="btn-icon"></i>
+            <span>Openen</span>
+          </button>
+          <input type="file" id="file-input" accept=".bpmn,.xml" style="display: none;">
+
+          <!-- Templates dropdown -->
+          <div class="dropdown-wrapper">
+            <button id="btn-templates-dropdown" class="btn btn-secondary dropdown-trigger" title="Kies een kant-en-klaar voorbeeld">
+              <i data-lucide="layout-template" class="btn-icon"></i>
+              <span>Voorbeelden</span>
+              <i data-lucide="chevron-down" class="chevron-icon"></i>
+            </button>
+            <div id="templates-menu" class="dropdown-menu">
+              <div class="dropdown-header">HHS BPM Sjablonen</div>
+              <button class="dropdown-item" data-template="swimlane">
+                <i data-lucide="columns-2"></i>
+                <div class="item-text">
+                  <strong>Basis Pool & Swimlanes</strong>
+                  <small>Klant & Organisatie met 2 banen</small>
+                </div>
+              </button>
+              <button class="dropdown-item" data-template="order-to-cash">
+                <i data-lucide="shopping-cart"></i>
+                <div class="item-text">
+                  <strong>Order-to-Cash Proces</strong>
+                  <small>Uitgebreid proces met XOR & AND gateways</small>
+                </div>
+              </button>
+              <button class="dropdown-item" data-template="exam">
+                <i data-lucide="graduation-cap"></i>
+                <div class="item-text">
+                  <strong>HHS Tentamenprocedure</strong>
+                  <small>Inschrijving, toetsing & cijferregistratie</small>
+                </div>
+              </button>
+              <button class="dropdown-item" data-template="incident">
+                <i data-lucide="headphones"></i>
+                <div class="item-text">
+                  <strong>Klachtenafhandeling</strong>
+                  <small>Eerste- en tweedelijns escalatie</small>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider-v"></div>
+
+        <!-- Export opties -->
+        <div class="action-group">
+          <div class="dropdown-wrapper">
+            <button id="btn-export-dropdown" class="btn btn-primary dropdown-trigger" title="Exporteer voor verslag of inlevering">
+              <i data-lucide="download" class="btn-icon"></i>
+              <span>Exporteren</span>
+              <i data-lucide="chevron-down" class="chevron-icon"></i>
+            </button>
+            <div id="export-menu" class="dropdown-menu dropdown-menu-right">
+              <div class="dropdown-header">Opslaan voor Verslag & Docent</div>
+              <button id="btn-export-png" class="dropdown-item">
+                <i data-lucide="image"></i>
+                <div class="item-text">
+                  <strong>Afbeelding (PNG)</strong>
+                  <small>Haarscherp voor Word & verslagen (witte achtergrond)</small>
+                </div>
+              </button>
+              <button id="btn-export-svg" class="dropdown-item">
+                <i data-lucide="file-code"></i>
+                <div class="item-text">
+                  <strong>Vector (SVG)</strong>
+                  <small>Schaalbaar grafisch vectorbestand</small>
+                </div>
+              </button>
+              <div class="dropdown-divider"></div>
+              <button id="btn-export-bpmn" class="dropdown-item">
+                <i data-lucide="file-text"></i>
+                <div class="item-text">
+                  <strong>BPMN 2.0 XML (.bpmn)</strong>
+                  <small>Officieel bestand voor Brightspace / Camunda</small>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider-v"></div>
+
+        <!-- Help & Spiekbrief -->
+        <div class="action-group">
+          <button id="btn-cheatsheet" class="btn btn-accent" title="BPMN 2.0 Spiekbrief & Richtlijnen voor het vak BPM">
+            <i data-lucide="book-open" class="btn-icon"></i>
+            <span>BPM Spiekbrief</span>
+          </button>
+          
+          <button id="btn-shortcuts" class="btn btn-icon-only" title="Sneltoetsen bekijken">
+            <i data-lucide="keyboard"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Sub-bar: Canvas Controls & Kleuren & Snelle Acties -->
+    <div class="canvas-controls-bar">
+      <!-- Undo / Redo -->
+      <div class="control-cluster">
+        <button id="btn-undo" class="tool-btn" title="Ongedaan maken (Ctrl+Z)" disabled>
+          <i data-lucide="undo-2"></i>
+        </button>
+        <button id="btn-redo" class="tool-btn" title="Opnieuw (Ctrl+Y)" disabled>
+          <i data-lucide="redo-2"></i>
+        </button>
+      </div>
+
+      <div class="cluster-divider"></div>
+
+      <!-- Zoom and View -->
+      <div class="control-cluster">
+        <button id="btn-zoom-in" class="tool-btn" title="Inzoomen">
+          <i data-lucide="zoom-in"></i>
+        </button>
+        <button id="btn-zoom-out" class="tool-btn" title="Uitzoomen">
+          <i data-lucide="zoom-out"></i>
+        </button>
+        <button id="btn-zoom-fit" class="tool-btn" title="Passend maken op scherm (Fit)">
+          <i data-lucide="maximize-2"></i>
+        </button>
+        <button id="btn-zoom-reset" class="tool-btn" title="Reset naar 100%">
+          <span class="zoom-level" id="zoom-level-label">100%</span>
+        </button>
+      </div>
+
+      <div class="cluster-divider"></div>
+
+      <!-- Color Marker for Elements -->
+      <div class="control-cluster color-picker-cluster" title="Kleur geselecteerde elementen (Happy path, foutpad, etc.)">
+        <span class="cluster-label">Kleurmarkering:</span>
+        <button class="color-dot-btn" data-color="default" title="Standaard / Reset" style="--dot-color: #64748b;"></button>
+        <button class="color-dot-btn" data-color="success" title="Happy Path / Goedkeuring (Groen)" style="--dot-color: #10b981;"></button>
+        <button class="color-dot-btn" data-color="warning" title="Uitzondering / Wachten (Geel/Oranje)" style="--dot-color: #f59e0b;"></button>
+        <button class="color-dot-btn" data-color="danger" title="Foutafhandeling / Afwijzing (Rood)" style="--dot-color: #ef4444;"></button>
+        <button class="color-dot-btn" data-color="info" title="Systeem / Data / Informatie (Blauw)" style="--dot-color: #3b82f6;"></button>
+        <button class="color-dot-btn" data-color="purple" title="Speciaal / Extern (Paars)" style="--dot-color: #8b5cf6;"></button>
+      </div>
+
+      <div class="cluster-divider"></div>
+
+      <!-- Element Quick Info -->
+      <div class="selection-info" id="selection-info">
+        <span class="selection-placeholder">Geen element geselecteerd (klik op een vorm)</span>
       </div>
     </div>
-  </footer>
 
+    <!-- Main Canvas Area -->
+    <main class="canvas-wrapper">
+      <div id="canvas" class="bpmn-canvas"></div>
+      
+      <!-- Drag and Drop Overlay Indicator -->
+      <div id="drop-zone-overlay" class="drop-zone-overlay">
+        <div class="drop-zone-content">
+          <i data-lucide="upload-cloud" class="drop-icon"></i>
+          <h3>Sleep je .bpmn of .xml bestand hierheen</h3>
+          <p>Laat los om het model direct in te laden</p>
+        </div>
+      </div>
+
+      <!-- Floating Canvas Tip -->
+      <div class="canvas-tip">
+        <i data-lucide="sparkles"></i>
+        <span><strong>Tip:</strong> Klik op een vorm om via het context-icoontje direct een volgende taak of gateway te trekken!</span>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal: BPMN Spiekbrief & HHS Richtlijnen -->
+  <div id="modal-cheatsheet" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <div class="modal-icon-badge">
+            <i data-lucide="book-marked"></i>
+          </div>
+          <div>
+            <h3>BPMN 2.0 Spiekbrief & HHS Beoordelingsregels</h3>
+            <p>Essentiële conventies voor het vak Business Process Management aan De Haagse Hogeschool</p>
+          </div>
+        </div>
+        <button class="btn-close-modal" id="btn-close-cheatsheet">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="cheatsheet-grid">
+          <!-- Card 1: Naamgeving -->
+          <div class="cheat-card">
+            <div class="cheat-card-header">
+              <span class="badge-num">1</span>
+              <h4>Naamgevingsconventies (Puntenpakkers!)</h4>
+            </div>
+            <ul>
+              <li><strong>Activiteit / Taak:</strong> Altijd <em>Zelfstandig Naamwoord + Actief Werkwoord</em> (bijv. <code>"Klantgegevens controleren"</code>, <code>"Factuur versturen"</code>). Nooit alleen <code>"Klant"</code> of <code>"Facturatie"</code>.</li>
+              <li><strong>Events:</strong> Altijd toestand in het <em>Voltooid Deelwoord</em> (bijv. <code>"Aanvraag ontvangen"</code>, <code>"Bestelling verzonden"</code>).</li>
+              <li><strong>Gateways:</strong> Formuleer de splitsing als een duidelijke vraag (bijv. <code>"Krediet toereikend?"</code>) en benoem <em>elke</em> uitgaande stroom (bijv. <code>"Ja"</code> / <code>"Nee"</code> of <code>"> €500"</code>).</li>
+            </ul>
+          </div>
+
+          <!-- Card 2: Pools & Swimlanes -->
+          <div class="cheat-card">
+            <div class="cheat-card-header">
+              <span class="badge-num">2</span>
+              <h4>Pools & Swimlanes (Klassieke Tentamenvalkuil)</h4>
+            </div>
+            <ul>
+              <li><strong>Sequence Flow (doorgetrokken lijn):</strong> Mag <strong>NOOIT</strong> de grens van een Pool overschrijden! Mag wél vrij tussen swimlanes binnen dezelfde pool bewegen.</li>
+              <li><strong>Message Flow (gestreepte lijn met open cirkel/pijl):</strong> Gebruik je <em>uitsluitend</em> voor communicatie tussen twee afzonderlijke Pools (bijv. tussen Klant en Organisatie).</li>
+              <li>Een <strong>Black Box Pool</strong> (geen interne stappen getoond) gebruik je voor externe partijen zoals leveranciers of de klant.</li>
+            </ul>
+          </div>
+
+          <!-- Card 3: Gateways -->
+          <div class="cheat-card">
+            <div class="cheat-card-header">
+              <span class="badge-num">3</span>
+              <h4>Gateways: Splitsen & Samenvoegen</h4>
+            </div>
+            <ul>
+              <li><strong>XOR (Exclusief - X):</strong> Slechts één pad wordt gekozen. Zorg altijd voor een samenvoegende XOR gateway verderop als de stromen weer bij elkaar komen!</li>
+              <li><strong>AND (Parallel - +):</strong> Alle paden worden gelijktijdig uitgevoerd. Zorg voor een samenvoegende AND gateway die wacht tot álle parallelle paden gereed zijn.</li>
+              <li><strong>OR (Inclusief - O):</strong> Eén of meerdere paden kunnen waar zijn.</li>
+              <li><strong>Nooit impliciet splitsen:</strong> Laat een taak niet zomaar meerdere uitgaande sequence flows hebben; gebruik altijd een expliciete gateway.</li>
+            </ul>
+          </div>
+
+          <!-- Card 4: Events & Logica -->
+          <div class="cheat-card">
+            <div class="cheat-card-header">
+              <span class="badge-num">4</span>
+              <h4>Start, Tussen & Eind Events</h4>
+            </div>
+            <ul>
+              <li><strong>Start Event:</strong> Elk proces heeft exact 1 startpunt (geen inkomende pijlen!).</li>
+              <li><strong>End Event:</strong> Elk proces moet eindigen in minimaal 1 End Event (geen uitgaande pijlen!).</li>
+              <li><strong>Timer Event:</strong> Gebruik een klok-icoon voor wachttijden (bijv. <em>"Wacht 3 werkdagen"</em>).</li>
+              <li><strong>Error End Event:</strong> Gebruik een bliksem-icoon voor het afbreken bij fouten.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <span class="footer-note">Handig voor je verslagen en tentamens van de opleiding Technische Bedrijfskunde / Bedrijfskunde / BIM.</span>
+        <button class="btn btn-primary" id="btn-close-cheatsheet-bottom">Begrepen</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Sneltoetsen -->
+  <div id="modal-shortcuts" class="modal-backdrop">
+    <div class="modal-card modal-sm">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <div class="modal-icon-badge">
+            <i data-lucide="keyboard"></i>
+          </div>
+          <div>
+            <h3>Sneltoetsen</h3>
+            <p>Werk nog sneller met handige shortcuts</p>
+          </div>
+        </div>
+        <button class="btn-close-modal" id="btn-close-shortcuts">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="shortcuts-list">
+          <div class="shortcut-row"><span class="shortcut-action">Tekst bewerken</span><kbd>Dubbelklik</kbd></div>
+          <div class="shortcut-row"><span class="shortcut-action">Ongedaan maken</span><kbd>Ctrl + Z</kbd></div>
+          <div class="shortcut-row"><span class="shortcut-action">Opnieuw uitvoeren</span><kbd>Ctrl + Y</kbd></div>
+          <div class="shortcut-row"><span class="shortcut-action">Element verwijderen</span><kbd>Delete</kbd> of <kbd>Backspace</kbd></div>
+          <div class="shortcut-row"><span class="shortcut-action">Canvas verschuiven (Pan)</span><kbd>Spatiebalk + Slepen</kbd></div>
+          <div class="shortcut-row"><span class="shortcut-action">In- en uitzoomen</span><kbd>Ctrl + Muiswiel</kbd></div>
+          <div class="shortcut-row"><span class="shortcut-action">Opslaan als .bpmn</span><kbd>Ctrl + S</kbd></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- bpmn-js library -->
+  <script src="https://unpkg.com/bpmn-js@18.28.0/dist/bpmn-modeler.production.min.js"></script>
+
+  <!-- Application logic -->
   <script src="main.js"></script>
 </body>
 </html>

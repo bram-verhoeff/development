@@ -1,4 +1,4 @@
-name: Deploy Multi-Branch Pages
+name: Deploy GitHub Pages
 
 on:
   push:
@@ -16,92 +16,23 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Prepare Multi-Branch Site
-        run: |
-          mkdir -p dist/branches
-          
-          # Fetch all branches from remote
-          git fetch --all
-
-          # Extract portal files from main branch into dist/
-          git archive origin/main | tar -x -C dist/ || true
-
-          # List all remote branches
-          BRANCHES=$(git branch -r | grep -v '\->' | grep -v 'origin/gh-pages' | sed 's/origin\///')
-          echo "Gedetecteerde branches: $BRANCHES"
-
-          # Extract each branch into dist/branches/<branch_name>/
-          for b in $BRANCHES; do
-            b_trimmed=$(echo "$b" | xargs)
-            if [ "$b_trimmed" != "main" ] && [ -n "$b_trimmed" ]; then
-              echo "Extracting branch: $b_trimmed"
-              mkdir -p "dist/branches/$b_trimmed"
-              git archive "origin/$b_trimmed" | tar -x -C "dist/branches/$b_trimmed" || true
-            fi
-          done
-
-          # Automatically generate branches.json for static frontend
-          node -e '
-            const fs = require("fs");
-            const path = require("path");
-            const branchesDir = "dist/branches";
-            const list = [];
-
-            if (fs.existsSync(branchesDir)) {
-              const entries = fs.readdirSync(branchesDir, { withFileTypes: true });
-              for (const entry of entries) {
-                if (entry.isDirectory()) {
-                  const bName = entry.name;
-                  const indexPath = path.join(branchesDir, bName, "index.html");
-                  let title = "Branch: " + bName;
-                  let description = "Git branch product";
-
-                  if (fs.existsSync(indexPath)) {
-                    try {
-                      const html = fs.readFileSync(indexPath, "utf8");
-                      const tMatch = html.match(/<title>([^<]+)<\/title>/i);
-                      if (tMatch && tMatch[1]) title = tMatch[1].trim();
-                      const dMatch = html.match(/<meta\\s+name=["\x27]description["\x27]\\s+content=["\x27]([^"\x27]+)["\x27]/i);
-                      if (dMatch && dMatch[1]) description = dMatch[1].trim();
-                    } catch (e) {}
-                  }
-
-                  list.push({
-                    branch: bName,
-                    title: title,
-                    description: description,
-                    url: "./branches/" + bName + "/",
-                    status: "ONLINE"
-                  });
-                }
-              }
-            }
-
-            const output = { branches: list };
-            fs.writeFileSync("dist/branches.json", JSON.stringify(output, null, 2));
-            console.log("Gegenereerde branches.json:", output);
-          '
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./dist
-
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
