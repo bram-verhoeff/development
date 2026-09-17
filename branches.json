@@ -1,20 +1,29 @@
 {
   "branches": [
     {
+      "branch": "BPMNModeler",
+      "commit": "ad31017",
+      "title": "HHS BPMN Modeler | De Haagse Hogeschool",
+      "description": "Moderne, snelle en gebruiksvriendelijke BPMN 2.0 Modeler voor studenten van het vak Business Process Management aan De Haagse Hogeschool.",
+      "url": "./branches/BPMNModeler/",
+      "status": "ONLINE"
+    },
+    {
       "branch": "CRMSYSTEM",
-      "commit": "55cea30",
+      "commit": "9e07399",
       "title": "HighFlow CRM | GoHighLevel Automation & Sales Platform",
-      "description": "All-in-one GoHighLevel alternatief met een visuele workflow builder, sales pipelines, omnichannel inbox, LinkedIn AI Studio en contactbeheer.",
+      "description": "All-in-one GoHighLevel alternatief met een visuele workflow builder, sales pipelines, omnichannel inbox en contactbeheer.",
       "url": "./branches/CRMSYSTEM/",
       "status": "ONLINE"
     },
     {
       "branch": "thecoast",
-      "commit": "a9f0aa1",
+      "commit": "e14d59f",
       "title": "Beach House The Coast | Strandpaviljoen op Palen in Monster",
-      "description": "Welkom bij Beach House The Coast aan strandopgang Molenslag in Monster. 360° uitzicht over zee, verse vis en seizoensgerechten, jaarrond geopend.",
+      "description": "Welkom bij Beach House The Coast aan strandopgang Molenslag in Monster. Geniet jaarrond van een adembenemend 360° uitzicht over zee, verse vis en seizoensgerechten, borrels en onvergetelijke strandfeesten en bruiloften.",
       "url": "./branches/thecoast/",
       "status": "ONLINE"
     }
   ]
 }
+
