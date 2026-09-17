@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HHS BPMN Modeler | De Haagse Hogeschool</title>
-  <meta name="description" content="Moderne, snelle en gebruiksvriendelijke BPMN 2.0 Modeler voor studenten van het vak Business Process Management aan De Haagse Hogeschool.">
+  <title>Agevo BPMN Modeler | agevodev.nl</title>
+  <meta name="description" content="Moderne, professionele en razendsnelle BPMN 2.0 Modeler ontwikkeld door Agevo (agevodev.nl). Breng complexe bedrijfsprocessen en workflows helder in kaart.">
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
 
   <!-- Google Fonts: Plus Jakarta Sans -->
@@ -28,20 +28,34 @@
     <!-- Top Navigation & Toolbar -->
     <header class="app-header">
       <div class="header-left">
-        <div class="brand">
+        <a href="https://agevodev.nl" target="_blank" rel="noopener noreferrer" class="brand" title="AgevoDev — Tech Studio & Venture Builder (agevodev.nl)">
           <div class="brand-logo">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="3" y="4" width="7" height="6" rx="1.5" stroke="#10b981" stroke-width="2"/>
-              <rect x="14" y="14" width="7" height="6" rx="1.5" stroke="#3b82f6" stroke-width="2"/>
-              <circle cx="6.5" cy="17" r="3" stroke="#f59e0b" stroke-width="2"/>
-              <path d="M10 7H17.5V14M6.5 14V10" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <svg width="22" height="22" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="brandBracketGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#4f46e5" />
+                  <stop offset="50%" stop-color="#6366f1" />
+                  <stop offset="100%" stop-color="#3b82f6" />
+                </linearGradient>
+                <linearGradient id="brandSlashGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#6366f1" />
+                  <stop offset="100%" stop-color="#3b82f6" />
+                </linearGradient>
+                <linearGradient id="brandRightGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#3b82f6" />
+                  <stop offset="100%" stop-color="#60a5fa" />
+                </linearGradient>
+              </defs>
+              <path d="M 36 22 L 14 45 L 36 68" stroke="url(#brandBracketGrad)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M 54 20 L 40 70" stroke="url(#brandSlashGrad)" stroke-width="8" stroke-linecap="round" />
+              <path d="M 59 22 L 81 45 L 59 68" stroke="url(#brandRightGrad)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </div>
           <div class="brand-text">
-            <span class="brand-title">BPMN Modeler</span>
-            <span class="brand-badge">HHS • BPM</span>
+            <span class="brand-title">Agevo<span class="brand-title-accent">Dev</span></span>
+            <span class="brand-badge">BPMN • agevodev.nl</span>
           </div>
-        </div>
+        </a>
 
         <div class="divider-v"></div>
 
@@ -73,16 +87,16 @@
           <div class="dropdown-wrapper">
             <button id="btn-templates-dropdown" class="btn btn-secondary dropdown-trigger" title="Kies een kant-en-klaar voorbeeld">
               <i data-lucide="layout-template" class="btn-icon"></i>
-              <span>Voorbeelden</span>
+              <span>Sjablonen</span>
               <i data-lucide="chevron-down" class="chevron-icon"></i>
             </button>
             <div id="templates-menu" class="dropdown-menu">
-              <div class="dropdown-header">HHS BPM Sjablonen</div>
+              <div class="dropdown-header">Bedrijfsproces Sjablonen</div>
               <button class="dropdown-item" data-template="swimlane">
                 <i data-lucide="columns-2"></i>
                 <div class="item-text">
                   <strong>Basis Pool & Swimlanes</strong>
-                  <small>Klant & Organisatie met 2 banen</small>
+                  <small>Klant & Agevo met 2 banen</small>
                 </div>
               </button>
               <button class="dropdown-item" data-template="order-to-cash">
@@ -93,16 +107,16 @@
                 </div>
               </button>
               <button class="dropdown-item" data-template="exam">
-                <i data-lucide="graduation-cap"></i>
+                <i data-lucide="layers"></i>
                 <div class="item-text">
-                  <strong>HHS Tentamenprocedure</strong>
-                  <small>Inschrijving, toetsing & cijferregistratie</small>
+                  <strong>SaaS Project & Delivery Flow</strong>
+                  <small>Scope, architectuur, CI/CD & rollout</small>
                 </div>
               </button>
               <button class="dropdown-item" data-template="incident">
                 <i data-lucide="headphones"></i>
                 <div class="item-text">
-                  <strong>Klachtenafhandeling</strong>
+                  <strong>Klachten- & Incidentafhandeling</strong>
                   <small>Eerste- en tweedelijns escalatie</small>
                 </div>
               </button>
@@ -115,18 +129,18 @@
         <!-- Export opties -->
         <div class="action-group">
           <div class="dropdown-wrapper">
-            <button id="btn-export-dropdown" class="btn btn-primary dropdown-trigger" title="Exporteer voor verslag of inlevering">
+            <button id="btn-export-dropdown" class="btn btn-primary dropdown-trigger" title="Exporteer als afbeelding of BPMN 2.0 bestand">
               <i data-lucide="download" class="btn-icon"></i>
               <span>Exporteren</span>
               <i data-lucide="chevron-down" class="chevron-icon"></i>
             </button>
             <div id="export-menu" class="dropdown-menu dropdown-menu-right">
-              <div class="dropdown-header">Opslaan voor Verslag & Docent</div>
+              <div class="dropdown-header">Exporteren & Delen</div>
               <button id="btn-export-png" class="dropdown-item">
                 <i data-lucide="image"></i>
                 <div class="item-text">
                   <strong>Afbeelding (PNG)</strong>
-                  <small>Haarscherp voor Word & verslagen (witte achtergrond)</small>
+                  <small>Haarscherp voor documenten en presentaties</small>
                 </div>
               </button>
               <button id="btn-export-svg" class="dropdown-item">
@@ -141,7 +155,7 @@
                 <i data-lucide="file-text"></i>
                 <div class="item-text">
                   <strong>BPMN 2.0 XML (.bpmn)</strong>
-                  <small>Officieel bestand voor Brightspace / Camunda</small>
+                  <small>Standaardformaat voor Camunda & BPM engines</small>
                 </div>
               </button>
             </div>
@@ -150,16 +164,21 @@
 
         <div class="divider-v"></div>
 
-        <!-- Help & Spiekbrief -->
+        <!-- Help, Sneltoetsen & Agevo Link -->
         <div class="action-group">
-          <button id="btn-cheatsheet" class="btn btn-accent" title="BPMN 2.0 Spiekbrief & Richtlijnen voor het vak BPM">
+          <button id="btn-cheatsheet" class="btn btn-accent" title="BPMN 2.0 Spiekbrief & Modelleringsrichtlijnen">
             <i data-lucide="book-open" class="btn-icon"></i>
-            <span>BPM Spiekbrief</span>
+            <span>BPMN Spiekbrief</span>
           </button>
           
           <button id="btn-shortcuts" class="btn btn-icon-only" title="Sneltoetsen bekijken">
             <i data-lucide="keyboard"></i>
           </button>
+
+          <a href="https://agevodev.nl" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-website" title="Bezoek agevodev.nl (opent in nieuw tabblad)">
+            <i data-lucide="external-link" class="btn-icon"></i>
+            <span>agevodev.nl</span>
+          </a>
         </div>
       </div>
     </header>
@@ -236,7 +255,7 @@
     </main>
   </div>
 
-  <!-- Modal: BPMN Spiekbrief & HHS Richtlijnen -->
+  <!-- Modal: BPMN Spiekbrief & Richtlijnen -->
   <div id="modal-cheatsheet" class="modal-backdrop">
     <div class="modal-card">
       <div class="modal-header">
@@ -245,8 +264,8 @@
             <i data-lucide="book-marked"></i>
           </div>
           <div>
-            <h3>BPMN 2.0 Spiekbrief & HHS Beoordelingsregels</h3>
-            <p>Essentiële conventies voor het vak Business Process Management aan De Haagse Hogeschool</p>
+            <h3>BPMN 2.0 Spiekbrief & Best Practices</h3>
+            <p>Essentiële conventies en standaarden voor professionele procesmodellering — Agevo (agevodev.nl)</p>
           </div>
         </div>
         <button class="btn-close-modal" id="btn-close-cheatsheet">
@@ -259,7 +278,7 @@
           <div class="cheat-card">
             <div class="cheat-card-header">
               <span class="badge-num">1</span>
-              <h4>Naamgevingsconventies (Puntenpakkers!)</h4>
+              <h4>Naamgevingsconventies (Best Practices)</h4>
             </div>
             <ul>
               <li><strong>Activiteit / Taak:</strong> Altijd <em>Zelfstandig Naamwoord + Actief Werkwoord</em> (bijv. <code>"Klantgegevens controleren"</code>, <code>"Factuur versturen"</code>). Nooit alleen <code>"Klant"</code> of <code>"Facturatie"</code>.</li>
@@ -272,7 +291,7 @@
           <div class="cheat-card">
             <div class="cheat-card-header">
               <span class="badge-num">2</span>
-              <h4>Pools & Swimlanes (Klassieke Tentamenvalkuil)</h4>
+              <h4>Pools & Swimlanes (Modelleringsregels)</h4>
             </div>
             <ul>
               <li><strong>Sequence Flow (doorgetrokken lijn):</strong> Mag <strong>NOOIT</strong> de grens van een Pool overschrijden! Mag wél vrij tussen swimlanes binnen dezelfde pool bewegen.</li>
@@ -311,7 +330,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <span class="footer-note">Handig voor je verslagen en tentamens van de opleiding Technische Bedrijfskunde / Bedrijfskunde / BIM.</span>
+        <span class="footer-note">Ontwikkeld door <a href="https://agevodev.nl" target="_blank" rel="noopener noreferrer" style="color: var(--accent-blue); text-decoration: underline;">AgevoDev</a> — Tech Studio & Venture Builder.</span>
         <button class="btn btn-primary" id="btn-close-cheatsheet-bottom">Begrepen</button>
       </div>
     </div>

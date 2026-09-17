@@ -1,6 +1,6 @@
 /* ===================================================================
-   HHS BPMN Modeler - Modern Design System
-   Tailored for Students of De Haagse Hogeschool
+   Agevo BPMN Modeler - Modern Design System
+   Powered by AgevoDev (agevodev.nl) - Tech Studio & Venture Builder
    =================================================================== */
 
 :root {
@@ -87,17 +87,32 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.brand:hover {
+  opacity: 0.95;
 }
 
 .brand-logo {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(59, 130, 246, 0.15));
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.25), rgba(59, 130, 246, 0.25));
+  border: 1px solid rgba(99, 102, 241, 0.35);
   border-radius: var(--radius-md);
+  box-shadow: 0 0 16px rgba(99, 102, 241, 0.2);
+  transition: var(--transition);
+}
+
+.brand:hover .brand-logo {
+  border-color: rgba(99, 102, 241, 0.6);
+  box-shadow: 0 0 22px rgba(99, 102, 241, 0.4);
+  transform: translateY(-1px);
 }
 
 .brand-text {
@@ -107,24 +122,45 @@ body {
 }
 
 .brand-title {
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 15.5px;
+  font-weight: 800;
   letter-spacing: -0.02em;
-  background: linear-gradient(135deg, #ffffff, #cbd5e1);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #ffffff;
+}
+
+.brand-title-accent {
+  color: #3b82f6;
+  font-weight: 800;
 }
 
 .brand-badge {
-  font-size: 11px;
-  font-weight: 700;
-  padding: 2px 7px;
-  background: rgba(16, 185, 129, 0.12);
-  color: #34d399;
-  border: 1px solid rgba(16, 185, 129, 0.25);
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 2px 8px;
+  background: rgba(99, 102, 241, 0.15);
+  color: #a5b4fc;
+  border: 1px solid rgba(99, 102, 241, 0.3);
   border-radius: var(--radius-full);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  transition: var(--transition);
+}
+
+.brand:hover .brand-badge {
+  background: rgba(99, 102, 241, 0.25);
+  border-color: rgba(99, 102, 241, 0.5);
+  color: #c7d2fe;
+}
+
+.btn-website {
+  border-color: rgba(99, 102, 241, 0.3) !important;
+  color: #a5b4fc !important;
+  text-decoration: none !important;
+}
+
+.btn-website:hover {
+  background: rgba(99, 102, 241, 0.15) !important;
+  border-color: rgba(99, 102, 241, 0.6) !important;
+  color: #ffffff !important;
 }
 
 .divider-v {
@@ -572,6 +608,245 @@ body {
   stroke: #3b82f6 !important;
   stroke-width: 2px !important;
   stroke-dasharray: 4, 3 !important;
+}
+
+/* ===================================================================
+   bpmn-js Popup Menu (Change Element / Replace Menu)
+   Fix contrast: prevent light-text inheritance from body
+   =================================================================== */
+.djs-popup {
+  background: #ffffff !important;
+  color: #1e293b !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: 0 16px 36px -4px rgba(15, 23, 42, 0.2), 0 6px 16px -2px rgba(15, 23, 42, 0.08) !important;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  padding: 6px 0 !important;
+  z-index: 250 !important;
+  overflow: hidden !important;
+}
+
+.djs-popup-header {
+  padding: 8px 14px 6px 14px !important;
+  margin: 0 !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+.djs-popup-title {
+  color: #0f172a !important;
+  font-weight: 700 !important;
+  font-size: 13.5px !important;
+  letter-spacing: -0.01em !important;
+}
+
+.djs-popup-search {
+  margin: 8px 12px !important;
+}
+
+.djs-popup-search input {
+  color: #0f172a !important;
+  background-color: #f1f5f9 !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: var(--radius-sm) !important;
+  padding: 6px 10px 6px 28px !important;
+  font-family: inherit !important;
+  font-size: 12.5px !important;
+  transition: var(--transition);
+}
+
+.djs-popup-search input:focus {
+  background-color: #ffffff !important;
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
+  color: #0f172a !important;
+  outline: none !important;
+}
+
+.djs-popup-search-icon {
+  color: #64748b !important;
+}
+
+.djs-popup-search-count {
+  color: #64748b !important;
+}
+
+.djs-popup-results {
+  padding: 4px 6px !important;
+  margin: 0 !important;
+  max-height: 280px !important;
+}
+
+.djs-popup-body .entry {
+  color: #1e293b !important;
+  padding: 7px 10px !important;
+  border-radius: var(--radius-sm) !important;
+  margin: 2px 0 !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  transition: var(--transition);
+  cursor: pointer !important;
+}
+
+.djs-popup-body .entry:hover,
+.djs-popup .entry.selected {
+  background-color: rgba(59, 130, 246, 0.1) !important;
+  color: #1d4ed8 !important;
+}
+
+.djs-popup-body .entry:hover .djs-popup-label,
+.djs-popup-body .entry:hover .djs-popup-entry-icon,
+.djs-popup-body .entry:hover [class*="icon"],
+.djs-popup .entry.selected .djs-popup-label,
+.djs-popup .entry.selected .djs-popup-entry-icon,
+.djs-popup .entry.selected [class*="icon"] {
+  color: #1d4ed8 !important;
+}
+
+.djs-popup-label {
+  color: #1e293b !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+}
+
+.djs-popup-entry-icon,
+.djs-popup [class*="icon"],
+.djs-popup [class*="icon"]:before {
+  color: #334155 !important;
+  font-size: 15px !important;
+}
+
+.djs-popup-entry-icon svg,
+.djs-popup [class*="icon"] svg,
+.djs-popup-body .entry svg {
+  fill: currentColor;
+}
+
+.djs-popup-entry-description {
+  color: #64748b !important;
+  font-size: 11px !important;
+}
+
+.djs-popup-tabs-container {
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+.djs-popup-tab {
+  color: #64748b !important;
+  font-family: inherit !important;
+  font-size: 12.5px !important;
+  font-weight: 500 !important;
+  padding: 6px 12px !important;
+}
+
+.djs-popup-tab:hover {
+  color: #0f172a !important;
+}
+
+.djs-popup-tab[aria-selected="true"] {
+  color: #2563eb !important;
+  border-bottom-color: #2563eb !important;
+  font-weight: 600 !important;
+}
+
+.djs-popup-breadcrumbs-item {
+  color: #64748b !important;
+}
+
+.djs-popup-breadcrumbs-item--current {
+  color: #0f172a !important;
+  font-weight: 600 !important;
+}
+
+.djs-popup-footer {
+  border-top: 1px solid #e2e8f0 !important;
+  color: #64748b !important;
+}
+
+.djs-popup-footer-docs,
+.djs-popup-entry-docs {
+  color: #64748b !important;
+}
+
+.djs-popup-footer-docs:hover,
+.djs-popup-entry-docs:hover {
+  color: #0f172a !important;
+}
+
+.djs-popup-no-results {
+  color: #64748b !important;
+}
+
+/* Inline Direct Text Editing on Canvas (Double Click on elements) */
+.djs-direct-editing-parent {
+  color: #0f172a !important;
+  background: #ffffff !important;
+  border: 1.5px solid #3b82f6 !important;
+  border-radius: var(--radius-sm) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15) !important;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-size: 12px !important;
+  line-height: 1.3 !important;
+  padding: 3px 6px !important;
+  z-index: 210 !important;
+}
+
+.djs-direct-editing-parent [contenteditable] {
+  color: #0f172a !important;
+  outline: none !important;
+}
+
+/* Search / Find in diagram */
+.djs-search-container {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: 0 12px 30px -4px rgba(15, 23, 42, 0.2) !important;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+.djs-search-input input {
+  color: #0f172a !important;
+  background: #f8fafc !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: var(--radius-sm) !important;
+}
+
+.djs-search-input input:focus {
+  border-color: #3b82f6 !important;
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+
+.djs-search-result {
+  color: #1e293b !important;
+}
+
+.djs-search-result-primary {
+  color: #0f172a !important;
+}
+
+.djs-search-result-secondary {
+  color: #64748b !important;
+}
+
+.djs-search-result:hover,
+.djs-search-result-selected {
+  background-color: rgba(59, 130, 246, 0.12) !important;
+  color: #1d4ed8 !important;
+}
+
+/* Hover tooltips in canvas */
+.djs-hover-tooltip {
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+  border-radius: var(--radius-sm) !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  box-shadow: var(--shadow-md) !important;
 }
 
 /* Drag and Drop Overlay */

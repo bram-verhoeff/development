@@ -1,14 +1,14 @@
 /**
- * HHS BPMN Modeler - Core Application Logic
+ * Agevo BPMN Modeler - Core Application Logic
  * Powered by bpmn-js
- * Specially designed for De Haagse Hogeschool BPM Course
+ * Developed by AgevoDev (agevodev.nl) - Tech Studio & Venture Builder
  */
 
 // ===================================================================
 // BPMN 2.0 Templates Library
 // ===================================================================
 const TEMPLATES = {
-  // 1. Standaard Pool met 2 Swimlanes (Klant & Haagse Hogeschool)
+  // 1. Standaard Pool met 2 Swimlanes (Klant & Agevo)
   swimlane: `<?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
                   xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
@@ -17,20 +17,20 @@ const TEMPLATES = {
                   id="Definitions_Swimlane"
                   targetNamespace="http://bpmn.io/schema/bpmn">
   <bpmn:collaboration id="Collaboration_1">
-    <bpmn:participant id="Participant_HHS" name="Haagse Hogeschool" processRef="Process_HHS" />
-    <bpmn:participant id="Participant_Klant" name="Klant / Student" />
-    <bpmn:messageFlow id="Flow_Msg_1" name="Aanvraag indienen" sourceRef="Participant_Klant" targetRef="StartEvent_1" />
+    <bpmn:participant id="Participant_Agevo" name="Agevo (agevodev.nl)" processRef="Process_Agevo" />
+    <bpmn:participant id="Participant_Klant" name="Klant / Partner" />
+    <bpmn:messageFlow id="Flow_Msg_1" name="Projectaanvraag indienen" sourceRef="Participant_Klant" targetRef="StartEvent_1" />
   </bpmn:collaboration>
 
-  <bpmn:process id="Process_HHS" isExecutable="false">
+  <bpmn:process id="Process_Agevo" isExecutable="false">
     <bpmn:laneSet id="LaneSet_1">
-      <bpmn:lane id="Lane_FrontOffice" name="Front Office">
+      <bpmn:lane id="Lane_FrontOffice" name="Client Success &amp; Product">
         <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_GegevensCheck</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Gateway_Compleet</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>EndEvent_Afwijzen</bpmn:flowNodeRef>
       </bpmn:lane>
-      <bpmn:lane id="Lane_BackOffice" name="Back Office">
+      <bpmn:lane id="Lane_BackOffice" name="Engineering &amp; Cloud">
         <bpmn:flowNodeRef>Activity_AanvraagVerwerken</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>EndEvent_Succes</bpmn:flowNodeRef>
       </bpmn:lane>
@@ -41,18 +41,18 @@ const TEMPLATES = {
       <bpmn:messageEventDefinition id="MessageEventDefinition_1" />
     </bpmn:startEvent>
 
-    <bpmn:userTask id="Activity_GegevensCheck" name="Gegevens controleren">
+    <bpmn:userTask id="Activity_GegevensCheck" name="Scope en vereisten valideren">
       <bpmn:incoming>Flow_1</bpmn:incoming>
       <bpmn:outgoing>Flow_2</bpmn:outgoing>
     </bpmn:userTask>
 
-    <bpmn:exclusiveGateway id="Gateway_Compleet" name="Gegevens compleet?" default="Flow_Nee">
+    <bpmn:exclusiveGateway id="Gateway_Compleet" name="Project haalbaar?" default="Flow_Nee">
       <bpmn:incoming>Flow_2</bpmn:incoming>
       <bpmn:outgoing>Flow_Ja</bpmn:outgoing>
       <bpmn:outgoing>Flow_Nee</bpmn:outgoing>
     </bpmn:exclusiveGateway>
 
-    <bpmn:userTask id="Activity_AanvraagVerwerken" name="Aanvraag verwerken">
+    <bpmn:userTask id="Activity_AanvraagVerwerken" name="Venture sprint inplannen">
       <bpmn:incoming>Flow_Ja</bpmn:incoming>
       <bpmn:outgoing>Flow_4</bpmn:outgoing>
     </bpmn:userTask>
@@ -61,7 +61,7 @@ const TEMPLATES = {
       <bpmn:incoming>Flow_Nee</bpmn:incoming>
     </bpmn:endEvent>
 
-    <bpmn:endEvent id="EndEvent_Succes" name="Aanvraag goedgekeurd">
+    <bpmn:endEvent id="EndEvent_Succes" name="Project kick-off gestart">
       <bpmn:incoming>Flow_4</bpmn:incoming>
     </bpmn:endEvent>
 
@@ -77,7 +77,7 @@ const TEMPLATES = {
       <bpmndi:BPMNShape id="Participant_Klant_di" bpmnElement="Participant_Klant" isHorizontal="true">
         <dc:Bounds x="160" y="80" width="760" height="60" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Participant_HHS_di" bpmnElement="Participant_HHS" isHorizontal="true">
+      <bpmndi:BPMNShape id="Participant_Agevo_di" bpmnElement="Participant_Agevo" isHorizontal="true">
         <dc:Bounds x="160" y="180" width="760" height="280" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_FrontOffice_di" bpmnElement="Lane_FrontOffice" isHorizontal="true">
@@ -370,7 +370,7 @@ const TEMPLATES = {
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>`,
 
-  // 3. HHS Tentamenprocedure
+  // 3. SaaS Project & Delivery Flow
   exam: `<?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
                   xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
@@ -379,62 +379,62 @@ const TEMPLATES = {
                   id="Definitions_Exam"
                   targetNamespace="http://bpmn.io/schema/bpmn">
   <bpmn:collaboration id="Collab_Exam">
-    <bpmn:participant id="Part_HHS_Exam" name="De Haagse Hogeschool" processRef="Process_Exam" />
+    <bpmn:participant id="Part_Agevo_Exam" name="Agevo Studio (agevodev.nl)" processRef="Process_Exam" />
   </bpmn:collaboration>
 
   <bpmn:process id="Process_Exam" isExecutable="false">
     <bpmn:laneSet id="LaneSet_Exam">
-      <bpmn:lane id="Lane_Student" name="Student">
+      <bpmn:lane id="Lane_Student" name="Klant / Partner">
         <bpmn:flowNodeRef>Start_Aanmelding</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Task_Inschrijven</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Task_Maken</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>End_CijferBekend</bpmn:flowNodeRef>
       </bpmn:lane>
-      <bpmn:lane id="Lane_Docent" name="Docent / Examinator">
+      <bpmn:lane id="Lane_Docent" name="Engineering &amp; Product">
         <bpmn:flowNodeRef>Task_Surveilleren</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Task_Nakijken</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Task_CijferInvoeren</bpmn:flowNodeRef>
       </bpmn:lane>
-      <bpmn:lane id="Lane_Examencommissie" name="Examenadministratie (Osiris)">
+      <bpmn:lane id="Lane_Examencommissie" name="DevOps &amp; Cloud Infra">
         <bpmn:flowNodeRef>Task_Publiceren</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
 
-    <bpmn:startEvent id="Start_Aanmelding" name="Inschrijfperiode geopend">
+    <bpmn:startEvent id="Start_Aanmelding" name="Projectaanvraag ingediend">
       <bpmn:outgoing>E_Flow1</bpmn:outgoing>
     </bpmn:startEvent>
 
-    <bpmn:userTask id="Task_Inschrijven" name="Inschrijven voor tentamen">
+    <bpmn:userTask id="Task_Inschrijven" name="Scope &amp; vereisten afstemmen">
       <bpmn:incoming>E_Flow1</bpmn:incoming>
       <bpmn:outgoing>E_Flow2</bpmn:outgoing>
     </bpmn:userTask>
 
-    <bpmn:userTask id="Task_Maken" name="Tentamen afleggen">
+    <bpmn:userTask id="Task_Maken" name="Architectuur &amp; data modelleren">
       <bpmn:incoming>E_Flow2</bpmn:incoming>
       <bpmn:outgoing>E_Flow3</bpmn:outgoing>
     </bpmn:userTask>
 
-    <bpmn:userTask id="Task_Surveilleren" name="Tentamen innemen en controleren">
+    <bpmn:userTask id="Task_Surveilleren" name="Code review &amp; tests uitvoeren">
       <bpmn:incoming>E_Flow3</bpmn:incoming>
       <bpmn:outgoing>E_Flow4</bpmn:outgoing>
     </bpmn:userTask>
 
-    <bpmn:userTask id="Task_Nakijken" name="Werk beoordelen en normeren">
+    <bpmn:userTask id="Task_Nakijken" name="Staging deployment &amp; QA">
       <bpmn:incoming>E_Flow4</bpmn:incoming>
       <bpmn:outgoing>E_Flow5</bpmn:outgoing>
     </bpmn:userTask>
 
-    <bpmn:userTask id="Task_CijferInvoeren" name="Cijfers invoeren in Osiris">
+    <bpmn:userTask id="Task_CijferInvoeren" name="Acceptatie &amp; security audit">
       <bpmn:incoming>E_Flow5</bpmn:incoming>
       <bpmn:outgoing>E_Flow6</bpmn:outgoing>
     </bpmn:userTask>
 
-    <bpmn:serviceTask id="Task_Publiceren" name="Resultaten valideren en publiceren">
+    <bpmn:serviceTask id="Task_Publiceren" name="Productie rollout &amp; CDN caching">
       <bpmn:incoming>E_Flow6</bpmn:incoming>
       <bpmn:outgoing>E_Flow7</bpmn:outgoing>
     </bpmn:serviceTask>
 
-    <bpmn:endEvent id="End_CijferBekend" name="Cijfer zichtbaar voor student">
+    <bpmn:endEvent id="End_CijferBekend" name="SaaS platform live &amp; operationeel">
       <bpmn:incoming>E_Flow7</bpmn:incoming>
     </bpmn:endEvent>
 
@@ -449,7 +449,7 @@ const TEMPLATES = {
 
   <bpmndi:BPMNDiagram id="Diagram_Exam">
     <bpmndi:BPMNPlane id="Plane_Exam" bpmnElement="Collab_Exam">
-      <bpmndi:BPMNShape id="Part_HHS_Exam_di" bpmnElement="Part_HHS_Exam" isHorizontal="true">
+      <bpmndi:BPMNShape id="Part_Agevo_Exam_di" bpmnElement="Part_Agevo_Exam" isHorizontal="true">
         <dc:Bounds x="160" y="80" width="1060" height="420" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_Student_di" bpmnElement="Lane_Student" isHorizontal="true">
@@ -633,8 +633,8 @@ const COLOR_PRESETS = {
 // ===================================================================
 let bpmnModeler = null;
 let autosaveTimeout = null;
-const STORAGE_KEY_XML = 'hhs_bpmn_modeler_xml_v1';
-const STORAGE_KEY_TITLE = 'hhs_bpmn_modeler_title_v1';
+const STORAGE_KEY_XML = 'agevo_bpmn_modeler_xml_v1';
+const STORAGE_KEY_TITLE = 'agevo_bpmn_modeler_title_v1';
 
 // DOM Elements
 const canvasEl = document.getElementById('canvas');
@@ -729,12 +729,12 @@ async function initModeler() {
     });
 
     // Restore saved diagram or load default
-    const savedTitle = localStorage.getItem(STORAGE_KEY_TITLE);
+    const savedTitle = localStorage.getItem(STORAGE_KEY_TITLE) || localStorage.getItem('hhs_bpmn_modeler_title_v1');
     if (savedTitle) {
       titleInput.value = savedTitle;
     }
 
-    const savedXml = localStorage.getItem(STORAGE_KEY_XML);
+    const savedXml = localStorage.getItem(STORAGE_KEY_XML) || localStorage.getItem('hhs_bpmn_modeler_xml_v1');
     if (savedXml && savedXml.trim().length > 0) {
       await loadDiagram(savedXml, false);
       showToast('Opgeslagen model hersteld uit browsergeheugen', 'info');
@@ -999,8 +999,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const titleMap = {
         'swimlane': 'Basis Pool & Swimlanes',
         'order-to-cash': 'Order-to-Cash Proces',
-        'exam': 'HHS Tentamenprocedure',
-        'incident': 'Klachtenafhandeling'
+        'exam': 'SaaS Project & Delivery Flow',
+        'incident': 'Klachten- & Incidentafhandeling'
       };
 
       titleInput.value = titleMap[templateKey] || 'Voorbeeld Proces';
