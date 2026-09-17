@@ -3,27 +3,41 @@
     {
       "branch": "BPMNModeler",
       "commit": "ad31017",
+      "subject": "feat: transform repository into HHS BPMN 2.0 Modeler for BPM course",
+      "dateIso": "2026-09-17 10:58:32 +0200",
+      "dateRelative": "43 minutes ago",
       "title": "HHS BPMN Modeler | De Haagse Hogeschool",
       "description": "Moderne, snelle en gebruiksvriendelijke BPMN 2.0 Modeler voor studenten van het vak Business Process Management aan De Haagse Hogeschool.",
+      "hasIndex": true,
+      "isMain": false,
       "url": "./branches/BPMNModeler/",
       "status": "ONLINE"
     },
     {
       "branch": "CRMSYSTEM",
       "commit": "9e07399",
+      "subject": "fix(ci): use git archive to build multi-branch pages safely without missing files",
+      "dateIso": "2026-09-17 01:25:58 +0200",
+      "dateRelative": "10 hours ago",
       "title": "HighFlow CRM | GoHighLevel Automation & Sales Platform",
       "description": "All-in-one GoHighLevel alternatief met een visuele workflow builder, sales pipelines, omnichannel inbox en contactbeheer.",
+      "hasIndex": true,
+      "isMain": false,
       "url": "./branches/CRMSYSTEM/",
       "status": "ONLINE"
     },
     {
       "branch": "thecoast",
       "commit": "e14d59f",
+      "subject": "chore: remove whammy assets and leftover branches.json",
+      "dateIso": "2026-09-17 09:41:38 +0200",
+      "dateRelative": "2 hours ago",
       "title": "Beach House The Coast | Strandpaviljoen op Palen in Monster",
       "description": "Welkom bij Beach House The Coast aan strandopgang Molenslag in Monster. Geniet jaarrond van een adembenemend 360° uitzicht over zee, verse vis en seizoensgerechten, borrels en onvergetelijke strandfeesten en bruiloften.",
+      "hasIndex": true,
+      "isMain": false,
       "url": "./branches/thecoast/",
       "status": "ONLINE"
     }
   ]
 }
-

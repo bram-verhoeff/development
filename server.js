@@ -33,25 +33,42 @@ function scanGitBranches() {
   const branchList = [];
   try {
     const raw = execSync(
-      'git branch --format="%(refname:short)|%(authordate:iso)|%(authordate:relative)|%(subject)|%(objectname:short)"',
+      'git for-each-ref --format="%(refname:short)|%(authordate:iso)|%(authordate:relative)|%(subject)|%(objectname:short)" refs/heads refs/remotes/origin',
       { cwd: ROOT_DIR, encoding: 'utf8' }
     ).trim();
 
     if (!raw) return [];
 
     const lines = raw.split('\n');
+    const seen = new Set();
+    const uniqueBranches = [];
 
     for (const line of lines) {
       const parts = line.trim().split('|');
       if (parts.length < 5) continue;
 
-      const [branchName, dateIso, dateRel, subject, commitHash] = parts;
+      let [rawName, dateIso, dateRel, subject, commitHash] = parts;
+      let branchName = rawName.replace(/^origin\//, '');
+      if (branchName === 'HEAD' || branchName === 'gh-pages' || branchName === 'origin' || !branchName) continue;
+      if (seen.has(branchName)) continue;
+      seen.add(branchName);
 
+      uniqueBranches.push({ branchName, dateIso, dateRel, subject, commitHash });
+    }
+
+    for (const { branchName, dateIso, dateRel, subject, commitHash } of uniqueBranches) {
       const worktreePath = path.join(BRANCHES_DIR, branchName);
-      if (branchName !== 'main' && !fs.existsSync(worktreePath)) {
-        try {
-          execSync(`git worktree add "branches/${branchName}" "${branchName}"`, { cwd: ROOT_DIR, stdio: 'ignore' });
-        } catch (e) {}
+
+      if (branchName !== 'main') {
+        if (!fs.existsSync(worktreePath)) {
+          try {
+            execSync(`git worktree add --detach "branches/${branchName}" "${branchName}"`, { cwd: ROOT_DIR, stdio: 'ignore' });
+          } catch (e) {}
+        } else {
+          try {
+            execSync(`git -C "branches/${branchName}" checkout --detach "${branchName}"`, { cwd: ROOT_DIR, stdio: 'ignore' });
+          } catch (e) {}
+        }
       }
 
       const targetDir = (branchName === 'main') ? ROOT_DIR : worktreePath;
@@ -84,6 +101,17 @@ function scanGitBranches() {
         status: hasIndex ? 'ONLINE' : 'NO_INDEX'
       });
     }
+
+    // Automatisch branches.json synchroniseren zodat statische weergave altijd klopt
+    try {
+      const branchesData = { branches: branchList.filter(b => !b.isMain) };
+      const jsonPath = path.join(ROOT_DIR, 'branches.json');
+      const currentJson = fs.existsSync(jsonPath) ? fs.readFileSync(jsonPath, 'utf8') : '';
+      const newJson = JSON.stringify(branchesData, null, 2) + '\n';
+      if (currentJson !== newJson) {
+        fs.writeFileSync(jsonPath, newJson, 'utf8');
+      }
+    } catch (e) {}
   } catch (err) {
     console.error('[Agevo Dev Server] Error running git branch:', err.message);
   }
