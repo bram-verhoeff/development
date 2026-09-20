@@ -1,0 +1,20 @@
+{
+  "name": "pokemon-etb-hunter",
+  "version": "1.0.0",
+  "description": "Live stock scanner and alert tool for Pokémon TCG 30th Celebration ETB boxes",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "pokemon",
+    "tcg",
+    "etb",
+    "stock-scanner",
+    "celebrations",
+    "hunter"
+  ],
+  "author": "Bram Verhoeff",
+  "license": "MIT"
+}

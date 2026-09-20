@@ -3,111 +3,288 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agevo // Bram Verhoeff</title>
-  <meta name="description" content="Agevo development testserver van Bram Verhoeff.">
+  <title>⚡ Pokémon TCG 30th Celebration ETB Live Hunter</title>
+  <meta name="description" content="Realtime live stock scanner en drop alert tool voor de Pokémon TCG 30th Anniversary / Celebration Elite Trainer Box.">
   <meta name="author" content="Bram Verhoeff">
-  <meta name="robots" content="noindex, nofollow">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800;900&display=swap" rel="stylesheet">
 
-  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
-  <link rel="alternate icon" href="assets/logo.png">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="dark-theme">
 
-  <!-- Top Header -->
-  <header class="header">
-    <div class="container header-inner">
-      <div class="brand">
-        <a href="./" class="brand-link" title="AgevoDev">
-          <picture>
-            <source srcset="assets/logo.svg" type="image/svg+xml">
-            <img src="assets/logo.png" alt="AgevoDev Software Development" class="brand-logo" height="38">
-          </picture>
-        </a>
-        <div class="brand-sub-badge">
-          <span class="brand-author">Bram Verhoeff</span>
-        </div>
+  <!-- Top Announcement / Drop Alert Banner (Hidden by default, slides in on drop) -->
+  <div id="drop-alert-banner" class="drop-banner hidden">
+    <div class="drop-banner-content">
+      <div class="drop-banner-icon">🚨</div>
+      <div class="drop-banner-text">
+        <h4 id="drop-banner-title">VOORRAAD GEVONDEN!</h4>
+        <p id="drop-banner-desc">Een winkel heeft zojuist de Pokémon 30th ETB online gezet!</p>
       </div>
-      <div class="server-status">
-        <span class="status-dot"></span>
-        <span>Testserver Actief</span>
+      <div class="drop-banner-actions">
+        <a id="drop-banner-link" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-drop-buy">Direct Kopen ↗</a>
+        <button id="drop-banner-dismiss" class="btn btn-ghost" title="Sluiten">✕</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="container header-container">
+      <div class="brand-section">
+        <div class="brand-badge-group">
+          <div class="radar-dot">
+            <span class="radar-ping"></span>
+            <span class="radar-core"></span>
+          </div>
+          <span class="tag tag-live">LIVE SCANNER</span>
+          <span class="tag tag-anniversary">POKÉMON 30TH</span>
+        </div>
+        <h1 class="brand-title">
+          <span class="gradient-text">Pokémon 30th ETB</span> Hunter
+        </h1>
+        <p class="brand-subtitle">Realtime voorraad monitor voor de 30th Celebration Elite Trainer Box</p>
+      </div>
+
+      <!-- Quick Control Actions -->
+      <div class="header-actions">
+        <button id="btn-manual-scan" class="btn btn-primary" title="Scan direct alle winkels">
+          <svg class="btn-icon icon-scan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+            <path d="M3 3v5h5"/>
+            <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
+            <path d="M16 16h5v5"/>
+          </svg>
+          <span id="scan-btn-text">Scan Nu</span>
+        </button>
+
+        <button id="btn-test-drop" class="btn btn-warning" title="Simuleer een drop om geluid en notificaties te testen">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+          </svg>
+          <span>Test Drop</span>
+        </button>
+
+        <button id="btn-add-target" class="btn btn-secondary" title="Voeg een nieuwe webwinkel toe">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="16"/>
+            <line x1="8" y1="12" x2="16" y2="12"/>
+          </svg>
+          <span>+ Winkel Toevoegen</span>
+        </button>
       </div>
     </div>
   </header>
 
-  <!-- Main Content -->
+  <!-- Main Container -->
   <main class="main-content">
     <div class="container">
-      
-      <!-- Intro / Title -->
-      <div class="title-area">
-        <h1 class="page-title">Git Branches</h1>
-        <p class="page-subtitle">Kies een branch om het bijbehorende testproduct te openen:</p>
-      </div>
 
-      <!-- Branches Grid -->
-      <div class="branches-grid" id="branches-container">
-        <!-- Dynamically loaded via main.js -->
-        <div class="loading">Bezig met laden van branches...</div>
-      </div>
-
-      <!-- Custom Project Call to Action -->
-      <section class="cta-card">
-        <div class="cta-text">
-          <div class="cta-pill">
-            <span class="cta-pill-dot"></span>
-            <span>Maatwerk Software &amp; Web</span>
+      <!-- Target Product Spotlight -->
+      <section class="target-spotlight">
+        <div class="spotlight-left">
+          <div class="spotlight-badge">
+            <span class="spotlight-badge-dot"></span>
+            <span>Geverifieerd Doelproduct</span>
           </div>
-          <h2 class="cta-heading">Een eigen website of programma laten bouwen?</h2>
-          <p class="cta-sub">
-            Wil je ook een moderne website, webapplicatie of software op maat laten maken? Vraag vrijblijvend een offerte of kennismaking aan via <strong>agevodev.nl</strong>.
+          <h2 class="spotlight-title">Pokémon TCG: 30th Celebration Elite-trainerset (ETB)</h2>
+          <p class="spotlight-sub">
+            Inclusief exclusieve promotiekaart, 9+ uitbreidingspakketten (booster packs) en accessoires.
           </p>
+          <div class="spotlight-meta">
+            <span class="meta-item"><strong>ASIN:</strong> <code class="font-mono">B0H9HFPRRD</code></span>
+            <span class="meta-divider">•</span>
+            <span class="meta-item"><strong>Doelwit:</strong> Alle gemonitorde winkels scannen specifiek op deze officiële ETB-uitgave</span>
+          </div>
         </div>
-        <div class="cta-action">
-          <a href="https://agevodev.nl" target="_blank" rel="noopener noreferrer" class="cta-btn">
-            <span>Aanvragen op agevodev.nl</span>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <path d="M7 17L17 7"></path>
-              <path d="M7 7h10v10"></path>
-            </svg>
+        <div class="spotlight-right">
+          <a href="https://www.amazon.nl/Pok%C3%A9mon-Elite-trainerset-promotiekaart-uitbreidingspakketten-accessoires/dp/B0H9HFPRRD" target="_blank" rel="noopener noreferrer" class="btn btn-spotlight" title="Open exacte Amazon productpagina">
+            <span>Bekijk op Amazon.nl ↗</span>
           </a>
+        </div>
+      </section>
+
+      <!-- Stats Bar -->
+      <section class="stats-bar">
+        <div class="stat-card">
+          <div class="stat-label">Gemonitorde Winkels</div>
+          <div class="stat-value" id="stat-total-stores">--</div>
+          <div class="stat-sub">NL, BE &amp; Internationaal</div>
+        </div>
+
+        <div class="stat-card stat-card-success">
+          <div class="stat-label">Direct Leverbaar</div>
+          <div class="stat-value stat-value-glow" id="stat-in-stock">0</div>
+          <div class="stat-sub">Winkels op voorraad</div>
+        </div>
+
+        <div class="stat-card stat-card-amber">
+          <div class="stat-label">Pre-orders Open</div>
+          <div class="stat-value" id="stat-pre-orders">0</div>
+          <div class="stat-sub">Reserveringen mogelijk</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label">Volgende Auto-Scan</div>
+          <div class="stat-value font-mono" id="stat-countdown">30s</div>
+          <div class="stat-sub" id="stat-last-scan">Laatste scan: Nog niet uitgevoerd</div>
+        </div>
+      </section>
+
+      <!-- Settings & Controls Toolbar -->
+      <section class="toolbar">
+        <div class="toolbar-left">
+          <!-- Filters -->
+          <div class="filter-pills" id="filter-pills">
+            <button class="pill-btn active" data-filter="all">Alles (<span id="filter-count-all">0</span>)</button>
+            <button class="pill-btn pill-success" data-filter="in_stock">Op Voorraad (<span id="filter-count-instock">0</span>)</button>
+            <button class="pill-btn pill-amber" data-filter="pre_order">Pre-order (<span id="filter-count-preorder">0</span>)</button>
+            <button class="pill-btn pill-danger" data-filter="out_of_stock">Uitverkocht (<span id="filter-count-outofstock">0</span>)</button>
+          </div>
+
+          <!-- Search Input -->
+          <div class="search-box">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="text" id="search-input" placeholder="Zoek op winkel of trefwoord..." />
+          </div>
+        </div>
+
+        <div class="toolbar-right">
+          <!-- Auto-Scan Interval -->
+          <div class="control-item">
+            <label for="interval-select">Interval:</label>
+            <select id="interval-select" class="select-input">
+              <option value="15">15 seconden</option>
+              <option value="30" selected>30 seconden</option>
+              <option value="60">1 minuut</option>
+              <option value="120">2 minuten</option>
+              <option value="300">5 minuten</option>
+            </select>
+          </div>
+
+          <!-- Sound Alarm Toggle -->
+          <div class="control-item">
+            <button id="btn-toggle-sound" class="btn btn-icon-text active" title="Geluidssignaal aan/uit">
+              <span id="sound-icon">🔊</span>
+              <span>Alarm Geluid</span>
+            </button>
+            <button id="btn-test-sound" class="btn btn-tiny" title="Test geluid">Test</button>
+          </div>
+
+          <!-- Browser Notification Toggle -->
+          <div class="control-item">
+            <button id="btn-toggle-notifications" class="btn btn-icon-text" title="Push notificaties aan/uit">
+              <span id="notif-icon">🔔</span>
+              <span>Notificaties</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Store Cards Grid -->
+      <section class="stores-section">
+        <div class="section-header">
+          <h2 class="section-title">Winkels &amp; Beschikbaarheid</h2>
+          <span class="scan-indicator" id="scan-indicator">
+            <span class="spinner-dot"></span>
+            <span id="scan-indicator-text">Verbonden met live server stream</span>
+          </span>
+        </div>
+
+        <div class="stores-grid" id="stores-container">
+          <!-- Populated by app.js -->
+          <div class="loading-state">
+            <div class="spinner"></div>
+            <p>Winkels en live stock laden...</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Live Activity Log Section -->
+      <section class="activity-section">
+        <div class="activity-header">
+          <div class="activity-title-group">
+            <span class="pulse-icon">●</span>
+            <h3 class="activity-title">Live Activiteiten &amp; Drop Log</h3>
+          </div>
+          <button id="btn-clear-logs" class="btn btn-tiny">Log Wissen</button>
+        </div>
+        <div class="activity-log-list" id="activity-log-list">
+          <div class="log-empty">Wachten op scan updates...</div>
         </div>
       </section>
 
     </div>
   </main>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container footer-inner">
-      <div class="footer-brand-info">
-        <span>&copy; 2026 <strong>Agevo</strong> &bull; Bram Verhoeff</span>
-        <span class="footer-divider">&bull;</span>
-        <span class="footer-kvk font-mono">KvK: <strong>42160840</strong></span>
+  <!-- Modal: Add Store / URL -->
+  <div id="modal-add-target" class="modal-overlay hidden">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Nieuwe Winkel / Pagina Toevoegen</h3>
+        <button id="btn-close-modal" class="btn-close">✕</button>
       </div>
+      <form id="form-add-target" class="modal-body">
+        <div class="form-group">
+          <label for="input-store-name">Winkelnaam *</label>
+          <input type="text" id="input-store-name" class="text-input" placeholder="bijv. Spelspul.nl of Bol.com Direct" required />
+        </div>
 
-      <div class="footer-contact-links">
-        <a href="https://agevodev.nl" target="_blank" rel="noopener noreferrer" class="footer-link">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-          <span>agevodev.nl</span>
-        </a>
-        <a href="mailto:info@agevodev.nl" class="footer-link">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-          <span>info@agevodev.nl</span>
-        </a>
-        <a href="https://instagram.com/agevodev" target="_blank" rel="noopener noreferrer" class="footer-link">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-          <span>@agevodev</span>
-        </a>
+        <div class="form-group">
+          <label for="input-store-url">Volledige URL naar product of zoekpagina *</label>
+          <input type="url" id="input-store-url" class="text-input font-mono" placeholder="https://www.winkel.nl/pokemon-30th-celebration-etb" required />
+          <small class="form-help">Tip: Plak de directe productpagina of zoekresultatenpagina van de winkel.</small>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="select-store-region">Regio</label>
+            <select id="select-store-region" class="select-input">
+              <option value="NL">Nederland (NL)</option>
+              <option value="NL/BE">Nederland &amp; België (NL/BE)</option>
+              <option value="BE">België (BE)</option>
+              <option value="EU">Europa (EU)</option>
+              <option value="UK">Verenigd Koninkrijk (UK)</option>
+              <option value="US">Verenigde Staten (US)</option>
+            </select>
+          </div>
+
+          <div class="form-group flex-1">
+            <label for="input-product-title">Productlabel</label>
+            <input type="text" id="input-product-title" class="text-input" placeholder="Pokémon 30th ETB" value="Pokémon TCG 30th ETB" />
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" id="btn-cancel-modal" class="btn btn-ghost">Annuleren</button>
+          <button type="submit" class="btn btn-primary">Toevoegen &amp; Scannen</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="container footer-container">
+      <div class="footer-left">
+        <span>⚡ <strong>Pokémon TCG 30th Celebration ETB Live Hunter</strong> — Ontwikkeld door Bram Verhoeff</span>
+      </div>
+      <div class="footer-right">
+        <span class="status-indicator">
+          <span class="status-dot"></span>
+          <span>Auto-scanner actief</span>
+        </span>
       </div>
     </div>
   </footer>
 
-  <script src="main.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
