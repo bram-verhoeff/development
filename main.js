@@ -613,6 +613,588 @@ const TEMPLATES = {
       <bpmndi:BPMNEdge id="I_F6_di" bpmnElement="I_F6"><di:waypoint x="950" y="180" /><di:waypoint x="1002" y="180" /></bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
+</bpmn:definitions>`,
+
+  // 5. HHS Reader Figuur 3: Bevestigen van een plank (XOR Keuze & Merge)
+  'reader-plank': `<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  id="Definitions_Plank"
+                  targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:process id="Process_Plank" isExecutable="false">
+    <bpmn:startEvent id="Start_Plank" name="Er zijn te weinig planken voor alle studieboeken">
+      <bpmn:outgoing>Flow_P1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="Task_PakPlank" name="Pak een plank">
+      <bpmn:incoming>Flow_P1</bpmn:incoming>
+      <bpmn:outgoing>Flow_P2</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_ControlCheck" name="Bekijk of plank gespijkerd of geschroefd moet worden">
+      <bpmn:incoming>Flow_P2</bpmn:incoming>
+      <bpmn:outgoing>Flow_P3</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="Gateway_XOR_Split">
+      <bpmn:incoming>Flow_P3</bpmn:incoming>
+      <bpmn:outgoing>Flow_Spijkeren</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Schroeven</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="Task_Spijkeren" name="Spijker de plank vast">
+      <bpmn:incoming>Flow_Spijkeren</bpmn:incoming>
+      <bpmn:outgoing>Flow_SpijkerenKlaar</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Schroeven" name="Schroef de plank vast">
+      <bpmn:incoming>Flow_Schroeven</bpmn:incoming>
+      <bpmn:outgoing>Flow_SchroevenKlaar</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="Gateway_XOR_Merge">
+      <bpmn:incoming>Flow_SpijkerenKlaar</bpmn:incoming>
+      <bpmn:incoming>Flow_SchroevenKlaar</bpmn:incoming>
+      <bpmn:outgoing>Flow_P4</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="Task_PlaatsBoeken" name="Plaats de studieboeken op de plank">
+      <bpmn:incoming>Flow_P4</bpmn:incoming>
+      <bpmn:outgoing>Flow_P5</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:endEvent id="End_Plank" name="Studieboeken staan op de plank">
+      <bpmn:incoming>Flow_P5</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_P1" sourceRef="Start_Plank" targetRef="Task_PakPlank" />
+    <bpmn:sequenceFlow id="Flow_P2" sourceRef="Task_PakPlank" targetRef="Task_ControlCheck" />
+    <bpmn:sequenceFlow id="Flow_P3" sourceRef="Task_ControlCheck" targetRef="Gateway_XOR_Split" />
+    <bpmn:sequenceFlow id="Flow_Spijkeren" name="Spijkeren" sourceRef="Gateway_XOR_Split" targetRef="Task_Spijkeren" />
+    <bpmn:sequenceFlow id="Flow_Schroeven" name="Schroeven" sourceRef="Gateway_XOR_Split" targetRef="Task_Schroeven" />
+    <bpmn:sequenceFlow id="Flow_SpijkerenKlaar" sourceRef="Task_Spijkeren" targetRef="Gateway_XOR_Merge" />
+    <bpmn:sequenceFlow id="Flow_SchroevenKlaar" sourceRef="Task_Schroeven" targetRef="Gateway_XOR_Merge" />
+    <bpmn:sequenceFlow id="Flow_P4" sourceRef="Gateway_XOR_Merge" targetRef="Task_PlaatsBoeken" />
+    <bpmn:sequenceFlow id="Flow_P5" sourceRef="Task_PlaatsBoeken" targetRef="End_Plank" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Diagram_Plank">
+    <bpmndi:BPMNPlane id="Plane_Plank" bpmnElement="Process_Plank">
+      <bpmndi:BPMNShape id="Start_Plank_di" bpmnElement="Start_Plank">
+        <dc:Bounds x="162" y="162" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="135" y="205" width="90" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_PakPlank_di" bpmnElement="Task_PakPlank">
+        <dc:Bounds x="250" y="140" width="110" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_ControlCheck_di" bpmnElement="Task_ControlCheck">
+        <dc:Bounds x="390" y="140" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_XOR_Split_di" bpmnElement="Gateway_XOR_Split" isMarkerVisible="true">
+        <dc:Bounds x="545" y="155" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Spijkeren_di" bpmnElement="Task_Spijkeren">
+        <dc:Bounds x="630" y="70" width="110" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Schroeven_di" bpmnElement="Task_Schroeven">
+        <dc:Bounds x="630" y="220" width="110" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_XOR_Merge_di" bpmnElement="Gateway_XOR_Merge" isMarkerVisible="true">
+        <dc:Bounds x="775" y="155" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_PlaatsBoeken_di" bpmnElement="Task_PlaatsBoeken">
+        <dc:Bounds x="860" y="140" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Plank_di" bpmnElement="End_Plank">
+        <dc:Bounds x="1022" y="162" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1000" y="205" width="80" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_P1_di" bpmnElement="Flow_P1"><di:waypoint x="198" y="180" /><di:waypoint x="250" y="180" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_P2_di" bpmnElement="Flow_P2"><di:waypoint x="360" y="180" /><di:waypoint x="390" y="180" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_P3_di" bpmnElement="Flow_P3"><di:waypoint x="510" y="180" /><di:waypoint x="545" y="180" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Spijkeren_di" bpmnElement="Flow_Spijkeren">
+        <di:waypoint x="570" y="155" /><di:waypoint x="570" y="105" /><di:waypoint x="630" y="105" />
+        <bpmndi:BPMNLabel><dc:Bounds x="565" y="85" width="48" height="14" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Schroeven_di" bpmnElement="Flow_Schroeven">
+        <di:waypoint x="570" y="205" /><di:waypoint x="570" y="255" /><di:waypoint x="630" y="255" />
+        <bpmndi:BPMNLabel><dc:Bounds x="562" y="260" width="56" height="14" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_SpijkerenKlaar_di" bpmnElement="Flow_SpijkerenKlaar">
+        <di:waypoint x="740" y="105" /><di:waypoint x="800" y="105" /><di:waypoint x="800" y="155" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_SchroevenKlaar_di" bpmnElement="Flow_SchroevenKlaar">
+        <di:waypoint x="740" y="255" /><di:waypoint x="800" y="255" /><di:waypoint x="800" y="205" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_P4_di" bpmnElement="Flow_P4"><di:waypoint x="825" y="180" /><di:waypoint x="860" y="180" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_P5_di" bpmnElement="Flow_P5"><di:waypoint x="980" y="180" /><di:waypoint x="1022" y="180" /></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>`,
+
+  // 6. HHS Reader Figuur 13 & 22: Diner Keuzemenu (Inclusive Gateway IOR & Default Flow \)
+  'reader-diner': `<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  id="Definitions_Diner"
+                  targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:process id="Process_Diner" isExecutable="false">
+    <bpmn:startEvent id="Start_Diner" name="Klant wil dineren">
+      <bpmn:outgoing>Flow_D1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="Task_KeuzeMaken" name="Maak een keuze wat je gaat maken">
+      <bpmn:incoming>Flow_D1</bpmn:incoming>
+      <bpmn:outgoing>Flow_D2</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:inclusiveGateway id="Gateway_IOR_Split" default="Flow_Restaurant">
+      <bpmn:incoming>Flow_D2</bpmn:incoming>
+      <bpmn:outgoing>Flow_Voor</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Bij</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Hoofd</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Restaurant</bpmn:outgoing>
+    </bpmn:inclusiveGateway>
+    <bpmn:task id="Task_Voorgerecht" name="Maak een voorgerecht">
+      <bpmn:incoming>Flow_Voor</bpmn:incoming>
+      <bpmn:outgoing>Flow_VoorKlaar</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Bijgerecht" name="Maak een bijgerecht">
+      <bpmn:incoming>Flow_Bij</bpmn:incoming>
+      <bpmn:outgoing>Flow_BijKlaar</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Hoofdgerecht" name="Maak een hoofdgerecht">
+      <bpmn:incoming>Flow_Hoofd</bpmn:incoming>
+      <bpmn:outgoing>Flow_HoofdKlaar</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Restaurant" name="Ga naar een restaurant">
+      <bpmn:incoming>Flow_Restaurant</bpmn:incoming>
+      <bpmn:outgoing>Flow_RestKlaar</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:inclusiveGateway id="Gateway_IOR_Merge">
+      <bpmn:incoming>Flow_VoorKlaar</bpmn:incoming>
+      <bpmn:incoming>Flow_BijKlaar</bpmn:incoming>
+      <bpmn:incoming>Flow_HoofdKlaar</bpmn:incoming>
+      <bpmn:incoming>Flow_RestKlaar</bpmn:incoming>
+      <bpmn:outgoing>Flow_D3</bpmn:outgoing>
+    </bpmn:inclusiveGateway>
+    <bpmn:task id="Task_EetMaaltijd" name="Eet de maaltijd">
+      <bpmn:incoming>Flow_D3</bpmn:incoming>
+      <bpmn:outgoing>Flow_D4</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:endEvent id="End_Diner" name="Maaltijd genuttigd">
+      <bpmn:incoming>Flow_D4</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_D1" sourceRef="Start_Diner" targetRef="Task_KeuzeMaken" />
+    <bpmn:sequenceFlow id="Flow_D2" sourceRef="Task_KeuzeMaken" targetRef="Gateway_IOR_Split" />
+    <bpmn:sequenceFlow id="Flow_Voor" name="Voorgerecht" sourceRef="Gateway_IOR_Split" targetRef="Task_Voorgerecht" />
+    <bpmn:sequenceFlow id="Flow_Bij" name="Bijgerecht" sourceRef="Gateway_IOR_Split" targetRef="Task_Bijgerecht" />
+    <bpmn:sequenceFlow id="Flow_Hoofd" name="Hoofdgerecht" sourceRef="Gateway_IOR_Split" targetRef="Task_Hoofdgerecht" />
+    <bpmn:sequenceFlow id="Flow_Restaurant" name="Geen keuze gemaakt" sourceRef="Gateway_IOR_Split" targetRef="Task_Restaurant" />
+    <bpmn:sequenceFlow id="Flow_VoorKlaar" sourceRef="Task_Voorgerecht" targetRef="Gateway_IOR_Merge" />
+    <bpmn:sequenceFlow id="Flow_BijKlaar" sourceRef="Task_Bijgerecht" targetRef="Gateway_IOR_Merge" />
+    <bpmn:sequenceFlow id="Flow_HoofdKlaar" sourceRef="Task_Hoofdgerecht" targetRef="Gateway_IOR_Merge" />
+    <bpmn:sequenceFlow id="Flow_RestKlaar" sourceRef="Task_Restaurant" targetRef="Gateway_IOR_Merge" />
+    <bpmn:sequenceFlow id="Flow_D3" sourceRef="Gateway_IOR_Merge" targetRef="Task_EetMaaltijd" />
+    <bpmn:sequenceFlow id="Flow_D4" sourceRef="Task_EetMaaltijd" targetRef="End_Diner" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Diagram_Diner">
+    <bpmndi:BPMNPlane id="Plane_Diner" bpmnElement="Process_Diner">
+      <bpmndi:BPMNShape id="Start_Diner_di" bpmnElement="Start_Diner">
+        <dc:Bounds x="162" y="212" width="36" height="36" />
+        <bpmndi:BPMNLabel><dc:Bounds x="141" y="255" width="81" height="14" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_KeuzeMaken_di" bpmnElement="Task_KeuzeMaken">
+        <dc:Bounds x="240" y="190" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_IOR_Split_di" bpmnElement="Gateway_IOR_Split">
+        <dc:Bounds x="405" y="205" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Voorgerecht_di" bpmnElement="Task_Voorgerecht">
+        <dc:Bounds x="530" y="60" width="115" height="65" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Bijgerecht_di" bpmnElement="Task_Bijgerecht">
+        <dc:Bounds x="530" y="145" width="115" height="65" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Hoofdgerecht_di" bpmnElement="Task_Hoofdgerecht">
+        <dc:Bounds x="530" y="235" width="115" height="65" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Restaurant_di" bpmnElement="Task_Restaurant">
+        <dc:Bounds x="530" y="325" width="115" height="65" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_IOR_Merge_di" bpmnElement="Gateway_IOR_Merge">
+        <dc:Bounds x="705" y="205" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_EetMaaltijd_di" bpmnElement="Task_EetMaaltijd">
+        <dc:Bounds x="795" y="190" width="110" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Diner_di" bpmnElement="End_Diner">
+        <dc:Bounds x="942" y="212" width="36" height="36" />
+        <bpmndi:BPMNLabel><dc:Bounds x="918" y="255" width="87" height="14" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_D1_di" bpmnElement="Flow_D1"><di:waypoint x="198" y="230" /><di:waypoint x="240" y="230" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_D2_di" bpmnElement="Flow_D2"><di:waypoint x="360" y="230" /><di:waypoint x="405" y="230" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Voor_di" bpmnElement="Flow_Voor">
+        <di:waypoint x="430" y="205" /><di:waypoint x="430" y="92" /><di:waypoint x="530" y="92" />
+        <bpmndi:BPMNLabel><dc:Bounds x="440" y="75" width="60" height="14" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Bij_di" bpmnElement="Flow_Bij">
+        <di:waypoint x="440" y="215" /><di:waypoint x="470" y="177" /><di:waypoint x="530" y="177" />
+        <bpmndi:BPMNLabel><dc:Bounds x="455" y="160" width="51" height="14" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Hoofd_di" bpmnElement="Flow_Hoofd">
+        <di:waypoint x="440" y="245" /><di:waypoint x="470" y="267" /><di:waypoint x="530" y="267" />
+        <bpmndi:BPMNLabel><dc:Bounds x="445" y="270" width="67" height="14" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Restaurant_di" bpmnElement="Flow_Restaurant">
+        <di:waypoint x="430" y="255" /><di:waypoint x="430" y="357" /><di:waypoint x="530" y="357" />
+        <bpmndi:BPMNLabel><dc:Bounds x="436" y="335" width="64" height="27" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_VoorKlaar_di" bpmnElement="Flow_VoorKlaar">
+        <di:waypoint x="645" y="92" /><di:waypoint x="730" y="92" /><di:waypoint x="730" y="205" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_BijKlaar_di" bpmnElement="Flow_BijKlaar">
+        <di:waypoint x="645" y="177" /><di:waypoint x="715" y="177" /><di:waypoint x="725" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_HoofdKlaar_di" bpmnElement="Flow_HoofdKlaar">
+        <di:waypoint x="645" y="267" /><di:waypoint x="715" y="267" /><di:waypoint x="725" y="245" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_RestKlaar_di" bpmnElement="Flow_RestKlaar">
+        <di:waypoint x="645" y="357" /><di:waypoint x="730" y="357" /><di:waypoint x="730" y="255" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_D3_di" bpmnElement="Flow_D3"><di:waypoint x="755" y="230" /><di:waypoint x="795" y="230" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_D4_di" bpmnElement="Flow_D4"><di:waypoint x="905" y="230" /><di:waypoint x="942" y="230" /></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>`,
+
+  // 7. HHS Reader Figuur 18: Parallel Proces (AND-split & AND-join)
+  'reader-parallel': `<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  id="Definitions_Parallel"
+                  targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:process id="Process_Parallel" isExecutable="false">
+    <bpmn:startEvent id="Start_Par" name="Start opdracht">
+      <bpmn:outgoing>Flow_Par1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="Task_A" name="Taak A">
+      <bpmn:incoming>Flow_Par1</bpmn:incoming>
+      <bpmn:outgoing>Flow_Par2</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:parallelGateway id="Gateway_AND_Split">
+      <bpmn:incoming>Flow_Par2</bpmn:incoming>
+      <bpmn:outgoing>Flow_To_B</bpmn:outgoing>
+      <bpmn:outgoing>Flow_To_C</bpmn:outgoing>
+      <bpmn:outgoing>Flow_To_D</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:task id="Task_B" name="Taak B">
+      <bpmn:incoming>Flow_To_B</bpmn:incoming>
+      <bpmn:outgoing>Flow_From_B</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_C" name="Taak C">
+      <bpmn:incoming>Flow_To_C</bpmn:incoming>
+      <bpmn:outgoing>Flow_From_C</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_D" name="Taak D">
+      <bpmn:incoming>Flow_To_D</bpmn:incoming>
+      <bpmn:outgoing>Flow_From_D</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:parallelGateway id="Gateway_AND_Join">
+      <bpmn:incoming>Flow_From_B</bpmn:incoming>
+      <bpmn:incoming>Flow_From_C</bpmn:incoming>
+      <bpmn:incoming>Flow_From_D</bpmn:incoming>
+      <bpmn:outgoing>Flow_Par3</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:task id="Task_E" name="Taak E">
+      <bpmn:incoming>Flow_Par3</bpmn:incoming>
+      <bpmn:outgoing>Flow_Par4</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:endEvent id="End_Par" name="Opdracht voltooid">
+      <bpmn:incoming>Flow_Par4</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_Par1" sourceRef="Start_Par" targetRef="Task_A" />
+    <bpmn:sequenceFlow id="Flow_Par2" sourceRef="Task_A" targetRef="Gateway_AND_Split" />
+    <bpmn:sequenceFlow id="Flow_To_B" sourceRef="Gateway_AND_Split" targetRef="Task_B" />
+    <bpmn:sequenceFlow id="Flow_To_C" sourceRef="Gateway_AND_Split" targetRef="Task_C" />
+    <bpmn:sequenceFlow id="Flow_To_D" sourceRef="Gateway_AND_Split" targetRef="Task_D" />
+    <bpmn:sequenceFlow id="Flow_From_B" sourceRef="Task_B" targetRef="Gateway_AND_Join" />
+    <bpmn:sequenceFlow id="Flow_From_C" sourceRef="Task_C" targetRef="Gateway_AND_Join" />
+    <bpmn:sequenceFlow id="Flow_From_D" sourceRef="Task_D" targetRef="Gateway_AND_Join" />
+    <bpmn:sequenceFlow id="Flow_Par3" sourceRef="Gateway_AND_Join" targetRef="Task_E" />
+    <bpmn:sequenceFlow id="Flow_Par4" sourceRef="Task_E" targetRef="End_Par" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Diagram_Parallel">
+    <bpmndi:BPMNPlane id="Plane_Parallel" bpmnElement="Process_Parallel">
+      <bpmndi:BPMNShape id="Start_Par_di" bpmnElement="Start_Par">
+        <dc:Bounds x="162" y="192" width="36" height="36" />
+        <bpmndi:BPMNLabel><dc:Bounds x="145" y="235" width="70" height="14" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_A_di" bpmnElement="Task_A"><dc:Bounds x="240" y="170" width="100" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_AND_Split_di" bpmnElement="Gateway_AND_Split"><dc:Bounds x="385" y="185" width="50" height="50" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_B_di" bpmnElement="Task_B"><dc:Bounds x="480" y="70" width="100" height="70" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_C_di" bpmnElement="Task_C"><dc:Bounds x="480" y="175" width="100" height="70" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_D_di" bpmnElement="Task_D"><dc:Bounds x="480" y="280" width="100" height="70" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_AND_Join_di" bpmnElement="Gateway_AND_Join"><dc:Bounds x="635" y="185" width="50" height="50" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_E_di" bpmnElement="Task_E"><dc:Bounds x="730" y="170" width="100" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Par_di" bpmnElement="End_Par">
+        <dc:Bounds x="872" y="192" width="36" height="36" />
+        <bpmndi:BPMNLabel><dc:Bounds x="847" y="235" width="87" height="14" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_Par1_di" bpmnElement="Flow_Par1"><di:waypoint x="198" y="210" /><di:waypoint x="240" y="210" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Par2_di" bpmnElement="Flow_Par2"><di:waypoint x="340" y="210" /><di:waypoint x="385" y="210" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_To_B_di" bpmnElement="Flow_To_B"><di:waypoint x="410" y="185" /><di:waypoint x="410" y="105" /><di:waypoint x="480" y="105" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_To_C_di" bpmnElement="Flow_To_C"><di:waypoint x="435" y="210" /><di:waypoint x="480" y="210" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_To_D_di" bpmnElement="Flow_To_D"><di:waypoint x="410" y="235" /><di:waypoint x="410" y="315" /><di:waypoint x="480" y="315" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_From_B_di" bpmnElement="Flow_From_B"><di:waypoint x="580" y="105" /><di:waypoint x="660" y="105" /><di:waypoint x="660" y="185" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_From_C_di" bpmnElement="Flow_From_C"><di:waypoint x="580" y="210" /><di:waypoint x="635" y="210" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_From_D_di" bpmnElement="Flow_From_D"><di:waypoint x="580" y="315" /><di:waypoint x="660" y="315" /><di:waypoint x="660" y="235" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Par3_di" bpmnElement="Flow_Par3"><di:waypoint x="685" y="210" /><di:waypoint x="730" y="210" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Par4_di" bpmnElement="Flow_Par4"><di:waypoint x="830" y="210" /><di:waypoint x="872" y="210" /></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>`,
+
+  // 8. HHS Reader Figuur 25 & 27: Dataflow, Data Objects & Data Store
+  'reader-data': `<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  id="Definitions_Data"
+                  targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:process id="Process_Data" isExecutable="false">
+    <bpmn:startEvent id="Start_Brief" name="Briefproces start">
+      <bpmn:outgoing>Flow_B1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="Task_StelOp" name="Stel brief op">
+      <bpmn:incoming>Flow_B1</bpmn:incoming>
+      <bpmn:outgoing>Flow_B2</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="DOA_1">
+        <bpmn:targetRef>DataObject_Draft</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:task>
+    <bpmn:dataObjectReference id="DataObject_Draft" name="Brief [draft]" dataObjectRef="DO_Draft" />
+    <bpmn:dataObject id="DO_Draft" />
+    <bpmn:task id="Task_Verbeter" name="Verbeter brief">
+      <bpmn:incoming>Flow_B2</bpmn:incoming>
+      <bpmn:outgoing>Flow_B3</bpmn:outgoing>
+      <bpmn:property id="Prop_V1" name="__targetRef_placeholder" />
+      <bpmn:dataInputAssociation id="DIA_1">
+        <bpmn:sourceRef>DataObject_Draft</bpmn:sourceRef>
+        <bpmn:targetRef>Prop_V1</bpmn:targetRef>
+      </bpmn:dataInputAssociation>
+      <bpmn:dataOutputAssociation id="DOA_2">
+        <bpmn:targetRef>DataObject_Verbeterd</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:task>
+    <bpmn:dataObjectReference id="DataObject_Verbeterd" name="Brief [verbeterd]" dataObjectRef="DO_Verbeterd" />
+    <bpmn:dataObject id="DO_Verbeterd" />
+    <bpmn:task id="Task_Onderteken" name="Onderteken brief">
+      <bpmn:incoming>Flow_B3</bpmn:incoming>
+      <bpmn:outgoing>Flow_B4</bpmn:outgoing>
+      <bpmn:property id="Prop_O1" name="__targetRef_placeholder" />
+      <bpmn:dataInputAssociation id="DIA_2">
+        <bpmn:sourceRef>DataObject_Verbeterd</bpmn:sourceRef>
+        <bpmn:targetRef>Prop_O1</bpmn:targetRef>
+      </bpmn:dataInputAssociation>
+      <bpmn:dataOutputAssociation id="DOA_3">
+        <bpmn:targetRef>DataObject_Ondertekend</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:task>
+    <bpmn:dataObjectReference id="DataObject_Ondertekend" name="Brief [ondertekend]" dataObjectRef="DO_Ondertekend" />
+    <bpmn:dataObject id="DO_Ondertekend" />
+    <bpmn:task id="Task_Kopieer" name="Kopieer brief">
+      <bpmn:incoming>Flow_B4</bpmn:incoming>
+      <bpmn:outgoing>Flow_B5</bpmn:outgoing>
+      <bpmn:property id="Prop_K1" name="__targetRef_placeholder" />
+      <bpmn:dataInputAssociation id="DIA_3">
+        <bpmn:sourceRef>DataObject_Ondertekend</bpmn:sourceRef>
+        <bpmn:targetRef>Prop_K1</bpmn:targetRef>
+      </bpmn:dataInputAssociation>
+      <bpmn:dataOutputAssociation id="DOA_4">
+        <bpmn:targetRef>DataObject_Kopie</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:task>
+    <bpmn:dataObjectReference id="DataObject_Kopie" name="Brief [kopie]" dataObjectRef="DO_Kopie" />
+    <bpmn:dataObject id="DO_Kopie" />
+    <bpmn:parallelGateway id="Gateway_DataSplit">
+      <bpmn:incoming>Flow_B5</bpmn:incoming>
+      <bpmn:outgoing>Flow_Verstuur</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Archiveer</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:task id="Task_Verstuur" name="Verstuur brief">
+      <bpmn:incoming>Flow_Verstuur</bpmn:incoming>
+      <bpmn:outgoing>Flow_B6</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Archiveer" name="Archiveer brief">
+      <bpmn:incoming>Flow_Archiveer</bpmn:incoming>
+      <bpmn:outgoing>Flow_B7</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="DOA_Store">
+        <bpmn:targetRef>DataStore_Map</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:task>
+    <bpmn:dataStoreReference id="DataStore_Map" name="Brievenmap" />
+    <bpmn:endEvent id="End_Verstuurd" name="Brief is verstuurd">
+      <bpmn:incoming>Flow_B6</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="End_Gearchiveerd" name="Brief is gearchiveerd">
+      <bpmn:incoming>Flow_B7</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_B1" sourceRef="Start_Brief" targetRef="Task_StelOp" />
+    <bpmn:sequenceFlow id="Flow_B2" sourceRef="Task_StelOp" targetRef="Task_Verbeter" />
+    <bpmn:sequenceFlow id="Flow_B3" sourceRef="Task_Verbeter" targetRef="Task_Onderteken" />
+    <bpmn:sequenceFlow id="Flow_B4" sourceRef="Task_Onderteken" targetRef="Task_Kopieer" />
+    <bpmn:sequenceFlow id="Flow_B5" sourceRef="Task_Kopieer" targetRef="Gateway_DataSplit" />
+    <bpmn:sequenceFlow id="Flow_Verstuur" sourceRef="Gateway_DataSplit" targetRef="Task_Verstuur" />
+    <bpmn:sequenceFlow id="Flow_Archiveer" sourceRef="Gateway_DataSplit" targetRef="Task_Archiveer" />
+    <bpmn:sequenceFlow id="Flow_B6" sourceRef="Task_Verstuur" targetRef="End_Verstuurd" />
+    <bpmn:sequenceFlow id="Flow_B7" sourceRef="Task_Archiveer" targetRef="End_Gearchiveerd" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Diagram_Data">
+    <bpmndi:BPMNPlane id="Plane_Data" bpmnElement="Process_Data">
+      <bpmndi:BPMNShape id="Start_Brief_di" bpmnElement="Start_Brief"><dc:Bounds x="152" y="162" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="131" y="205" width="81" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_StelOp_di" bpmnElement="Task_StelOp"><dc:Bounds x="220" y="140" width="100" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObject_Draft_di" bpmnElement="DataObject_Draft"><dc:Bounds x="252" y="260" width="36" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="242" y="315" width="58" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Verbeter_di" bpmnElement="Task_Verbeter"><dc:Bounds x="350" y="140" width="100" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObject_Verbeterd_di" bpmnElement="DataObject_Verbeterd"><dc:Bounds x="382" y="260" width="36" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="361" y="315" width="79" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Onderteken_di" bpmnElement="Task_Onderteken"><dc:Bounds x="480" y="140" width="100" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObject_Ondertekend_di" bpmnElement="DataObject_Ondertekend"><dc:Bounds x="512" y="260" width="36" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="495" y="315" width="71" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Kopieer_di" bpmnElement="Task_Kopieer"><dc:Bounds x="610" y="140" width="100" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObject_Kopie_di" bpmnElement="DataObject_Kopie"><dc:Bounds x="642" y="260" width="36" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="630" y="315" width="60" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_DataSplit_di" bpmnElement="Gateway_DataSplit"><dc:Bounds x="745" y="155" width="50" height="50" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Verstuur_di" bpmnElement="Task_Verstuur"><dc:Bounds x="830" y="90" width="100" height="70" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Archiveer_di" bpmnElement="Task_Archiveer"><dc:Bounds x="830" y="210" width="100" height="70" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStore_Map_di" bpmnElement="DataStore_Map"><dc:Bounds x="975" y="275" width="50" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="971" y="332" width="60" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Verstuurd_di" bpmnElement="End_Verstuurd"><dc:Bounds x="972" y="107" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="948" y="150" width="85" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Gearchiveerd_di" bpmnElement="End_Gearchiveerd"><dc:Bounds x="972" y="227" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="942" y="195" width="98" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_B1_di" bpmnElement="Flow_B1"><di:waypoint x="188" y="180" /><di:waypoint x="220" y="180" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_B2_di" bpmnElement="Flow_B2"><di:waypoint x="320" y="180" /><di:waypoint x="350" y="180" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_B3_di" bpmnElement="Flow_B3"><di:waypoint x="450" y="180" /><di:waypoint x="480" y="180" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_B4_di" bpmnElement="Flow_B4"><di:waypoint x="580" y="180" /><di:waypoint x="610" y="180" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_B5_di" bpmnElement="Flow_B5"><di:waypoint x="710" y="180" /><di:waypoint x="745" y="180" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Verstuur_di" bpmnElement="Flow_Verstuur"><di:waypoint x="770" y="155" /><di:waypoint x="770" y="125" /><di:waypoint x="830" y="125" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Archiveer_di" bpmnElement="Flow_Archiveer"><di:waypoint x="770" y="205" /><di:waypoint x="770" y="245" /><di:waypoint x="830" y="245" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_B6_di" bpmnElement="Flow_B6"><di:waypoint x="930" y="125" /><di:waypoint x="972" y="125" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_B7_di" bpmnElement="Flow_B7"><di:waypoint x="930" y="245" /><di:waypoint x="972" y="245" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DOA_1_di" bpmnElement="DOA_1"><di:waypoint x="270" y="220" /><di:waypoint x="270" y="260" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DIA_1_di" bpmnElement="DIA_1"><di:waypoint x="288" y="285" /><di:waypoint x="370" y="285" /><di:waypoint x="370" y="220" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DOA_2_di" bpmnElement="DOA_2"><di:waypoint x="400" y="220" /><di:waypoint x="400" y="260" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DIA_2_di" bpmnElement="DIA_2"><di:waypoint x="418" y="285" /><di:waypoint x="500" y="285" /><di:waypoint x="500" y="220" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DOA_3_di" bpmnElement="DOA_3"><di:waypoint x="530" y="220" /><di:waypoint x="530" y="260" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DIA_3_di" bpmnElement="DIA_3"><di:waypoint x="548" y="285" /><di:waypoint x="630" y="285" /><di:waypoint x="630" y="220" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DOA_4_di" bpmnElement="DOA_4"><di:waypoint x="660" y="220" /><di:waypoint x="660" y="260" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DOA_Store_di" bpmnElement="DOA_Store">
+        <di:waypoint x="910" y="280" /><di:waypoint x="910" y="300" /><di:waypoint x="975" y="300" />
+        <bpmndi:BPMNLabel><dc:Bounds x="895" y="305" width="80" height="14" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>`,
+
+  // 9. HHS Reader Figuur 31: Twee Pools & Message Flows (Klant Black Box & White Box)
+  'reader-pools': `<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  id="Definitions_Pools"
+                  targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:collaboration id="Collab_Pools">
+    <bpmn:participant id="Participant_Klant_BB" name="Klant (Black Box)" />
+    <bpmn:participant id="Participant_Organisatie" name="Bedrijfsorganisatie" processRef="Process_Organisatie" />
+    <bpmn:messageFlow id="MsgFlow_1" name="Orderaanvraag" sourceRef="Participant_Klant_BB" targetRef="Start_Order" />
+    <bpmn:messageFlow id="MsgFlow_2" name="Orderbevestiging &amp; Factuur" sourceRef="Task_Factureren" targetRef="Participant_Klant_BB" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_Organisatie" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_Org">
+      <bpmn:lane id="Lane_FunctieY" name="Functie Y (Verkoop)">
+        <bpmn:flowNodeRef>Start_Order</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Beoordelen</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_Order</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Factureren</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_OrderKlaar</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_FunctieX" name="Functie X (Uitvoering)">
+        <bpmn:flowNodeRef>Task_Uitvoeren</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="Start_Order" name="Aanvraag ontvangen">
+      <bpmn:outgoing>Flow_Org1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="Task_Beoordelen" name="Beoordeel order">
+      <bpmn:incoming>Flow_Org1</bpmn:incoming>
+      <bpmn:outgoing>Flow_Org2</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="Gateway_Order" name="Akkoord?">
+      <bpmn:incoming>Flow_Org2</bpmn:incoming>
+      <bpmn:outgoing>Flow_Akkoord</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Afgekeurd</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="Task_Uitvoeren" name="Voer werkzaamheden uit">
+      <bpmn:incoming>Flow_Akkoord</bpmn:incoming>
+      <bpmn:outgoing>Flow_Org3</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Factureren" name="Factureer klant">
+      <bpmn:incoming>Flow_Org3</bpmn:incoming>
+      <bpmn:outgoing>Flow_Org4</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:endEvent id="End_OrderKlaar" name="Order afgehandeld">
+      <bpmn:incoming>Flow_Org4</bpmn:incoming>
+      <bpmn:incoming>Flow_Afgekeurd</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_Org1" sourceRef="Start_Order" targetRef="Task_Beoordelen" />
+    <bpmn:sequenceFlow id="Flow_Org2" sourceRef="Task_Beoordelen" targetRef="Gateway_Order" />
+    <bpmn:sequenceFlow id="Flow_Akkoord" name="Ja" sourceRef="Gateway_Order" targetRef="Task_Uitvoeren" />
+    <bpmn:sequenceFlow id="Flow_Afgekeurd" name="Nee" sourceRef="Gateway_Order" targetRef="End_OrderKlaar" />
+    <bpmn:sequenceFlow id="Flow_Org3" sourceRef="Task_Uitvoeren" targetRef="Task_Factureren" />
+    <bpmn:sequenceFlow id="Flow_Org4" sourceRef="Task_Factureren" targetRef="End_OrderKlaar" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Diagram_Pools">
+    <bpmndi:BPMNPlane id="Plane_Pools" bpmnElement="Collab_Pools">
+      <bpmndi:BPMNShape id="Participant_Klant_BB_di" bpmnElement="Participant_Klant_BB" isHorizontal="true">
+        <dc:Bounds x="160" y="80" width="780" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Participant_Organisatie_di" bpmnElement="Participant_Organisatie" isHorizontal="true">
+        <dc:Bounds x="160" y="210" width="780" height="270" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_FunctieY_di" bpmnElement="Lane_FunctieY" isHorizontal="true">
+        <dc:Bounds x="190" y="210" width="750" height="135" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_FunctieX_di" bpmnElement="Lane_FunctieX" isHorizontal="true">
+        <dc:Bounds x="190" y="345" width="750" height="135" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Start_Order_di" bpmnElement="Start_Order">
+        <dc:Bounds x="232" y="252" width="36" height="36" />
+        <bpmndi:BPMNLabel><dc:Bounds x="223" y="295" width="55" height="27" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Beoordelen_di" bpmnElement="Task_Beoordelen"><dc:Bounds x="310" y="230" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_Order_di" bpmnElement="Gateway_Order" isMarkerVisible="true"><dc:Bounds x="465" y="245" width="50" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="467" y="221" width="47" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Uitvoeren_di" bpmnElement="Task_Uitvoeren"><dc:Bounds x="560" y="375" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Factureren_di" bpmnElement="Task_Factureren"><dc:Bounds x="710" y="230" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_OrderKlaar_di" bpmnElement="End_OrderKlaar"><dc:Bounds x="862" y="252" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="848" y="295" width="65" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_Org1_di" bpmnElement="Flow_Org1"><di:waypoint x="268" y="270" /><di:waypoint x="310" y="270" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Org2_di" bpmnElement="Flow_Org2"><di:waypoint x="420" y="270" /><di:waypoint x="465" y="270" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Akkoord_di" bpmnElement="Flow_Akkoord">
+        <di:waypoint x="490" y="295" /><di:waypoint x="490" y="415" /><di:waypoint x="560" y="415" />
+        <bpmndi:BPMNLabel><dc:Bounds x="503" y="343" width="13" height="14" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Afgekeurd_di" bpmnElement="Flow_Afgekeurd">
+        <di:waypoint x="515" y="270" /><di:waypoint x="710" y="270" />
+        <bpmndi:BPMNLabel><dc:Bounds x="520" y="252" width="20" height="14" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Org3_di" bpmnElement="Flow_Org3">
+        <di:waypoint x="680" y="415" /><di:waypoint x="765" y="415" /><di:waypoint x="765" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Org4_di" bpmnElement="Flow_Org4"><di:waypoint x="820" y="270" /><di:waypoint x="862" y="270" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MsgFlow_1_di" bpmnElement="MsgFlow_1">
+        <di:waypoint x="250" y="150" /><di:waypoint x="250" y="252" />
+        <bpmndi:BPMNLabel><dc:Bounds x="255" y="173" width="76" height="14" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MsgFlow_2_di" bpmnElement="MsgFlow_2">
+        <di:waypoint x="765" y="230" /><di:waypoint x="765" y="150" />
+        <bpmndi:BPMNLabel><dc:Bounds x="770" y="173" width="85" height="27" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
 </bpmn:definitions>`
 };
 
@@ -703,6 +1285,7 @@ async function initModeler() {
       btnUndo.disabled = !commandStack.canUndo();
       btnRedo.disabled = !commandStack.canRedo();
       triggerAutosave();
+      validateHHSRules(false);
     });
 
     // Selection changed
@@ -718,6 +1301,7 @@ async function initModeler() {
       } else {
         selectionInfoEl.innerHTML = `<span><strong>${selected.length}</strong> elementen geselecteerd</span>`;
       }
+      updateSelectionQuickActions();
     });
 
     // Canvas view zoom level tracking
@@ -727,6 +1311,9 @@ async function initModeler() {
         zoomLevelLabel.textContent = `${zoom}%`;
       } catch (e) {}
     });
+
+    // Setup HHS BPMN tools sidebar
+    setupSidebarTools();
 
     // Restore saved diagram or load default
     const savedTitle = localStorage.getItem(STORAGE_KEY_TITLE) || localStorage.getItem('hhs_bpmn_modeler_title_v1');
@@ -743,6 +1330,7 @@ async function initModeler() {
     }
 
     refreshIcons();
+    validateHHSRules(false);
   } catch (err) {
     console.error('Fout bij initialiseren van BPMN Modeler:', err);
     showToast('Kon BPMN Modeler niet laden: ' + err.message, 'error', 6000);
@@ -766,6 +1354,8 @@ async function loadDiagram(xml, resetZoom = true) {
     }
     setSaveStatus('saved');
     refreshIcons();
+    validateHHSRules(false);
+    updateSelectionQuickActions();
   } catch (err) {
     console.error('Fout bij importeren van XML:', err);
     showToast('Ongeldig BPMN bestand: ' + err.message, 'error', 5000);
@@ -786,6 +1376,724 @@ function triggerAutosave() {
       console.warn('Autosave kon niet voltooien:', err);
     }
   }, 750);
+}
+
+// ===================================================================
+// HHS BPMN Modeler Helpers & Reader Tools (Paul de Vries)
+// ===================================================================
+
+function getElementPool(element, elementRegistry) {
+  if (!element) return null;
+  let current = element;
+  while (current) {
+    if (current.type === 'bpmn:Participant') {
+      return current;
+    }
+    current = current.parent;
+  }
+  return null;
+}
+
+// 1. Toggle Default Flow (\ Schuin streepje) for Exception Issue (Hfdst 3.3)
+function toggleDefaultFlow(targetFlow = null) {
+  if (!bpmnModeler) return;
+  const selection = bpmnModeler.get('selection').get();
+  const flow = targetFlow || selection.find(el => el.type === 'bpmn:SequenceFlow');
+  if (!flow) {
+    showToast('Selecteer eerst een sequence flow (volgordepijl)', 'info');
+    return;
+  }
+  const source = flow.source;
+  if (!source || (source.type !== 'bpmn:ExclusiveGateway' && source.type !== 'bpmn:InclusiveGateway')) {
+    showToast('Een default flow (uitzonderingsroute met \\) kan alleen starten vanaf een Exclusive (XOR) of Inclusive (IOR) gateway', 'warning', 4500);
+    return;
+  }
+  const modeling = bpmnModeler.get('modeling');
+  const isCurrentDefault = source.businessObject.default === flow.businessObject;
+  if (isCurrentDefault) {
+    modeling.updateProperties(source, { default: null });
+    showToast('Default flow markering (\\) verwijderd', 'info');
+  } else {
+    modeling.updateProperties(source, { default: flow.businessObject });
+    showToast('Standaardstroom (exception issue) gemarkeerd met schuin streepje (\\)', 'success');
+  }
+  updateSelectionQuickActions();
+  validateHHSRules(false);
+}
+window.toggleDefaultFlow = toggleDefaultFlow;
+
+// 2. Add Netto Data annotation to an association (Hfdst 4)
+function promptNettoData() {
+  if (!bpmnModeler) return;
+  const selection = bpmnModeler.get('selection').get();
+  const targetEl = selection.find(el => 
+    el.type === 'bpmn:Association' || 
+    el.type === 'bpmn:DataInputAssociation' || 
+    el.type === 'bpmn:DataOutputAssociation' ||
+    el.type === 'bpmn:DataStoreReference' ||
+    el.type === 'bpmn:SequenceFlow'
+  );
+  if (!targetEl) {
+    showToast('Selecteer eerst een (data-)associatie of data store om netto data in te stellen', 'info');
+    return;
+  }
+  const currentName = targetEl.businessObject.name || '';
+  const nettoText = prompt('Voer de netto data vermelding in (bijv. "Dagomzet", "Klantgegevens", "Inschrijving"):', currentName);
+  if (nettoText !== null) {
+    const modeling = bpmnModeler.get('modeling');
+    modeling.updateProperties(targetEl, { name: nettoText.trim() });
+    showToast(`Netto data annotatie bijgewerkt: "${nettoText.trim()}"`, 'success');
+    validateHHSRules(false);
+  }
+}
+window.promptNettoData = promptNettoData;
+
+// 3. Add or update Data Object Status [status] (Hfdst 4)
+function promptDataStatus() {
+  if (!bpmnModeler) return;
+  const selection = bpmnModeler.get('selection').get();
+  const dataObj = selection.find(el => el.type === 'bpmn:DataObjectReference');
+  if (!dataObj) {
+    showToast('Selecteer eerst een Data Object (ezelsor) om een toestand toe te voegen', 'info');
+    return;
+  }
+  let currentName = dataObj.businessObject.name || 'Data Object';
+  let baseName = currentName.replace(/\s*\[.*?\]\s*$/, '').trim();
+  const match = currentName.match(/\[(.*?)\]/);
+  const existingStatus = match ? match[1] : 'draft';
+  
+  const status = prompt(`Voer de toestand in voor "${baseName}" (bijv. draft, verbeterd, ondertekend, gearchiveerd):`, existingStatus);
+  if (status !== null) {
+    const modeling = bpmnModeler.get('modeling');
+    const newFullName = status.trim().length > 0 ? `${baseName} [${status.trim()}]` : baseName;
+    modeling.updateProperties(dataObj, { name: newFullName });
+    showToast(`Data toestand bijgewerkt naar: ${newFullName}`, 'success');
+  }
+}
+window.promptDataStatus = promptDataStatus;
+
+// 4. Add Swimlane to active pool
+function addSwimlane() {
+  if (!bpmnModeler) return;
+  const modeling = bpmnModeler.get('modeling');
+  const elementRegistry = bpmnModeler.get('elementRegistry');
+  const selection = bpmnModeler.get('selection').get();
+  
+  let target = selection.find(el => el.type === 'bpmn:Participant' || el.type === 'bpmn:Lane');
+  if (!target) {
+    target = elementRegistry.filter(el => el.type === 'bpmn:Participant' || el.type === 'bpmn:Lane')[0];
+  }
+  if (target) {
+    modeling.addLane(target, 'bottom');
+    showToast('Nieuwe swimlane toegevoegd aan pool', 'success');
+    validateHHSRules(false);
+  } else {
+    showToast('Plaats eerst een Pool om een swimlane aan toe te voegen', 'info');
+  }
+}
+window.addSwimlane = addSwimlane;
+
+// 5. Switch Gateway type (XOR, AND, IOR)
+function switchGatewayTypeSelected(targetType) {
+  if (!bpmnModeler) return;
+  const selection = bpmnModeler.get('selection').get();
+  const gateway = selection.find(el => 
+    el.type === 'bpmn:ExclusiveGateway' || 
+    el.type === 'bpmn:ParallelGateway' || 
+    el.type === 'bpmn:InclusiveGateway'
+  );
+  if (!gateway) {
+    showToast('Selecteer eerst een gateway om het type te wijzigen', 'info');
+    return;
+  }
+  if (gateway.type === targetType) return;
+  const bpmnReplace = bpmnModeler.get('bpmnReplace');
+  const newElement = bpmnReplace.replaceElement(gateway, { type: targetType });
+  bpmnModeler.get('selection').set([newElement]);
+  updateSelectionQuickActions();
+  showToast(`Gateway gewijzigd naar ${targetType.replace('bpmn:', '')}`, 'success');
+}
+window.switchGatewayTypeSelected = switchGatewayTypeSelected;
+
+// 6. Highlight and center element on canvas
+function highlightElement(elementId) {
+  if (!bpmnModeler || !elementId) return;
+  const elementRegistry = bpmnModeler.get('elementRegistry');
+  const selection = bpmnModeler.get('selection');
+  const canvas = bpmnModeler.get('canvas');
+  const elem = elementRegistry.get(elementId);
+  if (elem) {
+    const modal = document.getElementById('modal-rules-checker');
+    if (modal) modal.classList.remove('open');
+    selection.set([elem]);
+    try {
+      canvas.scrollToElement(elem);
+    } catch (e) {}
+    showToast(`Element '${elem.businessObject.name || elem.id}' geselecteerd`, 'info');
+  }
+}
+window.highlightElement = highlightElement;
+
+// 7. Contextual Quick Actions on Selection
+function updateSelectionQuickActions() {
+  const container = document.getElementById('selection-quick-actions');
+  if (!container || !bpmnModeler) return;
+
+  const selection = bpmnModeler.get('selection').get();
+  if (!selection || selection.length !== 1) {
+    container.innerHTML = '';
+    return;
+  }
+
+  const elem = selection[0];
+  const type = elem.type;
+  let html = '';
+
+  // Sequence Flow
+  if (type === 'bpmn:SequenceFlow') {
+    const source = elem.source;
+    const isFromGateway = source && (source.type === 'bpmn:ExclusiveGateway' || source.type === 'bpmn:InclusiveGateway');
+    if (isFromGateway) {
+      const isDefault = source.businessObject.default === elem.businessObject;
+      html += `
+        <button class="quick-action-btn ${isDefault ? 'active' : ''}" onclick="toggleDefaultFlow()" title="Zet deze uitgaande flow om naar de standaard uitzonderingsroute met een schuin streepje (\\)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14m-5-5l5 5-5 5"/><path d="M7 8l4 8" stroke-width="3"/></svg>
+          <span>${isDefault ? 'Default Flow (\\) Actief' : 'Maak Default Flow (\\)'}</span>
+        </button>
+      `;
+    }
+  }
+
+  // Data Object
+  if (type === 'bpmn:DataObjectReference') {
+    html += `
+      <button class="quick-action-btn" onclick="promptDataStatus()" title="Voeg toestand toe aan data object (bijv. [draft], [verbeterd], [ondertekend])">
+        <i data-lucide="tag"></i>
+        <span>Toestand [status]</span>
+      </button>
+    `;
+  }
+
+  // Data Store
+  if (type === 'bpmn:DataStoreReference') {
+    html += `
+      <button class="quick-action-btn" onclick="promptNettoData()" title="Netto data / annotatie bewerken">
+        <i data-lucide="database"></i>
+        <span>Netto Data / Naam</span>
+      </button>
+    `;
+  }
+
+  // Association or Data Associations
+  if (type === 'bpmn:Association' || type === 'bpmn:DataInputAssociation' || type === 'bpmn:DataOutputAssociation') {
+    html += `
+      <button class="quick-action-btn" onclick="promptNettoData()" title="Benoem netto data (bijv. Dagomzet, Klanten, Inschrijving)">
+        <i data-lucide="tag"></i>
+        <span>Netto Data Annotatie</span>
+      </button>
+    `;
+  }
+
+  // Gateways: Quick type switcher between XOR, AND, IOR
+  if (type === 'bpmn:ExclusiveGateway' || type === 'bpmn:ParallelGateway' || type === 'bpmn:InclusiveGateway') {
+    html += `
+      <button class="quick-action-btn ${type === 'bpmn:ExclusiveGateway' ? 'active' : ''}" onclick="switchGatewayTypeSelected('bpmn:ExclusiveGateway')" title="Wissel naar Exclusive Gateway (XOR - X)">
+        <span>XOR (X)</span>
+      </button>
+      <button class="quick-action-btn ${type === 'bpmn:ParallelGateway' ? 'active' : ''}" onclick="switchGatewayTypeSelected('bpmn:ParallelGateway')" title="Wissel naar Parallel Gateway (AND - +)">
+        <span>AND (+)</span>
+      </button>
+      <button class="quick-action-btn ${type === 'bpmn:InclusiveGateway' ? 'active' : ''}" onclick="switchGatewayTypeSelected('bpmn:InclusiveGateway')" title="Wissel naar Inclusive Gateway (IOR - O)">
+        <span>IOR (O)</span>
+      </button>
+    `;
+  }
+
+  // Participant (Pool)
+  if (type === 'bpmn:Participant') {
+    html += `
+      <button class="quick-action-btn" onclick="addSwimlane()" title="Voeg een extra swimlane (organisatorische functie) toe aan deze pool">
+        <i data-lucide="plus"></i>
+        <span>+ Swimlane</span>
+      </button>
+    `;
+  }
+
+  container.innerHTML = html;
+  refreshIcons();
+}
+
+// 8. HHS Modelleringsregels Controleur (Paul de Vries Reader)
+function validateHHSRules(openModal = false) {
+  if (!bpmnModeler) return;
+  const elementRegistry = bpmnModeler.get('elementRegistry');
+  const allElements = elementRegistry.getAll();
+  
+  let errorsCount = 0;
+  let warningsCount = 0;
+  
+  const rulesReport = [
+    {
+      id: 'rule-seq-flow-pools',
+      title: 'Geen sequence flows tussen verschillende pools',
+      ref: 'Hoofdstuk 5, Figuur 36 (Blz. 19-20)',
+      desc: 'Een sequence flow mag NOOIT de grens van een pool overschrijden. Tussen twee verschillende pools zijn uitsluitend message flows toegestaan.',
+      status: 'passed',
+      violations: []
+    },
+    {
+      id: 'rule-msg-flow-pools',
+      title: 'Message flows uitsluitend tussen afzonderlijke pools',
+      ref: 'Hoofdstuk 5, Figuur 31 (Blz. 17-18)',
+      desc: 'Een message flow (gestreepte lijn) mag nooit binnen dezelfde pool of tussen taken binnen één organisatie gebruikt worden.',
+      status: 'passed',
+      violations: []
+    },
+    {
+      id: 'rule-data-direct-store',
+      title: 'Geen data object rechtstreeks aan data store gekoppeld',
+      ref: 'Hoofdstuk 4, Figuur 26 (Blz. 16-17)',
+      desc: 'Data objecten kunnen niet direct geassocieerd worden met een data store. Data-uitwisseling met een data store moet altijd via een taak (task) verlopen.',
+      status: 'passed',
+      violations: []
+    },
+    {
+      id: 'rule-data-across-pools',
+      title: 'Geen data-associaties die poolgrens overschrijden',
+      ref: 'Hoofdstuk 5, Figuur 34 (Blz. 18-19)',
+      desc: 'Communicatie tussen pools via data objecten of data stores is niet toegestaan. Communicatie tussen pools moet altijd met message flows verlopen.',
+      status: 'passed',
+      violations: []
+    },
+    {
+      id: 'rule-start-events',
+      title: 'Start Event richtlijnen (Hoofdstuk 2.1)',
+      ref: 'Hoofdstuk 2.1 (Blz. 5-6)',
+      desc: 'Een start event heeft als symbool een enkelvoudige dunne cirkel, mag geen inkomende sequence flows hebben en moet een betekenisvolle naam hebben (nooit "Het proces start").',
+      status: 'passed',
+      violations: []
+    },
+    {
+      id: 'rule-end-events',
+      title: 'End Event richtlijnen (Hoofdstuk 2.1)',
+      ref: 'Hoofdstuk 2.1 (Blz. 5-6)',
+      desc: 'Een end event heeft als symbool een dikke cirkel, mag geen uitgaande sequence flows hebben en wordt beschreven in de voltooide tijd (nooit "Het proces stopt").',
+      status: 'passed',
+      violations: []
+    },
+    {
+      id: 'rule-gateways',
+      title: 'Gateway splitsingen, condities & default flow',
+      ref: 'Hoofdstuk 2.2 & 3 (Blz. 7-14)',
+      desc: 'XOR en IOR splitsingen vereisen minimaal 2 uitgaande flows met benoemde condities of een uitzonderingsroute / default flow (\\\\).',
+      status: 'passed',
+      violations: []
+    },
+    {
+      id: 'rule-task-naming',
+      title: 'Taaknaamgeving (Hoofdstuk 2.1)',
+      ref: 'Hoofdstuk 2.1 (Blz. 5-6)',
+      desc: 'De naam van een taak bevat minstens één zelfstandig naamwoord plus een werkwoordsvorm (bij voorkeur infinitief of imperatief).',
+      status: 'passed',
+      violations: []
+    }
+  ];
+
+  // Element arrays
+  const seqFlows = allElements.filter(el => el.type === 'bpmn:SequenceFlow');
+  const msgFlows = allElements.filter(el => el.type === 'bpmn:MessageFlow');
+  const associations = allElements.filter(el => 
+    el.type === 'bpmn:Association' || 
+    el.type === 'bpmn:DataInputAssociation' || 
+    el.type === 'bpmn:DataOutputAssociation'
+  );
+  const startEvents = allElements.filter(el => el.type === 'bpmn:StartEvent');
+  const endEvents = allElements.filter(el => el.type === 'bpmn:EndEvent');
+  const gateways = allElements.filter(el => 
+    el.type === 'bpmn:ExclusiveGateway' || 
+    el.type === 'bpmn:InclusiveGateway' || 
+    el.type === 'bpmn:ParallelGateway'
+  );
+  const tasks = allElements.filter(el => 
+    el.type === 'bpmn:Task' || 
+    el.type === 'bpmn:UserTask' || 
+    el.type === 'bpmn:ServiceTask' || 
+    el.type === 'bpmn:ManualTask' || 
+    el.type === 'bpmn:BusinessRuleTask' ||
+    el.type === 'bpmn:ScriptTask'
+  );
+
+  // Check 1: Sequence flows between different pools
+  seqFlows.forEach(flow => {
+    if (flow.source && flow.target) {
+      const sourcePool = getElementPool(flow.source, elementRegistry);
+      const targetPool = getElementPool(flow.target, elementRegistry);
+      if (sourcePool && targetPool && sourcePool.id !== targetPool.id) {
+        rulesReport[0].violations.push({
+          elementId: flow.id,
+          label: `Sequence flow '${flow.businessObject.name || flow.id}' overschrijdt poolgrens van '${sourcePool.businessObject.name || sourcePool.id}' naar '${targetPool.businessObject.name || targetPool.id}'`
+        });
+      }
+    }
+  });
+
+  // Check 2: Message flows inside same pool
+  msgFlows.forEach(flow => {
+    if (flow.source && flow.target) {
+      const sourcePool = getElementPool(flow.source, elementRegistry);
+      const targetPool = getElementPool(flow.target, elementRegistry);
+      if (sourcePool && targetPool && sourcePool.id === targetPool.id) {
+        rulesReport[1].violations.push({
+          elementId: flow.id,
+          label: `Message flow '${flow.businessObject.name || flow.id}' bevindt zich binnen dezelfde pool '${sourcePool.businessObject.name || sourcePool.id}'. Gebruik een sequence flow!`
+        });
+      }
+    }
+  });
+
+  // Check 3: Data Object directly to Data Store
+  associations.forEach(assoc => {
+    if (assoc.source && assoc.target) {
+      const isSrcObj = assoc.source.type === 'bpmn:DataObjectReference';
+      const isDstObj = assoc.target.type === 'bpmn:DataObjectReference';
+      const isSrcStore = assoc.source.type === 'bpmn:DataStoreReference';
+      const isDstStore = assoc.target.type === 'bpmn:DataStoreReference';
+      if ((isSrcObj && isDstStore) || (isSrcStore && isDstObj)) {
+        rulesReport[2].violations.push({
+          elementId: assoc.id,
+          label: `Data object '${assoc.source.businessObject.name || assoc.source.id}' is direct gekoppeld aan data store '${assoc.target.businessObject.name || assoc.target.id}' (moet altijd via een taak!)`
+        });
+      }
+    }
+  });
+
+  // Check 4: Data associations across pools
+  associations.forEach(assoc => {
+    if (assoc.source && assoc.target) {
+      const sourcePool = getElementPool(assoc.source, elementRegistry);
+      const targetPool = getElementPool(assoc.target, elementRegistry);
+      if (sourcePool && targetPool && sourcePool.id !== targetPool.id) {
+        rulesReport[3].violations.push({
+          elementId: assoc.id,
+          label: `Data-associatie verbindt elementen uit verschillende pools (${sourcePool.businessObject.name || 'Pool 1'} en ${targetPool.businessObject.name || 'Pool 2'}). Gebruik een message flow!`
+        });
+      }
+    }
+  });
+
+  // Check 5: Start events
+  if (startEvents.length === 0 && tasks.length > 0) {
+    rulesReport[4].violations.push({
+      elementId: null,
+      label: 'Geen Start Event gevonden in het proces. Elk proces moet beginnen met minimaal 1 Start Event.'
+    });
+  }
+  startEvents.forEach(start => {
+    if (start.incoming && start.incoming.length > 0) {
+      rulesReport[4].violations.push({
+        elementId: start.id,
+        label: `Start Event '${start.businessObject.name || start.id}' heeft ${start.incoming.length} inkomende sequence flow(s). Een Start Event mag NOOIT inkomende flows hebben!`
+      });
+    }
+    const name = (start.businessObject.name || '').trim().toLowerCase();
+    if (!name || name === 'start' || name === 'het proces start' || name === 'start event') {
+      rulesReport[4].violations.push({
+        elementId: start.id,
+        isWarning: true,
+        label: `Start Event '${start.businessObject.name || 'Naamloos'}' heeft een generieke of ontbrekende naam. Benoem de specifieke gebeurtenis die het proces triggert (bijv. 'Aanvraag ontvangen').`
+      });
+    }
+  });
+
+  // Check 6: End events
+  if (endEvents.length === 0 && tasks.length > 0) {
+    rulesReport[5].violations.push({
+      elementId: null,
+      label: 'Geen End Event gevonden in het proces. Elk proces moet eindigen in minimaal 1 End Event.'
+    });
+  }
+  endEvents.forEach(end => {
+    if (end.outgoing && end.outgoing.length > 0) {
+      rulesReport[5].violations.push({
+        elementId: end.id,
+        label: `End Event '${end.businessObject.name || end.id}' heeft ${end.outgoing.length} uitgaande sequence flow(s). Een End Event mag NOOIT uitgaande flows hebben!`
+      });
+    }
+    const name = (end.businessObject.name || '').trim().toLowerCase();
+    if (!name || name === 'einde' || name === 'stop' || name === 'het proces stopt' || name === 'end event') {
+      rulesReport[5].violations.push({
+        elementId: end.id,
+        isWarning: true,
+        label: `End Event '${end.businessObject.name || 'Naamloos'}' heeft een generieke of ontbrekende naam. Gebruik de voltooide tijd (bijv. 'Order is verzonden').`
+      });
+    }
+  });
+
+  // Check 7: Gateways
+  gateways.forEach(gw => {
+    const isXorOrIor = gw.type === 'bpmn:ExclusiveGateway' || gw.type === 'bpmn:InclusiveGateway';
+    if (isXorOrIor) {
+      const outgoing = gw.outgoing || [];
+      if (outgoing.length > 1) {
+        const hasDefault = Boolean(gw.businessObject.default);
+        const unlabelledFlows = outgoing.filter(flow => !flow.businessObject.name && flow.businessObject !== gw.businessObject.default);
+        if (unlabelledFlows.length === outgoing.length && !hasDefault) {
+          rulesReport[6].violations.push({
+            elementId: gw.id,
+            isWarning: true,
+            label: `Gateway '${gw.businessObject.name || gw.id}' splitst in ${outgoing.length} paden, maar heeft geen conditienamen of default flow (\\\\) ingesteld.`
+          });
+        }
+      }
+    }
+  });
+
+  // Check 8: Task naming
+  tasks.forEach(task => {
+    const name = (task.businessObject.name || '').trim();
+    if (!name) {
+      rulesReport[7].violations.push({
+        elementId: task.id,
+        label: `Taak (${task.id}) heeft geen naam. Geef elke taak een duidelijke omschrijving.`
+      });
+    } else {
+      const words = name.split(/\s+/);
+      if (words.length < 2) {
+        rulesReport[7].violations.push({
+          elementId: task.id,
+          isWarning: true,
+          label: `Taak '${name}' bestaat uit slechts één woord. Richtlijn uit reader: minstens één zelfstandig naamwoord + werkwoord (bijv. 'Factuur controleren').`
+        });
+      }
+    }
+  });
+
+  // Calculate totals and statuses
+  rulesReport.forEach(rule => {
+    const errorViolations = rule.violations.filter(v => !v.isWarning);
+    const warningViolations = rule.violations.filter(v => v.isWarning);
+    if (errorViolations.length > 0) {
+      rule.status = 'failed';
+      errorsCount += errorViolations.length;
+    } else if (warningViolations.length > 0) {
+      rule.status = 'warning';
+      warningsCount += warningViolations.length;
+    } else {
+      rule.status = 'passed';
+    }
+  });
+
+  // Update header badge
+  const badgeEl = document.getElementById('rules-indicator-badge');
+  if (badgeEl) {
+    if (errorsCount > 0) {
+      badgeEl.className = 'badge-status badge-error';
+      badgeEl.textContent = `${errorsCount} ${errorsCount === 1 ? 'fout' : 'fouten'}`;
+    } else if (warningsCount > 0) {
+      badgeEl.className = 'badge-status badge-warning';
+      badgeEl.textContent = `${warningsCount} ${warningsCount === 1 ? 'aandachtspunt' : 'aandachtspunten'}`;
+    } else {
+      badgeEl.className = 'badge-status badge-ok';
+      badgeEl.textContent = '0 fouten (OK)';
+    }
+  }
+
+  // If requested, open modal and render report
+  if (openModal) {
+    const modal = document.getElementById('modal-rules-checker');
+    const container = document.getElementById('rules-checklist-container');
+    const statStatus = document.getElementById('stat-overall-status');
+    const statElements = document.getElementById('stat-elements-count');
+    const statErrors = document.getElementById('stat-errors-count');
+    const statWarnings = document.getElementById('stat-warnings-count');
+
+    if (statElements) statElements.textContent = allElements.filter(el => !el.type.includes('Plane') && !el.type.includes('Process')).length;
+    if (statErrors) statErrors.textContent = errorsCount;
+    if (statWarnings) statWarnings.textContent = warningsCount;
+    if (statStatus) {
+      if (errorsCount > 0) {
+        statStatus.textContent = 'Niet conform HHS-regels';
+        statStatus.style.color = '#ef4444';
+      } else if (warningsCount > 0) {
+        statStatus.textContent = 'Enkele aandachtspunten';
+        statStatus.style.color = '#f59e0b';
+      } else {
+        statStatus.textContent = 'Volledig conform HHS-regels!';
+        statStatus.style.color = '#10b981';
+      }
+    }
+
+    if (container) {
+      container.innerHTML = rulesReport.map(rule => {
+        let badgeHtml = '';
+        if (rule.status === 'passed') {
+          badgeHtml = '<span class="badge-status badge-ok">Geslaagd</span>';
+        } else if (rule.status === 'warning') {
+          badgeHtml = '<span class="badge-status badge-warning">Aandachtspunt</span>';
+        } else {
+          badgeHtml = '<span class="badge-status badge-error">Fout</span>';
+        }
+
+        let violationsHtml = '';
+        if (rule.violations.length > 0) {
+          violationsHtml = `
+            <div class="rule-violations-list">
+              ${rule.violations.map(v => `
+                <button class="rule-violation-btn" onclick="highlightElement('${v.elementId || ''}')" title="Klik om dit element te tonen op canvas">
+                  <i data-lucide="crosshair" style="width: 12px; height: 12px;"></i>
+                  <span>${escapeHtml(v.label)}</span>
+                </button>
+              `).join('')}
+            </div>
+          `;
+        }
+
+        return `
+          <div class="rule-item-card ${rule.status}">
+            <div class="rule-item-header">
+              <div class="rule-item-title-group">
+                <div class="rule-item-icon">
+                  <i data-lucide="${rule.status === 'passed' ? 'check' : (rule.status === 'warning' ? 'alert-triangle' : 'alert-octagon')}"></i>
+                </div>
+                <span class="rule-item-title">${escapeHtml(rule.title)}</span>
+                <span class="rule-ref-tag">${escapeHtml(rule.ref)}</span>
+              </div>
+              ${badgeHtml}
+            </div>
+            <div class="rule-item-desc">${escapeHtml(rule.desc)}</div>
+            ${violationsHtml}
+          </div>
+        `;
+      }).join('');
+    }
+
+    modal.classList.add('open');
+    refreshIcons();
+  }
+}
+window.validateHHSRules = validateHHSRules;
+
+// 9. Setup HHS BPMN Tools Sidebar
+function setupSidebarTools() {
+  const sidebar = document.getElementById('tools-sidebar');
+  const toggleBtn = document.getElementById('btn-toggle-sidebar');
+  
+  if (toggleBtn && sidebar) {
+    toggleBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('collapsed');
+      const isCollapsed = sidebar.classList.contains('collapsed');
+      toggleBtn.classList.toggle('active', !isCollapsed);
+      localStorage.setItem('hhs_sidebar_collapsed', isCollapsed ? '1' : '0');
+    });
+
+    if (localStorage.getItem('hhs_sidebar_collapsed') === '1') {
+      sidebar.classList.add('collapsed');
+      toggleBtn.classList.remove('active');
+    }
+  }
+
+  // Cards with data-bpmn-type
+  document.querySelectorAll('.tool-card[data-bpmn-type]').forEach(card => {
+    card.addEventListener('mousedown', (e) => {
+      if (e.button !== 0) return;
+      if (!bpmnModeler) return;
+
+      const type = card.dataset.bpmnType;
+      const isSubProcess = card.dataset.subprocessCollapsed === 'true';
+      const elementFactory = bpmnModeler.get('elementFactory');
+      const create = bpmnModeler.get('create');
+
+      let shape;
+      if (type === 'bpmn:Participant') {
+        shape = elementFactory.createParticipantShape({ isExpanded: true });
+      } else if (isSubProcess) {
+        shape = elementFactory.createShape({ type: 'bpmn:SubProcess', isExpanded: false });
+      } else {
+        shape = elementFactory.createShape({ type });
+      }
+
+      create.start(e, shape);
+    });
+
+    // Also support single click to append if something is selected
+    card.addEventListener('click', (e) => {
+      if (!bpmnModeler) return;
+      const type = card.dataset.bpmnType;
+      const isSubProcess = card.dataset.subprocessCollapsed === 'true';
+      const elementFactory = bpmnModeler.get('elementFactory');
+      const autoPlace = bpmnModeler.get('autoPlace');
+      const selection = bpmnModeler.get('selection').get();
+      
+      if (selection.length === 1 && !type.includes('Participant') && !type.includes('DataObject') && !type.includes('DataStore')) {
+        try {
+          let shape;
+          if (isSubProcess) {
+            shape = elementFactory.createShape({ type: 'bpmn:SubProcess', isExpanded: false });
+          } else {
+            shape = elementFactory.createShape({ type });
+          }
+          autoPlace.append(selection[0], shape);
+          showToast(`${type.replace('bpmn:', '')} toegevoegd en verbonden`, 'success');
+        } catch (err) {}
+      }
+    });
+  });
+
+  // Action buttons
+  const btnConnect = document.getElementById('tool-btn-connect');
+  if (btnConnect) {
+    btnConnect.addEventListener('click', () => {
+      if (!bpmnModeler) return;
+      bpmnModeler.get('globalConnect').toggle();
+      showToast('Verbindingstool geactiveerd: klik op bron en doel om te verbinden', 'info');
+    });
+  }
+
+  const btnDefaultFlow = document.getElementById('tool-btn-default-flow');
+  if (btnDefaultFlow) {
+    btnDefaultFlow.addEventListener('click', () => toggleDefaultFlow());
+  }
+
+  const btnNettoData = document.getElementById('tool-btn-netto-data');
+  if (btnNettoData) {
+    btnNettoData.addEventListener('click', () => promptNettoData());
+  }
+
+  const btnDataStatus = document.getElementById('tool-btn-data-status');
+  if (btnDataStatus) {
+    btnDataStatus.addEventListener('click', () => promptDataStatus());
+  }
+
+  // Hand, Lasso, Space pills
+  const btnHand = document.getElementById('tool-btn-hand');
+  if (btnHand) {
+    btnHand.addEventListener('click', (e) => {
+      if (!bpmnModeler) return;
+      bpmnModeler.get('handTool').activateHand(e, true);
+    });
+  }
+
+  const btnLasso = document.getElementById('tool-btn-lasso');
+  if (btnLasso) {
+    btnLasso.addEventListener('click', (e) => {
+      if (!bpmnModeler) return;
+      bpmnModeler.get('lassoTool').activateLasso(e, true);
+    });
+  }
+
+  const btnSpace = document.getElementById('tool-btn-space');
+  if (btnSpace) {
+    btnSpace.addEventListener('click', (e) => {
+      if (!bpmnModeler) return;
+      bpmnModeler.get('spaceTool').activateSpace(e, true);
+    });
+  }
+
+  // Add swimlane
+  const cardAddLane = document.querySelector('[data-action="add-lane"]');
+  if (cardAddLane) {
+    cardAddLane.addEventListener('click', () => addSwimlane());
+  }
 }
 
 // ===================================================================
@@ -997,6 +2305,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!xml) return;
 
       const titleMap = {
+        'reader-plank': 'Figuur 3: Bevestigen van een plank (XOR)',
+        'reader-diner': 'Figuur 13 & 22: Diner Keuzemenu (IOR & Default Flow)',
+        'reader-parallel': 'Figuur 18: Parallel Proces (AND-split & join)',
+        'reader-data': 'Figuur 25 & 27: Dataflow & Netto Data',
+        'reader-pools': 'Figuur 31: Twee Pools & Message Flows',
         'swimlane': 'Basis Pool & Swimlanes',
         'order-to-cash': 'Order-to-Cash Proces',
         'exam': 'SaaS Project & Delivery Flow',
@@ -1049,10 +2362,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.addEventListener('click', () => closeAllDropdowns());
 
-  // Modals Setup (Cheatsheet & Shortcuts)
+  // Modals Setup (Cheatsheet, Shortcuts & Rules Checker)
   const modalCheatsheet = document.getElementById('modal-cheatsheet');
   const modalShortcuts = document.getElementById('modal-shortcuts');
+  const modalRules = document.getElementById('modal-rules-checker');
 
+  // Rules Checker Modal triggers
+  const btnValidateRules = document.getElementById('btn-validate-rules');
+  if (btnValidateRules) {
+    btnValidateRules.addEventListener('click', () => {
+      validateHHSRules(true);
+    });
+  }
+  const btnCloseRules = document.getElementById('btn-close-rules');
+  if (btnCloseRules) {
+    btnCloseRules.addEventListener('click', () => modalRules.classList.remove('open'));
+  }
+  const btnCloseRulesBottom = document.getElementById('btn-close-rules-bottom');
+  if (btnCloseRulesBottom) {
+    btnCloseRulesBottom.addEventListener('click', () => modalRules.classList.remove('open'));
+  }
+
+  // Cheatsheet modal
   document.getElementById('btn-cheatsheet').addEventListener('click', () => {
     modalCheatsheet.classList.add('open');
   });
@@ -1063,6 +2394,7 @@ document.addEventListener('DOMContentLoaded', () => {
     modalCheatsheet.classList.remove('open');
   });
 
+  // Shortcuts modal
   document.getElementById('btn-shortcuts').addEventListener('click', () => {
     modalShortcuts.classList.add('open');
   });
@@ -1071,7 +2403,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Close modals on click outside
-  [modalCheatsheet, modalShortcuts].forEach(modal => {
+  [modalCheatsheet, modalShortcuts, modalRules].forEach(modal => {
+    if (!modal) return;
     modal.addEventListener('click', (e) => {
       if (e.target === modal) {
         modal.classList.remove('open');
@@ -1083,8 +2416,9 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('keydown', (e) => {
     // Escape closes modals and dropdowns
     if (e.key === 'Escape') {
-      modalCheatsheet.classList.remove('open');
-      modalShortcuts.classList.remove('open');
+      if (modalCheatsheet) modalCheatsheet.classList.remove('open');
+      if (modalShortcuts) modalShortcuts.classList.remove('open');
+      if (modalRules) modalRules.classList.remove('open');
       closeAllDropdowns();
     }
 
@@ -1092,6 +2426,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if ((e.ctrlKey || e.metaKey) && e.key === 's') {
       e.preventDefault();
       exportBPMN();
+    }
+
+    // Ctrl + B toggles sidebar
+    if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
+      e.preventDefault();
+      const sidebar = document.getElementById('tools-sidebar');
+      const toggleBtn = document.getElementById('btn-toggle-sidebar');
+      if (sidebar && toggleBtn) {
+        sidebar.classList.toggle('collapsed');
+        toggleBtn.classList.toggle('active', !sidebar.classList.contains('collapsed'));
+      }
     }
   });
 
