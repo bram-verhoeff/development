@@ -38,6 +38,19 @@
       "isMain": false,
       "url": "./branches/thecoast/",
       "status": "ONLINE"
+    },
+    {
+      "branch": "games",
+      "commit": "3d41246",
+      "subject": "feat: realistic 3D WebGL multiplayer FPS with bots, HUD & graphics presets",
+      "dateIso": "2026-09-23 01:37:00 +0200",
+      "dateRelative": "zojuist",
+      "title": "VORTEX TACTICAL // Realistic WebGL Multiplayer FPS",
+      "description": "High-fidelity WebGL 3D first-person shooter in Sector-7 met Rapier physics, combat AI bots, P2P multiplayer mesh en aanpasbare graphics presets.",
+      "hasIndex": true,
+      "isMain": false,
+      "url": "./branches/games/",
+      "status": "ONLINE"
     }
   ]
 }
