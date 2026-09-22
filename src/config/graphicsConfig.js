@@ -1,0 +1,68 @@
+// High-Fidelity Graphics Presets and Display Settings Configuration
+
+export const GRAPHICS_PRESETS = [
+  {
+    id: 'low',
+    name: 'LOW',
+    label: 'LOW (300+ FPS ESPORTS)',
+    dpr: 0.65,
+    shadows: false,
+    shadowMapSize: 512,
+    enablePostProcessing: false,
+    bloomIntensity: 0,
+    chromaticAberration: false,
+    vignette: false,
+    color: '#10b981', // Emerald Green
+    badge: '300+ FPS',
+    specs: '0.65x DPR // Fast Gouraud // Shadows OFF // 0-Lag AI',
+    description: 'Speciaal ontworpen om moeiteloos 300+ FPS te halen. Gouraud-shading, props LOD, achtergrond-culling, 60Hz physics en geoptimaliseerde AI.',
+  },
+  {
+    id: 'medium',
+    name: 'MEDIUM',
+    label: 'MEDIUM (BALANCED)',
+    dpr: [1, 1.25],
+    shadows: true,
+    shadowMapSize: 1024,
+    enablePostProcessing: true,
+    bloomIntensity: 0.5,
+    chromaticAberration: false,
+    vignette: true,
+    color: '#38bdf8', // Sky Blue
+    badge: 'BALANCED',
+    specs: '1.25x DPR // 1K Shadows // Fast Bloom',
+    description: 'Gebalanceerde instelling voor stabiele gameplay met schaduwen en lichte bloom.',
+  },
+  {
+    id: 'high',
+    name: 'HIGH',
+    label: 'HIGH (RECOMMENDED)',
+    dpr: [1, 1.5],
+    shadows: true,
+    shadowMapSize: 2048,
+    enablePostProcessing: true,
+    bloomIntensity: 0.85,
+    chromaticAberration: true,
+    vignette: true,
+    color: '#00ffcc', // Cyber Cyan
+    badge: 'HIGH-DEF',
+    specs: '1.5x DPR // 2K Soft Shadows // Tactical PostFX',
+    description: 'Standaard tactische weergave met haarscherpe 2K schaduwen, realistische bloom en lensvervorming.',
+  },
+  {
+    id: 'ultra',
+    name: 'ULTRA',
+    label: 'ULTRA HIGH (CINEMATIC)',
+    dpr: [1, 1.5],
+    shadows: true,
+    shadowMapSize: 2048,
+    enablePostProcessing: true,
+    bloomIntensity: 1.15,
+    chromaticAberration: true,
+    vignette: true,
+    color: '#f59e0b', // Amber Gold
+    badge: 'CINEMATIC HD',
+    specs: '1.5x DPR // 2K PCF Soft Shadows // Ultra FX',
+    description: 'Maximale grafische pracht. Haarscherpe PCF Soft Shadows, filmische post-processing en stabiele 60+ FPS ray tracing reflecties.',
+  },
+];

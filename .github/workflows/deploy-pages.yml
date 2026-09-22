@@ -47,6 +47,10 @@ jobs:
               echo "Extracting branch: $b_trimmed"
               mkdir -p "dist/branches/$b_trimmed"
               git archive "origin/$b_trimmed" | tar -x -C "dist/branches/$b_trimmed" || true
+              if [ -d "dist/branches/$b_trimmed/dist" ]; then
+                echo "Copying built dist files for branch: $b_trimmed"
+                cp -r dist/branches/$b_trimmed/dist/* "dist/branches/$b_trimmed/" || true
+              fi
             fi
           done
 
