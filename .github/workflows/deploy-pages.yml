@@ -52,12 +52,22 @@ jobs:
             fi
           done
 
-          # Automatically generate branches.json for static frontend
+          # Automatically generate branches.json for static frontend, preserving custom metadata
           node -e '
             const fs = require("fs");
             const path = require("path");
             const branchesDir = "dist/branches";
             const list = [];
+            const existingMap = new Map();
+
+            if (fs.existsSync("dist/branches.json")) {
+              try {
+                const parsed = JSON.parse(fs.readFileSync("dist/branches.json", "utf8"));
+                if (Array.isArray(parsed.branches)) {
+                  parsed.branches.forEach(b => existingMap.set(b.branch, b));
+                }
+              } catch (e) {}
+            }
 
             if (fs.existsSync(branchesDir)) {
               const entries = fs.readdirSync(branchesDir, { withFileTypes: true });
@@ -65,25 +75,34 @@ jobs:
                 if (entry.isDirectory()) {
                   const bName = entry.name;
                   const indexPath = path.join(branchesDir, bName, "index.html");
-                  let title = "Branch: " + bName;
-                  let description = "Git branch product";
+                  const existing = existingMap.get(bName) || {};
+
+                  let title = existing.title || ("Branch: " + bName);
+                  let description = existing.description || "Git branch product";
+                  let url = existing.url || ("./branches/" + bName + "/");
 
                   if (fs.existsSync(indexPath)) {
                     try {
                       const html = fs.readFileSync(indexPath, "utf8");
                       const tMatch = html.match(/<title>([^<]+)<\/title>/i);
-                      if (tMatch && tMatch[1]) title = tMatch[1].trim();
+                      if (tMatch && tMatch[1] && !existing.title) title = tMatch[1].trim();
                       const dMatch = html.match(/<meta\\s+name=["\x27]description["\x27]\\s+content=["\x27]([^"\x27]+)["\x27]/i);
-                      if (dMatch && dMatch[1]) description = dMatch[1].trim();
+                      if (dMatch && dMatch[1] && !existing.description) description = dMatch[1].trim();
                     } catch (e) {}
                   }
 
                   list.push({
                     branch: bName,
+                    commit: existing.commit || "",
+                    subject: existing.subject || "",
+                    dateIso: existing.dateIso || "",
+                    dateRelative: existing.dateRelative || "",
                     title: title,
                     description: description,
-                    url: "./branches/" + bName + "/",
-                    status: "ONLINE"
+                    hasIndex: fs.existsSync(indexPath),
+                    isMain: false,
+                    url: url,
+                    status: fs.existsSync(indexPath) ? "ONLINE" : "NO_INDEX"
                   });
                 }
               }

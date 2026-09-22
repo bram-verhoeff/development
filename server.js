@@ -56,6 +56,17 @@ function scanGitBranches() {
       uniqueBranches.push({ branchName, dateIso, dateRel, subject, commitHash });
     }
 
+    const existingMap = new Map();
+    try {
+      const jsonPath = path.join(ROOT_DIR, 'branches.json');
+      if (fs.existsSync(jsonPath)) {
+        const parsed = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+        if (Array.isArray(parsed.branches)) {
+          parsed.branches.forEach(b => existingMap.set(b.branch, b));
+        }
+      }
+    } catch (e) {}
+
     for (const { branchName, dateIso, dateRel, subject, commitHash } of uniqueBranches) {
       const worktreePath = path.join(BRANCHES_DIR, branchName);
 
@@ -73,17 +84,24 @@ function scanGitBranches() {
 
       const targetDir = (branchName === 'main') ? ROOT_DIR : worktreePath;
       const indexPath = path.join(targetDir, 'index.html');
-      let title = `Branch: ${branchName}`;
-      let description = subject || `Git branch commit ${commitHash}`;
+      const existing = existingMap.get(branchName);
+
+      let title = (existing && existing.title) || `Branch: ${branchName}`;
+      let description = (existing && existing.description) || subject || `Git branch commit ${commitHash}`;
       let hasIndex = fs.existsSync(indexPath);
+      let targetUrl = branchName === 'main' ? './' : `./branches/${branchName}/`;
+
+      if (existing && existing.url && existing.url.includes('#')) {
+        targetUrl = existing.url;
+      }
 
       if (hasIndex) {
         try {
           const htmlContent = fs.readFileSync(indexPath, 'utf8');
           const titleMatch = htmlContent.match(/<title>([^<]+)<\/title>/i);
-          if (titleMatch && titleMatch[1]) title = titleMatch[1].trim();
+          if (titleMatch && titleMatch[1] && (!existing || !existing.title)) title = titleMatch[1].trim();
           const descMatch = htmlContent.match(/<meta\s+name=["']description["']\s+content=["']([^"']+)["']/i);
-          if (descMatch && descMatch[1]) description = descMatch[1].trim();
+          if (descMatch && descMatch[1] && (!existing || !existing.description)) description = descMatch[1].trim();
         } catch (e) {}
       }
 
@@ -97,7 +115,7 @@ function scanGitBranches() {
         description: description,
         hasIndex: hasIndex,
         isMain: branchName === 'main',
-        url: branchName === 'main' ? './' : `./branches/${branchName}/`,
+        url: targetUrl,
         status: hasIndex ? 'ONLINE' : 'NO_INDEX'
       });
     }
