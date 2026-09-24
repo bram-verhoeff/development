@@ -67,10 +67,10 @@ const MOBILENET_MAP = {
   'water bottle': { category: 'statiegeld', label: 'Waterflesje (Mogelijk Statiegeld)', deposit: 0.15, info: 'Kleine plastic waterflesjes hebben in NL €0,15 statiegeld!' },
   'flask': { category: 'statiegeld', label: 'Drankfles (Statiegeld)', deposit: 0.15, info: 'Flesvormig drankreservoir.' },
   'cocktail shaker': { category: 'statiegeld', label: 'Metalen Drinkbeker / Blik', deposit: 0.15, info: 'Metalen drankreservoir.' },
-  'steel drum': { category: 'statiegeld', label: 'Metalen Vat / Blik', deposit: 0.15, info: 'Metalen materiaal.' },
+  'steel drum': { category: 'overig', label: 'Metalen Vat (Groot Afval)', deposit: 0.00, info: 'Metalen materiaal hoort bij de milieustraat.' },
 
   'plastic bag': { category: 'plastic', label: 'Plastic Zak / Draagtas', deposit: 0.00, info: 'Zacht plastic PMD afval. Kan gerecycled worden tot folie.' },
-  'pill bottle': { category: 'statiegeld', label: 'Drankblikje / Flesje (Statiegeld)', deposit: 0.15, info: 'Cilindrische drankverpakking.' },
+  'pill bottle': { category: 'plastic', label: 'Medicijnflesje / Plastic Potje', deposit: 0.00, info: 'Hard plastic verpakking. Hoort bij PMD (mits leeg).' },
   'lotion': { category: 'plastic', label: 'Flacon Verzorging / Shampoo', deposit: 0.00, info: 'Hard plastic (HDPE/PP) verpakking. Hoort bij PMD.' },
   'soap dispenser': { category: 'plastic', label: 'Zeepdispenser (Plastic)', deposit: 0.00, info: 'Plastic pompflacon. Leegmaken voor recycling.' },
   'measuring cup': { category: 'plastic', label: 'Plastic Maatbeker / Beker', deposit: 0.00, info: 'Hard kunststof materiaal.' },
@@ -79,7 +79,7 @@ const MOBILENET_MAP = {
   'packet': { category: 'plastic', label: 'Plastic Zakje / Wrapper', deposit: 0.00, info: 'Plastic snoep- of snackverpakking.' },
   'nipple': { category: 'plastic', label: 'Plastic Dop / Onderdeel', deposit: 0.00, info: 'Synthetisch plastic.' },
   'syringe': { category: 'plastic', label: 'Plastic Doseerspuitje', deposit: 0.00, info: 'Kunststof materiaal.' },
-  'hair spray': { category: 'statiegeld', label: 'Drankblikje / Blik (Statiegeld)', deposit: 0.15, info: 'Aluminium blikje of spuitbus met statiegeld.' },
+  'hair spray': { category: 'overig', label: 'Spuitbus / Verzorging (Restafval)', deposit: 0.00, info: 'Spuitbussen horen bij het restafval of KCA.' },
   'sunscreen': { category: 'plastic', label: 'Zonnebrand Fles (Plastic)', deposit: 0.00, info: 'Plastic flesverzorging.' },
   'bucket': { category: 'plastic', label: 'Plastic Emmer / Bak', deposit: 0.00, info: 'Hard polypropyleen plastic.' },
   'balloon': { category: 'plastic', label: 'Ballon / Rubber Elastomeer', deposit: 0.00, info: 'Synthetisch materiaal.' },
@@ -119,12 +119,18 @@ const MOBILENET_MAP = {
   'coffee cup': { category: 'overig', label: 'Wegwerp Koffiebeker (Restafval)', deposit: 0.00, info: 'Koffiebekers hebben een waterdichte plastic coating en mogen NIET bij oud papier!' },
   'cup': { category: 'overig', label: 'Drinkbeker (Restafval)', deposit: 0.00, info: 'Wegwerpbekers horen meestal bij het restafval.' },
   'cellular telephone': { category: 'overig', label: 'Smartphone (E-Waste)', deposit: 0.00, info: 'Elektronica hoort bij de Wecycle bak of de milieustraat.' },
+  'cellphone': { category: 'overig', label: 'Smartphone (E-Waste)', deposit: 0.00, info: 'Elektronica hoort bij de Wecycle bak of de milieustraat.' },
+  'cell phone': { category: 'overig', label: 'Smartphone (E-Waste)', deposit: 0.00, info: 'Elektronica hoort bij de Wecycle bak of de milieustraat.' },
+  'mobile phone': { category: 'overig', label: 'Smartphone (E-Waste)', deposit: 0.00, info: 'Elektronica hoort bij de Wecycle bak of de milieustraat.' },
+  'hand-held computer': { category: 'overig', label: 'Smartphone / Tablet (E-Waste)', deposit: 0.00, info: 'Elektronica hoort bij de Wecycle bak of de milieustraat.' },
+  'ipod': { category: 'overig', label: 'Smartphone / Mediaspeler (E-Waste)', deposit: 0.00, info: 'Elektronica hoort bij de Wecycle bak.' },
+  'laptop': { category: 'overig', label: 'Laptop / Computer (E-Waste)', deposit: 0.00, info: 'Elektronica hoort bij de milieustraat.' },
   'mouse': { category: 'overig', label: 'Computermuis (E-Waste)', deposit: 0.00, info: 'Kleine elektronica inleveren bij speciaal inzamelpunt.' },
   'keyboard': { category: 'overig', label: 'Toetsenbord (E-Waste)', deposit: 0.00, info: 'Elektrisch afval.' },
   'remote control': { category: 'overig', label: 'Afstandsbediening (E-Waste)', deposit: 0.00, info: 'Bevat batterijen en printplaat: Wecycle bak.' },
   'shoe': { category: 'overig', label: 'Schoen (Textiel / Rest)', deposit: 0.00, info: 'Kledingcontainer of restafval.' },
   'sneaker': { category: 'overig', label: 'Sportschoen (Restafval)', deposit: 0.00, info: 'Versleten schoeisel hoort bij het restafval.' },
-  'lighter': { category: 'statiegeld', label: 'Drankblikje (Statiegeld)', deposit: 0.15, info: 'Cilindrisch aluminium blikje met statiegeld.' },
+  'lighter': { category: 'overig', label: 'Aansteker (Restafval)', deposit: 0.00, info: 'Aanstekers horen bij het restafval.' },
   'candle': { category: 'overig', label: 'Kaars / Was (Restafval)', deposit: 0.00, info: 'Kaarsvet hoort bij restafval.' }
 };
 
@@ -1101,7 +1107,7 @@ class WasteAI {
     if (AppState.cocoModel) {
       try {
         const cocoPredictions = await AppState.cocoModel.detect(videoElement);
-        const wasteCocoClasses = ['bottle', 'wine glass', 'cup', 'banana', 'apple', 'sandwich', 'orange', 'broccoli', 'pizza', 'donut', 'book', 'cell phone', 'scissors', 'remote'];
+        const wasteCocoClasses = ['bottle', 'wine glass', 'cup', 'banana', 'apple', 'sandwich', 'orange', 'broccoli', 'pizza', 'donut', 'book', 'cell phone', 'scissors', 'remote', 'laptop'];
 
         const validObjects = cocoPredictions.filter(p => wasteCocoClasses.includes(p.class) && p.score > 0.38);
         if (validObjects.length > 0) {
@@ -1116,54 +1122,29 @@ class WasteAI {
             score: topObj.score
           };
           boxCanvas = Camera.getCroppedBoxCanvas(detectedWasteBox);
+
+          // Directe herkenning van smartphone of elektronica door COCO-SSD
+          if (topObj.class === 'cell phone' || topObj.class === 'remote' || topObj.class === 'laptop') {
+            AppState.trackedObjects = [{
+              x: detectedWasteBox.x,
+              y: detectedWasteBox.y,
+              width: detectedWasteBox.width,
+              height: detectedWasteBox.height,
+              label: 'Smartphone (E-Waste)',
+              category: 'overig',
+              confidence: topObj.score
+            }];
+            return {
+              category: 'overig',
+              label: 'Smartphone / Telefoon (E-Waste)',
+              confidence: topObj.score,
+              deposit: 0.00,
+              info: 'Elektronica hoort bij de Wecycle bak of de milieustraat, niet in de prullenbak.'
+            };
+          }
         }
       } catch (e) {
         console.warn('COCO detect error:', e);
-      }
-    }
-
-    // PASS 1.5: Directe Visuele Materiaal & Blikjesscanner (Red Bull & Metallic Drankblikjes)
-    // Werkt direct op pixelkleuren & reflecties van de COCO box of het richtkruis
-    const sampleCanvas = boxCanvas || Camera.getCenterROICanvas();
-    if (sampleCanvas) {
-      const visual = this.analyzeVisualSignature(sampleCanvas);
-      if (visual.isRedBull) {
-        if (detectedWasteBox) {
-          AppState.trackedObjects = [{
-            x: detectedWasteBox.x,
-            y: detectedWasteBox.y,
-            width: detectedWasteBox.width,
-            height: detectedWasteBox.height,
-            label: 'Red Bull Blikje',
-            category: 'statiegeld',
-            confidence: 0.99
-          }];
-        }
-        return {
-          category: 'statiegeld',
-          label: 'Red Bull Energy Drink (Statiegeld Blikje)',
-          confidence: 0.99,
-          deposit: 0.15,
-          info: 'Red Bull aluminium blikje met statiegeldlogo herkend. Waarde: €0,15.'
-        };
-      }
-      if (visual.isCocaCola) {
-        return {
-          category: 'statiegeld',
-          label: 'Coca-Cola / Frisdrankblikje (Statiegeld)',
-          confidence: 0.98,
-          deposit: 0.15,
-          info: 'Aluminium frisdrankblikje met statiegeldlogo herkend. Waarde: €0,15.'
-        };
-      }
-      if (visual.isMetallicCan) {
-        return {
-          category: 'statiegeld',
-          label: 'Drankblikje Aluminium (Statiegeld)',
-          confidence: 0.97,
-          deposit: 0.15,
-          info: 'Aluminium drankblikje met statiegeldlogo herkend. Waarde: €0,15.'
-        };
       }
     }
 
@@ -1238,27 +1219,27 @@ class WasteAI {
         totalSampled++;
 
         // Zilver / aluminium reflectie (helder neutraal grijs/wit van blikjesrand)
-        if (r > 120 && g > 120 && b > 120 && Math.abs(r - g) < 28 && Math.abs(g - b) < 28) {
+        if (r > 130 && g > 130 && b > 130 && Math.abs(r - g) < 20 && Math.abs(g - b) < 20) {
           silverMetallic++;
         }
         // Felle witte specular glans (reflectie op gebogen aluminium cilinder)
-        if (r > 200 && g > 200 && b > 200) {
+        if (r > 220 && g > 220 && b > 220) {
           brightSpecular++;
         }
         // Red Bull diepblauw (duidelijk meer blauw dan rood/groen)
-        if (b > 75 && b > r + 15 && b > g + 10) {
+        if (b > 90 && b > r + 30 && b > g + 20) {
           royalBlue++;
         }
         // Rood logo of Coca-Cola rood
-        if (r > 130 && r > g * 1.35 && r > b * 1.35) {
+        if (r > 140 && r > g * 1.5 && r > b * 1.5) {
           redLogoOrCan++;
         }
         // Geel (zonnetje van Red Bull)
-        if (r > 135 && g > 115 && b < 100) {
+        if (r > 150 && g > 130 && b < 80) {
           yellowLogo++;
         }
         // Heineken / Sprite groen
-        if (g > 100 && g > r * 1.25 && g > b * 1.15) {
+        if (g > 110 && g > r * 1.35 && g > b * 1.25) {
           greenCan++;
         }
       }
@@ -1270,11 +1251,11 @@ class WasteAI {
       const yellowRatio = yellowLogo / totalSampled;
       const greenRatio = greenCan / totalSampled;
 
-      // Red Bull kenmerkt zich door blauw + (zilver/specular OF logo rood/geel)
-      const isRedBull = (blueRatio > 0.015 && (silverRatio > 0.03 || specRatio > 0.008 || redRatio > 0.008 || yellowRatio > 0.005));
-      const isCocaCola = (redRatio > 0.06 && (silverRatio > 0.02 || specRatio > 0.008));
-      const isGreenCan = (greenRatio > 0.05);
-      const isMetallicCan = (silverRatio > 0.06 && specRatio > 0.008);
+      // Een echt Red Bull blikje heeft een significant deel diepblauw EN zilver aluminium én logo-accenten
+      const isRedBull = (blueRatio > 0.08 && silverRatio > 0.08 && (redRatio > 0.015 || yellowRatio > 0.01 || specRatio > 0.02));
+      const isCocaCola = (redRatio > 0.22 && (silverRatio > 0.05 || specRatio > 0.02));
+      const isGreenCan = (greenRatio > 0.15 && (silverRatio > 0.05 || specRatio > 0.02));
+      const isMetallicCan = (silverRatio > 0.18 && specRatio > 0.03);
 
       return { isRedBull, isCocaCola, isGreenCan, isMetallicCan };
     } catch (e) {
@@ -1309,6 +1290,18 @@ class WasteAI {
       };
     }
 
+    // 1b. Check of MobileNet een smartphone of consumentenelektronica detecteert
+    const phoneKeywords = ['cellular telephone', 'cellphone', 'cell phone', 'mobile phone', 'hand-held computer', 'ipod', 'remote control', 'screen', 'laptop', 'notebook computer'];
+    if (phoneKeywords.some(k => topLower.includes(k))) {
+      return {
+        category: 'overig',
+        label: 'Smartphone / Telefoon (E-Waste)',
+        confidence: Math.max(0.82, topPred.probability),
+        deposit: 0.00,
+        info: 'Elektronica hoort bij de Wecycle bak of de milieustraat, niet in de prullenbak.'
+      };
+    }
+
     // 2. Visuele reflectie & kleuranalyse (specifiek voor Red Bull & blikjes)
     const visual = this.analyzeVisualSignature(inputCanvas || Camera.roiCanvas);
 
@@ -1327,17 +1320,29 @@ class WasteAI {
     };
 
     // Sleutelwoorden die duiden op drankverpakkingen (blikjes, flessen)
-    const drinkKeywords = ['can', 'beer can', 'tin can', 'pop bottle', 'soda bottle', 'beer bottle', 'water bottle', 'beverage can', 'aluminum can', 'flask', 'cocktail shaker', 'hair spray', 'spray', 'lighter', 'pill bottle'];
+    const drinkKeywords = ['can', 'beer can', 'tin can', 'pop bottle', 'soda bottle', 'beer bottle', 'water bottle', 'beverage can', 'aluminum can', 'flask', 'cocktail shaker', 'wine bottle'];
+
+    let isDrinkDetected = false;
 
     for (let i = 0; i < predictions.length; i++) {
       const pred = predictions[i];
       const lower = pred.className.toLowerCase();
       const weight = pred.probability * (1.0 - i * 0.12);
 
+      // Check of dit in onze MOBILENET_MAP staat
+      let mapMatch = null;
+      for (const [mapKey, mapVal] of Object.entries(MOBILENET_MAP)) {
+        if (lower.includes(mapKey)) {
+          mapMatch = mapVal;
+          break;
+        }
+      }
+
       // Check of dit een blikje / fles / drankverpakking representeert
-      const isDrink = drinkKeywords.some(k => lower.includes(k)) || (cocoBox && cocoBox.cocoClass === 'bottle');
+      const isDrink = drinkKeywords.some(k => lower.includes(k)) || (cocoBox && (cocoBox.cocoClass === 'bottle' || cocoBox.cocoClass === 'wine glass'));
       if (isDrink) {
-        scores.statiegeld += weight * 2.8; // Sterke bias naar statiegeld bij drankcilinders
+        isDrinkDetected = true;
+        scores.statiegeld += weight * 2.2;
         if (!labels.statiegeld) {
           if (visual.isRedBull) {
             labels.statiegeld = 'Red Bull Energy Drink (Statiegeld Blikje €0,15)';
@@ -1345,12 +1350,17 @@ class WasteAI {
             labels.statiegeld = 'Coca-Cola / Frisdrankblikje (Statiegeld €0,15)';
           } else if (visual.isMetallicCan) {
             labels.statiegeld = 'Aluminium Drankblikje (Statiegeld €0,15)';
-          } else if (lower.includes('can') || lower.includes('tin') || lower.includes('spray') || lower.includes('lighter')) {
+          } else if (mapMatch && mapMatch.category === 'statiegeld') {
+            labels.statiegeld = mapMatch.label;
+          } else if (lower.includes('can') || lower.includes('tin')) {
             labels.statiegeld = 'Drankblikje 250ml / 330ml (Statiegeld €0,15)';
           } else {
             labels.statiegeld = 'Drankfles / Flesje (Statiegeld €0,15)';
           }
         }
+      } else if (mapMatch) {
+        scores[mapMatch.category] += weight * 1.5;
+        if (!labels[mapMatch.category]) labels[mapMatch.category] = mapMatch.label;
       } else if (lower.includes('paper') || lower.includes('cardboard') || lower.includes('box') || lower.includes('envelope') || lower.includes('carton') || lower.includes('book')) {
         scores.papier += weight * 1.5;
         if (!labels.papier) labels.papier = 'Papier / Karton (' + pred.className.split(',')[0] + ')';
@@ -1363,16 +1373,18 @@ class WasteAI {
       }
     }
 
-    // 4. Pas visuele Red Bull / aluminium bonus toe
-    if (visual.isRedBull) {
-      scores.statiegeld += 1.2;
-      labels.statiegeld = 'Red Bull Energy Drink (Statiegeld Blikje €0,15)';
-    } else if (visual.isCocaCola) {
-      scores.statiegeld += 0.9;
-      labels.statiegeld = 'Coca-Cola / Frisdrankblikje (Statiegeld €0,15)';
-    } else if (visual.isMetallicCan) {
-      scores.statiegeld += 0.7;
-      if (!labels.statiegeld) labels.statiegeld = 'Aluminium Drankblikje (Statiegeld €0,15)';
+    // 4. Pas visuele Red Bull / aluminium bonus toe ALLEEN als er een drankverpakking gedetecteerd is
+    if (isDrinkDetected && scores.statiegeld > 0.3) {
+      if (visual.isRedBull) {
+        scores.statiegeld += 1.0;
+        labels.statiegeld = 'Red Bull Energy Drink (Statiegeld Blikje €0,15)';
+      } else if (visual.isCocaCola) {
+        scores.statiegeld += 0.8;
+        labels.statiegeld = 'Coca-Cola / Frisdrankblikje (Statiegeld €0,15)';
+      } else if (visual.isMetallicCan) {
+        scores.statiegeld += 0.6;
+        if (!labels.statiegeld) labels.statiegeld = 'Aluminium Drankblikje (Statiegeld €0,15)';
+      }
     }
 
     // 5. Bepaal winnende categorie
@@ -1385,10 +1397,10 @@ class WasteAI {
       }
     }
 
-    // Bereken betrouwbaarheidsscore (genormaliseerd naar 75-99%)
-    let finalConfidence = Math.min(0.99, Math.max(0.68, maxScore / 1.7));
-    if (visual.isRedBull || visual.isMetallicCan || visual.isCocaCola) {
-      finalConfidence = Math.max(0.96, finalConfidence);
+    // Bereken betrouwbaarheidsscore (genormaliseerd naar 70-98%)
+    let finalConfidence = Math.min(0.98, Math.max(0.68, maxScore / 1.7));
+    if (isDrinkDetected && (visual.isRedBull || visual.isMetallicCan || visual.isCocaCola)) {
+      finalConfidence = Math.max(0.94, finalConfidence);
     }
 
     const finalLabel = labels[bestCat] || topPred.className.split(',')[0];
