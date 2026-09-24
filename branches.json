@@ -1,6 +1,19 @@
 {
   "branches": [
     {
+      "branch": "SortCycle",
+      "commit": "e43784b",
+      "subject": "fix(ai): verhelp foutieve Red Bull herkenning en voeg smartphone e-waste detectie toe",
+      "dateIso": "2026-09-25 00:43:45 +0200",
+      "dateRelative": "zojuist",
+      "title": "SortCycle | AI Slimme Afval Sorteerder",
+      "description": "Automatische afvalherkenning en sorteer prullenbak met webcam AI & Arduino Web Serial voor schoolproject.",
+      "hasIndex": true,
+      "isMain": false,
+      "url": "./branches/SortCycle/",
+      "status": "ONLINE"
+    },
+    {
       "branch": "CRMSYSTEM",
       "commit": "2c4e108",
       "subject": "feat: complete GoHighLevel-style CRM system with visual automations and LinkedIn AI studio",
