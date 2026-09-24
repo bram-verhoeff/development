@@ -19,9 +19,10 @@
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.1/dist/mobilenet.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/knn-classifier@1.2.4/dist/knn-classifier.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.3/dist/coco-ssd.min.js"></script>
 
   <!-- Applicatie Stijlen -->
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=2.2">
 </head>
 <body>
   <div class="app-container">
@@ -71,9 +72,14 @@
             <i data-lucide="camera"></i>
             <span>Live Laptop Camera &amp; AI Scanner</span>
           </div>
-          <div class="hud-pill" id="model-mode-pill">
-            <i data-lucide="zap"></i>
-            <span id="model-mode-text">MobileNet v2 (Lokaal)</span>
+          <div class="header-cam-tools">
+            <select id="camera-device-select" class="camera-select-dropdown" title="Kies actieve camera">
+              <option value="">Standaard Webcam</option>
+            </select>
+            <div class="hud-pill" id="model-mode-pill">
+              <i data-lucide="zap"></i>
+              <span id="model-mode-text">Dual AI (MobileNet + COCO)</span>
+            </div>
           </div>
         </div>
 
@@ -81,17 +87,21 @@
         <div class="camera-container" id="camera-wrapper">
           <!-- Live Video Feed -->
           <video id="camera-video" playsinline autoplay muted class="mirrored"></video>
+          <!-- Vector Overlay Canvas voor real-time bounding boxes & tracking visuals -->
+          <canvas id="camera-overlay-canvas"></canvas>
           <!-- Canvas voor snapshots en verwerking -->
           <canvas id="canvas-output" style="display: none;"></canvas>
 
           <!-- Placeholder wanneer camera nog uit staat -->
           <div class="camera-placeholder" id="camera-placeholder">
-            <i data-lucide="video-off"></i>
+            <div class="placeholder-icon-wrap">
+              <i data-lucide="camera"></i>
+            </div>
             <h3>Camera staat uitgeschakeld</h3>
-            <p>Klik hieronder op "Start Camera" om je webcam te activeren en afval te scannen.</p>
-            <button id="btn-start-camera-placeholder" class="btn btn-primary">
+            <p>Klik hieronder op "Start Camera" om de webcam te activeren en afval direct te scannen.</p>
+            <button id="btn-start-camera-placeholder" class="btn btn-primary btn-lg">
               <i data-lucide="video"></i>
-              <span>Camera Inschakelen</span>
+              <span>Camera Inschakelen (1080p HD)</span>
             </button>
           </div>
 
@@ -104,13 +114,28 @@
               <span class="corner-bl"></span>
               <span class="corner-br"></span>
               <div class="scanner-laser" id="scanner-laser"></div>
+              <div class="reticle-center-target">
+                <div class="reticle-ring"></div>
+                <div class="reticle-dot"></div>
+              </div>
+              <span class="reticle-instruction-tag">PLAATS AFVAL IN RICHTKRUIS</span>
             </div>
 
             <!-- Bovenste Status Badge -->
             <div class="camera-badge-row">
-              <div class="hud-pill">
-                <i data-lucide="scan"></i>
-                <span id="hud-mode-indicator">SCAN READY</span>
+              <div class="badge-group-left">
+                <div class="hud-pill">
+                  <i data-lucide="scan"></i>
+                  <span id="hud-mode-indicator">SCAN READY</span>
+                </div>
+                <div class="hud-pill" id="hud-res-pill">
+                  <i data-lucide="monitor"></i>
+                  <span id="camera-res-text">HD 720p</span>
+                </div>
+              </div>
+              <div class="hud-pill hud-lock" id="hud-lock-pill">
+                <span class="status-dot"></span>
+                <span id="hud-lock-text">ZOEKT AFVAL</span>
               </div>
               <div class="hud-pill hud-fps">
                 <span id="hud-fps-text">-- FPS</span>
@@ -133,27 +158,79 @@
           </div>
         </div>
 
-        <!-- Camera Bedieningsknoppen -->
+        <!-- Camera Toolbar & Bedieningsknoppen -->
         <div class="camera-controls">
-          <div class="controls-left">
+          <div class="controls-primary-row">
             <button id="btn-toggle-camera" class="btn btn-primary">
               <i data-lucide="video"></i>
               <span id="camera-toggle-text">Start Camera</span>
             </button>
-            <button id="btn-scan-now" class="btn btn-accent" title="Maak direct een foto en voer een diepe scan uit">
+            <button id="btn-scan-now" class="btn btn-accent" title="Voer direct een directe scan uit">
               <i data-lucide="scan-line"></i>
               <span>Scan Nu</span>
+            </button>
+            <button id="btn-superscan-gemini" class="btn btn-superscan" title="Deep Vision AI Scan via Google Gemini">
+              <i data-lucide="sparkles"></i>
+              <span>⚡ AI SuperScan</span>
+            </button>
+            <button id="btn-toggle-clarity" class="btn btn-secondary active" title="Activeer helderheid & contrast boost">
+              <i data-lucide="sun-medium"></i>
+              <span>HD Helderheid</span>
+            </button>
+            <button id="btn-freeze-frame" class="btn btn-secondary" title="Pauzeer / hervat live frame ter inspectie">
+              <i data-lucide="pause"></i>
+              <span id="freeze-btn-text">Pauzeer</span>
             </button>
             <button id="btn-flip-mirror" class="btn btn-secondary" title="Spiegel het camerabeeld">
               <i data-lucide="flip-horizontal"></i>
             </button>
           </div>
 
-          <div class="controls-right">
-            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer; color: var(--text-secondary);">
-              <input type="checkbox" id="toggle-continuous-scan" checked>
-              <span>Continu Scannen</span>
-            </label>
+          <div class="controls-secondary-row">
+            <!-- Zoom Knoppen -->
+            <div class="zoom-controls-group">
+              <span class="control-label"><i data-lucide="zoom-in"></i> Zoom:</span>
+              <button class="btn-zoom active" data-zoom="1.0">1.0x</button>
+              <button class="btn-zoom" data-zoom="1.4">1.4x</button>
+              <button class="btn-zoom" data-zoom="1.8">1.8x</button>
+              <button class="btn-zoom" data-zoom="2.2">2.2x</button>
+            </div>
+
+            <!-- Toggles & Filters -->
+            <div class="camera-toggles-group">
+              <label class="toggle-label" title="Focus AI analyseerzone op het midden (filtert achtergrond en kleding weg)">
+                <input type="checkbox" id="toggle-center-focus" checked>
+                <span>Center Focus (ROI)</span>
+              </label>
+              <label class="toggle-label" title="Toon real-time AI bounding box kaders om gedetecteerde voorwerpen">
+                <input type="checkbox" id="toggle-bounding-boxes" checked>
+                <span>AI Kaders (COCO)</span>
+              </label>
+              <label class="toggle-label">
+                <input type="checkbox" id="toggle-continuous-scan" checked>
+                <span>Continu Scannen</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Snel-Sorteren / Presentatie Knoppen (Directe herkenning voor demo's) -->
+          <div class="presentation-quick-bar">
+            <span class="quick-bar-label"><i data-lucide="play-circle"></i> Snel Sorteren:</span>
+            <button class="btn-quick btn-quick-statiegeld" id="btn-quick-blikje" title="Sorteer direct als Red Bull / Drankblikje (€0,15 statiegeld) [Toets: B]">
+              <span>🥫 Blikje (Red Bull/Cola)</span>
+            </button>
+            <button class="btn-quick btn-quick-statiegeld" id="btn-quick-flesje" title="Sorteer direct als Statiegeldflesje (€0,25) [Toets: S]">
+              <span>🍾 Fles (€0,25)</span>
+            </button>
+            <button class="btn-quick btn-quick-plastic" id="btn-quick-plastic" title="Sorteer direct als Plastic PMD [Toets: P]">
+              <span>🟡 Plastic PMD</span>
+            </button>
+            <button class="btn-quick btn-quick-papier" id="btn-quick-papier" title="Sorteer direct als Papier/Karton [Toets: K]">
+              <span>🔵 Papier/Karton</span>
+            </button>
+            <button class="btn-quick btn-quick-overig" id="btn-quick-overig" title="Sorteer direct als Restafval [Toets: O]">
+              <span>🟣 Restafval</span>
+            </button>
           </div>
         </div>
 
@@ -164,13 +241,19 @@
               <i data-lucide="sparkles"></i>
               <span>Snel Inleren voor Schoolpresentatie (Eigen items toevoegen)</span>
             </div>
-            <button id="btn-reset-training" class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" title="Wis eigen ingeleerde items">
-              <i data-lucide="rotate-ccw"></i>
-              <span>Herstel Model</span>
-            </button>
+            <div class="training-actions">
+              <label class="toggle-label" title="Neem automatisch 5 foto's achter elkaar vanuit verschillende hoeken" style="margin-right: 8px;">
+                <input type="checkbox" id="toggle-burst-training" checked>
+                <span style="color: #38bdf8;">⚡ 5x Burst Mode</span>
+              </label>
+              <button id="btn-reset-training" class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" title="Wis eigen ingeleerde items">
+                <i data-lucide="rotate-ccw"></i>
+                <span>Herstel Model</span>
+              </button>
+            </div>
           </div>
           <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 10px;">
-            Houd een specifiek voorwerp (bijv. jouw schoolkantine beker of fles) voor de camera en klik op de juiste knop:
+            Houd een specifiek voorwerp (bijv. jouw schoolkantine beker of fles) in het richtkruis en klik op de gewenste categorie:
           </p>
           <div class="training-buttons">
             <button class="btn-train btn-train-plastic" id="btn-train-plastic" title="Leer dit camerabeeld in als Plastic">
@@ -582,6 +665,6 @@ void loop() {
   </div>
 
   <!-- Applicatie Script -->
-  <script src="main.js"></script>
+  <script src="main.js?v=2.2"></script>
 </body>
 </html>
