@@ -3,716 +3,585 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agevo BPMN Modeler | agevodev.nl</title>
-  <meta name="description" content="Moderne, professionele en razendsnelle BPMN 2.0 Modeler ontwikkeld door Agevo (agevodev.nl). Breng complexe bedrijfsprocessen en workflows helder in kaart.">
+  <title>SortCycle | AI Slimme Afval Sorteerder (Schoolproject)</title>
+  <meta name="description" content="Automatische afvalherkenning en sorteer prullenbak met webcam AI voor school. Herkent plastic, statiegeld flesjes/blikjes, papier en overig afval.">
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
 
-  <!-- Google Fonts: Plus Jakarta Sans -->
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
-  <!-- bpmn-js styles -->
-  <link rel="stylesheet" href="https://unpkg.com/bpmn-js@18.28.0/dist/assets/diagram-js.css">
-  <link rel="stylesheet" href="https://unpkg.com/bpmn-js@18.28.0/dist/assets/bpmn-js.css">
-  <link rel="stylesheet" href="https://unpkg.com/bpmn-js@18.28.0/dist/assets/bpmn-font/css/bpmn.css">
-
-  <!-- Application styles -->
-  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- TensorFlow.js & Pretrained Modellen voor Offline Browser AI -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.1/dist/mobilenet.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/knn-classifier@1.2.4/dist/knn-classifier.min.js"></script>
+
+  <!-- Applicatie Stijlen -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="app" class="app-container">
-    <!-- Top Navigation & Toolbar -->
+  <div class="app-container">
+
+    <!-- ====================================================================
+         Top Navigatie & Header
+         ==================================================================== -->
     <header class="app-header">
-      <div class="header-left">
-        <a href="https://agevodev.nl" target="_blank" rel="noopener noreferrer" class="brand" title="AgevoDev — Tech Studio & Venture Builder (agevodev.nl)">
-          <div class="brand-logo">
-            <svg width="22" height="22" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="brandBracketGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-                  <stop offset="0%" stop-color="#4f46e5" />
-                  <stop offset="50%" stop-color="#6366f1" />
-                  <stop offset="100%" stop-color="#3b82f6" />
-                </linearGradient>
-                <linearGradient id="brandSlashGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-                  <stop offset="0%" stop-color="#6366f1" />
-                  <stop offset="100%" stop-color="#3b82f6" />
-                </linearGradient>
-                <linearGradient id="brandRightGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-                  <stop offset="0%" stop-color="#3b82f6" />
-                  <stop offset="100%" stop-color="#60a5fa" />
-                </linearGradient>
-              </defs>
-              <path d="M 36 22 L 14 45 L 36 68" stroke="url(#brandBracketGrad)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
-              <path d="M 54 20 L 40 70" stroke="url(#brandSlashGrad)" stroke-width="8" stroke-linecap="round" />
-              <path d="M 59 22 L 81 45 L 59 68" stroke="url(#brandRightGrad)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </div>
-          <div class="brand-text">
-            <span class="brand-title">Agevo<span class="brand-title-accent">Dev</span></span>
-            <span class="brand-badge">BPMN • agevodev.nl</span>
-          </div>
-        </a>
-
-        <div class="divider-v"></div>
-
-        <!-- Diagram Name Input -->
-        <div class="diagram-meta">
-          <input type="text" id="diagram-title" class="diagram-title-input" value="Mijn Bedrijfsproces" placeholder="Naam van proces..." title="Klik om diagramnaam te wijzigen">
-          <span id="save-status" class="save-status" title="Wijzigingen worden lokaal automatisch bewaard">
-            <i data-lucide="check-circle-2" class="status-icon"></i>
-            <span class="status-text">Opgeslagen</span>
-          </span>
+      <div class="brand-section">
+        <img src="assets/logo.svg" alt="SortCycle Logo" class="brand-logo-img">
+        <div class="system-status-pill" id="system-status">
+          <span class="status-dot"></span>
+          <span id="status-text">AI Model Inladen...</span>
         </div>
       </div>
 
       <div class="header-actions">
-        <!-- Bestand & Nieuw -->
-        <div class="action-group">
-          <button id="btn-new" class="btn btn-secondary" title="Nieuw blanco diagram aanmaken">
-            <i data-lucide="file-plus" class="btn-icon"></i>
-            <span>Nieuw</span>
-          </button>
-          
-          <button id="btn-open-file" class="btn btn-secondary" title="Bestaand .bpmn of .xml bestand openen">
-            <i data-lucide="folder-open" class="btn-icon"></i>
-            <span>Openen</span>
-          </button>
-          <input type="file" id="file-input" accept=".bpmn,.xml" style="display: none;">
+        <!-- Hardware / Arduino Koppeling knop -->
+        <button id="btn-connect-serial" class="btn btn-serial" title="Koppel een fysieke Arduino via USB (Web Serial)">
+          <i data-lucide="cpu"></i>
+          <span id="serial-btn-text">Arduino Koppelen</span>
+        </button>
 
-          <!-- Templates dropdown -->
-          <div class="dropdown-wrapper">
-            <button id="btn-templates-dropdown" class="btn btn-secondary dropdown-trigger" title="Kies een kant-en-klaar voorbeeld">
-              <i data-lucide="layout-template" class="btn-icon"></i>
-              <span>Sjablonen</span>
-              <i data-lucide="chevron-down" class="chevron-icon"></i>
-            </button>
-            <div id="templates-menu" class="dropdown-menu">
-              <div class="dropdown-header">HHS BPMN-Reader Modellen (Paul de Vries)</div>
-              <button class="dropdown-item" data-template="reader-plank">
-                <i data-lucide="git-branch"></i>
-                <div class="item-text">
-                  <strong>Figuur 3: Bevestigen van een plank</strong>
-                  <small>XOR Keuze, Control task &amp; Merge XOR</small>
-                </div>
-              </button>
-              <button class="dropdown-item" data-template="reader-diner">
-                <i data-lucide="utensils"></i>
-                <div class="item-text">
-                  <strong>Figuur 13 &amp; 22: Diner Keuzemenu</strong>
-                  <small>Inclusive Gateway (IOR) &amp; Default Flow (\)</small>
-                </div>
-              </button>
-              <button class="dropdown-item" data-template="reader-parallel">
-                <i data-lucide="split"></i>
-                <div class="item-text">
-                  <strong>Figuur 18: Parallel Proces</strong>
-                  <small>AND-split en AND-join synchronisatie</small>
-                </div>
-              </button>
-              <button class="dropdown-item" data-template="reader-data">
-                <i data-lucide="database"></i>
-                <div class="item-text">
-                  <strong>Figuur 25 &amp; 27: Dataflow &amp; Netto Data</strong>
-                  <small>Data Objects [draft], Data Store &amp; Associaties</small>
-                </div>
-              </button>
-              <button class="dropdown-item" data-template="reader-pools">
-                <i data-lucide="columns-2"></i>
-                <div class="item-text">
-                  <strong>Figuur 31: Twee Pools &amp; Message Flows</strong>
-                  <small>Klant (Black Box), Organisatie &amp; Swimlanes</small>
-                </div>
-              </button>
+        <!-- Arduino Code Bekijken Modal Trigger -->
+        <button id="btn-open-arduino-code" class="btn btn-secondary" title="Bekijk en kopieer de Arduino C++ code voor servomotoren">
+          <i data-lucide="code-2"></i>
+          <span>Arduino Code</span>
+        </button>
 
-              <div class="dropdown-divider"></div>
-              <div class="dropdown-header">Bedrijfsproces Sjablonen</div>
-              <button class="dropdown-item" data-template="swimlane">
-                <i data-lucide="columns-2"></i>
-                <div class="item-text">
-                  <strong>Basis Pool &amp; Swimlanes</strong>
-                  <small>Klant &amp; Agevo met 2 banen</small>
-                </div>
-              </button>
-              <button class="dropdown-item" data-template="order-to-cash">
-                <i data-lucide="shopping-cart"></i>
-                <div class="item-text">
-                  <strong>Order-to-Cash Proces</strong>
-                  <small>Uitgebreid proces met XOR &amp; AND gateways</small>
-                </div>
-              </button>
-              <button class="dropdown-item" data-template="exam">
-                <i data-lucide="layers"></i>
-                <div class="item-text">
-                  <strong>SaaS Project &amp; Delivery Flow</strong>
-                  <small>Scope, architectuur, CI/CD &amp; rollout</small>
-                </div>
-              </button>
-              <button class="dropdown-item" data-template="incident">
-                <i data-lucide="headphones"></i>
-                <div class="item-text">
-                  <strong>Klachten- &amp; Incidentafhandeling</strong>
-                  <small>Eerste- en tweedelijns escalatie</small>
-                </div>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="divider-v"></div>
-
-        <!-- Export opties -->
-        <div class="action-group">
-          <div class="dropdown-wrapper">
-            <button id="btn-export-dropdown" class="btn btn-primary dropdown-trigger" title="Exporteer als afbeelding of BPMN 2.0 bestand">
-              <i data-lucide="download" class="btn-icon"></i>
-              <span>Exporteren</span>
-              <i data-lucide="chevron-down" class="chevron-icon"></i>
-            </button>
-            <div id="export-menu" class="dropdown-menu dropdown-menu-right">
-              <div class="dropdown-header">Exporteren & Delen</div>
-              <button id="btn-export-png" class="dropdown-item">
-                <i data-lucide="image"></i>
-                <div class="item-text">
-                  <strong>Afbeelding (PNG)</strong>
-                  <small>Haarscherp voor documenten en presentaties</small>
-                </div>
-              </button>
-              <button id="btn-export-svg" class="dropdown-item">
-                <i data-lucide="file-code"></i>
-                <div class="item-text">
-                  <strong>Vector (SVG)</strong>
-                  <small>Schaalbaar grafisch vectorbestand</small>
-                </div>
-              </button>
-              <div class="dropdown-divider"></div>
-              <button id="btn-export-bpmn" class="dropdown-item">
-                <i data-lucide="file-text"></i>
-                <div class="item-text">
-                  <strong>BPMN 2.0 XML (.bpmn)</strong>
-                  <small>Standaardformaat voor Camunda & BPM engines</small>
-                </div>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="divider-v"></div>
-
-        <!-- HHS Regelcontrole, Help, Sneltoetsen & Agevo Link -->
-        <div class="action-group">
-          <button id="btn-validate-rules" class="btn btn-warning-soft" title="Controleer diagram volgens de HHS BPMN-reader regels">
-            <i data-lucide="shield-check" class="btn-icon"></i>
-            <span>HHS Regelcheck</span>
-            <span id="rules-indicator-badge" class="badge-status badge-ok">0 fouten</span>
-          </button>
-
-          <button id="btn-cheatsheet" class="btn btn-accent" title="BPMN 2.0 Spiekbrief & Modelleringsrichtlijnen">
-            <i data-lucide="book-open" class="btn-icon"></i>
-            <span>BPMN Spiekbrief</span>
-          </button>
-          
-          <button id="btn-shortcuts" class="btn btn-icon-only" title="Sneltoetsen bekijken">
-            <i data-lucide="keyboard"></i>
-          </button>
-
-          <a href="https://agevodev.nl" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-website" title="Bezoek agevodev.nl (opent in nieuw tabblad)">
-            <i data-lucide="external-link" class="btn-icon"></i>
-            <span>agevodev.nl</span>
-          </a>
-        </div>
+        <!-- Instellingen / Gemini API Key -->
+        <button id="btn-open-settings" class="btn btn-secondary" title="Configureer AI instellingen of Gemini API">
+          <i data-lucide="settings"></i>
+          <span>Instellingen</span>
+        </button>
       </div>
     </header>
 
-    <!-- Sub-bar: Canvas Controls & Kleuren & Snelle Acties -->
-    <div class="canvas-controls-bar">
-      <!-- Sidebar Toggle -->
-      <button id="btn-toggle-sidebar" class="tool-btn active" title="Gereedschapskist tonen/verbergen (Zijbalk)">
-        <i data-lucide="panel-left"></i>
-      </button>
+    <!-- ====================================================================
+         Hoofd Dashboard: Camera & Sorteerder Grid
+         ==================================================================== -->
+    <main class="main-grid">
 
-      <div class="cluster-divider"></div>
-
-      <!-- Undo / Redo -->
-      <div class="control-cluster">
-        <button id="btn-undo" class="tool-btn" title="Ongedaan maken (Ctrl+Z)" disabled>
-          <i data-lucide="undo-2"></i>
-        </button>
-        <button id="btn-redo" class="tool-btn" title="Opnieuw (Ctrl+Y)" disabled>
-          <i data-lucide="redo-2"></i>
-        </button>
-      </div>
-
-      <div class="cluster-divider"></div>
-
-      <!-- Zoom and View -->
-      <div class="control-cluster">
-        <button id="btn-zoom-in" class="tool-btn" title="Inzoomen">
-          <i data-lucide="zoom-in"></i>
-        </button>
-        <button id="btn-zoom-out" class="tool-btn" title="Uitzoomen">
-          <i data-lucide="zoom-out"></i>
-        </button>
-        <button id="btn-zoom-fit" class="tool-btn" title="Passend maken op scherm (Fit)">
-          <i data-lucide="maximize-2"></i>
-        </button>
-        <button id="btn-zoom-reset" class="tool-btn" title="Reset naar 100%">
-          <span class="zoom-level" id="zoom-level-label">100%</span>
-        </button>
-      </div>
-
-      <div class="cluster-divider"></div>
-
-      <!-- Color Marker for Elements -->
-      <div class="control-cluster color-picker-cluster" title="Kleur geselecteerde elementen (Happy path, foutpad, etc.)">
-        <span class="cluster-label">Kleurmarkering:</span>
-        <button class="color-dot-btn" data-color="default" title="Standaard / Reset" style="--dot-color: #64748b;"></button>
-        <button class="color-dot-btn" data-color="success" title="Happy Path / Goedkeuring (Groen)" style="--dot-color: #10b981;"></button>
-        <button class="color-dot-btn" data-color="warning" title="Uitzondering / Wachten (Geel/Oranje)" style="--dot-color: #f59e0b;"></button>
-        <button class="color-dot-btn" data-color="danger" title="Foutafhandeling / Afwijzing (Rood)" style="--dot-color: #ef4444;"></button>
-        <button class="color-dot-btn" data-color="info" title="Systeem / Data / Informatie (Blauw)" style="--dot-color: #3b82f6;"></button>
-        <button class="color-dot-btn" data-color="purple" title="Speciaal / Extern (Paars)" style="--dot-color: #8b5cf6;"></button>
-      </div>
-
-      <!-- Context-gevoelige snelle acties voor geselecteerd element -->
-      <div id="selection-quick-actions" class="selection-quick-actions">
-        <!-- Dynamisch gevuld door main.js -->
-      </div>
-
-      <!-- Element Quick Info -->
-      <div class="selection-info" id="selection-info">
-        <span class="selection-placeholder">Geen element geselecteerd (klik op een vorm)</span>
-      </div>
-    </div>
-
-    <!-- Main Workspace: Tools Sidebar + Canvas Area -->
-    <div class="app-workspace">
-      <!-- HHS BPMN Tools Sidebar (Bijlage II & Hoofdstukken 2-5) -->
-      <aside class="bpmn-tools-sidebar" id="tools-sidebar">
-        <div class="sidebar-header">
-          <div class="sidebar-title">
-            <svg class="sidebar-title-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="3" width="7" height="7"></rect>
-              <rect x="14" y="3" width="7" height="7"></rect>
-              <rect x="14" y="14" width="7" height="7"></rect>
-              <rect x="3" y="14" width="7" height="7"></rect>
-            </svg>
-            <span>HHS BPMN Tools</span>
+      <!-- Linker Kolom: Camera Feed, Scanner HUD & Kalibratie Werkbalk -->
+      <section class="card camera-card">
+        <div class="card-header">
+          <div class="card-title">
+            <i data-lucide="camera"></i>
+            <span>Live Laptop Camera &amp; AI Scanner</span>
           </div>
-          <span class="sidebar-subtitle">Sleep of klik om te plaatsen</span>
+          <div class="hud-pill" id="model-mode-pill">
+            <i data-lucide="zap"></i>
+            <span id="model-mode-text">MobileNet v2 (Lokaal)</span>
+          </div>
         </div>
 
-        <div class="tools-scroll-container">
-          <!-- 1. Basis Symbolen (Hfdst 2) -->
-          <div class="tool-section">
-            <div class="tool-section-title">
-              <span>Basis Symbolen</span>
-              <span class="tool-section-badge">Hfdst 2</span>
-            </div>
-            <div class="tool-grid">
-              <div class="tool-card" draggable="true" data-bpmn-type="bpmn:StartEvent" title="Start Event (Dunne cirkel) - Begint een procesflow. Mag geen inkomende sequence flows hebben.">
-                <div class="tool-icon">
-                  <svg width="28" height="28" viewBox="0 0 32 32">
-                    <circle cx="16" cy="16" r="11" stroke="currentColor" stroke-width="2" fill="none"/>
-                  </svg>
-                </div>
-                <span class="tool-label">Start Event</span>
-              </div>
+        <!-- Camera Viewport Container -->
+        <div class="camera-container" id="camera-wrapper">
+          <!-- Live Video Feed -->
+          <video id="camera-video" playsinline autoplay muted class="mirrored"></video>
+          <!-- Canvas voor snapshots en verwerking -->
+          <canvas id="canvas-output" style="display: none;"></canvas>
 
-              <div class="tool-card" draggable="true" data-bpmn-type="bpmn:EndEvent" title="End Event (Dikke cirkel) - Beëindigt de process flow in voltooide tijd. Mag geen uitgaande sequence flows hebben.">
-                <div class="tool-icon">
-                  <svg width="28" height="28" viewBox="0 0 32 32">
-                    <circle cx="16" cy="16" r="10" stroke="currentColor" stroke-width="4" fill="none"/>
-                  </svg>
-                </div>
-                <span class="tool-label">End Event</span>
-              </div>
-
-              <div class="tool-card" draggable="true" data-bpmn-type="bpmn:Task" title="Task / Taak (Rechthoek met ronde hoeken) - Atomaire activiteit uitgevoerd door mens of applicatie. Naam: zelfstandig nw + werkwoord.">
-                <div class="tool-icon">
-                  <svg width="28" height="28" viewBox="0 0 32 32">
-                    <rect x="3" y="6" width="26" height="20" rx="5" stroke="currentColor" stroke-width="2" fill="none"/>
-                  </svg>
-                </div>
-                <span class="tool-label">Taak (Task)</span>
-              </div>
-
-              <div class="tool-card" draggable="true" data-bpmn-type="bpmn:SubProcess" data-subprocess-collapsed="true" title="Sub process [+] (Deelproces) - Logische reeks opeenvolgende taken die samengevat wordt. Kan worden ingezoomd.">
-                <div class="tool-icon">
-                  <svg width="28" height="28" viewBox="0 0 32 32">
-                    <rect x="3" y="5" width="26" height="20" rx="4" stroke="currentColor" stroke-width="2" fill="none"/>
-                    <rect x="12" y="19" width="8" height="8" stroke="currentColor" stroke-width="1.5" fill="#f8fafc"/>
-                    <path d="M16 21v4 M14 23h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                  </svg>
-                </div>
-                <span class="tool-label">Sub process [+]</span>
-              </div>
-            </div>
+          <!-- Placeholder wanneer camera nog uit staat -->
+          <div class="camera-placeholder" id="camera-placeholder">
+            <i data-lucide="video-off"></i>
+            <h3>Camera staat uitgeschakeld</h3>
+            <p>Klik hieronder op "Start Camera" om je webcam te activeren en afval te scannen.</p>
+            <button id="btn-start-camera-placeholder" class="btn btn-primary">
+              <i data-lucide="video"></i>
+              <span>Camera Inschakelen</span>
+            </button>
           </div>
 
-          <!-- 2. Gateways (Hfdst 2 & 3) -->
-          <div class="tool-section">
-            <div class="tool-section-title">
-              <span>Gateways (Splitsingen)</span>
-              <span class="tool-section-badge">Hfdst 3</span>
+          <!-- Scanner HUD Overlay -->
+          <div class="scanner-hud">
+            <!-- Richtkruis / Reticle in het midden -->
+            <div class="hud-reticle" id="hud-reticle">
+              <span class="corner-tl"></span>
+              <span class="corner-tr"></span>
+              <span class="corner-bl"></span>
+              <span class="corner-br"></span>
+              <div class="scanner-laser" id="scanner-laser"></div>
             </div>
-            <div class="tool-grid">
-              <div class="tool-card" draggable="true" data-bpmn-type="bpmn:ExclusiveGateway" title="Exclusive Gateway (XOR) - Exclusieve keuze (X): precies één pad wordt gekozen op basis van control task. Minimaal 2 conditional flows.">
-                <div class="tool-icon">
-                  <svg width="28" height="28" viewBox="0 0 32 32">
-                    <path d="M16 3 L29 16 L16 29 L3 16 Z" stroke="currentColor" stroke-width="2" fill="none"/>
-                    <path d="M11 11 L21 21 M21 11 L11 21" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-                  </svg>
-                </div>
-                <span class="tool-label">Exclusive (XOR)</span>
-              </div>
 
-              <div class="tool-card" draggable="true" data-bpmn-type="bpmn:ParallelGateway" title="Parallel Gateway (AND) - Parallelsplitsing (+): alle paden worden gelijktijdig uitgevoerd. Geen control task vereist.">
-                <div class="tool-icon">
-                  <svg width="28" height="28" viewBox="0 0 32 32">
-                    <path d="M16 3 L29 16 L16 29 L3 16 Z" stroke="currentColor" stroke-width="2" fill="none"/>
-                    <path d="M16 9 v14 M9 16 h14" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/>
-                  </svg>
-                </div>
-                <span class="tool-label">Parallel (AND)</span>
+            <!-- Bovenste Status Badge -->
+            <div class="camera-badge-row">
+              <div class="hud-pill">
+                <i data-lucide="scan"></i>
+                <span id="hud-mode-indicator">SCAN READY</span>
               </div>
-
-              <div class="tool-card" draggable="true" data-bpmn-type="bpmn:InclusiveGateway" title="Inclusive Gateway (IOR) - Inclusieve keuze (O): 1 of elke gewenste combinatie van paden wordt gelijktijdig gevolgd.">
-                <div class="tool-icon">
-                  <svg width="28" height="28" viewBox="0 0 32 32">
-                    <path d="M16 3 L29 16 L16 29 L3 16 Z" stroke="currentColor" stroke-width="2" fill="none"/>
-                    <circle cx="16" cy="16" r="6" stroke="currentColor" stroke-width="2.5" fill="none"/>
-                  </svg>
-                </div>
-                <span class="tool-label">Inclusive (IOR)</span>
+              <div class="hud-pill hud-fps">
+                <span id="hud-fps-text">-- FPS</span>
               </div>
             </div>
-          </div>
 
-          <!-- 3. Gegevens & Dataflow (Hfdst 4) -->
-          <div class="tool-section">
-            <div class="tool-section-title">
-              <span>Data Objects &amp; Data Store</span>
-              <span class="tool-section-badge">Hfdst 4</span>
-            </div>
-            <div class="tool-grid">
-              <div class="tool-card" draggable="true" data-bpmn-type="bpmn:DataObjectReference" title="Data Object (Ezelsor) - Tijdelijke informatie die een taak nodig heeft of oplevert. Kan toestand bevatten: Brief [draft].">
-                <div class="tool-icon">
-                  <svg width="28" height="28" viewBox="0 0 32 32">
-                    <path d="M8 4 h11 l6 6 v17 a1 1 0 0 1 -1 1 H8 a1 1 0 0 1 -1 -1 V5 a1 1 0 0 1 1 -1 Z" stroke="currentColor" stroke-width="2" fill="none"/>
-                    <path d="M19 4 v6 h6" stroke="currentColor" stroke-width="2" fill="none"/>
-                  </svg>
-                </div>
-                <span class="tool-label">Data Object</span>
+            <!-- Onderste Live Detectie Banner -->
+            <div class="hud-detection-banner" id="hud-banner">
+              <div class="hud-item-info">
+                <span class="hud-category-title" id="hud-item-category">Geen Object</span>
+                <span class="hud-category-name" id="hud-item-label">Houd afval voor de camera...</span>
               </div>
-
-              <div class="tool-card" draggable="true" data-bpmn-type="bpmn:DataStoreReference" title="Data Store (Trommel) - Permanente opslag (applicatie, digitaal systeem, archiefkast) die na afloop beschikbaar blijft.">
-                <div class="tool-icon">
-                  <svg width="28" height="28" viewBox="0 0 32 32">
-                    <ellipse cx="16" cy="8" rx="10" ry="3.5" stroke="currentColor" stroke-width="2" fill="none"/>
-                    <path d="M6 8 v14 c0 1.93 4.48 3.5 10 3.5 s10 -1.57 10 -3.5 v-14" stroke="currentColor" stroke-width="2" fill="none"/>
-                    <path d="M6 15 c0 1.93 4.48 3.5 10 3.5 s10 -1.57 10 -3.5" stroke="currentColor" stroke-width="2" fill="none"/>
-                  </svg>
+              <div class="hud-confidence-wrap">
+                <div class="hud-confidence-bar">
+                  <div class="hud-confidence-fill" id="hud-confidence-bar-fill"></div>
                 </div>
-                <span class="tool-label">Data Store</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- 4. Organisatie: Pools & Lanes (Hfdst 5) -->
-          <div class="tool-section">
-            <div class="tool-section-title">
-              <span>Organisatie (Pools &amp; Lanes)</span>
-              <span class="tool-section-badge">Hfdst 5</span>
-            </div>
-            <div class="tool-grid">
-              <div class="tool-card" draggable="true" data-bpmn-type="bpmn:Participant" title="Pool (Organisatie) - Eén organisatie met eigen aansturing. Kan White Box (met taken) of Black Box (zonder interne taken) zijn.">
-                <div class="tool-icon">
-                  <svg width="28" height="28" viewBox="0 0 32 32">
-                    <rect x="3" y="6" width="26" height="20" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
-                    <path d="M9 6 v20" stroke="currentColor" stroke-width="2"/>
-                  </svg>
-                </div>
-                <span class="tool-label">Pool</span>
-              </div>
-
-              <div class="tool-card" data-action="add-lane" title="Swimlane toevoegen - Functie/afdeling (swimlane owner) binnen de actieve pool.">
-                <div class="tool-icon">
-                  <svg width="28" height="28" viewBox="0 0 32 32">
-                    <rect x="3" y="6" width="26" height="20" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
-                    <path d="M9 6 v20 M9 16 h20" stroke="currentColor" stroke-width="1.8"/>
-                    <circle cx="23" cy="21" r="4.5" fill="#3b82f6"/>
-                    <path d="M23 18.5 v5 M20.5 21 h5" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round"/>
-                  </svg>
-                </div>
-                <span class="tool-label">+ Swimlane</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- 5. Verbindingen & Gereedschap -->
-          <div class="tool-section">
-            <div class="tool-section-title">
-              <span>Verbindingen &amp; Gereedschap</span>
-              <span class="tool-section-badge">Tools</span>
-            </div>
-            <div class="tool-action-list">
-              <button class="tool-action-row" id="tool-btn-connect" title="Verbindingstool (L) - Trek een Sequence Flow binnen een pool, Message Flow tussen pools, of Associatie naar Data.">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M5 12h14m-5-5l5 5-5 5"/>
-                </svg>
-                <div class="action-info">
-                  <strong>Verbindingstool</strong>
-                  <small>Flow / Message / Associatie</small>
-                </div>
-              </button>
-
-              <button class="tool-action-row" id="tool-btn-default-flow" title="Standaardstroom (\) - Zet een geselecteerde uitgaande sequence flow vanaf een XOR/IOR gateway om naar de uitzonderingsroute met een backslash.">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M5 12h14m-5-5l5 5-5 5"/>
-                  <path d="M7 8l4 8" stroke-width="2.5"/>
-                </svg>
-                <div class="action-info">
-                  <strong>Default Flow (\)</strong>
-                  <small>Uitzonderingsroute (nooduitgang)</small>
-                </div>
-              </button>
-
-              <button class="tool-action-row" id="tool-btn-netto-data" title="Netto Data toevoegen - Benoem het specifieke deel van gegevens op een associatie tussen task en data store.">
-                <i data-lucide="tag"></i>
-                <div class="action-info">
-                  <strong>Netto Data Annotatie</strong>
-                  <small>Specificeer deel van data store</small>
-                </div>
-              </button>
-
-              <button class="tool-action-row" id="tool-btn-data-status" title="Data Status toevoegen - Voeg status toe aan data object tussen rechte haken (bijv. [draft], [verbeterd]).">
-                <i data-lucide="file-check"></i>
-                <div class="action-info">
-                  <strong>Data Status [status]</strong>
-                  <small>Voeg [draft] / [gearchiveerd] toe</small>
-                </div>
-              </button>
-
-              <div class="action-row-divider"></div>
-
-              <div class="tool-pill-group">
-                <button class="tool-pill-btn" id="tool-btn-hand" title="Handgereedschap (H) - Canvas slepen/pannen">
-                  <i data-lucide="hand"></i>
-                  <span>Hand</span>
-                </button>
-                <button class="tool-pill-btn" id="tool-btn-lasso" title="Lassotool (Lasso) - Meerdere elementen selecteren">
-                  <i data-lucide="box-select"></i>
-                  <span>Lasso</span>
-                </button>
-                <button class="tool-pill-btn" id="tool-btn-space" title="Ruimtetool (S) - Ruimte tussen elementen invoegen of verkleinen">
-                  <i data-lucide="move"></i>
-                  <span>Ruimte</span>
-                </button>
+                <span class="hud-confidence-text" id="hud-confidence-val">0%</span>
               </div>
             </div>
           </div>
         </div>
-      </aside>
 
-      <!-- Main Canvas Area -->
-      <main class="canvas-wrapper">
-        <div id="canvas" class="bpmn-canvas"></div>
-        
-        <!-- Drag and Drop Overlay Indicator -->
-        <div id="drop-zone-overlay" class="drop-zone-overlay">
-          <div class="drop-zone-content">
-            <i data-lucide="upload-cloud" class="drop-icon"></i>
-            <h3>Sleep je .bpmn of .xml bestand hierheen</h3>
-            <p>Laat los om het model direct in te laden</p>
+        <!-- Camera Bedieningsknoppen -->
+        <div class="camera-controls">
+          <div class="controls-left">
+            <button id="btn-toggle-camera" class="btn btn-primary">
+              <i data-lucide="video"></i>
+              <span id="camera-toggle-text">Start Camera</span>
+            </button>
+            <button id="btn-scan-now" class="btn btn-accent" title="Maak direct een foto en voer een diepe scan uit">
+              <i data-lucide="scan-line"></i>
+              <span>Scan Nu</span>
+            </button>
+            <button id="btn-flip-mirror" class="btn btn-secondary" title="Spiegel het camerabeeld">
+              <i data-lucide="flip-horizontal"></i>
+            </button>
+          </div>
+
+          <div class="controls-right">
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer; color: var(--text-secondary);">
+              <input type="checkbox" id="toggle-continuous-scan" checked>
+              <span>Continu Scannen</span>
+            </label>
           </div>
         </div>
 
-        <!-- Floating Canvas Tip -->
-        <div class="canvas-tip">
-          <i data-lucide="sparkles"></i>
-          <span><strong>HHS Tip:</strong> Sleep symbolen direct uit de linker werkbalk, of gebruik de context-icoontjes om verbindingen te trekken!</span>
+        <!-- Snelle Kalibratie / Inleren Werkbalk (KNN Transfer Learning) -->
+        <div class="training-toolbar">
+          <div class="training-header">
+            <div class="training-title">
+              <i data-lucide="sparkles"></i>
+              <span>Snel Inleren voor Schoolpresentatie (Eigen items toevoegen)</span>
+            </div>
+            <button id="btn-reset-training" class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" title="Wis eigen ingeleerde items">
+              <i data-lucide="rotate-ccw"></i>
+              <span>Herstel Model</span>
+            </button>
+          </div>
+          <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 10px;">
+            Houd een specifiek voorwerp (bijv. jouw schoolkantine beker of fles) voor de camera en klik op de juiste knop:
+          </p>
+          <div class="training-buttons">
+            <button class="btn-train btn-train-plastic" id="btn-train-plastic" title="Leer dit camerabeeld in als Plastic">
+              <span>+ Inleren Plastic</span>
+              <span class="train-count" id="count-train-plastic">0 samples</span>
+            </button>
+            <button class="btn-train btn-train-statiegeld" id="btn-train-statiegeld" title="Leer dit camerabeeld in als Statiegeld fles/blik">
+              <span>+ Inleren Statiegeld</span>
+              <span class="train-count" id="count-train-statiegeld">0 samples</span>
+            </button>
+            <button class="btn-train btn-train-papier" id="btn-train-papier" title="Leer dit camerabeeld in als Papier/Karton">
+              <span>+ Inleren Papier</span>
+              <span class="train-count" id="count-train-papier">0 samples</span>
+            </button>
+            <button class="btn-train btn-train-overig" id="btn-train-overig" title="Leer dit camerabeeld in als Overig/Restafval">
+              <span>+ Inleren Overig</span>
+              <span class="train-count" id="count-train-overig">0 samples</span>
+            </button>
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+
+      <!-- Rechter Kolom: Smart Bin Simulator & AI Analyse Resultaat -->
+      <section class="card smart-bin-card">
+        <div class="card-header">
+          <div class="card-title">
+            <i data-lucide="trash-2"></i>
+            <span>Slimme Prullenbak Simulator</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <!-- Geluid Toggle -->
+            <label class="bin-sound-toggle" title="Geluidseffecten in- of uitschakelen">
+              <input type="checkbox" id="toggle-sound-effects" checked>
+              <i data-lucide="volume-2" style="width: 16px; height: 16px;"></i>
+              <span>SFX</span>
+            </label>
+            <!-- Spraak Toggle -->
+            <label class="bin-sound-toggle" title="Nederlandse spraakbegeleiding in- of uitschakelen">
+              <input type="checkbox" id="toggle-speech-synthesis" checked>
+              <i data-lucide="message-square" style="width: 16px; height: 16px;"></i>
+              <span>Spraak</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- 3D Prullenbak Behuizing & Sorteervakken -->
+        <div class="bin-simulator-container">
+          <!-- Top bar met Servomotor visualisatie -->
+          <div class="bin-top-controls">
+            <div class="servo-indicator">
+              <div class="servo-dial" id="servo-dial">
+                <div class="servo-needle" id="servo-needle"></div>
+              </div>
+              <div class="servo-text">
+                <span class="servo-label">Fysieke Servomotor Hoek</span>
+                <span class="servo-angle-value" id="servo-angle-display">0° (Ruststand)</span>
+              </div>
+            </div>
+            <div class="hud-pill" id="bin-status-pill">
+              <span id="bin-status-label">Alle kleppen gesloten</span>
+            </div>
+          </div>
+
+          <!-- De 4 Sorteervakken / Chutes -->
+          <div class="bins-chutes-grid">
+            <!-- 1. PLASTIC -->
+            <div class="bin-chute chute-plastic" id="chute-plastic">
+              <span class="chute-count-badge" id="badge-count-plastic">0</span>
+              <div class="chute-flap-outer">
+                <div class="chute-flap-door" id="door-plastic">
+                  <div class="chute-led-bar"></div>
+                </div>
+              </div>
+              <div class="chute-icon">🟡</div>
+              <div class="chute-name">PLASTIC</div>
+              <div class="chute-servo-tag">Servo: 45°</div>
+            </div>
+
+            <!-- 2. STATIEGELD -->
+            <div class="bin-chute chute-statiegeld" id="chute-statiegeld">
+              <span class="chute-count-badge" id="badge-count-statiegeld">0</span>
+              <div class="chute-flap-outer">
+                <div class="chute-flap-door" id="door-statiegeld">
+                  <div class="chute-led-bar"></div>
+                </div>
+              </div>
+              <div class="chute-icon">🟢</div>
+              <div class="chute-name">STATIEGELD</div>
+              <div class="chute-servo-tag">Servo: 90°</div>
+            </div>
+
+            <!-- 3. PAPIER -->
+            <div class="bin-chute chute-papier" id="chute-papier">
+              <span class="chute-count-badge" id="badge-count-papier">0</span>
+              <div class="chute-flap-outer">
+                <div class="chute-flap-door" id="door-papier">
+                  <div class="chute-led-bar"></div>
+                </div>
+              </div>
+              <div class="chute-icon">🔵</div>
+              <div class="chute-name">PAPIER</div>
+              <div class="chute-servo-tag">Servo: 135°</div>
+            </div>
+
+            <!-- 4. OVERIG -->
+            <div class="bin-chute chute-overig" id="chute-overig">
+              <span class="chute-count-badge" id="badge-count-overig">0</span>
+              <div class="chute-flap-outer">
+                <div class="chute-flap-door" id="door-overig">
+                  <div class="chute-led-bar"></div>
+                </div>
+              </div>
+              <div class="chute-icon">🟣</div>
+              <div class="chute-name">OVERIG</div>
+              <div class="chute-servo-tag">Servo: 180°</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Huidig Sorteerresultaat & Advies Paneel -->
+        <div class="classification-result-card" id="result-card">
+          <div class="result-main-header">
+            <div>
+              <span style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Gedetecteerd Materiaal</span>
+              <h2 class="result-detected-label" id="result-label">Nog niets gedetecteerd</h2>
+            </div>
+            <div class="result-badge badge-overig" id="result-category-badge">
+              <span id="result-category-text">Wachten op scan</span>
+            </div>
+          </div>
+
+          <!-- Statiegeld Alert Kaartje (zichtbaar bij statiegeld) -->
+          <div class="statiegeld-alert-box" id="statiegeld-banner" style="display: none;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span class="statiegeld-coin-anim">🪙</span>
+              <div>
+                <strong style="color: #ffffff; font-size: 0.95rem;">Statiegeld Waarde</strong>
+                <p style="font-size: 0.8rem; color: #a7f3d0;">Lever in bij de supermarkt of speciale automaat!</p>
+              </div>
+            </div>
+            <div class="statiegeld-coin-val" id="statiegeld-amount-display">+ €0,15</div>
+          </div>
+
+          <!-- Uitleg en recycle-instructie -->
+          <p class="result-explanation-text" id="result-explanation">
+            Richt je laptopcamera op een stuk afval (zoals een plastic flesje, blikje, vel papier of doosje). SortCycle analyseert automatisch het materiaal en opent de bijbehorende prullenbakklep.
+          </p>
+
+          <!-- Handmatige Test Knoppen (Handig voor presentatie) -->
+          <div class="result-actions">
+            <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">Handmatige test:</span>
+            <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;" onclick="SortApp.triggerSorting('plastic', 'Plastic Beker (Handmatig)', 0.95)">Plastic</button>
+            <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;" onclick="SortApp.triggerSorting('statiegeld', 'Blikje 330ml (Handmatig)', 0.98)">Statiegeld</button>
+            <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;" onclick="SortApp.triggerSorting('papier', 'Kartonnen Doos (Handmatig)', 0.92)">Papier</button>
+            <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;" onclick="SortApp.triggerSorting('overig', 'Restafval (Handmatig)', 0.89)">Overig</button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ====================================================================
+         Statistieken Dashboard & Impact Meters
+         ==================================================================== -->
+    <section class="stats-summary-grid">
+      <!-- 1. Totaal Items -->
+      <div class="stat-box">
+        <div class="stat-icon-wrap" style="color: #38bdf8;">
+          <i data-lucide="layers"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-label">Totaal Gesorteerd</span>
+          <span class="stat-value" id="stat-total-sorted">0 stuks</span>
+        </div>
+      </div>
+
+      <!-- 2. Statiegeld Portemonnee -->
+      <div class="stat-box">
+        <div class="stat-icon-wrap" style="color: #10b981;">
+          <i data-lucide="coins"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-label">Statiegeld Waarde</span>
+          <span class="stat-value" id="stat-statiegeld-value" style="color: #34d399;">€ 0,00</span>
+        </div>
+      </div>
+
+      <!-- 3. CO2 Besparing -->
+      <div class="stat-box">
+        <div class="stat-icon-wrap" style="color: #f59e0b;">
+          <i data-lucide="leaf"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-label">Geschatte CO2 Winst</span>
+          <span class="stat-value" id="stat-co2-saved">0,00 kg</span>
+        </div>
+      </div>
+
+      <!-- 4. Nauwkeurigheid -->
+      <div class="stat-box">
+        <div class="stat-icon-wrap" style="color: #a855f7;">
+          <i data-lucide="check-check"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-label">AI Betrouwbaarheid</span>
+          <span class="stat-value" id="stat-avg-confidence">-- %</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         Geschiedenis / Sorteerlogboek
+         ==================================================================== -->
+    <section class="card history-section">
+      <div class="card-header">
+        <div class="card-title">
+          <i data-lucide="history"></i>
+          <span>Recente Sorteringen &amp; Logboek</span>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button id="btn-export-data" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.8rem;" title="Download sorteergegevens als JSON/CSV voor schoolverslag">
+            <i data-lucide="download"></i>
+            <span>Export Logboek</span>
+          </button>
+          <button id="btn-clear-history" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.8rem;" title="Wis geschiedenis">
+            <i data-lucide="trash"></i>
+            <span>Wissen</span>
+          </button>
+        </div>
+      </div>
+      <div class="history-list" id="history-container">
+        <!-- Wordt dynamisch gevuld met gescande items -->
+        <p style="color: var(--text-muted); font-size: 0.85rem; padding: 10px;" id="history-empty-text">
+          Nog geen items gesorteerd. Start de camera om de eerste scans vast te leggen!
+        </p>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         Footer
+         ==================================================================== -->
+    <footer class="app-footer">
+      <div>
+        <strong>SortCycle</strong> — Slimme AI Afval Sorteerder voor Schoolproject &bull; Hardware ready met Arduino Web Serial
+      </div>
+      <div class="footer-links">
+        <a href="#arduino-modal" id="link-show-arduino">Arduino Instructies</a>
+        <a href="#settings-modal" id="link-show-settings">API &amp; Instellingen</a>
+      </div>
+    </footer>
+
   </div>
 
-  <!-- Modal: HHS BPMN Modelleringsregels Controleur -->
-  <div id="modal-rules-checker" class="modal-backdrop">
-    <div class="modal-card modal-lg">
+  <!-- ====================================================================
+       MODAL 1: Arduino Hardware & C++ Code Modal
+       ==================================================================== -->
+  <div class="modal-overlay" id="modal-arduino">
+    <div class="modal-window">
       <div class="modal-header">
-        <div class="modal-title-wrap">
-          <div class="modal-icon-badge" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; border-color: rgba(245, 158, 11, 0.3);">
-            <i data-lucide="shield-check"></i>
-          </div>
-          <div>
-            <h3>HHS BPMN Modelleringsregels Controleur</h3>
-            <p>Automatische validatie conform de officiële regels uit de BPMN-Reader (Haagse Hogeschool)</p>
-          </div>
-        </div>
-        <button class="btn-close-modal" id="btn-close-rules">
-          <i data-lucide="x"></i>
-        </button>
-      </div>
-
-      <div class="modal-body">
-        <div class="rules-summary-bar" id="rules-summary-bar">
-          <div class="rule-stat-item">
-            <span class="stat-label">Model Status</span>
-            <strong class="stat-value" id="stat-overall-status">Bezig met controleren...</strong>
-          </div>
-          <div class="rule-stat-item">
-            <span class="stat-label">Elementen geteld</span>
-            <strong class="stat-value" id="stat-elements-count">0</strong>
-          </div>
-          <div class="rule-stat-item">
-            <span class="stat-label">Fouten</span>
-            <strong class="stat-value stat-error" id="stat-errors-count">0</strong>
-          </div>
-          <div class="rule-stat-item">
-            <span class="stat-label">Aandachtspunten</span>
-            <strong class="stat-value stat-warning" id="stat-warnings-count">0</strong>
-          </div>
-        </div>
-
-        <div class="rules-checklist" id="rules-checklist-container">
-          <!-- Dynamisch gevuld door main.js met alle regels uit de reader -->
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <span class="footer-note">Gebaseerd op HHS BPMN-Reader (Deel 1 Basis semester door Paul de Vries).</span>
-        <button class="btn btn-primary" id="btn-close-rules-bottom">Sluiten</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal: BPMN Spiekbrief & Richtlijnen -->
-  <div id="modal-cheatsheet" class="modal-backdrop">
-    <div class="modal-card">
-      <div class="modal-header">
-        <div class="modal-title-wrap">
-          <div class="modal-icon-badge">
-            <i data-lucide="book-marked"></i>
-          </div>
-          <div>
-            <h3>BPMN 2.0 Spiekbrief &amp; HHS Richtlijnen</h3>
-            <p>Conform de BPMN-Reader Haagse Hogeschool HBO-ICT (Paul de Vries) &amp; Agevo</p>
-          </div>
-        </div>
-        <button class="btn-close-modal" id="btn-close-cheatsheet">
-          <i data-lucide="x"></i>
-        </button>
+        <h3 class="modal-title">Arduino &amp; Servomotor Hardware Koppeling</h3>
+        <button class="modal-close" id="btn-close-arduino-modal"><i data-lucide="x"></i></button>
       </div>
       <div class="modal-body">
-        <div class="cheatsheet-grid">
-          <!-- Card 1: Basis Symbolen -->
-          <div class="cheat-card">
-            <div class="cheat-card-header">
-              <span class="badge-num">1</span>
-              <h4>Basis Symbolen (Hoofdstuk 2)</h4>
-            </div>
-            <ul>
-              <li><strong>Taak (Task):</strong> Rechthoek met ronde hoeken. Atomair (niet verder gedetailleerd). Naam: <em>zelfstandig naamwoord + infinitief/imperatief werkwoord</em> (bijv. <code>Plank pakken</code>, <code>Klant controleren</code>).</li>
-              <li><strong>Start Event:</strong> Enkelvoudige dunne cirkel. Geen markering binnen de cirkel. Mag <strong>nooit een inkomende sequence flow</strong> hebben. Naam beschrijft de gebeurtenis (nooit 'Het proces start').</li>
-              <li><strong>End Event:</strong> Enkelvoudige dikke cirkel. Geen markering binnen de cirkel. Mag <strong>nooit een uitgaande sequence flow</strong> hebben. Naam in <em>voltooide tijd</em> (bijv. <code>Order is uitgeleverd</code>).</li>
-              <li><strong>Sequence Flow:</strong> Doorgetrokken lijn met één pijl. Bepaalt de volgorde van taken binnen één proces.</li>
-            </ul>
-          </div>
+        <p style="font-size: 0.88rem; color: var(--text-secondary);">
+          Met SortCycle kun je rechtstreeks een <strong>Arduino Uno, Nano of ESP32</strong> via de USB-kabel aansturen! Wanneer de AI een item herkent, stuurt de browser een serieel commando (bijv. <code>BIN:PLASTIC</code>) waardoor een servomotor fysiek naar de juiste klep draait.
+        </p>
 
-          <!-- Card 2: Gateways & Default Flow -->
-          <div class="cheat-card">
-            <div class="cheat-card-header">
-              <span class="badge-num">2</span>
-              <h4>Gateways &amp; Exception Issue (Hoofdstuk 2 &amp; 3)</h4>
-            </div>
-            <ul>
-              <li><strong>Exclusive Gateway (XOR - X):</strong> Slechts één conditie is waar. Voorafgegaan door een <em>control task</em> die de conditie vaststelt. Minimaal 2 uitgaande conditional flows.</li>
-              <li><strong>Inclusive Gateway (IOR - O):</strong> Eén of elke combinatie van condities kan waar zijn. Minimaal 1 en maximaal alle flows gaan door. Merge IOR aanbevolen.</li>
-              <li><strong>Parallel Gateway (AND - +):</strong> Alle uitgaande stromen worden gelijktijdig uitgevoerd. Geen control task vooraf vereist. Een AND-join wacht tot álle binnenkomende taken klaar zijn.</li>
-              <li><strong>Default Flow (Schuin streepje \):</strong> Nooduitgang voor het <em>gateway exception issue</em>: treedt in werking als geen enkele conditie waar is om stagnatie te voorkomen.</li>
-            </ul>
-          </div>
-
-          <!-- Card 3: Dataflow & Netto Data -->
-          <div class="cheat-card">
-            <div class="cheat-card-header">
-              <span class="badge-num">3</span>
-              <h4>Data Objects &amp; Data Store (Hoofdstuk 4)</h4>
-            </div>
-            <ul>
-              <li><strong>Data Object:</strong> Pagina met ezelsor. Tijdelijke data tijdens het proces. Toestand tussen rechte haken: <code>Brief [draft]</code>, <code>Brief [verbeterd]</code>.</li>
-              <li><strong>Data Store:</strong> Trommel met deksel. Permanente opslag (database, archief). Blijft bewaard na het proces.</li>
-              <li><strong>Associaties:</strong> Stippellijn met pijl. Naar de taak = <em>data input</em> (lezen). Naar het object/store = <em>data output</em> (schrijven).</li>
-              <li><strong>Verboden regel (Figuur 26):</strong> Data objects mogen <strong>NOOIT rechtstreeks gekoppeld worden aan een data store</strong> (moet altijd via een taak lopen!).</li>
-              <li><strong>Netto data:</strong> Als slechts een deel van een data store gebruikt wordt, noteer dit als annotatie op de associatie (bijv. <code>Dagomzet</code>).</li>
-            </ul>
-          </div>
-
-          <!-- Card 4: Pools, Lanes & Message Flow -->
-          <div class="cheat-card">
-            <div class="cheat-card-header">
-              <span class="badge-num">4</span>
-              <h4>Pools, Lanes &amp; Sub Process (Hoofdstuk 5)</h4>
-            </div>
-            <ul>
-              <li><strong>Pool:</strong> Eén organisatie met eigen aansturing. Kan White Box (interne taken zichtbaar) of Black Box (gesloten extern) zijn.</li>
-              <li><strong>Swimlane (Lane):</strong> Organisatorische functie / rol / afdeling binnen een pool. Sequence flows mogen vrij tussen lanes binnen dezelfde pool bewegen.</li>
-              <li><strong>Verboden regel (Figuur 36):</strong> Sequence flows mogen <strong>NOOIT de grens tussen twee pools overschrijden</strong>!</li>
-              <li><strong>Message Flow (onderbroken streepjeslijn met pijl):</strong> Uitsluitend toegestaan <strong>tussen twee verschillende pools</strong>. Nooit tussen taken binnen dezelfde pool!</li>
-              <li><strong>Sub process [+]:</strong> Rechthoek met [+] markering. Houdt details buiten zicht en bevat bij inzoomen een eigen BPMN-deelproces.</li>
-            </ul>
+        <!-- Serial Terminal Monitor -->
+        <div>
+          <label class="form-label" style="display: flex; justify-content: space-between;">
+            <span>Live USB Serial Monitor (TX/RX):</span>
+            <span id="serial-connection-state" style="color: #64748b;">Niet verbonden</span>
+          </label>
+          <div class="serial-console-box" id="serial-terminal-log">
+            <div class="serial-line">[Status] Seriële monitor gereed. Klik op 'Arduino Koppelen' om de COM-poort te kiezen.</div>
           </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <span class="footer-note">Haagse Hogeschool HBO-ICT BPMN-Reader &amp; <a href="https://agevodev.nl" target="_blank" rel="noopener noreferrer" style="color: var(--accent-blue); text-decoration: underline;">AgevoDev</a>.</span>
-        <button class="btn btn-primary" id="btn-close-cheatsheet-bottom">Begrepen</button>
+
+        <!-- Arduino C++ Code Box -->
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label class="form-label">Arduino Code (sortcycle_servo.ino):</label>
+            <button id="btn-copy-arduino-code" class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;">
+              <i data-lucide="copy"></i>
+              <span id="copy-code-text">Kopieer Code</span>
+            </button>
+          </div>
+          <div class="code-preview-box" id="arduino-code-display">/*
+  SortCycle - Arduino Servo & LED Controller voor Slimme Afvalbak
+  Geschikt voor Arduino Uno / Nano / Mega / ESP32
+*/
+#include &lt;Servo.h&gt;
+
+Servo sortServo;
+
+const int SERVO_PIN = 9;
+const int LED_PLASTIC = 4;
+const int LED_STATIEGELD = 5;
+const int LED_PAPIER = 6;
+const int LED_OVERIG = 7;
+
+void setup() {
+  Serial.begin(9600);
+  sortServo.attach(SERVO_PIN);
+  sortServo.write(0); // Ruststand
+
+  pinMode(LED_PLASTIC, OUTPUT);
+  pinMode(LED_STATIEGELD, OUTPUT);
+  pinMode(LED_PAPIER, OUTPUT);
+  pinMode(LED_OVERIG, OUTPUT);
+  
+  Serial.println("SortCycle Arduino Online! Wachten op commando's...");
+}
+
+void loop() {
+  if (Serial.available() > 0) {
+    String command = Serial.readStringUntil('\n');
+    command.trim();
+    command.toUpperCase();
+
+    // Schakel alle leds eerst uit
+    digitalWrite(LED_PLASTIC, LOW);
+    digitalWrite(LED_STATIEGELD, LOW);
+    digitalWrite(LED_PAPIER, LOW);
+    digitalWrite(LED_OVERIG, LOW);
+
+    if (command == "BIN:PLASTIC") {
+      digitalWrite(LED_PLASTIC, HIGH);
+      sortServo.write(45);
+      delay(2500);
+      sortServo.write(0);
+    } 
+    else if (command == "BIN:STATIEGELD") {
+      digitalWrite(LED_STATIEGELD, HIGH);
+      sortServo.write(90);
+      delay(2500);
+      sortServo.write(0);
+    } 
+    else if (command == "BIN:PAPIER") {
+      digitalWrite(LED_PAPIER, HIGH);
+      sortServo.write(135);
+      delay(2500);
+      sortServo.write(0);
+    } 
+    else if (command == "BIN:OVERIG") {
+      digitalWrite(LED_OVERIG, HIGH);
+      sortServo.write(180);
+      delay(2500);
+      sortServo.write(0);
+    }
+  }
+}</div>
+        </div>
+
+        <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 8px; padding: 12px; font-size: 0.8rem; color: #a7f3d0;">
+          💡 <strong>Tip voor je presentatie:</strong> Sluit een standaard SG90 servomotor aan op Pin 9 (Bruin=GND, Rood=5V, Oranje=Pin 9) en plak een pijltje of klepje op de servo. Wanneer je een blikje voor de webcam houdt, beweegt de fysieke servo automatisch mee!
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Modal: Sneltoetsen -->
-  <div id="modal-shortcuts" class="modal-backdrop">
-    <div class="modal-card modal-sm">
+  <!-- ====================================================================
+       MODAL 2: Instellingen & Google Gemini API Modal
+       ==================================================================== -->
+  <div class="modal-overlay" id="modal-settings">
+    <div class="modal-window">
       <div class="modal-header">
-        <div class="modal-title-wrap">
-          <div class="modal-icon-badge">
-            <i data-lucide="keyboard"></i>
-          </div>
-          <div>
-            <h3>Sneltoetsen</h3>
-            <p>Werk nog sneller met handige shortcuts</p>
-          </div>
-        </div>
-        <button class="btn-close-modal" id="btn-close-shortcuts">
-          <i data-lucide="x"></i>
-        </button>
+        <h3 class="modal-title">Instellingen &amp; AI Configuratie</h3>
+        <button class="modal-close" id="btn-close-settings-modal"><i data-lucide="x"></i></button>
       </div>
       <div class="modal-body">
-        <div class="shortcuts-list">
-          <div class="shortcut-row"><span class="shortcut-action">Tekst bewerken</span><kbd>Dubbelklik</kbd></div>
-          <div class="shortcut-row"><span class="shortcut-action">Ongedaan maken</span><kbd>Ctrl + Z</kbd></div>
-          <div class="shortcut-row"><span class="shortcut-action">Opnieuw uitvoeren</span><kbd>Ctrl + Y</kbd></div>
-          <div class="shortcut-row"><span class="shortcut-action">Element verwijderen</span><kbd>Delete</kbd> of <kbd>Backspace</kbd></div>
-          <div class="shortcut-row"><span class="shortcut-action">Canvas verschuiven (Pan)</span><kbd>Spatiebalk + Slepen</kbd></div>
-          <div class="shortcut-row"><span class="shortcut-action">In- en uitzoomen</span><kbd>Ctrl + Muiswiel</kbd></div>
-          <div class="shortcut-row"><span class="shortcut-action">Opslaan als .bpmn</span><kbd>Ctrl + S</kbd></div>
+        <!-- AI Engine Selectie -->
+        <div class="form-group">
+          <label class="form-label">AI Detectiemethode:</label>
+          <select id="select-ai-engine" class="form-input">
+            <option value="mobilenet">MobileNet v2 + KNN (Direct in browser, 100% offline, razendsnel)</option>
+            <option value="gemini">Google Gemini Flash Vision API (Diepe scan &amp; tekst/barcode herkenning)</option>
+          </select>
+        </div>
+
+        <!-- Gemini API Key Input -->
+        <div class="form-group" id="gemini-key-group">
+          <label class="form-label">Google Gemini API Key (Optioneel):</label>
+          <input type="password" id="input-gemini-key" class="form-input" placeholder="AIzaSy...">
+          <small style="color: var(--text-muted); font-size: 0.78rem;">
+            Als je een gratis Gemini API key invoert, analyseert Gemini Flash het etiket, het statiegeldlogo en barcode op de verpakking. Als je dit leeg laat, gebruikt SortCycle het supersnelle lokale MobileNet model of ingebouwde simulatie.
+          </small>
+        </div>
+
+        <!-- Drempelwaarde Confidence -->
+        <div class="form-group">
+          <label class="form-label">Minimale AI Zekerheidsdrempel (Confidence): <span id="val-confidence-threshold">45%</span></label>
+          <input type="range" id="range-confidence-threshold" min="20" max="85" value="45" style="accent-color: #10b981;">
+        </div>
+
+        <!-- Herstel knop -->
+        <div style="border-top: 1px solid var(--border-subtle); padding-top: 16px; display: flex; justify-content: space-between; align-items: center;">
+          <button id="btn-reset-all-stats" class="btn btn-secondary" style="color: #f87171; border-color: rgba(239, 68, 68, 0.3);">
+            <i data-lucide="trash-2"></i>
+            <span>Reset Alle Statistieken</span>
+          </button>
+          <button id="btn-save-settings" class="btn btn-primary">
+            <i data-lucide="check"></i>
+            <span>Instellingen Opslaan</span>
+          </button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Toast Notification Container -->
-  <div id="toast-container" class="toast-container"></div>
-
-  <!-- bpmn-js library -->
-  <script src="https://unpkg.com/bpmn-js@18.28.0/dist/bpmn-modeler.production.min.js"></script>
-
-  <!-- Application logic -->
+  <!-- Applicatie Script -->
   <script src="main.js"></script>
 </body>
 </html>
