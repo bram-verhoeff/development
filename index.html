@@ -1,109 +1,942 @@
 <!DOCTYPE html>
-<html lang="nl-NL">
+<html lang="nl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agevo // Bram Verhoeff</title>
-  <meta name="description" content="Agevo development testserver van Bram Verhoeff.">
-  <meta name="author" content="Bram Verhoeff">
-  <meta name="robots" content="noindex, nofollow">
+  <title>Bloeiende Landen | Regeneratief Voedselbos Zevenhoven</title>
+  <meta name="description" content="Bloeiende Landen is een regeneratief voedselbos van ca. 1 hectare langs de Kromme Mijdrecht in Zevenhoven. Ontdek onze 3 teeltsystemen, de 7 boslagen, rondleidingen en seizoensoogst.">
+  <meta name="keywords" content="Bloeiende Landen, voedselbos, Zevenhoven, regeneratieve landbouw, De Groene Jonker, Kromme Mijdrecht, Koen de Ridder, permacultuur, biodiversiteit, kleinfruit, kastanjes">
+  <meta name="author" content="Koen de Ridder - Bloeiende Landen">
+
+  <!-- Open Graph / Social Sharing -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.bloeiendelanden.nl/">
+  <meta property="og:title" content="Bloeiende Landen | Regeneratief Voedselbos Zevenhoven">
+  <meta property="og:description" content="Eetbare natuur in balans met het polderlandschap langs de Kromme Mijdrecht.">
+  <meta property="og:image" content="assets/hero-forest.jpg">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="apple-touch-icon" href="assets/favicon.svg">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..800;1,9..144,300..700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
-  <link rel="alternate icon" href="assets/logo.png">
   <link rel="stylesheet" href="style.css">
+
+  <!-- Structured Data (JSON-LD) for Local/Agricultural Project -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Bloeiende Landen",
+    "description": "Regeneratief voedselbos en natuurlandschap langs de Kromme Mijdrecht in Zevenhoven.",
+    "founder": {
+      "@type": "Person",
+      "name": "Koen de Ridder"
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Kade 9B",
+      "addressLocality": "Zevenhoven",
+      "addressRegion": "Zuid-Holland",
+      "addressCountry": "NL"
+    },
+    "url": "https://www.bloeiendelanden.nl/",
+    "email": "koen@bloeiendelanden.nl"
+  }
+  </script>
 </head>
 <body>
+  <!-- Header / Navigatie -->
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner container">
+      <a href="#hero" class="brand-link" aria-label="Bloeiende Landen Startpagina">
+        <img src="assets/logo.svg" alt="Bloeiende Landen Logo" class="brand-logo" width="230" height="48">
+      </a>
 
-  <!-- Top Header -->
-  <header class="header">
-    <div class="container header-inner">
-      <div class="brand">
-        <a href="./" class="brand-link" title="AgevoDev">
-          <picture>
-            <source srcset="assets/logo.svg" type="image/svg+xml">
-            <img src="assets/logo.png" alt="AgevoDev Software Development" class="brand-logo" height="38">
-          </picture>
+      <nav class="main-nav" id="mainNav" aria-label="Hoofdnavigatie">
+        <ul class="nav-list">
+          <li><a href="#over" class="nav-link">Over Ons</a></li>
+          <li><a href="#systemen" class="nav-link">De 3 Systemen</a></li>
+          <li><a href="#lagen" class="nav-link">7 Voedselboslagen</a></li>
+          <li><a href="#kalender" class="nav-link">Oogstkalender</a></li>
+          <li><a href="#bezoek" class="nav-link">Rondleidingen</a></li>
+          <li><a href="#locatie" class="nav-link">Locatie</a></li>
+          <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <a href="#bezoek" class="btn btn-primary btn-sm header-cta">
+          <span>Rondleiding Boeken</span>
+          <svg class="btn-arrow" viewBox="0 0 20 20" fill="none" width="16" height="16">
+            <path d="M4.166 10h11.667M10.833 5l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </a>
-        <div class="brand-sub-badge">
-          <span class="brand-author">Bram Verhoeff</span>
-        </div>
-      </div>
-      <div class="server-status">
-        <span class="status-dot"></span>
-        <span>Testserver Actief</span>
+
+        <button class="mobile-toggle" id="mobileMenuBtn" aria-expanded="false" aria-label="Menu openen of sluiten" aria-controls="mainNav">
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+        </button>
       </div>
     </div>
   </header>
 
-  <!-- Main Content -->
-  <main class="main-content">
-    <div class="container">
-      
-      <!-- Intro / Title -->
-      <div class="title-area">
-        <h1 class="page-title">Git Branches</h1>
-        <p class="page-subtitle">Kies een branch om het bijbehorende testproduct te openen:</p>
+  <main id="mainContent">
+    <!-- Hero Section -->
+    <section class="hero-section" id="hero">
+      <div class="hero-bg-wrapper">
+        <img src="assets/hero-forest.jpg" alt="Regeneratief Voedselbos Bloeiende Landen aan de Kromme Mijdrecht bij ochtendgloren" class="hero-bg-img" fetchpriority="high">
+        <div class="hero-overlay"></div>
       </div>
 
-      <!-- Branches Grid -->
-      <div class="branches-grid" id="branches-container">
-        <!-- Dynamically loaded via main.js -->
-        <div class="loading">Bezig met laden van branches...</div>
-      </div>
-
-      <!-- Custom Project Call to Action -->
-      <section class="cta-card">
-        <div class="cta-text">
-          <div class="cta-pill">
-            <span class="cta-pill-dot"></span>
-            <span>Maatwerk Software &amp; Web</span>
+      <div class="hero-container container">
+        <div class="hero-content">
+          <div class="hero-badge animate-fade-in">
+            <span class="badge-icon">🌿</span>
+            <span>Regeneratief Voedselbos &middot; Zevenhoven</span>
           </div>
-          <h2 class="cta-heading">Een eigen website of programma laten bouwen?</h2>
-          <p class="cta-sub">
-            Wil je ook een moderne website, webapplicatie of software op maat laten maken? Vraag vrijblijvend een offerte of kennismaking aan via <strong>agevodev.nl</strong>.
+
+          <h1 class="hero-title animate-fade-in-up">
+            Eetbare Natuur in Balans met het Polderlandschap
+          </h1>
+
+          <p class="hero-subtitle animate-fade-in-up delay-1">
+            Langs de oevers van de Kromme Mijdrecht, direct grenzend aan natuurgebied De Groene Jonker, laten we bijna 1 hectare veengrond opbloeien tot een rijk, eetbaar ecosysteem vol leven, biodiversiteit en gezonde oogst.
+          </p>
+
+          <div class="hero-buttons animate-fade-in-up delay-2">
+            <a href="#systemen" class="btn btn-primary btn-lg">
+              <span>Ontdek de 3 Bossystemen</span>
+              <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
+                <path d="M4.166 10h11.667M10.833 5l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+            <a href="#bezoek" class="btn btn-glass btn-lg">
+              <span>Bezoek of Werk Mee</span>
+            </a>
+          </div>
+
+          <div class="hero-stats animate-fade-in-up delay-3">
+            <div class="stat-item">
+              <span class="stat-number">9.734 m²</span>
+              <span class="stat-label">Levend Veengebied</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <span class="stat-number">3</span>
+              <span class="stat-label">Teeltsystemen</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <span class="stat-number">150+</span>
+              <span class="stat-label">Eetbare Soorten</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <span class="stat-number">100%</span>
+              <span class="stat-label">Natuurlijk & Gifvrij</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="scroll-down-hint">
+        <a href="#over" aria-label="Scroll naar beneden">
+          <span class="mouse-icon">
+            <span class="mouse-wheel"></span>
+          </span>
+          <span class="scroll-text">Ontdek meer</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Missie & Introductie Section -->
+    <section class="section about-section" id="over">
+      <div class="container">
+        <div class="grid-2-col about-grid">
+          <div class="about-text-column">
+            <div class="section-tag">
+              <span class="tag-dot"></span>
+              <span>Onze Filosofie</span>
+            </div>
+            <h2 class="section-title">
+              Bouwen aan een veerkrachtige toekomst op Hollandse veengrond
+            </h2>
+            <p class="lead-text">
+              In het typische veenweidegebied tussen Utrecht en Zuid-Holland startte <strong>Koen de Ridder</strong> in het najaar van 2025 met de realisatie van <strong>Bloeiende Landen</strong>. Waar voorheen monocultuur grasland lag, ontstaat nu een meerlagig eetbaar bos.
+            </p>
+            <p class="body-text">
+              Klassieke veenweides kampen met bodemdaling, koolstofuitstoot door oxidatie en verlies aan biodiversiteit. Met regeneratieve agroforestry keren we dit proces om: we houden water vast, voeden het bodemleven en bouwen organische stof op, terwijl we tegelijkertijd bessen, noten, fruit en theekruiden oogsten.
+            </p>
+
+            <div class="about-highlights">
+              <div class="highlight-item">
+                <div class="highlight-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3>Levend Bodemecosysteem</h3>
+                  <p>Herstel van schimmelnetwerken (mycorrhizae) en bodemorganismen zonder kunstmest of bestrijdingsmiddelen.</p>
+                </div>
+              </div>
+
+              <div class="highlight-item">
+                <div class="highlight-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 4a6 6 0 110 12 6 6 0 010-12z"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3>Verbinding met De Groene Jonker</h3>
+                  <p>Een ecologische stapsteen voor vogels, wilde bijen, vlinders en amfibieën direct langs de Kromme Mijdrecht.</p>
+                </div>
+              </div>
+
+              <div class="highlight-item">
+                <div class="highlight-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3>Kennisdeling & Gemeenschap</h3>
+                  <p>Ondersteund door het SBNL Natuurfonds en onderdeel van het landelijke netwerk <em>Voedsel uit het Bos</em>.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="founder-quote">
+              <div class="quote-mark">“</div>
+              <blockquote>
+                Een voedselbos bootst de veerkracht en zelfredzaamheid van een oerbos na. We werken niet tegen de natuur, maar dansen mee met haar natuurlijke cycli.
+              </blockquote>
+              <div class="founder-signature">
+                <strong>Koen de Ridder</strong> &mdash; <span>Oprichter Bloeiende Landen</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="about-media-column">
+            <div class="image-card-group">
+              <div class="image-wrapper main-img-wrap">
+                <img src="assets/community-tour.jpg" alt="Rondleiding en bodemonderzoek bij Bloeiende Landen met Koen de Ridder" class="rounded-image" loading="lazy">
+                <div class="image-badge">
+                  <span class="pulse-dot"></span>
+                  <span>Bodem & Gemeenschap in beweging</span>
+                </div>
+              </div>
+              <div class="floating-stat-card">
+                <div class="stat-icon">🌱</div>
+                <div class="stat-details">
+                  <h4>Veenbescherming</h4>
+                  <p>Minder inklinking & hogere grondwaterstanden</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- De 3 Voedselbossystemen Section -->
+    <section class="section systems-section" id="systemen">
+      <div class="container">
+        <div class="section-header text-center">
+          <div class="section-tag">
+            <span class="tag-dot"></span>
+            <span>Doordacht Landschapsontwerp</span>
+          </div>
+          <h2 class="section-title">De Drie Voedselbossystemen</h2>
+          <p class="section-lead">
+            Op ons perceel van 9.734 m² combineren we drie complementaire systemen die elk een eigen ecologische en maatschappelijke functie vervullen.
           </p>
         </div>
-        <div class="cta-action">
-          <a href="https://agevodev.nl" target="_blank" rel="noopener noreferrer" class="cta-btn">
-            <span>Aanvragen op agevodev.nl</span>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <path d="M7 17L17 7"></path>
-              <path d="M7 7h10v10"></path>
-            </svg>
-          </a>
-        </div>
-      </section>
 
-    </div>
+        <div class="systems-grid">
+          <!-- Systeem 1: Plukgedeelte -->
+          <article class="system-card" data-system="pluk">
+            <div class="system-card-top">
+              <div class="system-badge status-active">
+                <span class="badge-dot"></span>
+                <span>Aangeplant voorjaar 2026</span>
+              </div>
+              <div class="system-number">01</div>
+            </div>
+            <div class="system-icon-wrap">
+              <svg viewBox="0 0 48 48" fill="none" class="system-svg">
+                <circle cx="24" cy="24" r="22" stroke="#52b788" stroke-width="2" stroke-dasharray="4 2"/>
+                <path d="M24 10c0 0-8 6-8 14a8 8 0 0016 0c0-8-8-14-8-14z" fill="#52b788" opacity="0.3"/>
+                <path d="M24 10v18M18 20c2 2 6 2 6 2M30 20c-2 2-6 2-6 2" stroke="#2d6a4f" stroke-width="2.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3 class="system-title">Het Plukgedeelte</h3>
+            <p class="system-desc">
+              Het meest toegankelijke deel van het voedselbos, ontworpen voor kleinschalige oogst, wandelaars en plukbezoekers. Rijk aan kleinfruit, theekruiden en bloemen.
+            </p>
+            <div class="system-plantings">
+              <h4>Belangrijkste soorten:</h4>
+              <ul class="plant-tags">
+                <li>Rode & zwarte bessen</li>
+                <li>Kruisbessen & jostabessen</li>
+                <li>Frambozen & bramen</li>
+                <li>Eetbare bloemen</li>
+                <li>Munt & citroenmelisse</li>
+              </ul>
+            </div>
+            <div class="system-footer">
+              <span class="system-focus">Focus: Educatie, beleving & directe vers-oogst</span>
+            </div>
+          </article>
+
+          <!-- Systeem 2: Productiegedeelte -->
+          <article class="system-card highlighted-system" data-system="productie">
+            <div class="system-card-top">
+              <div class="system-badge status-upcoming">
+                <span class="badge-dot"></span>
+                <span>Winter 2026/2027</span>
+              </div>
+              <div class="system-number">02</div>
+            </div>
+            <div class="system-icon-wrap">
+              <svg viewBox="0 0 48 48" fill="none" class="system-svg">
+                <circle cx="24" cy="24" r="22" stroke="#d4a373" stroke-width="2"/>
+                <path d="M24 8v32M12 28c4-6 12-6 12 0 0-6 8-6 12 0" stroke="#b5835a" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="16" cy="18" r="4" fill="#d4a373"/>
+                <circle cx="32" cy="18" r="4" fill="#d4a373"/>
+              </svg>
+            </div>
+            <h3 class="system-title">Het Productiegedeelte</h3>
+            <p class="system-desc">
+              Gericht op langdurige, hoogcalorische en voedzame opbrengsten. Een combinatie van hoogstam notenbomen, traditionele fruitrassen en meerjarige eetbare gewassen.
+            </p>
+            <div class="system-plantings">
+              <h4>Belangrijkste soorten:</h4>
+              <ul class="plant-tags">
+                <li>Tamme kastanje</li>
+                <li>Walnoot & hazelnoot</li>
+                <li>Oude rassen appels & peren</li>
+                <li>Kweeperen & mispels</li>
+                <li>Meerjarige groenten</li>
+              </ul>
+            </div>
+            <div class="system-footer">
+              <span class="system-focus">Focus: Lokale voedselzekerheid & koolstofopslag</span>
+            </div>
+          </article>
+
+          <!-- Systeem 3: Romantisch & Wild Bosgedeelte -->
+          <article class="system-card" data-system="romantisch">
+            <div class="system-card-top">
+              <div class="system-badge status-upcoming">
+                <span class="badge-dot"></span>
+                <span>Winter 2026/2027</span>
+              </div>
+              <div class="system-number">03</div>
+            </div>
+            <div class="system-icon-wrap">
+              <svg viewBox="0 0 48 48" fill="none" class="system-svg">
+                <circle cx="24" cy="24" r="22" stroke="#2d6a4f" stroke-width="2" stroke-dasharray="2 4"/>
+                <path d="M14 36c4-14 16-20 20-24M20 36c2-8 10-14 14-16" stroke="#52b788" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M30 14c-4 0-8 6-8 6s6 2 8-6z" fill="#74c69d"/>
+              </svg>
+            </div>
+            <h3 class="system-title">Romantisch & Wild Bos</h3>
+            <p class="system-desc">
+              Een natuurzone vol kronkelende struinpaadjes, waterpoelen, schaduwrijke bankjes en inheemse struiken die naadloos overvloeien in natuurgebied De Groene Jonker.
+            </p>
+            <div class="system-plantings">
+              <h4>Belangrijkste soorten:</h4>
+              <ul class="plant-tags">
+                <li>Zwarte els & wilgen (oever)</li>
+                <li>Vlierbes & meidoorn</li>
+                <li>Klimop & wilde hop</li>
+                <li>Daslook & bosaardbei</li>
+                <li>Bloemrijke zoomkruiden</li>
+              </ul>
+            </div>
+            <div class="system-footer">
+              <span class="system-focus">Focus: Biodiversiteit, stilte, rust & habitat</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactieve 7 Lagen van een Voedselbos -->
+    <section class="section layers-section" id="lagen">
+      <div class="container">
+        <div class="section-header text-center">
+          <div class="section-tag">
+            <span class="tag-dot"></span>
+            <span>Verticale Gelaagdheid</span>
+          </div>
+          <h2 class="section-title">De 7 Lagen van het Voedselbos</h2>
+          <p class="section-lead">
+            Net als een oerwoud benut een voedselbos zonlicht, water en ruimte in zeven verschillende hoogtelagen. Klik op een laag om de werking en soorten te ontdekken.
+          </p>
+        </div>
+
+        <div class="layers-interactive-wrapper">
+          <!-- Navigatie tussen de 7 lagen -->
+          <div class="layers-nav" role="tablist" aria-label="Voedselbos lagen">
+            <button class="layer-tab active" data-layer="canopy" role="tab" aria-selected="true" id="tab-canopy">
+              <span class="layer-idx">1</span>
+              <span class="layer-name">Kruinlaag</span>
+              <span class="layer-height">> 10 meter</span>
+            </button>
+            <button class="layer-tab" data-layer="subcanopy" role="tab" aria-selected="false" id="tab-subcanopy">
+              <span class="layer-idx">2</span>
+              <span class="layer-name">Lage Bomen</span>
+              <span class="layer-height">3 - 10 meter</span>
+            </button>
+            <button class="layer-tab" data-layer="shrub" role="tab" aria-selected="false" id="tab-shrub">
+              <span class="layer-idx">3</span>
+              <span class="layer-name">Struiklaag</span>
+              <span class="layer-height">1 - 3 meter</span>
+            </button>
+            <button class="layer-tab" data-layer="herbaceous" role="tab" aria-selected="false" id="tab-herbaceous">
+              <span class="layer-idx">4</span>
+              <span class="layer-name">Kruidenlaag</span>
+              <span class="layer-height">< 1 meter</span>
+            </button>
+            <button class="layer-tab" data-layer="groundcover" role="tab" aria-selected="false" id="tab-groundcover">
+              <span class="layer-idx">5</span>
+              <span class="layer-name">Bodembedekkers</span>
+              <span class="layer-height">0 - 15 cm</span>
+            </button>
+            <button class="layer-tab" data-layer="rhizosphere" role="tab" aria-selected="false" id="tab-rhizosphere">
+              <span class="layer-idx">6</span>
+              <span class="layer-name">Ondergronds (Wortels)</span>
+              <span class="layer-height">Onder het maaiveld</span>
+            </button>
+            <button class="layer-tab" data-layer="vertical" role="tab" aria-selected="false" id="tab-vertical">
+              <span class="layer-idx">7</span>
+              <span class="layer-name">Klimlaag</span>
+              <span class="layer-height">Verticale klimmers</span>
+            </button>
+          </div>
+
+          <!-- Inhoud per laag -->
+          <div class="layer-display-card" id="layerDisplayCard">
+            <div class="layer-card-header">
+              <div class="layer-badge-label" id="layerBadge">Laag 1 van 7</div>
+              <h3 class="layer-display-title" id="layerTitle">De Kruinlaag (Canopy)</h3>
+              <p class="layer-display-role" id="layerRole">De majestueuze ruggengraat van het voedselbos</p>
+            </div>
+
+            <div class="layer-card-body">
+              <div class="layer-info-column">
+                <h4>Functie in ons ecosysteem</h4>
+                <p id="layerDescription">
+                  De hoogste bomen vangen het eerste felle zonlicht, breken harde polderwinden en creëren een mild microklimaat voor de onderliggende gewassen. Hun diepe wortels pompen mineralen uit diepere grondlagen omhoog en voeden het bodemnetwerk.
+                </p>
+
+                <h4>Voorbeelden in Bloeiende Landen</h4>
+                <ul class="layer-species-list" id="layerSpecies">
+                  <li><strong>Tamme Kastanje (Castanea sativa)</strong> &mdash; Voedzame noten, robuust en langlevend</li>
+                  <li><strong>Walnoot (Juglans regia)</strong> &mdash; Waardevolle noten en natuurlijke insectenwerende aroma's</li>
+                  <li><strong>Zwarte Els (Alnus glutinosa)</strong> &mdash; Inheems aan de polderwaterkant, bindt stikstof in de veenbodem</li>
+                </ul>
+              </div>
+
+              <div class="layer-visual-column">
+                <div class="layer-visual-art" id="layerVisualArt">
+                  <div class="layer-symbol-circle">
+                    <svg viewBox="0 0 80 80" fill="none" class="layer-big-icon" id="layerIconSvg">
+                      <path d="M40 70V30M40 30c-15 0-25-10-25-20 10 0 20 5 25 12 5-7 15-12 25-12 0 10-10 20-25 20z" stroke="#2d6a4f" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <div class="layer-depth-indicator">
+                    <span class="indicator-bar" style="height: 90%;"></span>
+                    <span class="indicator-tag" id="indicatorTag">Bovenlaag: 10 - 20 meter</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seizoenskalender & Oogst Section -->
+    <section class="section calendar-section" id="kalender">
+      <div class="container">
+        <div class="grid-2-col calendar-layout">
+          <div class="calendar-intro">
+            <div class="section-tag">
+              <span class="tag-dot"></span>
+              <span>Wat Groeit en Rijpt</span>
+            </div>
+            <h2 class="section-title">Oogsten met het Ritme der Seizoenen</h2>
+            <p class="lead-text">
+              In tegenstelling tot een gewone akker levert een voedselbos vrijwel het hele jaar door iets lekkers, voedzaams of geneeskrachtigs.
+            </p>
+            <p class="body-text">
+              We oogsten kleinschalig en met respect voor de fauna. Wat overblijft voedt de vogels van De Groene Jonker en keert terug naar de bodem als rijke humus.
+            </p>
+
+            <div class="calendar-filter-tabs" role="tablist">
+              <button class="season-filter-btn active" data-season="lente">Lente</button>
+              <button class="season-filter-btn" data-season="zomer">Zomer</button>
+              <button class="season-filter-btn" data-season="herfst">Herfst</button>
+              <button class="season-filter-btn" data-season="winter">Winter</button>
+            </div>
+
+            <div class="season-card-content" id="seasonCardContent">
+              <div class="season-header">
+                <h3 id="seasonTitle">Lente &middot; Het Ontwaken (Maart - Mei)</h3>
+                <span class="season-tag-badge" id="seasonBadge">Fris & Krachtig</span>
+              </div>
+              <p id="seasonDescription">
+                De sapstromen komen op gang. De kruidenlaag explodeert met verse theekruiden, vroege scheuten en daslook, gevolgd door geurige vlierbloesem en rabarber.
+              </p>
+              <ul class="season-harvest-list" id="seasonHarvestList">
+                <li>🌿 Daslookbladeren en vroege wilde kruiden</li>
+                <li>🌸 Geurige vlierbloesem voor siroop & fermenten</li>
+                <li>🌱 Jonge brandnetel, munt en citroenmelisse</li>
+                <li>🍓 Eerste bosaardbeienbloei & lentebloesems</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="calendar-media">
+            <div class="basket-image-wrap">
+              <img src="assets/harvest-basket.jpg" alt="Vers geoogste bessen, appels, noten en kruiden in een ambachtelijke houten oogstmand" class="rounded-image shadow-lift" loading="lazy">
+              <div class="harvest-banner-overlay">
+                <span class="harvest-icon">🧺</span>
+                <div>
+                  <strong>Proef de Polder</strong>
+                  <p>100% onbespoten, vol vitaminen en bodemkracht</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rondleidingen, Bezoek & Vrijwilligers Section -->
+    <section class="section visit-section" id="bezoek">
+      <div class="container">
+        <div class="section-header text-center">
+          <div class="section-tag">
+            <span class="tag-dot"></span>
+            <span>Beleef Bloeiende Landen</span>
+          </div>
+          <h2 class="section-title">Kom Kijken, Leren & Meedoen</h2>
+          <p class="section-lead">
+            Of je nu nieuwsgierig bent naar voedselbossen, je eigen tuin wilt vergroenen, of met je handen in de aarde wilt meebouwen: je bent van harte welkom!
+          </p>
+        </div>
+
+        <div class="visit-options-grid">
+          <!-- Optie 1: Rondleidingen -->
+          <div class="visit-card">
+            <div class="visit-card-icon">🥾</div>
+            <h3>Rondleidingen met Gids</h3>
+            <p>
+              Ga op pad met initiatiefnemer Koen de Ridder. Leer over het ontwerp, de veenbodem, bodemleven, eetbare plantensoorten en proef onderweg de seizoensoogst.
+            </p>
+            <ul class="visit-features">
+              <li>Duur: ca. 1,5 uur</li>
+              <li>Voor individuen, groepen en scholen</li>
+              <li>Inclusief kruidenthee uit eigen tuin</li>
+            </ul>
+            <a href="#aanmelden" class="btn btn-outline" data-action="book-tour">Boek een Rondleiding</a>
+          </div>
+
+          <!-- Optie 2: Open Voedselbossendag -->
+          <div class="visit-card featured-visit-card">
+            <div class="visit-popular-badge">Populair</div>
+            <div class="visit-card-icon">🌻</div>
+            <h3>Open Voedselbossendag</h3>
+            <p>
+              Als aangesloten project bij het landelijke platform <em>Voedsel uit het Bos</em> openen we regelmatig de hekken voor het publiek. Vrij rondwandelen en kennismaken.
+            </p>
+            <ul class="visit-features">
+              <li>Toegankelijk voor jong en oud</li>
+              <li>Lezingen & workshops op het terrein</li>
+              <li>Gratis toegang (donatie welkom)</li>
+            </ul>
+            <a href="#aanmelden" class="btn btn-primary" data-action="open-day">Blijf op de Hoogte</a>
+          </div>
+
+          <!-- Optie 3: Meewerkdagen & Vrijwilligers -->
+          <div class="visit-card">
+            <div class="visit-card-icon">🧤</div>
+            <h3>Samen Meewerken</h3>
+            <p>
+              Steek je handen uit de mouwen! Tijdens onze plant- en onderhoudsdagen planten we bomen, mulchen we bessenstruiken en bouwen we samen aan een eetbaar paradijs.
+            </p>
+            <ul class="visit-features">
+              <li>Gezellige lunch aan het water</li>
+              <li>Leren door te doen (hands-on)</li>
+              <li>Geen groene vingers vooraf vereist</li>
+            </ul>
+            <a href="#aanmelden" class="btn btn-outline" data-action="volunteer">Meld je aan als Vrijwilliger</a>
+          </div>
+        </div>
+
+        <!-- Aanmeld / Interesse Formulier -->
+        <div class="booking-box-container" id="aanmelden">
+          <div class="booking-box">
+            <div class="booking-box-header">
+              <h3>Direct Aanmelden of Vraag Stellen</h3>
+              <p>Laat ons weten hoe je Bloeiende Landen wilt beleven. We reageren snel en persoonlijk.</p>
+            </div>
+
+            <form class="interactive-form" id="visitForm">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="visitorName">Naam *</label>
+                  <input type="text" id="visitorName" name="name" required placeholder="Je volledige naam">
+                </div>
+
+                <div class="form-group">
+                  <label for="visitorEmail">E-mailadres *</label>
+                  <input type="email" id="visitorEmail" name="email" required placeholder="jouw@email.nl">
+                </div>
+
+                <div class="form-group">
+                  <label for="visitorInterest">Interesse in *</label>
+                  <select id="visitorInterest" name="interest" required>
+                    <option value="rondleiding">Rondleiding met gids</option>
+                    <option value="open-dag">Open Voedselbossendag bezoeken</option>
+                    <option value="vrijwilliger">Meewerken als vrijwilliger</option>
+                    <option value="groepsexcursie">Groepsexcursie / Studiebezoek</option>
+                    <option value="anders">Algemene vraag</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="visitorGroupSize">Aantal personen</label>
+                  <input type="number" id="visitorGroupSize" name="group_size" min="1" max="50" value="1">
+                </div>
+
+                <div class="form-group full-width">
+                  <label for="visitorMessage">Bericht of opmerking</label>
+                  <textarea id="visitorMessage" name="message" rows="3" placeholder="Vertel ons wanneer je ongeveer wilt langskomen of stel je vraag..."></textarea>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-lg" id="submitVisitBtn">
+                  <span>Aanvraag Versturen</span>
+                  <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
+                    <path d="M4.166 10h11.667M10.833 5l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="form-feedback hidden" id="visitFeedback"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Locatie & Route Section -->
+    <section class="section location-section" id="locatie">
+      <div class="container">
+        <div class="grid-2-col location-grid">
+          <div class="location-details">
+            <div class="section-tag">
+              <span class="tag-dot"></span>
+              <span>In het Hart van het Groene Hart</span>
+            </div>
+            <h2 class="section-title">Vind Ons langs de Kromme Mijdrecht</h2>
+            <p class="lead-text">
+              Bloeiende Landen ligt op een magische plek: direct aan het slingerende riviertje de Kromme Mijdrecht, precies op de grens van Zuid-Holland en Utrecht.
+            </p>
+
+            <div class="location-cards">
+              <div class="loc-card">
+                <div class="loc-icon">📍</div>
+                <div>
+                  <strong>Adres & Coördinaten</strong>
+                  <p>Kade 9B, Zevenhoven (Gemeente Nieuwkoop)</p>
+                  <span class="loc-sub">Direct naast natuurgebied De Groene Jonker</span>
+                </div>
+              </div>
+
+              <div class="loc-card">
+                <div class="loc-icon">🚲</div>
+                <div>
+                  <strong>Op de Fiets</strong>
+                  <p>Prachtige fietsroutes over de dijk langs de Kromme Mijdrecht, bereikbaar vanuit Woerden, Alphen aan den Rijn, Mijdrecht en Uithoorn.</p>
+                </div>
+              </div>
+
+              <div class="loc-card">
+                <div class="loc-icon">🚗</div>
+                <div>
+                  <strong>Met de Auto</strong>
+                  <p>Parkeergelegenheid nabij De Groene Jonker. We moedigen carpoolen en langzaam reizen per fiets aan.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="nature-note">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="note-icon">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              <p>
+                <strong>Tip voor natuurliefhebbers:</strong> Combineer je bezoek aan Bloeiende Landen met een vogelwandeling door De Groene Jonker, waar lepelaars, grutto's en blauwborsten broeden!
+              </p>
+            </div>
+          </div>
+
+          <div class="location-map-wrap">
+            <div class="map-card">
+              <div class="map-header">
+                <span class="map-dot"></span>
+                <span>Regeneratief Voedselbos &middot; Kade 9B, Zevenhoven</span>
+              </div>
+              <div class="map-interactive-container">
+                <!-- OpenStreetMap Interactive Embed -->
+                <iframe
+                  title="Kaart van Bloeiende Landen aan de Kade in Zevenhoven"
+                  class="osm-map"
+                  src="https://www.openstreetmap.org/export/embed.html?bbox=4.7600%2C52.1700%2C4.8100%2C52.1950&layer=mapnik&marker=52.1830%2C4.7865"
+                  loading="lazy">
+                </iframe>
+              </div>
+              <div class="map-footer">
+                <a href="https://www.google.com/maps/search/?api=1&query=Kade+9B+Zevenhoven" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">
+                  <span>Openen in Google Maps</span>
+                  <svg viewBox="0 0 20 20" fill="none" width="14" height="14">
+                    <path d="M9 3H4a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1v-5M12 3h5m0 0v5m0-5L8 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Veelgestelde Vragen (FAQ) -->
+    <section class="section faq-section" id="faq">
+      <div class="container">
+        <div class="section-header text-center">
+          <div class="section-tag">
+            <span class="tag-dot"></span>
+            <span>Vragen & Antwoorden</span>
+          </div>
+          <h2 class="section-title">Veelgestelde Vragen</h2>
+          <p class="section-lead">
+            Alles wat je wilt weten over voedselbossen, onze filosofie en een bezoek aan Bloeiende Landen.
+          </p>
+        </div>
+
+        <div class="faq-accordion" id="faqAccordion">
+          <div class="faq-item active">
+            <button class="faq-question" aria-expanded="true">
+              <span>Mag ik zomaar langskomen en plukken?</span>
+              <span class="faq-toggle-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>
+                Bloeiende Landen is in ontwikkeling en kwetsbare planten moeten eerst diep wortelen. Daarom is het terrein momenteel geopend tijdens <strong>rondleidingen, georganiseerde meewerkdagen en Open Voedselbossendagen</strong>. Zo zorgen we dat de jonge bomen niet vertrapt worden en het bodemleven beschermd blijft.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>Gebruiken jullie bestrijdingsmiddelen of kunstmest?</span>
+              <span class="faq-toggle-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>
+                Absoluut niet! Wij werken 100% gif- en kunstmestvrij volgens regeneratieve agroforestry principes. Schadelijke insecten worden op natuurlijke wijze gereguleerd door natuurlijke vijanden (vogels, sluipwespen, lieveheersbeestjes) en bodemvruchtbaarheid wordt opgebouwd door stikstofbindende bomen (zoals zwarte els) en diepwortelende kruiden (zoals smeerwortel).
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>Waarom is een voedselbos zo geschikt voor veengrond?</span>
+              <span class="faq-toggle-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>
+                Traditionele ontwatering van veengrond leidt tot oxidatie, bodemdaling en enorme CO2-uitstoot. In een voedselbos houden we het grondwaterpeil hoger en bedekken we de bodem permanent met levende wortels en bladmassa. Dit voorkomt uitdroging, beschermt het veen en legt juist koolstof vast in de bodem.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>Hoe kan ik helpen of doneren?</span>
+              <span class="faq-toggle-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>
+                Je kunt meedoen met onze vrijwilligersdagen, een rondleiding boeken of een boom sponsoren. Ook steunen we educatieprojecten voor lokale scholen. Neem contact op via <a href="mailto:koen@bloeiendelanden.nl">koen@bloeiendelanden.nl</a> voor meer informatie.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              <span>Met welke partners werkt Bloeiende Landen samen?</span>
+              <span class="faq-toggle-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>
+                Het project ontving financiële stimulans van het <strong>SBNL Natuurfonds</strong> ter versterking van biodiversiteit en het landschap, en staat geregistreerd bij de landelijke beweging <strong>Voedsel uit het Bos</strong> (voedseluithetbos.nl).
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Nieuwsbrief / Contact CTA Section -->
+    <section class="section contact-section" id="contact">
+      <div class="container">
+        <div class="contact-box-grid">
+          <div class="contact-info-col">
+            <div class="section-tag light-tag">
+              <span class="tag-dot"></span>
+              <span>Blijf Verbonden</span>
+            </div>
+            <h2 class="section-title text-white">Groei met ons mee</h2>
+            <p class="text-white-sub">
+              Heb je een vraag, wil je een lezing organiseren of meedenken over ons regeneratieve voedsellandschap? Neem gerust contact op met Koen.
+            </p>
+
+            <div class="contact-detail-list">
+              <div class="contact-detail-item">
+                <span class="detail-icon">✉️</span>
+                <div>
+                  <span class="detail-lbl">E-mail</span>
+                  <a href="mailto:koen@bloeiendelanden.nl" class="detail-link">koen@bloeiendelanden.nl</a>
+                </div>
+              </div>
+
+              <div class="contact-detail-item">
+                <span class="detail-icon">📍</span>
+                <div>
+                  <span class="detail-lbl">Locatie</span>
+                  <span>Kade 9B, Zevenhoven</span>
+                </div>
+              </div>
+
+              <div class="contact-detail-item">
+                <span class="detail-icon">🌐</span>
+                <div>
+                  <span class="detail-lbl">Online</span>
+                  <span>bloeiendelanden.nl</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="newsletter-subscription-box">
+              <h4>Bodempost & Oogstupdates</h4>
+              <p>Ontvang 4x per jaar een korte update over wat er bloeit, rijpt en georganiseerd wordt.</p>
+              <form class="newsletter-form" id="newsletterForm">
+                <input type="email" placeholder="Je e-mailadres" required id="newsletterEmail">
+                <button type="submit" class="btn btn-secondary">Inschrijven</button>
+              </form>
+              <div class="newsletter-msg hidden" id="newsletterMsg"></div>
+            </div>
+          </div>
+
+          <div class="contact-form-col">
+            <div class="quick-contact-card">
+              <h3>Stuur een Direct Bericht</h3>
+              <p>We horen graag van je!</p>
+
+              <form id="directContactForm">
+                <div class="form-group">
+                  <label for="contactName">Naam *</label>
+                  <input type="text" id="contactName" required placeholder="Wat is je naam?">
+                </div>
+
+                <div class="form-group">
+                  <label for="contactEmail">E-mail *</label>
+                  <input type="email" id="contactEmail" required placeholder="jouw@email.nl">
+                </div>
+
+                <div class="form-group">
+                  <label for="contactSubject">Onderwerp</label>
+                  <input type="text" id="contactSubject" placeholder="Bijv: Vraag over rondleiding of sponsoring">
+                </div>
+
+                <div class="form-group">
+                  <label for="contactMsg">Bericht *</label>
+                  <textarea id="contactMsg" rows="4" required placeholder="Waar kunnen we je mee helpen?"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">
+                  <span>Bericht Verzenden</span>
+                </button>
+                <div class="form-feedback hidden" id="contactFeedback"></div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container footer-inner">
-      <div class="footer-brand-info">
-        <span>&copy; 2026 <strong>Agevo</strong> &bull; Bram Verhoeff</span>
-        <span class="footer-divider">&bull;</span>
-        <span class="footer-kvk font-mono">KvK: <strong>42160840</strong></span>
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container footer-container">
+      <div class="footer-top-grid">
+        <div class="footer-brand-col">
+          <img src="assets/logo.svg" alt="Bloeiende Landen Logo" class="footer-logo" width="220">
+          <p class="footer-mission">
+            Regeneratief voedselbos van circa 1 hectare langs de Kromme Mijdrecht in Zevenhoven. Bouwend aan een eetbaar paradijs voor mens, dier en veenbodem.
+          </p>
+          <div class="footer-partners">
+            <span class="partners-label">Mede mogelijk gemaakt en ondersteund door:</span>
+            <div class="partner-badges">
+              <span class="partner-badge">SBNL Natuurfonds</span>
+              <span class="partner-badge">Voedsel uit het Bos</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-links-col">
+          <h4 class="footer-heading">Navigatie</h4>
+          <ul>
+            <li><a href="#hero">Startpagina</a></li>
+            <li><a href="#over">Onze Filosofie</a></li>
+            <li><a href="#systemen">De 3 Bossystemen</a></li>
+            <li><a href="#lagen">7 Voedselboslagen</a></li>
+            <li><a href="#kalender">Seizoenskalender</a></li>
+            <li><a href="#bezoek">Rondleidingen</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links-col">
+          <h4 class="footer-heading">Locatie & Contact</h4>
+          <address class="footer-address">
+            <strong>Bloeiende Landen</strong><br>
+            Kade 9B<br>
+            2431 AA Zevenhoven<br>
+            Nederland<br><br>
+            <strong>Contactpersoon:</strong> Koen de Ridder<br>
+            <strong>E-mail:</strong> <a href="mailto:koen@bloeiendelanden.nl">koen@bloeiendelanden.nl</a>
+          </address>
+        </div>
       </div>
 
-      <div class="footer-contact-links">
-        <a href="https://agevodev.nl" target="_blank" rel="noopener noreferrer" class="footer-link">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-          <span>agevodev.nl</span>
-        </a>
-        <a href="mailto:info@agevodev.nl" class="footer-link">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-          <span>info@agevodev.nl</span>
-        </a>
-        <a href="https://instagram.com/agevodev" target="_blank" rel="noopener noreferrer" class="footer-link">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-          <span>@agevodev</span>
-        </a>
+      <div class="footer-bottom">
+        <p>&copy; <span id="currentYear"></span> Bloeiende Landen. Alle rechten voorbehouden.</p>
+        <p class="footer-eco-note">🌿 Ontworpen met respect voor de natuur &middot; 100% Natuurlijk & Vrij van bestrijdingsmiddelen</p>
       </div>
     </div>
   </footer>
