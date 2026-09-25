@@ -1,6 +1,19 @@
 {
   "branches": [
     {
+      "branch": "qualitycomputercentre",
+      "commit": "HEAD",
+      "subject": "feat: herontwerp Quality Computer Centre met reparatiecalculator, webshop en custom PC catalogus",
+      "dateIso": "2026-09-25 02:00:00 +0200",
+      "dateRelative": "zojuist",
+      "title": "Quality Computer Centre | Den Haag Reparatie & Webshop",
+      "description": "Volledig modern herontwerp van Quality Computer Centre met fix-portaal, interactieve prijs- & duurcalculator, webshop showroom en 6 custom game PC's.",
+      "hasIndex": true,
+      "isMain": false,
+      "url": "./branches/qualitycomputercentre/",
+      "status": "ONLINE"
+    },
+    {
       "branch": "SortCycle",
       "commit": "e43784b",
       "subject": "fix(ai): verhelp foutieve Red Bull herkenning en voeg smartphone e-waste detectie toe",
