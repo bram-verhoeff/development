@@ -3,111 +3,2746 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agevo // Bram Verhoeff</title>
-  <meta name="description" content="Agevo development testserver van Bram Verhoeff.">
-  <meta name="author" content="Bram Verhoeff">
-  <meta name="robots" content="noindex, nofollow">
+  <title>Quality Computer Centre | Specialist in Reparatie &amp; IT Den Haag</title>
+  <meta name="description" content="Quality Computer Centre (QCC) Den Haag: al sinds 1997 hét vertrouwde adres voor computer-, laptop-, smartphone-, tablet- en console-reparaties. Snelle service, vakkundige technici & reparaties aan huis.">
+  <meta name="keywords" content="computer reparatie den haag, laptop reparatie, smartphone reparatie, iphone scherm vervangen den haag, playstation reparatie, pc hulp aan huis den haag, goudreinetstraat computer, qcc den haag">
+  <meta name="author" content="Quality Computer Centre">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://qualitycomputer.nl/">
+  <meta property="og:title" content="Quality Computer Centre | Dé Computerspecialist van Den Haag">
+  <meta property="og:description" content="Al sinds 1997 uw vertrouwde specialist voor computers, laptops, telefoons, consoles en service aan huis. Vakkundig, snel en eerlijk.">
+  <meta property="og:image" content="assets/hero-tech-lab.jpg">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/qcc-icon.png">
+  <link rel="apple-touch-icon" href="assets/qcc-icon.png">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
-  <link rel="alternate icon" href="assets/logo.png">
   <link rel="stylesheet" href="style.css">
+
+  <!-- Schema.org LocalBusiness Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ComputerStore",
+    "name": "Quality Computer Centre",
+    "image": "https://qualitycomputer.nl/wp-content/uploads/2019/07/cropped-QCC-Rood-1-1-e1561723282645.png",
+    "telephone": "070-3236991",
+    "email": "info@qualitycomputer.nl",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Goudreinetstraat 253",
+      "addressLocality": "Den Haag",
+      "postalCode": "2564 PS",
+      "addressCountry": "NL"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 52.0655,
+      "longitude": 4.2612
+    },
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Tuesday", "Wednesday", "Thursday", "Friday"],
+        "opens": "10:00",
+        "closes": "17:30"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": "Saturday",
+        "opens": "10:00",
+        "closes": "16:30"
+      }
+    ],
+    "priceRange": "€€",
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Reparatie en IT Diensten",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Computer & Laptop Reparatie"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Smartphone & Tablet Schermvervanging"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Reparatie op Locatie aan Huis"
+          }
+        }
+      ]
+    }
+  }
+  </script>
 </head>
 <body>
 
-  <!-- Top Header -->
-  <header class="header">
-    <div class="container header-inner">
-      <div class="brand">
-        <a href="./" class="brand-link" title="AgevoDev">
-          <picture>
-            <source srcset="assets/logo.svg" type="image/svg+xml">
-            <img src="assets/logo.png" alt="AgevoDev Software Development" class="brand-logo" height="38">
-          </picture>
-        </a>
-        <div class="brand-sub-badge">
-          <span class="brand-author">Bram Verhoeff</span>
+  <!-- Modern Floating Glassmorphic Navbar -->
+  <header class="site-header" id="navbar">
+    <div class="nav-container">
+      
+      <!-- Brand Mark -->
+      <a href="#home" class="nav-brand" id="nav-logo" aria-label="Quality Computer Centre Home">
+        <div class="brand-emblem-wrap">
+          <img src="assets/qcc-icon.png" alt="QCC Icon" class="brand-icon-img" width="34" height="34">
         </div>
+        <div class="brand-text-wrap">
+          <div class="brand-title">Quality Computer</div>
+          <div class="brand-tagline">
+            <span class="tag-loc">Den Haag</span>
+            <span class="tag-sep">•</span>
+            <span class="tag-est">Sinds 1997</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links in EXACT scroll order -->
+      <nav class="nav-links" id="nav-links" aria-label="Hoofdnavigatie">
+        <a href="#diensten" class="nav-item">Diensten</a>
+        <a href="#calculator" class="nav-item">Calculator</a>
+        <a href="#shop" class="nav-item">Webshop</a>
+        <a href="#aan-huis" class="nav-item">Aan Huis</a>
+        <a href="#high-end" class="nav-item">Game PC's</a>
+        <a href="#remote-support" class="nav-item">Support</a>
+        <a href="#reviews" class="nav-item">Ervaringen</a>
+        <a href="#contact" class="nav-item">Contact</a>
+      </nav>
+
+      <!-- Nav Actions -->
+      <div class="nav-actions">
+        <!-- Live Store Status Chip -->
+        <div class="nav-status-pill" id="nav-status-pill" title="Openingstijden winkel Den Haag">
+          <span class="status-pulse-dot" id="store-pulse-dot"></span>
+          <span class="status-live-text" id="store-live-status">Geopend</span>
+        </div>
+
+        <!-- Phone Action -->
+        <a href="tel:0703236991" class="nav-phone-link" title="Bel direct naar Quality Computer Centre">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          <span class="nav-phone-text">070 - 323 69 91</span>
+        </a>
+
+        <!-- Primary CTA Button -->
+        <button type="button" class="btn btn-primary btn-sm open-appointment-modal" id="nav-quote-btn">
+          <span>Afspraak Maken</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </button>
+
+        <!-- Mobile Toggle Button -->
+        <button type="button" class="mobile-menu-btn" id="mobile-toggle" aria-label="Menu openen" aria-expanded="false">
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+        </button>
       </div>
-      <div class="server-status">
-        <span class="status-dot"></span>
-        <span>Testserver Actief</span>
+
+    </div>
+
+    <!-- Mobile Slideout Menu in EXACT scroll order -->
+    <div class="mobile-menu" id="mobile-menu">
+      <div class="mobile-status-bar">
+        <span class="status-pulse-dot" id="mobile-pulse-dot"></span>
+        <span id="mobile-live-status">Openingstijden controleren...</span>
+      </div>
+      <nav class="mobile-nav" aria-label="Mobiele navigatie">
+        <a href="#diensten" class="mobile-nav-link">Diensten &amp; Reparaties</a>
+        <a href="#calculator" class="mobile-nav-link">Reparatie Calculator &amp; Prijzen</a>
+        <a href="#shop" class="mobile-nav-link">Webshop &amp; Hardware</a>
+        <a href="#aan-huis" class="mobile-nav-link">Reparatie &amp; Hulp op Locatie</a>
+        <a href="#high-end" class="mobile-nav-link">High-End Game PC Projecten</a>
+        <a href="#remote-support" class="mobile-nav-link">Support op Afstand &amp; Abonnement</a>
+        <a href="#reviews" class="mobile-nav-link">Klantbeoordelingen (4.8/5)</a>
+        <a href="#contact" class="mobile-nav-link">Contact &amp; Openingstijden</a>
+      </nav>
+      <div class="mobile-menu-actions">
+        <a href="tel:0703236991" class="btn btn-primary btn-block">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          Direct Bellen (070 - 323 69 91)
+        </a>
+        <a href="https://wa.me/31703236991" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block whatsapp-btn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 2C6.505 2 2 6.503 2 12.028c0 1.942.556 3.754 1.518 5.29L2 22l4.832-1.488A9.97 9.97 0 0 0 12.031 22C17.556 22 22 17.503 22 12.028 22 6.503 17.556 2 12.031 2zm5.72 14.18c-.24.67-1.4 1.28-1.94 1.34-.51.06-1.18.08-3.41-.83-2.85-1.17-4.68-4.08-4.82-4.27-.14-.19-1.15-1.53-1.15-2.92 0-1.39.73-2.07 1-2.35.26-.28.58-.35.77-.35.19 0 .39 0 .56.01.18.01.42-.07.66.5.24.58.82 2 .89 2.15.07.15.12.33.02.53-.1.2-.15.32-.3.49-.15.17-.32.38-.45.51-.15.15-.31.31-.13.62.18.31.79 1.3 1.7 2.11 1.17 1.04 2.15 1.36 2.46 1.51.31.15.49.13.67-.08.19-.21.79-.92 1-1.23.21-.31.42-.26.7-.15.28.11 1.78.84 2.09.99.31.15.51.23.59.36.08.13.08.76-.16 1.43z"/></svg>
+          WhatsApp Chat
+        </a>
       </div>
     </div>
+
   </header>
 
-  <!-- Main Content -->
-  <main class="main-content">
-    <div class="container">
-      
-      <!-- Intro / Title -->
-      <div class="title-area">
-        <h1 class="page-title">Git Branches</h1>
-        <p class="page-subtitle">Kies een branch om het bijbehorende testproduct te openen:</p>
-      </div>
+  <!-- Hero Section -->
+  <section class="hero-section" id="home">
+    <div class="hero-bg-glow"></div>
+    <div class="container hero-container">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          <span class="badge-text">Vertrouwd sinds 1997 &bull; Den Haag</span>
+          <span class="badge-stars">★★★★★ 4.8</span>
+        </div>
 
-      <!-- Branches Grid -->
-      <div class="branches-grid" id="branches-container">
-        <!-- Dynamically loaded via main.js -->
-        <div class="loading">Bezig met laden van branches...</div>
-      </div>
+        <h1 class="hero-title">
+          Werkt uw PC of telefoon niet mee? <br>
+          <span class="text-gradient">Bel dé specialist QCC!</span>
+        </h1>
 
-      <!-- Custom Project Call to Action -->
-      <section class="cta-card">
-        <div class="cta-text">
-          <div class="cta-pill">
-            <span class="cta-pill-dot"></span>
-            <span>Maatwerk Software &amp; Web</span>
+        <p class="hero-description">
+          Al meer dan 28 jaar het toonaangevende reparatiecentrum van Den Haag voor 
+          <strong>computers, laptops, Apple MacBooks, smartphones, tablets en gameconsoles</strong>. 
+          Vakkundige monteurs, originele kwaliteitsonderdelen en transparante prijzen.
+        </p>
+
+        <!-- Trust Features Grid -->
+        <div class="hero-trust-list">
+          <div class="trust-item">
+            <div class="trust-icon-box">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+            <span>Klaar terwijl u wacht reparaties</span>
           </div>
-          <h2 class="cta-heading">Een eigen website of programma laten bouwen?</h2>
-          <p class="cta-sub">
-            Wil je ook een moderne website, webapplicatie of software op maat laten maken? Vraag vrijblijvend een offerte of kennismaking aan via <strong>agevodev.nl</strong>.
+          <div class="trust-item">
+            <div class="trust-icon-box">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+            <span>No Cure, No Pay garantie</span>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon-box">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+            <span>Reparatie bij u thuis &euro;12,50/kwartier</span>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon-box">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+            <span>Eigen werkplaats aan Goudreinetstraat</span>
+          </div>
+        </div>
+
+        <!-- Hero Action Buttons -->
+        <div class="hero-buttons">
+          <a href="#calculator" class="btn btn-primary btn-lg">
+            <span>Bereken Reparatieduur &amp; Prijs</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <button type="button" class="btn btn-glass btn-lg open-appointment-modal">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            <span>Reparatie Aanmelden</span>
+          </button>
+        </div>
+
+        <!-- Quick Contact Card Strip -->
+        <div class="hero-quick-strip">
+          <div class="strip-item">
+            <span class="strip-label">Direct contact:</span>
+            <a href="tel:0703236991" class="strip-val">070 - 323 69 91</a>
+          </div>
+          <div class="strip-divider"></div>
+          <div class="strip-item">
+            <span class="strip-label">Locatie:</span>
+            <span class="strip-val">Den Haag (Vruchtenbuurt)</span>
+          </div>
+          <div class="strip-divider"></div>
+          <div class="strip-item">
+            <span class="strip-label">Parkeren:</span>
+            <span class="strip-val">Ruime parkeergelegenheid</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Visual Showcase -->
+      <div class="hero-visual">
+        <div class="hero-card-wrapper">
+          <div class="hero-image-frame">
+            <img src="assets/hero-tech-lab.jpg" alt="Quality Computer Centre hightech reparatie werkplaats Den Haag" class="hero-main-img" loading="eager">
+            <div class="hero-img-overlay"></div>
+          </div>
+
+          <!-- Floating Badges -->
+          <div class="floating-badge badge-top-right">
+            <div class="floating-badge-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            </div>
+            <div>
+              <div class="floating-badge-title">6 Maanden Garantie</div>
+              <div class="floating-badge-sub">Op alle onderdelen &amp; reparaties</div>
+            </div>
+          </div>
+
+          <div class="floating-badge badge-bottom-left">
+            <div class="floating-badge-avatar">
+              <img src="assets/qcc-icon.png" alt="QCC Icon" width="28" height="28">
+            </div>
+            <div>
+              <div class="floating-badge-title">25.000+ Reparaties</div>
+              <div class="floating-badge-sub">Tevreden klanten in Haaglanden</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1. Uitgebreide Diensten Sectie -->
+  <section class="section services-section" id="diensten">
+    <div class="container">
+      <div class="section-header text-center">
+        <div class="section-pill">Alles Onder Eén Dak</div>
+        <h2 class="section-title">Onze Specialistische Diensten</h2>
+        <p class="section-subtitle">
+          Van precisie-solderen op smartphones tot complexe servernetwerken en custom game pc's: QCC lost het snel en vakkundig op.
+        </p>
+      </div>
+
+      <!-- Service Filter Buttons -->
+      <div class="service-filters" id="service-filters">
+        <button type="button" class="filter-btn active" data-filter="all">Alle Diensten</button>
+        <button type="button" class="filter-btn" data-filter="computers">Computers &amp; Laptops</button>
+        <button type="button" class="filter-btn" data-filter="mobile">Smartphones &amp; Tablets</button>
+        <button type="button" class="filter-btn" data-filter="consoles">Spelconsoles</button>
+        <button type="button" class="filter-btn" data-filter="business">Aan Huis &amp; Zakelijk</button>
+      </div>
+
+      <!-- Services Grid -->
+      <div class="services-grid" id="services-grid">
+        
+        <!-- Service Card 1: Computer & Laptop -->
+        <article class="service-card" data-category="computers">
+          <div class="service-card-glow"></div>
+          <div class="service-icon-box">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+          </div>
+          <span class="service-tag">Windows &amp; Mac</span>
+          <h3 class="service-title">Computer- &amp; Laptopreparaties</h3>
+          <p class="service-desc">
+            Is uw computer traag, start hij niet meer op of heeft u last van virussen? Wij repareren alle merken laptops (HP, Asus, Lenovo, Dell, Acer) én Apple MacBooks en iMacs.
+          </p>
+          <ul class="service-points">
+            <li><span class="check-mark">✓</span> SSD upgrade (maakt uw computer tot 10x sneller)</li>
+            <li><span class="check-mark">✓</span> Verwijderen van virussen, malware &amp; spyware</li>
+            <li><span class="check-mark">✓</span> Schone Windows 11 of macOS herinstallatie met databehoud</li>
+            <li><span class="check-mark">✓</span> Koelpasta vervangen &amp; koeling stofvrij maken</li>
+            <li><span class="check-mark">✓</span> Scherm-, toetsenbord- en laadpoort vervanging</li>
+          </ul>
+          <div class="service-footer">
+            <span class="service-price">Diagnose &amp; advies vooraf</span>
+            <button type="button" class="service-link-btn open-appointment-modal" data-pref="Computer reparatie">Meld aan &rarr;</button>
+          </div>
+        </article>
+
+        <!-- Service Card 2: Smartphone & Tablet -->
+        <article class="service-card" data-category="mobile">
+          <div class="service-card-glow"></div>
+          <div class="service-icon-box">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+          </div>
+          <span class="service-tag">iPhone, Samsung, iPad &amp; meer</span>
+          <h3 class="service-title">Smartphone &amp; Tablet Reparaties</h3>
+          <p class="service-desc">
+            Gebroken scherm, accu die razendsnel leegloopt of een defecte oplaadpoort? Wij repareren uw telefoon of tablet vaak binnen 30 tot 60 minuten met topkwaliteit onderdelen.
+          </p>
+          <ul class="service-points">
+            <li><span class="check-mark">✓</span> Scherm- en OLED vervanging klaar terwijl u wacht</li>
+            <li><span class="check-mark">✓</span> Nieuwe batterij met 100% capaciteit en garantie</li>
+            <li><span class="check-mark">✓</span> Ultrasone reiniging &amp; herstel bij waterschade</li>
+            <li><span class="check-mark">✓</span> Oplaadconnector, microfoon &amp; speaker vervanging</li>
+            <li><span class="check-mark">✓</span> Camera module en gebroken achterkant herstel</li>
+          </ul>
+          <div class="service-footer">
+            <span class="service-price">Klaar terwijl u wacht</span>
+            <button type="button" class="service-link-btn open-appointment-modal" data-pref="Smartphone reparatie">Meld aan &rarr;</button>
+          </div>
+        </article>
+
+        <!-- Service Card 3: Game Consoles -->
+        <article class="service-card" data-category="consoles">
+          <div class="service-card-glow"></div>
+          <div class="service-icon-box">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"></rect><circle cx="8" cy="12" r="2"></circle><path d="M15 9v6"></path><path d="M12 12h6"></path></svg>
+          </div>
+          <span class="service-tag">PlayStation &bull; Xbox &bull; Nintendo</span>
+          <h3 class="service-title">Spelconsole Reparaties</h3>
+          <p class="service-desc">
+            Geen beeld op uw PlayStation 5 of Xbox door een verbogen HDMI poort? Blaast uw ventilator oorverdovend hard of leest hij geen discs meer? Onze soldeer-experts lossen het op.
+          </p>
+          <ul class="service-points">
+            <li><span class="check-mark">✓</span> HDMI-poort micro-soldeer vervanging (PS5, PS4, Series X)</li>
+            <li><span class="check-mark">✓</span> Grondige thermische reiniging &amp; vloeibaar metaal / koelpasta</li>
+            <li><span class="check-mark">✓</span> Blu-ray disc drive en laser lens reparatie</li>
+            <li><span class="check-mark">✓</span> Interne voeding en moederbord herstel</li>
+            <li><span class="check-mark">✓</span> Nintendo Switch USB-C poort &amp; Joy-Con stick drift</li>
+          </ul>
+          <div class="service-footer">
+            <span class="service-price">Vakkundig soldeerwerk</span>
+            <button type="button" class="service-link-btn open-appointment-modal" data-pref="Console reparatie">Meld aan &rarr;</button>
+          </div>
+        </article>
+
+        <!-- Service Card 4: Reparatie Aan Huis & Kantoor -->
+        <article class="service-card highlighted-card" data-category="business">
+          <div class="service-card-glow"></div>
+          <div class="service-icon-box">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+          </div>
+          <span class="service-tag badge-red">Populair &bull; Aan Huis</span>
+          <h3 class="service-title">Reparatie &amp; Hulp op Locatie</h3>
+          <p class="service-desc">
+            Geen zin om te slepen met zware computerkasten of printers? Onze technicus bezoekt particulieren en bedrijven in Den Haag en omgeving.
+          </p>
+          <div class="price-highlight-box">
+            <span class="price-big">Slechts &euro; 12,50</span>
+            <span class="price-sub">per kwartier (zakelijk &amp; particulier)</span>
+          </div>
+          <ul class="service-points">
+            <li><span class="check-mark">✓</span> Wifi optimalisatie en dekkingsproblemen oplossen</li>
+            <li><span class="check-mark">✓</span> Printers, scanners en netwerken configureren</li>
+            <li><span class="check-mark">✓</span> E-mail, cloud en data-overzetting naar nieuwe pc</li>
+            <li><span class="check-mark">✓</span> Transparante afrekening per kwartier zonder verrassingen</li>
+          </ul>
+          <div class="service-footer">
+            <span class="service-price">&euro;12,50 / kwartier</span>
+            <button type="button" class="service-link-btn open-appointment-modal" data-pref="Hulp aan huis">Inplannen &rarr;</button>
+          </div>
+        </article>
+
+        <!-- Service Card 5: Data Herstel & Back-up -->
+        <article class="service-card" data-category="computers">
+          <div class="service-card-glow"></div>
+          <div class="service-icon-box">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          </div>
+          <span class="service-tag">Veilig &amp; Discreet</span>
+          <h3 class="service-title">Data Recovery &amp; Back-up</h3>
+          <p class="service-desc">
+            Crasht uw harde schijf, externe HDD of USB-stick? Verwijderde foto's of documenten? Wij redden uw dierbare bestanden en richten direct een automatische back-up voor u in.
+          </p>
+          <ul class="service-points">
+            <li><span class="check-mark">✓</span> Herstel van beschadigde of gecrashte HDD's &amp; SSD's</li>
+            <li><span class="check-mark">✓</span> Geformatteerde partities en per ongeluk gewiste mappen</li>
+            <li><span class="check-mark">✓</span> Automatische back-up naar NAS of veilige cloud</li>
+            <li><span class="check-mark">✓</span> 100% privacy- en geheimhoudingsgarantie</li>
+          </ul>
+          <div class="service-footer">
+            <span class="service-price">No data, no fee opties</span>
+            <button type="button" class="service-link-btn open-appointment-modal" data-pref="Data recovery">Data redden &rarr;</button>
+          </div>
+        </article>
+
+        <!-- Service Card 6: Support op Afstand & Serviceabonnement -->
+        <article class="service-card" data-category="business">
+          <div class="service-card-glow"></div>
+          <div class="service-icon-box">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          </div>
+          <span class="service-tag">&euro;79,95 per jaar</span>
+          <h3 class="service-title">Serviceabonnement &amp; Remote Support</h3>
+          <p class="service-desc">
+            Het hele jaar door zorgeloos computeren met ons all-in serviceabonnement. Inclusief directe remote hulp via TeamViewer bij kleine storingen of instellingen.
+          </p>
+          <ul class="service-points">
+            <li><span class="check-mark">✓</span> Onbeperkt telefonische en remote support tijdens openingstijden</li>
+            <li><span class="check-mark">✓</span> Hulp bij foutmeldingen, e-mail en printerverbindingen</li>
+            <li><span class="check-mark">✓</span> Geen voorrijkosten of wachttijden bij remote assistentie</li>
+            <li><span class="check-mark">✓</span> Direct te starten via TeamViewer QuickSupport</li>
+          </ul>
+          <div class="service-footer">
+            <span class="service-price">&euro;79,95 / jaar</span>
+            <a href="#remote-support" class="service-link-btn">Bekijk details &rarr;</a>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- ==================================================================
+           QCC FIX PORTAAL: Toestel- & Merkenwijzer (fix.qualitycomputer.nl)
+           ================================================================== -->
+      <div class="fix-portal-wrapper" id="fix-portal">
+        <div class="fix-portal-header">
+          <div class="fix-portal-badge">
+            <span class="fix-badge-dot"></span>
+            Fix Portaal • fix.qualitycomputer.nl integratie
+          </div>
+          <h3 class="fix-portal-title">Kies Uw Toestel of Console voor Directe Reparatie</h3>
+          <p class="fix-portal-desc">
+            Zoek uw model op en bekijk direct de beschikbare reparaties, vaste tarieven en doorlooptijden. 
+            Van Apple iPhone en Samsung Galaxy tot alle generaties PlayStation, Xbox en Nintendo.
           </p>
         </div>
-        <div class="cta-action">
-          <a href="https://agevodev.nl" target="_blank" rel="noopener noreferrer" class="cta-btn">
-            <span>Aanvragen op agevodev.nl</span>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <path d="M7 17L17 7"></path>
-              <path d="M7 7h10v10"></path>
-            </svg>
-          </a>
+
+        <!-- Brand Selector Tabs -->
+        <div class="fix-brand-tabs" id="fix-brand-tabs">
+          <button type="button" class="brand-tab active" data-brand="apple">
+            <span class="b-icon">🍎</span>
+            <span class="b-info">
+              <span class="b-name">Apple</span>
+              <span class="b-sub">iPhone, iPad, Mac</span>
+            </span>
+          </button>
+          <button type="button" class="brand-tab" data-brand="samsung">
+            <span class="b-icon">📱</span>
+            <span class="b-info">
+              <span class="b-name">Samsung</span>
+              <span class="b-sub">Galaxy S, A, Note, Z, Tab</span>
+            </span>
+          </button>
+          <button type="button" class="brand-tab" data-brand="playstation">
+            <span class="b-icon">🎮</span>
+            <span class="b-info">
+              <span class="b-name">PlayStation</span>
+              <span class="b-sub">PS5, PS4, PS3, PSP, PSV</span>
+            </span>
+          </button>
+          <button type="button" class="brand-tab" data-brand="xbox">
+            <span class="b-icon">❎</span>
+            <span class="b-info">
+              <span class="b-name">Xbox</span>
+              <span class="b-sub">Series X/S, One, 360</span>
+            </span>
+          </button>
+          <button type="button" class="brand-tab" data-brand="nintendo">
+            <span class="b-icon">🕹️</span>
+            <span class="b-info">
+              <span class="b-name">Nintendo</span>
+              <span class="b-sub">Switch, 3DS, 2DS, Wii</span>
+            </span>
+          </button>
+          <button type="button" class="brand-tab" data-brand="other">
+            <span class="b-icon">🌐</span>
+            <span class="b-info">
+              <span class="b-name">Overige Merken</span>
+              <span class="b-sub">Google, Huawei, OnePlus, Xiaomi</span>
+            </span>
+          </button>
         </div>
-      </section>
 
+        <!-- Brand Device Grids Container -->
+        <div class="fix-device-panels" id="fix-device-panels">
+          
+          <!-- Apple Panel -->
+          <div class="brand-panel active" id="panel-apple">
+            <div class="panel-intro">
+              <h4 class="panel-title">Apple Toestellen &amp; Reparaties</h4>
+              <p class="panel-sub">Originele en A+ onderdelen met 6 maanden garantie. Scherm &amp; batterij vaak binnen 30-45 minuten klaar.</p>
+            </div>
+            <div class="device-chips-grid">
+              <div class="device-card" data-cat="smartphone" data-model="iPhone 16 / 15 Serie">
+                <span class="device-tag">Nieuwste Generatie</span>
+                <h5 class="device-name">iPhone 16 &amp; 15 Serie</h5>
+                <p class="device-desc">16 Pro Max, 16 Pro, 16, 15 Pro Max, 15 Pro, 15 Plus, 15</p>
+                <div class="device-meta">
+                  <span class="device-repairs">Scherm • Accu • USB-C • Behuizing</span>
+                  <a href="#calculator" class="device-action-btn select-device-btn">Bereken &rarr;</a>
+                </div>
+              </div>
+
+              <div class="device-card" data-cat="smartphone" data-model="iPhone 14 Serie">
+                <span class="device-tag">Populair</span>
+                <h5 class="device-name">iPhone 14 Serie</h5>
+                <p class="device-desc">iPhone 14 Pro Max, 14 Pro, 14 Plus, 14 (A2882)</p>
+                <div class="device-meta">
+                  <span class="device-repairs">Scherm • Accu • Laadpoort • Camera</span>
+                  <a href="#calculator" class="device-action-btn select-device-btn">Bereken &rarr;</a>
+                </div>
+              </div>
+
+              <div class="device-card" data-cat="smartphone" data-model="iPhone 13 Serie">
+                <span class="device-tag">Veel gerepareerd</span>
+                <h5 class="device-name">iPhone 13 Serie</h5>
+                <p class="device-desc">iPhone 13 Pro Max (A2643), 13 Pro (A2638), 13 (A2633), 13 Mini</p>
+                <div class="device-meta">
+                  <span class="device-repairs">Scherm • Accu • Achterkant glas</span>
+                  <a href="#calculator" class="device-action-btn select-device-btn">Bereken &rarr;</a>
+                </div>
+              </div>
+
+              <div class="device-card" data-cat="smartphone" data-model="iPhone 12 Serie">
+                <span class="device-tag">Klaar binnen 45 min</span>
+                <h5 class="device-name">iPhone 12 Serie</h5>
+                <p class="device-desc">iPhone 12 Pro Max, 12 Pro (A2407), 12, 12 Mini (A2399)</p>
+                <div class="device-meta">
+                  <span class="device-repairs">Display module • Accu €74,99 • Oplaadpoort</span>
+                  <a href="#calculator" class="device-action-btn select-device-btn">Bereken &rarr;</a>
+                </div>
+              </div>
+
+              <div class="device-card" data-cat="smartphone" data-model="iPhone 11 & XR Serie">
+                <span class="device-tag">Scherp tarief</span>
+                <h5 class="device-name">iPhone 11, Pro, XS &amp; XR</h5>
+                <p class="device-desc">iPhone 11 Pro Max, 11 Pro, 11 (A2221), XS Max, XS, XR (A1984), X</p>
+                <div class="device-meta">
+                  <span class="device-repairs">Scherm vervanging • Nieuwe batterij</span>
+                  <a href="#calculator" class="device-action-btn select-device-btn">Bereken &rarr;</a>
+                </div>
+              </div>
+
+              <div class="device-card" data-cat="smartphone" data-model="iPhone SE / 8 / 7 / 6s">
+                <span class="device-tag">Klassiekers</span>
+                <h5 class="device-name">iPhone SE (2022/2020), 8, 7, 6s</h5>
+                <p class="device-desc">Onderdelen continu op voorraad in de werkplaats</p>
+                <div class="device-meta">
+                  <span class="device-repairs">Scherm vanaf €49,- • Accu vanaf €39,-</span>
+                  <a href="#calculator" class="device-action-btn select-device-btn">Bereken &rarr;</a>
+                </div>
+              </div>
+
+              <div class="device-card" data-cat="tablet" data-model="Apple iPad (Pro, Air, Mini, standaard)">
+                <span class="device-tag">Tablets</span>
+                <h5 class="device-name">Apple iPad Familie</h5>
+                <p class="device-desc">iPad Pro 12.9 (A2229), 11 (A2228), iPad Air, iPad Mini, iPad 10/9/8/2020</p>
+                <div class="device-meta">
+                  <span class="device-repairs">Touchscreen glas • Display • Batterij • Lightning/USB-C</span>
+                  <a href="#calculator" class="device-action-btn select-device-btn">Bereken &rarr;</a>
+                </div>
+              </div>
+
+              <div class="device-card" data-cat="laptop" data-model="Apple MacBook Pro / Air">
+                <span class="device-tag">Mac computers</span>
+                <h5 class="device-name">MacBook Pro, Air &amp; iMac</h5>
+                <p class="device-desc">Apple Silicon (M1/M2/M3) en Intel MacBooks</p>
+                <div class="device-meta">
+                  <span class="device-repairs">Toetsenbord • Trackpad • Accu • Waterschade herstel</span>
+                  <a href="#calculator" class="device-action-btn select-device-btn">Bereken &rarr;</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Samsung Panel -->
+          <div class="brand-panel" id="panel-samsung">
+            <div class="panel-intro">
+              <h4 class="panel-title">Samsung Galaxy Toestellen &amp; Tablets</h4>
+              <p class="panel-sub">Originele Samsung Service Pack displays en batterijen met behoud van waterdichtheid en garantie.</p>
+            </div>
+            <div class="device-chips-grid">
+              <div class="device-card" data-cat="smartphone" data-model="Samsung Galaxy S24 / S23 / S22 / S21">
+                <span class="device-tag">Flagship Series</span>
+                <h5 class="device-name">Galaxy S Serie (S24 t/m S20)</h5>
+                <p class="device-desc">S24 Ultra, S24+, S24, S23, S22, S21 Ultra (SM-G998B), S21+, S21 (SM-G991B)</p>
+                <div class="device-meta">
+                  <span class="device-repairs">Dynamic AMOLED • Accu • Achterkant glas</span>
+                  <a href="#calculator" class="device-action-btn select-device-btn">Bereken &rarr;</a>
+                </div>
+              </div>
+
+              <div class="device-card" data-cat="smartphone" data-model="Samsung Galaxy A Serie">
+                <span class="device-tag">Veel verkocht</span>
+                <h5 class="device-name">Galaxy A Serie (A54, A53, A34...)</h5>
+                <p class="device-desc">A54, A53, A52, A51, A34, A33, A14, A13, A71, A70, A50</p>
+                <div class="device-meta">
+                  <span class="device-repairs">Scherm module • Laadpoort print • Batterij</span>
+                  <a href="#calculator" class="device-action-btn select-device-btn">Bereken &rarr;</a>
+                </div>
+              </div>
+
+              <div class="device-card" data-cat="smartphone" data-model="Samsung Galaxy Z Fold & Z Flip">
+                <span class="device-tag">Foldables</span>
+                <h5 class="device-name">Galaxy Z Fold &amp; Z Flip</h5>
+                <p class="device-desc">Z Fold 5, 4, 3, 2 en Z Flip 5, 4, 3</p>
+                <div class="device-meta">
+                  <span class="device-repairs">Buitenscherm • Scharnier reiniging • Accu</span>
+                  <a href="#calculator" class="device-action-btn select-device-btn">Bereken &rarr;</a>
+                </div>
+              </div>
+
+              <div class="device-card" data-cat="smartphone" data-model="Samsung Galaxy Note & Overig">
+                <span class="device-tag">Note &amp; Xcover</span>
+                <h5 class="device-name">Galaxy Note, Xcover, M &amp; J</h5>
+                <p class="device-desc">Note 20 Ultra, Note 10, Note 9, Xcover Pro/Field, Galaxy J &amp; M</p>
+                <div class="device-meta">
+                  <span class="device-repairs">Scherm • S-Pen sensor • Laadconnector</span>
+                  <a href="#calculator" class="device-action-btn select-device-btn">Bereken &rarr;</a>
+                </div>
+              </div>
+
+              <div class="device-card" data-cat="tablet" data-model="Samsung Galaxy Tab S & Tab A">
+                <span class="device-tag">Galaxy Tablets</span>
+                <h5 class="device-name">Samsung Galaxy Tab (S &amp; A Serie)</h5>
+                <p class="device-desc">Tab S9, S8, S7, Tab A 10.1 (SM-T510), Tab A 8.0 (SM-T290), Tab A 10.5 (SM-T590)</p>
+                <div class="device-meta">
+                  <span class="device-repairs">LCD / AMOLED • Laadpoort • Accu</span>
+                  <a href="#calculator" class="device-action-btn select-device-btn">Bereken &rarr;</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PlayStation Panel -->
+          <div class="brand-panel" id="panel-playstation">
+            <div class="panel-intro">
+              <h4 class="panel-title">Sony PlayStation Reparaties &amp; Micro-solderen</h4>
+              <p class="panel-sub">Specialist in HDMI-poort herstel, WLOD/BLOD diagnose, laserlenzen en koeling met vloeibaar metaal.</p>
+            </div>
+            <div class="device-chips-grid">
+              <div class="device-card" data-cat="console" data-model="Sony PlayStation 5 (PS5)">
+                <span class="device-tag badge-red">Meest gevraagd</span>
+                <h5 class="device-name">PlayStation 5 (PS5 Disc &amp; Digital)</h5>
+                <p class="device-desc">Inclusief PS5 Slim. HDMI-poort, vloeibaar metaal koeling, voeding en moederbord.</p>
+                <div class="device-meta">
+                  <span class="device-repairs">HDMI herstel €89,- • Lawaai/koeling €59,-</span>
+                  <a href="#calculator" class="device-action-btn select-device-btn">Bereken &rarr;</a>
+                </div>
+              </div>
+
+              <div class="device-card" data-cat="console" data-model="Sony PlayStation 4 (PS4 Slim / Pro)">
+                <span class="device-tag">Klaar binnen 1-2 dagen</span>
+                <h5 class="device-name">PlayStation 4 (Slim &amp; Pro)</h5>
+                <p class="device-desc">CUH-1000, CUH-1100, CUH-1200, PS4 Slim &amp; PS4 Pro</p>
+                <div class="device-meta">
+                  <span class="device-repairs">HDMI poort €79,- • Laserlens • Disc eject bug • BLOD</span>
+                  <a href="#calculator" class="device-action-btn select-device-btn">Bereken &rarr;</a>
+                </div>
+              </div>
+
+              <div class="device-card" data-cat="console" data-model="Sony PlayStation 3 (PS3)">
+                <span class="device-tag">Retro &amp; Klassiek</span>
+                <h5 class="device-name">PlayStation 3 (Fat, Slim &amp; Super Slim)</h5>
+                <p class="device-desc">Laser lens leest geen Blu-ray/games, voeding reparatie, YLOD herstel.</p>
+                <div class="device-meta">
+                  <span class="device-repairs">Laserlens • Harde schijf upgrade • Koeling</span>
+                  <a href="#calculator" class="device-action-btn select-device-btn">Bereken &rarr;</a>
+                </div>
+              </div>
+
+              <div class="device-card" data-cat="console" data-model="Sony PS Vita & PSP">
+                <span class="device-tag">Handhelds</span>
+                <h5 class="device-name">PS Vita (PSV) &amp; PSP</h5>
+                <p class="device-desc">OLED scherm vervanging, analog stick drift, laadpoort &amp; batterij.</p>
+                <div class="device-meta">
+                  <span class="device-repairs">Scherm • Sticks • Accu • Laadpoort</span>
+                  <a href="#calculator" class="device-action-btn select-device-btn">Bereken &rarr;</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Xbox Panel -->
+          <div class="brand-panel" id="panel-xbox">
+            <div class="panel-intro">
+              <h4 class="panel-title">Microsoft Xbox Reparaties</h4>
+              <p class="panel-sub">Vakkundig herstel van HDMI connectors, foutcodes, schijf-drives en oververhitting.</p>
+            </div>
+            <div class="device-chips-grid">
+              <div class="device-card" data-cat="console" data-model="Microsoft Xbox Series X / Series S">
+                <span class="device-tag">Next-Gen</span>
+                <h5 class="device-name">Xbox Series X &amp; Series S</h5>
+                <p class="device-desc">HDMI 2.1 poort vervanging, retimer IC chip soldeerwerk, koeling &amp; voeding.</p>
+                <div class="device-meta">
+                  <span class="device-repairs">HDMI poort • Schone voeding • Lawaaierige fan</span>
+                  <a href="#calculator" class="device-action-btn select-device-btn">Bereken &rarr;</a>
+                </div>
+              </div>
+
+              <div class="device-card" data-cat="console" data-model="Microsoft Xbox One (X / S / Original)">
+                <span class="device-tag">Veel hersteld</span>
+                <h5 class="device-name">Xbox One, One S &amp; One X</h5>
+                <p class="device-desc">HDMI poort afgebroken, leest geen spellen, start niet door (groen laadscherm loop).</p>
+                <div class="device-meta">
+                  <span class="device-repairs">HDMI poort €79,- • Interne HDD naar SSD • Laser</span>
+                  <a href="#calculator" class="device-action-btn select-device-btn">Bereken &rarr;</a>
+                </div>
+              </div>
+
+              <div class="device-card" data-cat="console" data-model="Microsoft Xbox 360">
+                <span class="device-tag">Legacy Support</span>
+                <h5 class="device-name">Xbox 360 (Slim &amp; Fat)</h5>
+                <p class="device-desc">Drive lade gaat niet open (snaar vervangen), laserlens, RROD herstel.</p>
+                <div class="device-meta">
+                  <span class="device-repairs">Drive revisie • Nieuwe laser • Koeling</span>
+                  <a href="#calculator" class="device-action-btn select-device-btn">Bereken &rarr;</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Nintendo Panel -->
+          <div class="brand-panel" id="panel-nintendo">
+            <div class="panel-intro">
+              <h4 class="panel-title">Nintendo Consoles &amp; Handhelds</h4>
+              <p class="panel-sub">Van de nieuwste Nintendo Switch tot de klassieke Nintendo DS en Wii systemen.</p>
+            </div>
+            <div class="device-chips-grid">
+              <div class="device-card" data-cat="console" data-model="Nintendo Switch (OLED / Regular / Lite)">
+                <span class="device-tag badge-red">Populair</span>
+                <h5 class="device-name">Nintendo Switch (OLED, V2 &amp; Lite)</h5>
+                <p class="device-desc">USB-C oplaadpoort soldeerwerk, laad-IC (M92T36), Joy-Con stick drift, game card slot.</p>
+                <div class="device-meta">
+                  <span class="device-repairs">USB-C poort • Scherm • Game slot • Stick drift</span>
+                  <a href="#calculator" class="device-action-btn select-device-btn">Bereken &rarr;</a>
+                </div>
+              </div>
+
+              <div class="device-card" data-cat="console" data-model="Nintendo NEW 3DS / 3DS XL">
+                <span class="device-tag">Handheld</span>
+                <h5 class="device-name">NEW 3DS &amp; 3DS XL (2015)</h5>
+                <p class="device-desc">Bovenscherm / onderscherm vervangen, scharnier herstel, laadaansluiting.</p>
+                <div class="device-meta">
+                  <span class="device-repairs">Displays • Touchscreen • Laadpoort</span>
+                  <a href="#calculator" class="device-action-btn select-device-btn">Bereken &rarr;</a>
+                </div>
+              </div>
+
+              <div class="device-card" data-cat="console" data-model="Nintendo 2DS & NEW 2DS XL">
+                <span class="device-tag">Handheld</span>
+                <h5 class="device-name">NEW 2DS XL (2017) &amp; Nintendo 2DS</h5>
+                <p class="device-desc">Gebroken scherm, defecte knoppen, laadpoort en batterij vervangen.</p>
+                <div class="device-meta">
+                  <span class="device-repairs">Schermmodule • Knoppen • Batterij</span>
+                  <a href="#calculator" class="device-action-btn select-device-btn">Bereken &rarr;</a>
+                </div>
+              </div>
+
+              <div class="device-card" data-cat="console" data-model="Nintendo DSi / DS Lite / Classic">
+                <span class="device-tag">Klassiek</span>
+                <h5 class="device-name">Nintendo DSi XL, DSi &amp; DS Lite</h5>
+                <p class="device-desc">Scherm vervangen, behuizing, L/R schouderknoppen en laadconnectors.</p>
+                <div class="device-meta">
+                  <span class="device-repairs">Behuizing • Schermen • Laadpoort</span>
+                  <a href="#calculator" class="device-action-btn select-device-btn">Bereken &rarr;</a>
+                </div>
+              </div>
+
+              <div class="device-card" data-cat="console" data-model="Nintendo Wii & Wii U">
+                <span class="device-tag">TV Consoles</span>
+                <h5 class="device-name">Nintendo Wii U &amp; Nintendo Wii</h5>
+                <p class="device-desc">Wii U GamePad touchscreen herstel, disc drive laser en HDMI signaal.</p>
+                <div class="device-meta">
+                  <span class="device-repairs">GamePad scherm • Drive laser • Voeding</span>
+                  <a href="#calculator" class="device-action-btn select-device-btn">Bereken &rarr;</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Other Brands Panel -->
+          <div class="brand-panel" id="panel-other">
+            <div class="panel-intro">
+              <h4 class="panel-title">Google Pixel, Huawei, OnePlus, Xiaomi &amp; Laptops</h4>
+              <p class="panel-sub">Volledige ondersteuning voor alle merken smartphones en laptops op de markt.</p>
+            </div>
+            <div class="device-chips-grid">
+              <div class="device-card" data-cat="smartphone" data-model="Google Pixel (8, 7, 6, 5)">
+                <span class="device-tag">Google</span>
+                <h5 class="device-name">Google Pixel Serie</h5>
+                <p class="device-desc">Pixel 8 Pro, 8, 7 Pro, 7, 6 Pro, 6, 6a, 5. Originele OLED schermen en batterijen.</p>
+                <div class="device-meta">
+                  <span class="device-repairs">OLED scherm • Accu • USB-C poort</span>
+                  <a href="#calculator" class="device-action-btn select-device-btn">Bereken &rarr;</a>
+                </div>
+              </div>
+
+              <div class="device-card" data-cat="smartphone" data-model="Huawei (P, Mate, Nova, Y)">
+                <span class="device-tag">Huawei</span>
+                <h5 class="device-name">Huawei P, Mate &amp; Nova Serie</h5>
+                <p class="device-desc">Huawei P40, P30 Pro, P20, Mate 40/30/20, Nova en Y-serie modellen.</p>
+                <div class="device-meta">
+                  <span class="device-repairs">Scherm vervangen • Batterij • Laadconnector</span>
+                  <a href="#calculator" class="device-action-btn select-device-btn">Bereken &rarr;</a>
+                </div>
+              </div>
+
+              <div class="device-card" data-cat="smartphone" data-model="OnePlus (12, 11, 10, Nord)">
+                <span class="device-tag">OnePlus</span>
+                <h5 class="device-name">OnePlus &amp; Nord Serie</h5>
+                <p class="device-desc">OnePlus 12, 11, 10 Pro, 9, 8 en de complete Nord familie.</p>
+                <div class="device-meta">
+                  <span class="device-repairs">Fluid AMOLED • Warp charge poort • Accu</span>
+                  <a href="#calculator" class="device-action-btn select-device-btn">Bereken &rarr;</a>
+                </div>
+              </div>
+
+              <div class="device-card" data-cat="smartphone" data-model="Xiaomi / Motorola / Sony">
+                <span class="device-tag">Overige Toestellen</span>
+                <h5 class="device-name">Xiaomi, Motorola, Sony Xperia &amp; Nokia</h5>
+                <p class="device-desc">Snelle levering van schermen, oplaadpoorten en accu's voor alle modellen.</p>
+                <div class="device-meta">
+                  <span class="device-repairs">Scherm • Laadpoort • Batterij • Diagnose</span>
+                  <a href="#calculator" class="device-action-btn select-device-btn">Bereken &rarr;</a>
+                </div>
+              </div>
+
+              <div class="device-card" data-cat="laptop" data-model="Windows Laptop (HP, Asus, Lenovo, Acer, Dell)">
+                <span class="device-tag">Alle Laptops</span>
+                <h5 class="device-name">Windows Laptops &amp; Desktops</h5>
+                <p class="device-desc">HP, Lenovo, Asus, Acer, Dell, MSI. Schermen, toetsenborden, SSD upgrades en voedingen.</p>
+                <div class="device-meta">
+                  <span class="device-repairs">SSD versnelling • Scherm vervangen • Scharnieren</span>
+                  <a href="#calculator" class="device-action-btn select-device-btn">Bereken &rarr;</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Veelvoorkomende Reparaties & Symptomen Matrix (direct uit fix.qualitycomputer.nl) -->
+        <div class="fix-symptoms-section">
+          <div class="symptoms-header">
+            <span class="section-pill">Symptomen &amp; Oplossingen</span>
+            <h4 class="symptoms-title">Veelvoorkomende Reparaties uit Ons Fix Portaal</h4>
+            <p class="symptoms-sub">
+              Herkent u één van onderstaande klachten aan uw smartphone, laptop of spelcomputer? Onze monteurs lossen het snel op met no cure, no pay garantie.
+            </p>
+          </div>
+
+          <div class="symptoms-grid">
+            
+            <!-- Symptoom 1: HDMI Poort & Geen Beeld -->
+            <div class="symptom-card">
+              <div class="symptom-icon-wrap icon-red">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+              </div>
+              <div class="symptom-body">
+                <span class="symptom-badge">PS5 • Xbox • PS4 • PC</span>
+                <h5 class="symptom-name">HDMI-poort Defect &amp; Geen Beeld</h5>
+                <p class="symptom-desc">
+                  Pinnen verbogen, kabel past niet lekker, of de console start op met wit licht (WLOD) maar geeft geen beeld naar de tv. Wij solderen machinaal een versterkte nieuwe HDMI-poort en testen direct de HDMI transmitter / retimer IC chip.
+                </p>
+                <div class="symptom-footer">
+                  <span class="symptom-price">Vaste prijs € 79,- / € 89,-</span>
+                  <button type="button" class="symptom-btn open-appointment-modal" data-pref="HDMI poort reparatie (PS5/PS4/Xbox)">Plan Reparatie</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Symptoom 2: Blu-ray Drive & Laserlens -->
+            <div class="symptom-card">
+              <div class="symptom-icon-wrap icon-cyan">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle></svg>
+              </div>
+              <div class="symptom-body">
+                <span class="symptom-badge">PS4 • PS5 • Xbox One • Wii U</span>
+                <h5 class="symptom-name">Laserlens &amp; Schijf-Drive Foutmeldingen</h5>
+                <p class="symptom-desc">
+                  Console leest geen spellen of Blu-ray disks meer, geeft foutmelding tijdens spelen, werpt schijfjes willekeurig uit of rammelt ratelend bij het laden. Wij vervangen de laserlens en reviseren het mechaniek.
+                </p>
+                <div class="symptom-footer">
+                  <span class="symptom-price">Deskundige revisie</span>
+                  <button type="button" class="symptom-btn open-appointment-modal" data-pref="Disc drive / laser lens reparatie">Plan Reparatie</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Symptoom 3: Beeldscherm & Glas -->
+            <div class="symptom-card">
+              <div class="symptom-icon-wrap icon-green">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+              </div>
+              <div class="symptom-body">
+                <span class="symptom-badge">iPhone • Samsung • iPad • Laptops</span>
+                <h5 class="symptom-name">Gebroken Display, Strepen of Touch Defect</h5>
+                <p class="symptom-desc">
+                  Gebarsten touchscreen, gekleurde verticale strepen, zwarte inktvlekken of reageert het scherm niet meer? Wij plaatsen haarscherpe originele of A+ OLED/LCD displays, vaak klaar binnen 30 tot 60 minuten.
+                </p>
+                <div class="symptom-footer">
+                  <span class="symptom-price">Klaar terwijl u wacht</span>
+                  <button type="button" class="symptom-btn open-appointment-modal" data-pref="Schermvervanging">Plan Reparatie</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Symptoom 4: Batterij & Opladen -->
+            <div class="symptom-card">
+              <div class="symptom-icon-wrap icon-gold">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="6" width="18" height="12" rx="2"></rect><line x1="23" y1="11" x2="23" y2="13"></line><line x1="6" y1="10" x2="6" y2="14"></line><line x1="10" y1="10" x2="10" y2="14"></line></svg>
+              </div>
+              <div class="symptom-body">
+                <span class="symptom-badge">Smartphones • MacBooks • Tablets</span>
+                <h5 class="symptom-name">Batterij Snel Leeg of Valt Plots Uit</h5>
+                <p class="symptom-desc">
+                  Loopt uw batterij in 2 uur leeg, valt de telefoon uit bij 20% of wordt het toestel gloeiend heet tijdens het laden? Wij plaatsen een nieuwe accu met 100% gezondheidscapaciteit en 6 maanden garantie.
+                </p>
+                <div class="symptom-footer">
+                  <span class="symptom-price">Vanaf € 39,- / € 49,-</span>
+                  <button type="button" class="symptom-btn open-appointment-modal" data-pref="Batterij vervangen">Plan Reparatie</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Symptoom 5: Oplaadconnector & USB-C -->
+            <div class="symptom-card">
+              <div class="symptom-icon-wrap icon-cyan">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path><line x1="12" y1="2" x2="12" y2="12"></line></svg>
+              </div>
+              <div class="symptom-body">
+                <span class="symptom-badge">USB-C • Lightning • Switch • Laptops</span>
+                <h5 class="symptom-name">Oplaadpoort Los, Wiebelt of Laadt Niet Op</h5>
+                <p class="symptom-desc">
+                  Moet u de kabel in een vreemde bocht houden om stroom te krijgen? Wij reinigen diepgaand van stof en gecorrodeerd residu of solderen vakkundig een gloednieuwe laadconnector op het bord.
+                </p>
+                <div class="symptom-footer">
+                  <span class="symptom-price">Vanaf € 49,-</span>
+                  <button type="button" class="symptom-btn open-appointment-modal" data-pref="Oplaadpoort reparatie">Plan Reparatie</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Symptoom 6: Oververhitting, Lawaai & Vloeibaar Metaal -->
+            <div class="symptom-card">
+              <div class="symptom-icon-wrap icon-red">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              </div>
+              <div class="symptom-body">
+                <span class="symptom-badge">PS5 • PS4 Pro • Gaming Laptops • PC</span>
+                <h5 class="symptom-name">Ventilator Maakt Lawaai &amp; Oververhitting</h5>
+                <p class="symptom-desc">
+                  Blaast uw PlayStation 5 of laptop als een straaljager en schakelt hij na 10 minuten gamen vanzelf uit? Wij ontleden de machine, verwijderen alle stofophopingen en brengen verse vloeibaar metaal of Arctic koelpasta aan.
+                </p>
+                <div class="symptom-footer">
+                  <span class="symptom-price">Vaste prijs € 59,-</span>
+                  <button type="button" class="symptom-btn open-appointment-modal" data-pref="Koeling & koelpasta onderhoud">Plan Reparatie</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Symptoom 7: Waterschade & Chemisch Drogen -->
+            <div class="symptom-card">
+              <div class="symptom-icon-wrap icon-cyan">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
+              </div>
+              <div class="symptom-body">
+                <span class="symptom-badge">Alle Toestellen &bull; Spoed</span>
+                <h5 class="symptom-name">Waterschade / Vloeistof Gemorst</h5>
+                <p class="symptom-desc">
+                  Koffie over het MacBook toetsenbord of telefoon in het water gevallen? Zet het apparaat niet aan! Ons ultrasoonbad verwijdert kalk, suikers en oxidatie van microchips voordat fatale kortsluiting optreedt.
+                </p>
+                <div class="symptom-footer">
+                  <span class="symptom-price">Diagnose € 35,-</span>
+                  <button type="button" class="symptom-btn open-appointment-modal" data-pref="Waterschade ultrasoon reiniging">Plan Spoedbehandeling</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Symptoom 8: Moederbord & Micro-solderen -->
+            <div class="symptom-card">
+              <div class="symptom-icon-wrap icon-green">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
+              </div>
+              <div class="symptom-body">
+                <span class="symptom-badge">Specialisme &bull; No cure, no pay</span>
+                <h5 class="symptom-name">Moederbord Reparatie, BLOD &amp; Micro-solderen</h5>
+                <p class="symptom-desc">
+                  Geeft uw apparaat geen enkel teken van leven, valt hij na 2 tot 6 seconden uit (BLOD) of is er kortsluiting op het moederbord? QCC repareert op componentniveau (IC chips, mosfets, condensatoren en traces) onder de microscoop.
+                </p>
+                <div class="symptom-footer">
+                  <span class="symptom-price">Heldere prijsopgave</span>
+                  <button type="button" class="symptom-btn open-appointment-modal" data-pref="Moederbord micro-soldeer reparatie">Plan Onderzoek</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
     </div>
-  </main>
+  </section>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container footer-inner">
-      <div class="footer-brand-info">
-        <span>&copy; 2026 <strong>Agevo</strong> &bull; Bram Verhoeff</span>
-        <span class="footer-divider">&bull;</span>
-        <span class="footer-kvk font-mono">KvK: <strong>42160840</strong></span>
+  <!-- 2. Interactive Reparatie Prijs- & Duurberekening Tool -->
+  <section class="section calculator-section" id="calculator">
+    <div class="container">
+      <div class="section-header text-center">
+        <div class="section-pill">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          Direct Inzicht
+        </div>
+        <h2 class="section-title">Wat heeft reparatie nodig?</h2>
+        <p class="section-subtitle">
+          Kies uw type apparaat en defect voor een directe indicatie van doorlooptijd, garantie en reparatiemogelijkheden.
+        </p>
       </div>
 
-      <div class="footer-contact-links">
-        <a href="https://agevodev.nl" target="_blank" rel="noopener noreferrer" class="footer-link">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-          <span>agevodev.nl</span>
+      <div class="calc-card">
+        <!-- Step 1: Select Category -->
+        <div class="calc-step">
+          <label class="calc-label">Stap 1: Kies uw categorie</label>
+          <div class="calc-category-grid" id="calc-categories">
+            <button type="button" class="category-btn active" data-category="laptop">
+              <span class="cat-icon">💻</span>
+              <span class="cat-name">Laptop &amp; PC</span>
+              <span class="cat-sub">Windows &amp; Mac</span>
+            </button>
+            <button type="button" class="category-btn" data-category="smartphone">
+              <span class="cat-icon">📱</span>
+              <span class="cat-name">Smartphone</span>
+              <span class="cat-sub">iPhone &amp; Android</span>
+            </button>
+            <button type="button" class="category-btn" data-category="tablet">
+              <span class="cat-icon">📟</span>
+              <span class="cat-name">Tablet &amp; iPad</span>
+              <span class="cat-sub">Apple &amp; Samsung</span>
+            </button>
+            <button type="button" class="category-btn" data-category="console">
+              <span class="cat-icon">🎮</span>
+              <span class="cat-name">Game Console</span>
+              <span class="cat-sub">PlayStation, Xbox, Switch</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 2: Select Brand / Model -->
+        <div class="calc-step-row">
+          <div class="calc-step-col">
+            <label class="calc-label" for="calc-brand">Stap 2: Kies merk of type</label>
+            <div class="select-wrapper">
+              <select id="calc-brand" class="form-select">
+                <!-- Dynamically populated -->
+              </select>
+            </div>
+          </div>
+
+          <div class="calc-step-col">
+            <label class="calc-label" for="calc-issue">Stap 3: Wat is het probleem?</label>
+            <div class="select-wrapper">
+              <select id="calc-issue" class="form-select">
+                <!-- Dynamically populated -->
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Interactive Result Card -->
+        <div class="calc-result-box" id="calc-result">
+          <div class="result-details">
+            <div class="result-header">
+              <span class="result-badge" id="res-badge">Directe Reparatie</span>
+              <h3 class="result-title" id="res-title">Schermvervanging &amp; Display Reparatie</h3>
+            </div>
+            <p class="result-desc" id="res-desc">
+              Professionele vervanging met A-kwaliteit / origineel displaypaneel. Inclusief grondige test van touch-respons, kleurcalibratie en behuizingscontrole.
+            </p>
+            <div class="result-metrics">
+              <div class="metric-item">
+                <span class="metric-icon">⏱️</span>
+                <div>
+                  <span class="metric-label">Geschatte doorlooptijd</span>
+                  <span class="metric-val" id="res-time">30 - 60 minuten</span>
+                </div>
+              </div>
+              <div class="metric-item">
+                <span class="metric-icon">🛡️</span>
+                <div>
+                  <span class="metric-label">Garantieperiode</span>
+                  <span class="metric-val" id="res-warranty">6 maanden garantie</span>
+                </div>
+              </div>
+              <div class="metric-item">
+                <span class="metric-icon">💶</span>
+                <div>
+                  <span class="metric-label">Kostenindicatie</span>
+                  <span class="metric-val text-red" id="res-price">Vanaf € 69,- (incl. btw &amp; montage)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="result-cta-col">
+            <div class="cta-callout">
+              <strong>Klaar terwijl u wacht?</strong>
+              <p>Meld uw apparaat van tevoren aan zodat het juiste onderdeel direct klaarligt op de werkbank.</p>
+            </div>
+            <button type="button" class="btn btn-primary btn-block open-appointment-modal" id="calc-submit-btn">
+              <span>Direct Afspraak Inplannen</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </button>
+            <a href="https://wa.me/31703236991" target="_blank" rel="noopener noreferrer" class="btn btn-glass btn-block btn-sm">
+              <span>Stel vraag via WhatsApp</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Webshop & Hardware Showroom (shop.qualitycomputer.nl) -->
+  <section class="section shop-section" id="shop">
+    <div class="container">
+      <div class="section-header text-center">
+        <div class="section-pill">
+          <span class="fix-badge-dot"></span>
+          QCC Webshop • shop.qualitycomputer.nl
+        </div>
+        <h2 class="section-title">Hardware, Kabels, Opslag &amp; Accessoires</h2>
+        <p class="section-subtitle">
+          Direct uit eigen voorraad af te halen in onze winkel aan de Goudreinetstraat 253 of snel thuisbezorgd. 
+          Van gecertificeerde snelladers en NVMe SSD's tot softwarelicenties en gaming kabels.
+        </p>
+      </div>
+
+      <!-- Shop Category Filters -->
+      <div class="shop-filter-bar" id="shop-filters">
+        <button type="button" class="shop-filter-btn active" data-shop-filter="all">Alles in Webshop</button>
+        <button type="button" class="shop-filter-btn" data-shop-filter="pcs">PC-Systemen &amp; Desktops (6)</button>
+        <button type="button" class="shop-filter-btn" data-shop-filter="cables">Kabels &amp; Connectoren</button>
+        <button type="button" class="shop-filter-btn" data-shop-filter="storage">Opslag &amp; SSD's</button>
+        <button type="button" class="shop-filter-btn" data-shop-filter="accessories">Laders &amp; Accessoires</button>
+        <button type="button" class="shop-filter-btn" data-shop-filter="software">Software &amp; Licenties</button>
+        <button type="button" class="shop-filter-btn" data-shop-filter="peripherals">Randapparatuur</button>
+      </div>
+
+      <!-- Shop Products Grid -->
+      <div class="shop-grid" id="shop-grid">
+        
+        <!-- PC Product 1: Intel i9 Flagship -->
+        <article class="shop-product-card" data-category="pcs">
+          <div class="product-badge-wrap">
+            <span class="prod-badge badge-hot">Topmodel</span>
+            <span class="prod-stock">Op voorraad</span>
+          </div>
+          <div class="product-icon-wrap">
+            <span class="prod-emoji">🖥️</span>
+          </div>
+          <div class="product-body">
+            <span class="prod-brand">QCC Custom Build</span>
+            <h4 class="prod-title">Intel Core i9 11900K &bull; EVGA RTX 3080 12GB (Full RGB)</h4>
+            <p class="prod-desc">Flagship gaming &amp; render PC. Arctic 360 RGB waterkoeling, Asrock Z590 Velocita, 64GB DDR4 en dubbele 1TB Samsung 980 PRO Gen4 SSD's.</p>
+            <div class="prod-specs-list">
+              <span>✓ 64GB DDR4 3600MHz RAM</span>
+              <span>✓ 2TB Samsung 980 PRO NVMe</span>
+              <span>✓ Seasonic Focus 850W Gold</span>
+            </div>
+          </div>
+          <div class="prod-footer">
+            <div class="prod-price-box">
+              <span class="prod-price">2 Jaar Gar.</span>
+              <span class="prod-vat">Volledige service</span>
+            </div>
+            <button type="button" class="btn btn-sm btn-primary open-appointment-modal" data-pref="Bestelling PC: Intel Core i9 11900K + EVGA RTX 3080 12GB">
+              <span>Reserveren &rarr;</span>
+            </button>
+          </div>
+        </article>
+
+        <!-- PC Product 2: Intel i7 RTX 3070 Ti -->
+        <article class="shop-product-card" data-category="pcs">
+          <div class="product-badge-wrap">
+            <span class="prod-badge badge-popular">Populaire Build</span>
+            <span class="prod-stock">Op voorraad</span>
+          </div>
+          <div class="product-icon-wrap">
+            <span class="prod-emoji">⚡</span>
+          </div>
+          <div class="product-body">
+            <span class="prod-brand">QCC Custom Build</span>
+            <h4 class="prod-title">Intel Core i7 11700K &bull; EVGA RTX 3070 Ti FTW3 Ultra</h4>
+            <p class="prod-desc">MSI MAG Z590 Tomahawk WiFi, Fractal Design Lumen S24 RGB, 32GB Kingston FURY Renegade 3600MHz en Samsung 980 PRO 1TB M.2.</p>
+            <div class="prod-specs-list">
+              <span>✓ 32GB DDR4 3600MHz CL16</span>
+              <span>✓ 1TB Gen4 NVMe SSD M.2</span>
+              <span>✓ Ingebouwde WiFi 6 &amp; Bluetooth</span>
+            </div>
+          </div>
+          <div class="prod-footer">
+            <div class="prod-price-box">
+              <span class="prod-price">2 Jaar Gar.</span>
+              <span class="prod-vat">Volledige service</span>
+            </div>
+            <button type="button" class="btn btn-sm btn-primary open-appointment-modal" data-pref="Bestelling PC: Intel Core i7 11700K + EVGA RTX 3070 Ti">
+              <span>Reserveren &rarr;</span>
+            </button>
+          </div>
+        </article>
+
+        <!-- PC Product 3: Intel i7 RTX 3080 AIO RGB -->
+        <article class="shop-product-card" data-category="pcs">
+          <div class="product-badge-wrap">
+            <span class="prod-badge badge-gold">3TB SSD Monster</span>
+            <span class="prod-stock">Op voorraad</span>
+          </div>
+          <div class="product-icon-wrap">
+            <span class="prod-emoji">🎮</span>
+          </div>
+          <div class="product-body">
+            <span class="prod-brand">QCC Custom Build</span>
+            <h4 class="prod-title">Intel Core i7 11700K &bull; EVGA RTX 3080 12GB (AIO RGB)</h4>
+            <p class="prod-desc">Extreme opslagcapaciteit met 1TB Samsung 980 PRO én 2TB 970 EVO Plus (3TB totaal). Arctic 360 RGB en 32GB Corsair Vengeance RGB.</p>
+            <div class="prod-specs-list">
+              <span>✓ 32GB Corsair RGB RAM</span>
+              <span>✓ 3TB Totaal NVMe SSD M.2</span>
+              <span>✓ 12GB GDDR6X Videogeheugen</span>
+            </div>
+          </div>
+          <div class="prod-footer">
+            <div class="prod-price-box">
+              <span class="prod-price">2 Jaar Gar.</span>
+              <span class="prod-vat">Volledige service</span>
+            </div>
+            <button type="button" class="btn btn-sm btn-primary open-appointment-modal" data-pref="Bestelling PC: Intel Core i7 11700K + EVGA RTX 3080 12GB AIO RGB">
+              <span>Reserveren &rarr;</span>
+            </button>
+          </div>
+        </article>
+
+        <!-- PC Product 4: Intel i7 RTX 3080 Stealth Black -->
+        <article class="shop-product-card" data-category="pcs">
+          <div class="product-badge-wrap">
+            <span class="prod-badge badge-popular">Stealth Black</span>
+            <span class="prod-stock">Op voorraad</span>
+          </div>
+          <div class="product-icon-wrap">
+            <span class="prod-emoji">🖤</span>
+          </div>
+          <div class="product-body">
+            <span class="prod-brand">QCC Custom Build</span>
+            <h4 class="prod-title">Intel Core i7 11700K &bull; EVGA RTX 3080 12GB (Stealth)</h4>
+            <p class="prod-desc">Volledig no-RGB, matzwarte minimalistische uitvoering. Fluisterstille Arctic 360 Stealth waterkoeling en Zalman Z9 behuizing.</p>
+            <div class="prod-specs-list">
+              <span>✓ 32GB Low-Profile 3600MHz</span>
+              <span>✓ 1TB Samsung 980 PRO Gen4</span>
+              <span>✓ Fluisterstille akoestiek</span>
+            </div>
+          </div>
+          <div class="prod-footer">
+            <div class="prod-price-box">
+              <span class="prod-price">2 Jaar Gar.</span>
+              <span class="prod-vat">Volledige service</span>
+            </div>
+            <button type="button" class="btn btn-sm btn-primary open-appointment-modal" data-pref="Bestelling PC: Intel Core i7 11700K + EVGA RTX 3080 Stealth">
+              <span>Reserveren &rarr;</span>
+            </button>
+          </div>
+        </article>
+
+        <!-- PC Product 5: AMD Ryzen 7 MSI Suprim RTX 3070 -->
+        <article class="shop-product-card" data-category="pcs">
+          <div class="product-badge-wrap">
+            <span class="prod-badge badge-green">AMD Ryzen</span>
+            <span class="prod-stock">Op voorraad</span>
+          </div>
+          <div class="product-icon-wrap">
+            <span class="prod-emoji">🔥</span>
+          </div>
+          <div class="product-body">
+            <span class="prod-brand">QCC Custom Build</span>
+            <h4 class="prod-title">AMD Ryzen 7 &bull; MSI SUPRIM GeForce RTX 3070</h4>
+            <p class="prod-desc">ASUS ROG STRIX B550-F Gaming moederbord, 16GB Corsair DDR4 en 1TB Samsung 980 PRO. Krachtig en stabiel voor competitief gamen.</p>
+            <div class="prod-specs-list">
+              <span>✓ AMD Ryzen 7 8-Core CPU</span>
+              <span>✓ MSI Suprim Flagship Koeler</span>
+              <span>✓ ASUS ROG Strix B550-F</span>
+            </div>
+          </div>
+          <div class="prod-footer">
+            <div class="prod-price-box">
+              <span class="prod-price">2 Jaar Gar.</span>
+              <span class="prod-vat">Volledige service</span>
+            </div>
+            <button type="button" class="btn btn-sm btn-primary open-appointment-modal" data-pref="Bestelling PC: AMD Ryzen 7 + MSI SUPRIM RTX 3070">
+              <span>Reserveren &rarr;</span>
+            </button>
+          </div>
+        </article>
+
+        <!-- PC Product 6: Intel Core i7 10700K EVGA RTX 2060 -->
+        <article class="shop-product-card" data-category="pcs">
+          <div class="product-badge-wrap">
+            <span class="prod-badge badge-popular">All-Round Gaming</span>
+            <span class="prod-stock">Op voorraad</span>
+          </div>
+          <div class="product-icon-wrap">
+            <span class="prod-emoji">🕹️</span>
+          </div>
+          <div class="product-body">
+            <span class="prod-brand">QCC Custom Build</span>
+            <h4 class="prod-title">Intel Core i7 10700K &bull; EVGA RTX 2060 (Corsair RGB)</h4>
+            <p class="prod-desc">MSI MPG Z490 Gaming Plus, Corsair H100i RGB Platinum 240mm waterkoeling, 32GB RAM en 750W Cooler Master Gold voeding.</p>
+            <div class="prod-specs-list">
+              <span>✓ 32GB Corsair Vengeance RAM</span>
+              <span>✓ Corsair Hydro 240mm Waterkoeling</span>
+              <span>✓ 750W 80+ Gold Modular</span>
+            </div>
+          </div>
+          <div class="prod-footer">
+            <div class="prod-price-box">
+              <span class="prod-price">2 Jaar Gar.</span>
+              <span class="prod-vat">Volledige service</span>
+            </div>
+            <button type="button" class="btn btn-sm btn-primary open-appointment-modal" data-pref="Bestelling PC: Intel Core i7 10700K + EVGA RTX 2060">
+              <span>Reserveren &rarr;</span>
+            </button>
+          </div>
+        </article>
+        
+        <!-- Product 1: XSSIVE Universal Stand -->
+        <article class="shop-product-card" data-category="accessories">
+          <div class="product-badge-wrap">
+            <span class="prod-badge badge-popular">Bestseller</span>
+            <span class="prod-stock">Op voorraad</span>
+          </div>
+          <div class="product-icon-wrap">
+            <span class="prod-emoji">📱</span>
+          </div>
+          <div class="product-body">
+            <span class="prod-brand">XSSIVE Official</span>
+            <h4 class="prod-title">XSSIVE Universal Phone &amp; Tablet Stand</h4>
+            <p class="prod-desc">Stevige, verstelbare aluminium bureauhouder geschikt voor alle telefoons en iPads. Antislip siliconen voet en kabeldoorvoer.</p>
+            <div class="prod-specs-list">
+              <span>✓ 270° hoek verstelbaar</span>
+              <span>✓ Geschikt t/m 12.9" tablets</span>
+              <span>✓ Zwart geanodiseerd metaal</span>
+            </div>
+          </div>
+          <div class="prod-footer">
+            <div class="prod-price-box">
+              <span class="prod-price">&euro; 14,95</span>
+              <span class="prod-vat">incl. btw</span>
+            </div>
+            <button type="button" class="btn btn-sm btn-primary open-appointment-modal" data-pref="Bestelling: XSSIVE Universal Phone &amp; Tablet Stand (€14,95)">
+              <span>Reserveren &rarr;</span>
+            </button>
+          </div>
+        </article>
+
+        <!-- Product 2: Kingston A400 SSD -->
+        <article class="shop-product-card" data-category="storage">
+          <div class="product-badge-wrap">
+            <span class="prod-badge badge-hot">Tot 10x Sneller</span>
+            <span class="prod-stock">Direct leverbaar</span>
+          </div>
+          <div class="product-icon-wrap">
+            <span class="prod-emoji">⚡</span>
+          </div>
+          <div class="product-body">
+            <span class="prod-brand">Kingston Technology</span>
+            <h4 class="prod-title">Kingston A400 SSD (480GB / 960GB)</h4>
+            <p class="prod-desc">De ideale upgrade voor trage laptops en pc's. Leessnelheden tot 500MB/s. Montage en data-overzetting mogelijk in onze werkplaats.</p>
+            <div class="prod-specs-list">
+              <span>✓ 2.5 inch SATA III interface</span>
+              <span>✓ 3 jaar fabrieksgarantie</span>
+              <span>✓ Schok- en trillingsbestendig</span>
+            </div>
+          </div>
+          <div class="prod-footer">
+            <div class="prod-price-box">
+              <span class="prod-price">Vanaf &euro; 44,95</span>
+              <span class="prod-vat">incl. btw</span>
+            </div>
+            <button type="button" class="btn btn-sm btn-primary open-appointment-modal" data-pref="Bestelling: Kingston A400 SSD Upgrade">
+              <span>Reserveren &rarr;</span>
+            </button>
+          </div>
+        </article>
+
+        <!-- Product 3: Kingston NV2 NVMe Gen4 -->
+        <article class="shop-product-card" data-category="storage">
+          <div class="product-badge-wrap">
+            <span class="prod-badge badge-speed">3500 MB/s</span>
+            <span class="prod-stock">Op voorraad</span>
+          </div>
+          <div class="product-icon-wrap">
+            <span class="prod-emoji">🚀</span>
+          </div>
+          <div class="product-body">
+            <span class="prod-brand">Kingston NVMe</span>
+            <h4 class="prod-title">Kingston NV2 PCIe 4.0 NVMe M.2 1TB</h4>
+            <p class="prod-desc">Ultrasnelle Gen 4x4 NVMe opslag voor de nieuwste laptops, desktops en PlayStation 5 interne geheugenuitbreiding.</p>
+            <div class="prod-specs-list">
+              <span>✓ Leessnelheid tot 3.500 MB/s</span>
+              <span>✓ M.2 2280 form factor</span>
+              <span>✓ PS5 compatibel</span>
+            </div>
+          </div>
+          <div class="prod-footer">
+            <div class="prod-price-box">
+              <span class="prod-price">&euro; 69,95</span>
+              <span class="prod-vat">incl. btw</span>
+            </div>
+            <button type="button" class="btn btn-sm btn-primary open-appointment-modal" data-pref="Bestelling: Kingston NV2 PCIe 4.0 NVMe 1TB (€69,95)">
+              <span>Reserveren &rarr;</span>
+            </button>
+          </div>
+        </article>
+
+        <!-- Product 4: USB-C 20W Snellader -->
+        <article class="shop-product-card" data-category="accessories">
+          <div class="product-badge-wrap">
+            <span class="prod-badge badge-popular">Power Delivery</span>
+            <span class="prod-stock">Op voorraad</span>
+          </div>
+          <div class="product-icon-wrap">
+            <span class="prod-emoji">🔌</span>
+          </div>
+          <div class="product-body">
+            <span class="prod-brand">USB-C PD 3.0</span>
+            <h4 class="prod-title">USB-C Power Adapter 20W Snellader</h4>
+            <p class="prod-desc">Gecertificeerde snellader voor Apple iPhone 16/15/14/13, iPad en Samsung Galaxy. Laadt 50% op binnen slechts 30 minuten.</p>
+            <div class="prod-specs-list">
+              <span>✓ Beveiligd tegen oververhitting</span>
+              <span>✓ Compact design voor onderweg</span>
+              <span>✓ Universeel USB-C Power Delivery</span>
+            </div>
+          </div>
+          <div class="prod-footer">
+            <div class="prod-price-box">
+              <span class="prod-price">&euro; 19,95</span>
+              <span class="prod-vat">incl. btw</span>
+            </div>
+            <button type="button" class="btn btn-sm btn-primary open-appointment-modal" data-pref="Bestelling: USB-C 20W Snellader Adapter (€19,95)">
+              <span>Reserveren &rarr;</span>
+            </button>
+          </div>
+        </article>
+
+        <!-- Product 5: Gevlochten Laadkabels -->
+        <article class="shop-product-card" data-category="cables">
+          <div class="product-badge-wrap">
+            <span class="prod-badge">Nylon Gevlochten</span>
+            <span class="prod-stock">Ruime voorraad</span>
+          </div>
+          <div class="product-icon-wrap">
+            <span class="prod-emoji">🔗</span>
+          </div>
+          <div class="product-body">
+            <span class="prod-brand">Kabels &amp; Connectoren</span>
+            <h4 class="prod-title">USB naar Lightning &amp; USB-C Kabels</h4>
+            <p class="prod-desc">Onbreekbare gevlochten laad- en datakabels met versterkte aluminium connectoren. Verkrijgbaar in 1 meter en 2 meter.</p>
+            <div class="prod-specs-list">
+              <span>✓ Knikbestendige trekontlasting</span>
+              <span>✓ Snelladen t/m 60W ondersteuning</span>
+              <span>✓ Getest op 15.000+ buigingen</span>
+            </div>
+          </div>
+          <div class="prod-footer">
+            <div class="prod-price-box">
+              <span class="prod-price">Vanaf &euro; 9,95</span>
+              <span class="prod-vat">incl. btw</span>
+            </div>
+            <button type="button" class="btn btn-sm btn-primary open-appointment-modal" data-pref="Bestelling: Gevlochten Laadkabel USB-C / Lightning">
+              <span>Reserveren &rarr;</span>
+            </button>
+          </div>
+        </article>
+
+        <!-- Product 6: HDMI 2.1 8K Kabel -->
+        <article class="shop-product-card" data-category="cables">
+          <div class="product-badge-wrap">
+            <span class="prod-badge badge-speed">4K 120Hz / 8K</span>
+            <span class="prod-stock">Op voorraad</span>
+          </div>
+          <div class="product-icon-wrap">
+            <span class="prod-emoji">🎮</span>
+          </div>
+          <div class="product-body">
+            <span class="prod-brand">High-Speed Video</span>
+            <h4 class="prod-title">HDMI 2.1 Ultra High Speed Kabel (2m)</h4>
+            <p class="prod-desc">Essentieel voor PlayStation 5, Xbox Series X en gaming monitoren. Ondersteunt 48 Gbps bandbreedte, VRR, ALLM en eARC audio.</p>
+            <div class="prod-specs-list">
+              <span>✓ 4K bij 120Hz en 8K bij 60Hz</span>
+              <span>✓ Vergulde contactpunten</span>
+              <span>✓ Geen haperingen of input lag</span>
+            </div>
+          </div>
+          <div class="prod-footer">
+            <div class="prod-price-box">
+              <span class="prod-price">&euro; 14,95</span>
+              <span class="prod-vat">incl. btw</span>
+            </div>
+            <button type="button" class="btn btn-sm btn-primary open-appointment-modal" data-pref="Bestelling: HDMI 2.1 Ultra High Speed Kabel 2m (€14,95)">
+              <span>Reserveren &rarr;</span>
+            </button>
+          </div>
+        </article>
+
+        <!-- Product 7: DisplayPort Adapters -->
+        <article class="shop-product-card" data-category="cables">
+          <div class="product-badge-wrap">
+            <span class="prod-badge">Converters</span>
+            <span class="prod-stock">Op voorraad</span>
+          </div>
+          <div class="product-icon-wrap">
+            <span class="prod-emoji">🖥️</span>
+          </div>
+          <div class="product-body">
+            <span class="prod-brand">Display Adapters</span>
+            <h4 class="prod-title">DisplayPort naar HDMI / VGA Adapter</h4>
+            <p class="prod-desc">Koppel uw zakelijke pc of laptop moeiteloos aan een tweede beeldscherm, projector of smart tv in haarscherpe resolutie.</p>
+            <div class="prod-specs-list">
+              <span>✓ Ondersteunt 4K Ultra HD video</span>
+              <span>✓ Geen software/driver installatie nodig</span>
+              <span>✓ Ook mini-DisplayPort verkrijgbaar</span>
+            </div>
+          </div>
+          <div class="prod-footer">
+            <div class="prod-price-box">
+              <span class="prod-price">&euro; 12,95</span>
+              <span class="prod-vat">incl. btw</span>
+            </div>
+            <button type="button" class="btn btn-sm btn-primary open-appointment-modal" data-pref="Bestelling: DisplayPort naar HDMI Adapter (€12,95)">
+              <span>Reserveren &rarr;</span>
+            </button>
+          </div>
+        </article>
+
+        <!-- Product 8: 9H Gehard Glas Screenprotector -->
+        <article class="shop-product-card" data-category="accessories">
+          <div class="product-badge-wrap">
+            <span class="prod-badge badge-popular">Inclusief Montage</span>
+            <span class="prod-stock">Alle modellen</span>
+          </div>
+          <div class="product-icon-wrap">
+            <span class="prod-emoji">🛡️</span>
+          </div>
+          <div class="product-body">
+            <span class="prod-brand">Schermbescherming</span>
+            <h4 class="prod-title">Gehard Glas 9H Screenprotector</h4>
+            <p class="prod-desc">Maximale bescherming tegen krassen en barsten voor iPhone (alle reeksen), Samsung Galaxy en iPads. Gratis vakkundig geplaatst in de winkel!</p>
+            <div class="prod-specs-list">
+              <span>✓ 9H diamant-hardheid</span>
+              <span>✓ Vlekvrije oleofobe coating</span>
+              <span>✓ Montage zonder stof of luchtbellen</span>
+            </div>
+          </div>
+          <div class="prod-footer">
+            <div class="prod-price-box">
+              <span class="prod-price">&euro; 12,50</span>
+              <span class="prod-vat">incl. montage</span>
+            </div>
+            <button type="button" class="btn btn-sm btn-primary open-appointment-modal" data-pref="Bestelling: 9H Screenprotector incl. montage (€12,50)">
+              <span>Reserveren &rarr;</span>
+            </button>
+          </div>
+        </article>
+
+        <!-- Product 9: Microsoft Office Licentie -->
+        <article class="shop-product-card" data-category="software">
+          <div class="product-badge-wrap">
+            <span class="prod-badge badge-hot">Levenslange Licentie</span>
+            <span class="prod-stock">Direct geleverd</span>
+          </div>
+          <div class="product-icon-wrap">
+            <span class="prod-emoji">📑</span>
+          </div>
+          <div class="product-body">
+            <span class="prod-brand">Microsoft Software</span>
+            <h4 class="prod-title">Microsoft Office Home &amp; Student</h4>
+            <p class="prod-desc">Originele permanente licentie voor 1 PC of Mac. Bevat de klassieke desktopversies van Word, Excel en PowerPoint zonder abonnementskosten.</p>
+            <div class="prod-specs-list">
+              <span>✓ Eenmalige aankoop (geen maandelijks abonnement)</span>
+              <span>✓ Officiële Microsoft activatie</span>
+              <span>✓ Installatiehulp mogelijk</span>
+            </div>
+          </div>
+          <div class="prod-footer">
+            <div class="prod-price-box">
+              <span class="prod-price">&euro; 149,-</span>
+              <span class="prod-vat">eenmalig</span>
+            </div>
+            <button type="button" class="btn btn-sm btn-primary open-appointment-modal" data-pref="Bestelling: Microsoft Office Home &amp; Student licentie (€149,-)">
+              <span>Aanvragen &rarr;</span>
+            </button>
+          </div>
+        </article>
+
+        <!-- Product 10: Norton Security Deluxe -->
+        <article class="shop-product-card" data-category="software">
+          <div class="product-badge-wrap">
+            <span class="prod-badge">Top Beveiliging</span>
+            <span class="prod-stock">Direct actief</span>
+          </div>
+          <div class="product-icon-wrap">
+            <span class="prod-emoji">🔒</span>
+          </div>
+          <div class="product-body">
+            <span class="prod-brand">Beveiligingssoftware</span>
+            <h4 class="prod-title">Norton Security Deluxe (1 Jaar / Multi-Device)</h4>
+            <p class="prod-desc">Geavanceerde bescherming tegen virussen, spyware, ransomware en internetfraude. Inclusief veilige VPN voor bankieren en surfen.</p>
+            <div class="prod-specs-list">
+              <span>✓ Bescherming voor PC, Mac &amp; Smartphone</span>
+              <span>✓ Realtime dreigingsdetectie</span>
+              <span>✓ Veilig online betalen &amp; wachtwoordbeheer</span>
+            </div>
+          </div>
+          <div class="prod-footer">
+            <div class="prod-price-box">
+              <span class="prod-price">&euro; 39,95</span>
+              <span class="prod-vat">per jaar</span>
+            </div>
+            <button type="button" class="btn btn-sm btn-primary open-appointment-modal" data-pref="Bestelling: Norton Security licentie (€39,95)">
+              <span>Aanvragen &rarr;</span>
+            </button>
+          </div>
+        </article>
+
+        <!-- Product 11: XSSIVE Bluetooth Speaker -->
+        <article class="shop-product-card" data-category="peripherals">
+          <div class="product-badge-wrap">
+            <span class="prod-badge badge-popular">Stereo Sound</span>
+            <span class="prod-stock">Op voorraad</span>
+          </div>
+          <div class="product-icon-wrap">
+            <span class="prod-emoji">🔊</span>
+          </div>
+          <div class="product-body">
+            <span class="prod-brand">Audio &amp; Sound</span>
+            <h4 class="prod-title">XSSIVE Bluetooth Speaker XSS-BSP08</h4>
+            <p class="prod-desc">Draagbare draadloze speaker met diepe bass en kristalhelder geluid. Robuuste behuizing, USB/MicroSD lezer en ingebouwde microfoon.</p>
+            <div class="prod-specs-list">
+              <span>✓ Tot 8 uur continue speeltijd</span>
+              <span>✓ Handsfree bellen functie</span>
+              <span>✓ Bluetooth 5.0 met 10 meter bereik</span>
+            </div>
+          </div>
+          <div class="prod-footer">
+            <div class="prod-price-box">
+              <span class="prod-price">&euro; 24,95</span>
+              <span class="prod-vat">incl. btw</span>
+            </div>
+            <button type="button" class="btn btn-sm btn-primary open-appointment-modal" data-pref="Bestelling: XSSIVE Bluetooth Speaker XSS-BSP08 (€24,95)">
+              <span>Reserveren &rarr;</span>
+            </button>
+          </div>
+        </article>
+
+        <!-- Product 12: Draadloze Ergonomische Muis -->
+        <article class="shop-product-card" data-category="peripherals">
+          <div class="product-badge-wrap">
+            <span class="prod-badge">Ergonomisch</span>
+            <span class="prod-stock">Op voorraad</span>
+          </div>
+          <div class="product-icon-wrap">
+            <span class="prod-emoji">🖱️</span>
+          </div>
+          <div class="product-body">
+            <span class="prod-brand">Randapparatuur</span>
+            <h4 class="prod-title">Draadloze Ergonomische Muis 2.4GHz</h4>
+            <p class="prod-desc">Voorkomt polsklachten en RSI. Ligt natuurlijk in de hand met instelbare optische DPI-sensor (800/1200/1600) en stille muisknoppen.</p>
+            <div class="prod-specs-list">
+              <span>✓ Plug &amp; play USB nano-ontvanger</span>
+              <span>✓ Automatische energiebesparing</span>
+              <span>✓ Werkt op Windows, macOS &amp; ChromeOS</span>
+            </div>
+          </div>
+          <div class="prod-footer">
+            <div class="prod-price-box">
+              <span class="prod-price">&euro; 17,95</span>
+              <span class="prod-vat">incl. btw</span>
+            </div>
+            <button type="button" class="btn btn-sm btn-primary open-appointment-modal" data-pref="Bestelling: Draadloze Muis 2.4GHz (€17,95)">
+              <span>Reserveren &rarr;</span>
+            </button>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- Shop Callout Banner -->
+      <div class="shop-banner">
+        <div class="shop-banner-info">
+          <div class="shop-banner-pill">1000+ Artikelen Direct Beschikbaar</div>
+          <h3 class="shop-banner-title">Zoekt u een specifieke adapter, converter of kabel?</h3>
+          <p class="shop-banner-desc">
+            In onze winkel aan de <strong>Goudreinetstraat 253</strong> en op onze online webshop vindt u honderden SATA-kabels, Molex converters, externe harde schijven, netwerkswitches en accessoires. 
+            Bel ons direct voor voorraadcontrole of bestel online via <strong>shop.qualitycomputer.nl</strong>.
+          </p>
+        </div>
+        <div class="shop-banner-actions">
+          <a href="https://shop.qualitycomputer.nl/" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
+            <span>Naar Volledige Webshop</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          </a>
+          <button type="button" class="btn btn-glass btn-lg open-appointment-modal" data-pref="Vraag / reservering webshop artikel">
+            <span>Product Reserveren in Winkel</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 4. Hulp op Locatie Detail Strip -->
+  <section class="section on-site-section" id="aan-huis">
+    <div class="container">
+      <div class="on-site-card">
+        <div class="on-site-info">
+          <div class="section-pill">Service Aan Huis &amp; Kantoor</div>
+          <h2 class="on-site-title">Geen gesjouw? Wij komen direct naar u toe!</h2>
+          <p class="on-site-text">
+            Of het nu gaat om een printer die weigert, slecht wifi-bereik op de bovenverdieping, een gecrashte computer of de installatie van een compleet thuisnetwerk: onze vakmonteur lost het bij u thuis of op de zaak op.
+          </p>
+          <div class="on-site-tarief">
+            <div class="tarief-badge">
+              <span class="tarief-eur">&euro; 12,50</span>
+              <span class="tarief-sub">per kwartier</span>
+            </div>
+            <div class="tarief-note">
+              <strong>Eerlijke &amp; transparante tarieven:</strong>
+              U betaalt enkel voor de daadwerkelijk gewerkte tijd. Geen onverwachte kosten.
+            </div>
+          </div>
+        </div>
+        <div class="on-site-cta">
+          <button type="button" class="btn btn-primary btn-lg open-appointment-modal" data-pref="Afspraak op locatie (thuis/kantoor)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            <span>Monteur Aan Huis Reserveren</span>
+          </button>
+          <p class="on-site-phone-hint">
+            Of bel direct voor spoedhulp: <a href="tel:0703236991"><strong>070 - 323 69 91</strong></a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. High-End Game PC's & Custom Builds Showcase (Alle PC-Systemen) -->
+  <section class="section high-end-section" id="high-end">
+    <div class="container">
+      
+      <div class="high-end-header">
+        <div class="section-pill pill-gold">High-End Engineering &bull; Den Haag</div>
+        <h2 class="section-title">Custom Game PC's &amp; Krachtige Workstations</h2>
+        <p class="section-subtitle">
+          Van ultra-krachtige 4K gaming rigs tot fluisterstille 3D-render workstations. 
+          Al onze custom systemen worden met de hand gebouwd in onze eigen werkplaats aan de Goudreinetstraat, 
+          voorzien van high-end koeling, professioneel kabelmanagement en 100% thermisch en benchmark getest.
+        </p>
+      </div>
+
+      <!-- PC Category Filters -->
+      <div class="pc-filter-bar" id="pc-filters">
+        <button type="button" class="pc-filter-btn active" data-pc-filter="all">Alle Systemen (6)</button>
+        <button type="button" class="pc-filter-btn" data-pc-filter="intel">Intel Core i9 / i7</button>
+        <button type="button" class="pc-filter-btn" data-pc-filter="amd">AMD Ryzen 7</button>
+        <button type="button" class="pc-filter-btn" data-pc-filter="rtx3080">GeForce RTX 3080</button>
+        <button type="button" class="pc-filter-btn" data-pc-filter="rtx3070">GeForce RTX 3070 / Ti</button>
+      </div>
+
+      <!-- PC Systems Catalog Grid -->
+      <div class="pc-catalog-grid" id="pc-grid">
+
+        <!-- PC 1: Intel i9 11900K Full RGB Flagship -->
+        <article class="pc-catalog-card" data-category="intel rtx3080 flagship">
+          <div class="pc-card-thumb-wrap">
+            <img src="assets/pc-i9-11900k-3080.jpg" alt="Intel i9 11900K EVGA RTX 3080 Full RGB Custom PC" class="pc-card-img" loading="lazy">
+            <div class="pc-thumb-badges">
+              <span class="pc-type-badge">Flagship Edition</span>
+              <span class="pc-stock-badge">Direct Beschikbaar</span>
+            </div>
+          </div>
+          <div class="pc-card-content">
+            <span class="pc-category-tag">Intel Core i9 &bull; Full RGB Watercooled</span>
+            <h3 class="pc-card-title">Intel Core i9 11900K &bull; EVGA RTX 3080 12GB FTW3 Ultra</h3>
+            <div class="pc-quick-pills">
+              <span class="pc-pill">64GB RAM</span>
+              <span class="pc-pill">2TB NVMe Gen4</span>
+              <span class="pc-pill">360mm AIO RGB</span>
+              <span class="pc-pill">850W Gold</span>
+            </div>
+            <table class="pc-spec-table">
+              <tr>
+                <td class="spec-k">Processor</td>
+                <td class="spec-v">Intel Core i9 11900K (8C / 16T tot 5.3GHz)</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Videokaart</td>
+                <td class="spec-v">EVGA GeForce RTX 3080 FTW3 Ultra Gaming 12GB GDDR6X</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Moederbord</td>
+                <td class="spec-v">ASRock Z590 PG Velocita High-End Gaming</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Koeling</td>
+                <td class="spec-v">Arctic Liquid Freezer II 360 A-RGB Waterkoeling</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Geheugen</td>
+                <td class="spec-v">Corsair Vengeance RGB RS 64GB (4x16GB) 3600MHz</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Opslag</td>
+                <td class="spec-v">2x Samsung 980 PRO 1TB M.2 PCIe 4.0 NVMe (2TB Totaal)</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Voeding &amp; Kast</td>
+                <td class="spec-v">Seasonic Focus GX-850 Gold in Zalman Z9 Iceberg (Full RGB)</td>
+              </tr>
+            </table>
+            <div class="pc-card-footer">
+              <div class="pc-price-tag-wrap">
+                <span class="pc-price-label">Garantie &amp; Service</span>
+                <span class="pc-price-val">2 Jaar QCC Garantie</span>
+              </div>
+              <button type="button" class="btn btn-sm btn-primary open-appointment-modal" data-pref="Bestelling / Aanvraag: Intel Core i9 11900K + EVGA RTX 3080 12GB FTW3 Ultra (Full RGB)">
+                <span>Aanvragen &rarr;</span>
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- PC 2: Intel i7 11700K EVGA RTX 3070 Ti -->
+        <article class="pc-catalog-card" data-category="intel rtx3070">
+          <div class="pc-card-thumb-wrap">
+            <img src="assets/pc-i7-11700k-3070ti.jpg" alt="Intel i7 11700K EVGA RTX 3070 Ti Custom PC" class="pc-card-img" loading="lazy">
+            <div class="pc-thumb-badges">
+              <span class="pc-type-badge">High Performance</span>
+              <span class="pc-stock-badge">Direct Beschikbaar</span>
+            </div>
+          </div>
+          <div class="pc-card-content">
+            <span class="pc-category-tag">Intel Core i7 &bull; Fractal Lumen RGB</span>
+            <h3 class="pc-card-title">Intel Core i7 11700K &bull; EVGA RTX 3070 Ti FTW3 Ultra</h3>
+            <div class="pc-quick-pills">
+              <span class="pc-pill">32GB RAM 3600MHz</span>
+              <span class="pc-pill">1TB Gen4 NVMe</span>
+              <span class="pc-pill">WiFi 6 &amp; BT</span>
+              <span class="pc-pill">Seasonic 850W</span>
+            </div>
+            <table class="pc-spec-table">
+              <tr>
+                <td class="spec-k">Processor</td>
+                <td class="spec-v">Intel Core i7 11700K (8C / 16T tot 5.0GHz)</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Videokaart</td>
+                <td class="spec-v">EVGA GeForce RTX 3070 Ti FTW3 ULTRA GAMING 8GB</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Moederbord</td>
+                <td class="spec-v">MSI MAG Z590 TOMAHAWK WIFI (Ingebouwde WiFi 6)</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Koeling</td>
+                <td class="spec-v">Fractal Design Lumen S24 RGB Waterkoeling</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Geheugen</td>
+                <td class="spec-v">Kingston FURY Renegade 32GB (2x16GB) 3600MHz CL16</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Opslag</td>
+                <td class="spec-v">Samsung 980 PRO 1TB M.2 PCIe 4.0 NVMe SSD</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Voeding &amp; Kast</td>
+                <td class="spec-v">Seasonic Focus GX-850 Gold in Zalman K1 Rev. A RGB Midi Tower</td>
+              </tr>
+            </table>
+            <div class="pc-card-footer">
+              <div class="pc-price-tag-wrap">
+                <span class="pc-price-label">Garantie &amp; Service</span>
+                <span class="pc-price-val">2 Jaar QCC Garantie</span>
+              </div>
+              <button type="button" class="btn btn-sm btn-primary open-appointment-modal" data-pref="Bestelling / Aanvraag: Intel Core i7 11700K + EVGA RTX 3070 Ti FTW3 Ultra">
+                <span>Aanvragen &rarr;</span>
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- PC 3: Intel i7 11700K EVGA RTX 3080 AIO RGB -->
+        <article class="pc-catalog-card" data-category="intel rtx3080">
+          <div class="pc-card-thumb-wrap">
+            <img src="assets/pc-i7-11700k-3080-rgb.jpg" alt="Intel i7 11700K EVGA RTX 3080 AIO RGB Custom Gaming PC" class="pc-card-img" loading="lazy">
+            <div class="pc-thumb-badges">
+              <span class="pc-type-badge">4K Gaming &bull; 3TB SSD</span>
+              <span class="pc-stock-badge">Direct Beschikbaar</span>
+            </div>
+          </div>
+          <div class="pc-card-content">
+            <span class="pc-category-tag">Intel Core i7 &bull; Dual NVMe Monster</span>
+            <h3 class="pc-card-title">Intel Core i7 11700K &bull; EVGA RTX 3080 12GB (AIO RGB)</h3>
+            <div class="pc-quick-pills">
+              <span class="pc-pill">32GB RAM</span>
+              <span class="pc-pill">3TB NVMe Opslag</span>
+              <span class="pc-pill">Arctic 360 RGB</span>
+              <span class="pc-pill">12GB GDDR6X</span>
+            </div>
+            <table class="pc-spec-table">
+              <tr>
+                <td class="spec-k">Processor</td>
+                <td class="spec-v">Intel Core i7 11700K (8 Cores / 16 Threads)</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Videokaart</td>
+                <td class="spec-v">EVGA GeForce RTX 3080 FTW3 Ultra Gaming 12GB GDDR6X</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Moederbord</td>
+                <td class="spec-v">ASRock Z590 PG Velocita High-End Gaming</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Koeling</td>
+                <td class="spec-v">Arctic Liquid Freezer II 360 RGB AIO Waterkoeling</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Geheugen</td>
+                <td class="spec-v">Corsair Vengeance RGB RS 32GB (2x16GB) 3600MHz</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Opslag</td>
+                <td class="spec-v">Samsung 980 PRO 1TB Gen4 + Samsung 970 EVO Plus 2TB (3TB Totaal)</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Voeding &amp; Kast</td>
+                <td class="spec-v">Seasonic Focus GX-850 Gold in Zalman Z9 Iceberg Glass Edition</td>
+              </tr>
+            </table>
+            <div class="pc-card-footer">
+              <div class="pc-price-tag-wrap">
+                <span class="pc-price-label">Garantie &amp; Service</span>
+                <span class="pc-price-val">2 Jaar QCC Garantie</span>
+              </div>
+              <button type="button" class="btn btn-sm btn-primary open-appointment-modal" data-pref="Bestelling / Aanvraag: Intel Core i7 11700K + EVGA RTX 3080 12GB (AIO RGB 3TB SSD)">
+                <span>Aanvragen &rarr;</span>
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- PC 4: Intel i7 11700K EVGA RTX 3080 Stealth Black (No RGB) -->
+        <article class="pc-catalog-card" data-category="intel rtx3080">
+          <div class="pc-card-thumb-wrap">
+            <img src="assets/pc-i7-11700k-3080-stealth.jpg" alt="Intel i7 11700K EVGA RTX 3080 Stealth No RGB PC" class="pc-card-img" loading="lazy">
+            <div class="pc-thumb-badges">
+              <span class="pc-type-badge">Stealth Workstation</span>
+              <span class="pc-stock-badge">Direct Beschikbaar</span>
+            </div>
+          </div>
+          <div class="pc-card-content">
+            <span class="pc-category-tag">Intel Core i7 &bull; Stealth No-RGB Clean</span>
+            <h3 class="pc-card-title">Intel Core i7 11700K &bull; EVGA RTX 3080 12GB (Stealth Black)</h3>
+            <div class="pc-quick-pills">
+              <span class="pc-pill">32GB RAM</span>
+              <span class="pc-pill">1TB Gen4 NVMe</span>
+              <span class="pc-pill">Fluisterstil 360mm</span>
+              <span class="pc-pill">Clean Black</span>
+            </div>
+            <table class="pc-spec-table">
+              <tr>
+                <td class="spec-k">Processor</td>
+                <td class="spec-v">Intel Core i7 11700K (8C / 16T tot 5.0GHz)</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Videokaart</td>
+                <td class="spec-v">EVGA GeForce RTX 3080 FTW3 Ultra Gaming 12GB GDDR6X</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Moederbord</td>
+                <td class="spec-v">ASRock Z590 PG Velocita High-End Gaming</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Koeling</td>
+                <td class="spec-v">Arctic Liquid Freezer II 360 Stealth Edition (No-RGB, ultra stil)</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Geheugen</td>
+                <td class="spec-v">Corsair Vengeance LPX 32GB (2x16GB) 3600MHz Low Profile</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Opslag</td>
+                <td class="spec-v">Samsung 980 PRO 1TB M.2 PCIe 4.0 NVMe SSD</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Voeding &amp; Kast</td>
+                <td class="spec-v">Seasonic Focus GX-850 Gold in Zalman Z9 Iceberg Matte Black</td>
+              </tr>
+            </table>
+            <div class="pc-card-footer">
+              <div class="pc-price-tag-wrap">
+                <span class="pc-price-label">Garantie &amp; Service</span>
+                <span class="pc-price-val">2 Jaar QCC Garantie</span>
+              </div>
+              <button type="button" class="btn btn-sm btn-primary open-appointment-modal" data-pref="Bestelling / Aanvraag: Intel Core i7 11700K + EVGA RTX 3080 12GB Stealth Edition">
+                <span>Aanvragen &rarr;</span>
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- PC 5: AMD Ryzen 7 MSI Suprim RTX 3070 -->
+        <article class="pc-catalog-card" data-category="amd rtx3070">
+          <div class="pc-card-thumb-wrap">
+            <img src="assets/pc-ryzen7-3070.jpg" alt="AMD Ryzen 7 MSI Suprim RTX 3070 Custom Gaming PC" class="pc-card-img" loading="lazy">
+            <div class="pc-thumb-badges">
+              <span class="pc-type-badge">AMD Ryzen Gaming</span>
+              <span class="pc-stock-badge">Direct Beschikbaar</span>
+            </div>
+          </div>
+          <div class="pc-card-content">
+            <span class="pc-category-tag">AMD Ryzen 7 &bull; ASUS ROG Strix Gaming</span>
+            <h3 class="pc-card-title">AMD Ryzen 7 &bull; MSI SUPRIM GeForce RTX 3070</h3>
+            <div class="pc-quick-pills">
+              <span class="pc-pill">Ryzen 7 8-Core</span>
+              <span class="pc-pill">MSI SUPRIM RTX 3070</span>
+              <span class="pc-pill">1TB Gen4 NVMe</span>
+              <span class="pc-pill">ROG Strix B550-F</span>
+            </div>
+            <table class="pc-spec-table">
+              <tr>
+                <td class="spec-k">Processor</td>
+                <td class="spec-v">AMD Ryzen 7 (8 Cores / 16 Threads Turbo Gaming)</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Videokaart</td>
+                <td class="spec-v">MSI SUPRIM GeForce RTX 3070 8GB GDDR6 (Flagship Koeling)</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Moederbord</td>
+                <td class="spec-v">ASUS ROG STRIX B550-F GAMING (PCIe 4.0, SupremeFX Audio)</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Koeling</td>
+                <td class="spec-v">AMD High-Performance Performance Cooler</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Geheugen</td>
+                <td class="spec-v">Corsair Vengeance DDR4 16GB (2x8GB) High-Speed Dual Channel</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Opslag</td>
+                <td class="spec-v">Samsung 980 PRO 1TB M.2 PCIe 4.0 NVMe SSD</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Voeding &amp; Kast</td>
+                <td class="spec-v">Cooler Master 750W 80+ Gold Modular in Tempered Glass RGB Case</td>
+              </tr>
+            </table>
+            <div class="pc-card-footer">
+              <div class="pc-price-tag-wrap">
+                <span class="pc-price-label">Garantie &amp; Service</span>
+                <span class="pc-price-val">2 Jaar QCC Garantie</span>
+              </div>
+              <button type="button" class="btn btn-sm btn-primary open-appointment-modal" data-pref="Bestelling / Aanvraag: AMD Ryzen 7 + MSI SUPRIM RTX 3070">
+                <span>Aanvragen &rarr;</span>
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- PC 6: Intel Core i7 10700K EVGA RTX 2060 -->
+        <article class="pc-catalog-card" data-category="intel allround">
+          <div class="pc-card-thumb-wrap">
+            <img src="assets/pc-i7-10700k-2060.jpg" alt="Intel i7 10700K EVGA RTX 2060 Custom PC" class="pc-card-img" loading="lazy">
+            <div class="pc-thumb-badges">
+              <span class="pc-type-badge">All-Round Esports</span>
+              <span class="pc-stock-badge">Direct Beschikbaar</span>
+            </div>
+          </div>
+          <div class="pc-card-content">
+            <span class="pc-category-tag">Intel Core i7 &bull; Corsair RGB Watercooled</span>
+            <h3 class="pc-card-title">Intel Core i7 10700K &bull; EVGA RTX 2060 Gaming</h3>
+            <div class="pc-quick-pills">
+              <span class="pc-pill">32GB RAM</span>
+              <span class="pc-pill">Corsair H100i RGB</span>
+              <span class="pc-pill">750W Gold Modular</span>
+              <span class="pc-pill">MSI Z490</span>
+            </div>
+            <table class="pc-spec-table">
+              <tr>
+                <td class="spec-k">Processor</td>
+                <td class="spec-v">Intel Core i7 10700K (8C / 16T tot 5.1GHz Turbo)</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Videokaart</td>
+                <td class="spec-v">EVGA GeForce RTX 2060 Gaming 6GB</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Moederbord</td>
+                <td class="spec-v">MSI MPG Z490 GAMING PLUS Gaming Moederbord</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Koeling</td>
+                <td class="spec-v">Corsair Hydro H100i RGB PLATINUM 240mm AIO Waterkoeling</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Geheugen</td>
+                <td class="spec-v">Corsair Vengeance RGB PRO 32GB (2x16GB) 3200MHz</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Voeding</td>
+                <td class="spec-v">Cooler Master MWE GOLD 750 V2 Full Modular (80+ Gold)</td>
+              </tr>
+              <tr>
+                <td class="spec-k">Behuizing</td>
+                <td class="spec-v">Corsair Tempered Glass Gaming Midi Tower met RGB Fans</td>
+              </tr>
+            </table>
+            <div class="pc-card-footer">
+              <div class="pc-price-tag-wrap">
+                <span class="pc-price-label">Garantie &amp; Service</span>
+                <span class="pc-price-val">2 Jaar QCC Garantie</span>
+              </div>
+              <button type="button" class="btn btn-sm btn-primary open-appointment-modal" data-pref="Bestelling / Aanvraag: Intel Core i7 10700K + EVGA RTX 2060 (Corsair RGB)">
+                <span>Aanvragen &rarr;</span>
+              </button>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- Custom Build Request Callout Banner -->
+      <div class="pc-custom-banner">
+        <div class="pc-custom-banner-info">
+          <span class="pc-custom-pill">Volledig Maatwerk Mogelijk</span>
+          <h3 class="pc-custom-title">Wilt u een specifieke PC laten bouwen op maat?</h3>
+          <p class="pc-custom-desc">
+            Heeft u al eigen componenten gekocht, zoekt u de nieuwste RTX 4080 / 4090 of Ryzen 9, 
+            of wilt u een workstation voor CAD, Blender of streaming? Onze vakkundige bouwers adviseren u graag, 
+            stellen samen binnen uw budget en leveren plug &amp; play inclusief Windows installatie en stresstest.
+          </p>
+        </div>
+        <div class="pc-custom-actions">
+          <button type="button" class="btn btn-primary btn-lg open-appointment-modal" data-pref="Maatwerk Custom PC Adviesgesprek / Offerte">
+            <span>Vraag Maatwerk Offerte Aan</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </button>
+          <a href="tel:0703236991" class="btn btn-glass btn-lg">
+            <span>Direct Bellen: 070 - 323 69 91</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Remote Support & TeamViewer Section -->
+  <section class="section remote-section" id="remote-support">
+    <div class="container">
+      <div class="remote-grid">
+        <div class="remote-text-col">
+          <div class="section-pill">Directe Hulp op Afstand</div>
+          <h2 class="section-title">Support binnen enkele minuten via TeamViewer</h2>
+          <p class="section-subtitle-left">
+            Heeft u een klein computerprobleem, een foutmelding of lukt het instellen van uw mailprogramma niet? 
+            Met onze veilige TeamViewer QuickSupport kijkt onze monteur direct met u mee op uw beeldscherm. U ziet precies wat er gebeurt en behoudt altijd de controle.
+          </p>
+
+          <div class="service-subscription-card">
+            <div class="sub-header">
+              <div>
+                <span class="sub-badge">Zorgeloos Computeren</span>
+                <h3 class="sub-title">Jaarlijks QCC Serviceabonnement</h3>
+              </div>
+              <div class="sub-price">
+                <span class="sub-num">&euro; 79,95</span>
+                <span class="sub-period">/ jaar</span>
+              </div>
+            </div>
+            <ul class="sub-features">
+              <li>✓ Onbeperkte telefonische ondersteuning tijdens openingstijden</li>
+              <li>✓ Inclusief remote support sessies (tot 30 min per sessie)</li>
+              <li>✓ Hulp bij virussen, updates, e-mail en browserproblemen</li>
+              <li>✓ Voorrang bij werkplaats- en hardware reparaties</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="remote-downloads-col">
+          <div class="download-box">
+            <div class="download-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            </div>
+            <h3>Download TeamViewer QuickSupport</h3>
+            <p>Geen installatie nodig. Download het kleine bestand, open het en geef uw unieke 9-cijferige ID door aan onze specialist.</p>
+
+            <div class="download-buttons">
+              <a href="https://download.teamviewer.com/download/TeamViewerQS.exe" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block dl-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.951-1.802"/></svg>
+                <span>Download voor Windows (.exe)</span>
+              </a>
+
+              <a href="https://download.teamviewer.com/download/TeamViewerQS.dmg" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block dl-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.38c.62-.75 1.04-1.8 0.92-2.85-.9.04-1.99.6-2.64 1.35-.57.65-1.07 1.72-.94 2.74 1 .08 2.03-.49 2.66-1.24z"/></svg>
+                <span>Download voor Apple Mac (.dmg)</span>
+              </a>
+            </div>
+
+            <div class="dl-support-call">
+              <span>Heeft u het bestand geopend? Bel ons direct op:</span>
+              <a href="tel:0703236991" class="dl-phone-link">070 - 323 69 91</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Klantbeoordelingen & Reviews -->
+  <section class="section reviews-section" id="reviews">
+    <div class="container">
+      <div class="section-header text-center">
+        <div class="section-pill">Klanttevredenheid</div>
+        <h2 class="section-title">Wat Klanten Over Quality Computer Centre Zeggen</h2>
+        <div class="reviews-score-badge">
+          <div class="stars">★★★★★</div>
+          <span class="score-text"><strong>4.8 van 5 sterren</strong> op basis van honderden tevreden klanten</span>
+        </div>
+      </div>
+
+      <div class="reviews-grid">
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">
+            “Mijn laptop scherm was na een val compleet gebarsten. Ik kon hem direct langsbrengen aan de Goudreinetstraat en binnen 24 uur was hij gerepareerd voor een hele schappelijke prijs. Eerlijk advies en hele vriendelijke mensen!”
+          </p>
+          <div class="review-author">
+            <div class="author-avatar">M</div>
+            <div>
+              <div class="author-name">Mark van der Laan</div>
+              <div class="author-sub">Den Haag &bull; Laptop Schermreparatie</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">
+            “Al jaren klant bij QCC. Laatst een high-end game pc laten bouwen door de mannen. Kabelmanagement is een kunstwerk en de temperaturen zijn ijskoud. Echt verstand van zaken!”
+          </p>
+          <div class="review-author">
+            <div class="author-avatar">R</div>
+            <div>
+              <div class="author-name">Robin K.</div>
+              <div class="author-sub">Rijswijk &bull; Custom Gaming PC</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">
+            “De monteur kwam dezelfde dag nog bij ons thuis voor onze haperende wifi en printer. Binnen 45 minuten werkte alles vlekkeloos door het hele huis. En de afrekening per kwartier is super eerlijk!”
+          </p>
+          <div class="review-author">
+            <div class="author-avatar">A</div>
+            <div>
+              <div class="author-name">Anja &amp; Peter Meijer</div>
+              <div class="author-sub">Scheveningen &bull; Hulp aan Huis</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">
+            “HDMI-poort van de PS5 van mijn zoon was beschadigd. Sony wilde 3 weken wachttijd. QCC had hem binnen 2 dagen perfect gesoldeerd en gelijk stofvrij gemaakt. Absolute aanrader!”
+          </p>
+          <div class="review-author">
+            <div class="author-avatar">D</div>
+            <div>
+              <div class="author-name">Dennis Brouwer</div>
+              <div class="author-sub">Den Haag &bull; PS5 HDMI Reparatie</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">
+            “Batterij van mijn iPhone 13 laten vervangen. Klaar terwijl ik even een boodschap deed. Telefoon gaat nu weer 2 dagen mee zonder opladen. Top service!”
+          </p>
+          <div class="review-author">
+            <div class="author-avatar">S</div>
+            <div>
+              <div class="author-name">Sanne V.</div>
+              <div class="author-sub">Voorburg &bull; iPhone Accu Vervanging</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">
+            “Heb al 3 jaar het serviceabonnement. Bij elke computervraag of vastloper bellen we en via TeamViewer is het binnen tien minuten opgelost. Geeft ontzettend veel rust.”
+          </p>
+          <div class="review-author">
+            <div class="author-avatar">J</div>
+            <div>
+              <div class="author-name">Johan Bakker</div>
+              <div class="author-sub">Den Haag &bull; Serviceabonnee</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact, Locatie & Openingstijden -->
+  <section class="section contact-section" id="contact">
+    <div class="container">
+      <div class="section-header text-center">
+        <div class="section-pill">Kom Langs of Neem Contact Op</div>
+        <h2 class="section-title">Bezoek Onze Winkel &amp; Werkplaats</h2>
+        <p class="section-subtitle">
+          Gelegen aan de Goudreinetstraat 253 in Den Haag met gratis en ruime parkeergelegenheid in de buurt.
+        </p>
+      </div>
+
+      <div class="contact-grid">
+        
+        <!-- Contact Details & Opening Hours -->
+        <div class="contact-card">
+          <div class="contact-card-header">
+            <img src="assets/qcc-icon.png" alt="QCC" width="36" height="36" class="contact-badge-img">
+            <div>
+              <h3 class="contact-shop-name">Quality Computer Centre</h3>
+              <p class="contact-shop-sub">Sinds 1997 uw vertrouwde computer- &amp; reparatiewinkel</p>
+            </div>
+          </div>
+
+          <div class="contact-items-list">
+            <div class="contact-item">
+              <div class="contact-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              </div>
+              <div class="contact-info">
+                <span class="contact-label">Bezoekadres:</span>
+                <span class="contact-value">Goudreinetstraat 253<br>2564 PS Den Haag</span>
+                <a href="https://maps.google.com/?q=Goudreinetstraat+253+Den+Haag" target="_blank" rel="noopener noreferrer" class="route-link">
+                  Open in Google Maps &rarr;
+                </a>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+              </div>
+              <div class="contact-info">
+                <span class="contact-label">Telefoonnummer:</span>
+                <a href="tel:0703236991" class="contact-link font-bold">(070) 323 69 91</a>
+                <span class="contact-sub-phone">Bij geen gehoor: <a href="tel:0703236981">(070) 323 69 81</a></span>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+              </div>
+              <div class="contact-info">
+                <span class="contact-label">E-mailadres:</span>
+                <a href="mailto:info@qualitycomputer.nl" class="contact-link">info@qualitycomputer.nl</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Opening Hours Table -->
+          <div class="hours-card">
+            <div class="hours-header">
+              <div class="hours-title-wrap">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <h4>Openingstijden Winkel</h4>
+              </div>
+              <span class="hours-live-pill" id="hours-status-badge">Geopend</span>
+            </div>
+
+            <div class="hours-table">
+              <div class="hours-row" data-day="1">
+                <span class="day-name">Maandag</span>
+                <span class="day-time">Gesloten (telefonisch bereikbaar)</span>
+              </div>
+              <div class="hours-row" data-day="2">
+                <span class="day-name">Dinsdag</span>
+                <span class="day-time">10:00 – 17:30</span>
+              </div>
+              <div class="hours-row" data-day="3">
+                <span class="day-name">Woensdag</span>
+                <span class="day-time">10:00 – 17:30</span>
+              </div>
+              <div class="hours-row" data-day="4">
+                <span class="day-name">Donderdag</span>
+                <span class="day-time">10:00 – 17:30</span>
+              </div>
+              <div class="hours-row" data-day="5">
+                <span class="day-name">Vrijdag</span>
+                <span class="day-time">10:00 – 17:30</span>
+              </div>
+              <div class="hours-row" data-day="6">
+                <span class="day-name">Zaterdag</span>
+                <span class="day-time">10:00 – 16:30</span>
+              </div>
+              <div class="hours-row" data-day="0">
+                <span class="day-name">Zondag</span>
+                <span class="day-time">Gesloten</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Direct Contact / Message Form -->
+        <div class="contact-form-card">
+          <div class="form-header">
+            <h3>Stuur ons direct een bericht</h3>
+            <p>Heeft u een vraag over een reparatie, kosten of wilt u advies? Wij reageren doorgaans binnen enkele uren.</p>
+          </div>
+
+          <form id="contact-form" class="inpage-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="form-name">Uw Naam *</label>
+                <input type="text" id="form-name" class="form-input" placeholder="bijv. Jan de Vries" required>
+              </div>
+              <div class="form-group">
+                <label for="form-phone">Telefoonnummer *</label>
+                <input type="tel" id="form-phone" class="form-input" placeholder="bijv. 06 - 12345678" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="form-email">E-mailadres *</label>
+              <input type="email" id="form-email" class="form-input" placeholder="uw@email.nl" required>
+            </div>
+
+            <div class="form-group">
+              <label for="form-service">Betreft dienst / apparaat</label>
+              <select id="form-service" class="form-select">
+                <option value="Laptop / Computer reparatie">Computer of Laptop reparatie</option>
+                <option value="Smartphone / Tablet reparatie">Smartphone of Tablet reparatie</option>
+                <option value="Reparatie aan huis / monteur">Reparatie aan huis / op kantoor (€12,50/kwartier)</option>
+                <option value="Game Console reparatie">Game Console (PlayStation, Xbox, Switch)</option>
+                <option value="High-End Custom Game PC">High-End Custom Game PC offerte</option>
+                <option value="Serviceabonnement / Support op afstand">Serviceabonnement of Support op afstand</option>
+                <option value="Overig">Overige vraag / advies</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="form-message">Beschrijving van het probleem of uw vraag *</label>
+              <textarea id="form-message" class="form-textarea" rows="4" placeholder="Omschrijf kort wat er aan de hand is met uw apparaat of waar u hulp bij nodig heeft..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block btn-lg" id="form-submit-btn">
+              <span>Bericht Versturen</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            </button>
+
+            <div class="form-success-notice" id="form-success-notice" style="display:none;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>Hartelijk dank voor uw bericht! We nemen snel contact met u op.</span>
+            </div>
+          </form>
+        </div>
+
+      </div>
+
+      <!-- Embedded Interactive Map Frame -->
+      <div class="map-container">
+        <iframe 
+          title="Locatie Quality Computer Centre Den Haag"
+          src="https://maps.google.com/maps?q=Goudreinetstraat+253,+2564+PS+Den+Haag,+Nederland&amp;t=&amp;z=15&amp;ie=UTF8&amp;iwloc=&amp;output=embed" 
+          width="100%" 
+          height="380" 
+          style="border:0;" 
+          allowfullscreen="" 
+          loading="lazy" 
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+        <div class="map-overlay-badge">
+          <strong>Quality Computer Centre</strong> &bull; Goudreinetstraat 253, 2564 PS Den Haag
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Interactive Appointment / Repair Modal -->
+  <div class="modal-backdrop" id="appointment-modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <button type="button" class="modal-close-btn" id="modal-close-btn" aria-label="Sluiten">
+          &times;
+        </button>
+        <div class="modal-header">
+          <div class="modal-pill">Direct Inplannen</div>
+          <h3 class="modal-title">Reparatie Aanmelden &amp; Afspraak</h3>
+          <p class="modal-subtitle">Geef aan welk apparaat u wilt laten herstellen en wanneer het u schikt.</p>
+        </div>
+
+        <form id="modal-booking-form" class="modal-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="modal-name">Uw Naam *</label>
+              <input type="text" id="modal-name" class="form-input" required placeholder="Jan Jansen">
+            </div>
+            <div class="form-group">
+              <label for="modal-phone">Telefoonnummer *</label>
+              <input type="tel" id="modal-phone" class="form-input" required placeholder="06 - 12345678">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="modal-email">E-mailadres *</label>
+              <input type="email" id="modal-email" class="form-input" required placeholder="uw@email.nl">
+            </div>
+            <div class="form-group">
+              <label for="modal-device">Type Apparaat &amp; Model *</label>
+              <input type="text" id="modal-device" class="form-input" required placeholder="bijv. iPhone 14 Pro, HP Pavilion, PS5">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="modal-date">Gewenste Datum</label>
+              <input type="date" id="modal-date" class="form-input">
+            </div>
+            <div class="form-group">
+              <label for="modal-location">Locatie Voorkeur</label>
+              <select id="modal-location" class="form-select">
+                <option value="Winkel (Goudreinetstraat 253)">Inleveren in de winkel (Goudreinetstraat 253)</option>
+                <option value="Aan huis / op kantoor">Monteur aan huis (€12,50 per kwartier)</option>
+                <option value="Hulp op afstand (TeamViewer)">Hulp op afstand (TeamViewer)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="modal-issue">Omschrijving van het defect / wensen</label>
+            <textarea id="modal-issue" class="form-textarea" rows="3" placeholder="Wat is er mis met het apparaat?"></textarea>
+          </div>
+
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary btn-block btn-lg" id="modal-submit-btn">
+              <span>Aanmelding Bevestigen</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </button>
+            <p class="modal-guarantee-note">
+              🔒 Wij gaan vertrouwelijk om met uw gegevens. U ontvangt direct een bevestiging.
+            </p>
+          </div>
+        </form>
+
+        <div class="modal-success-state" id="modal-success-state" style="display:none;">
+          <div class="success-icon-wrap">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+          <h3>Aanmelding Succesvol Ontvangen!</h3>
+          <p>
+            Hartelijk dank. Onze technici zetten uw aanvraag klaar. 
+            Heeft u een spoedreparatie? U kunt tijdens openingstijden ook altijd direct binnenlopen aan de <strong>Goudreinetstraat 253</strong>.
+          </p>
+          <button type="button" class="btn btn-primary" id="modal-success-close">Sluiten</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Primary Footer -->
+  <footer class="site-footer">
+    <div class="container footer-top-grid">
+      
+      <!-- Brand Info Column -->
+      <div class="footer-col footer-brand-col">
+        <a href="#home" class="footer-logo-link">
+          <img src="assets/qcc-logo.png" alt="Quality Computer Centre Logo" class="footer-logo-img">
         </a>
-        <a href="mailto:info@agevodev.nl" class="footer-link">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-          <span>info@agevodev.nl</span>
-        </a>
-        <a href="https://instagram.com/agevodev" target="_blank" rel="noopener noreferrer" class="footer-link">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-          <span>@agevodev</span>
-        </a>
+        <p class="footer-text">
+          Al sinds 1997 het vertrouwde adres voor betrouwbare computer-, laptop-, telefoon- en console-reparaties in Den Haag en omstreken.
+        </p>
+        <div class="footer-badges">
+          <span class="f-badge">✓ Sinds 1997</span>
+          <span class="f-badge">✓ No Cure, No Pay</span>
+          <span class="f-badge">✓ 6 Mnd Garantie</span>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="footer-col">
+        <h4 class="footer-heading">Onze Diensten</h4>
+        <ul class="footer-nav">
+          <li><a href="#diensten">Computer- &amp; Laptopreparatie</a></li>
+          <li><a href="#diensten">Smartphone &amp; iPhone Schermen</a></li>
+          <li><a href="#calculator">Reparatie Calculator &amp; Prijzen</a></li>
+          <li><a href="#shop">Webshop &amp; Hardware Assortiment</a></li>
+          <li><a href="#high-end">Custom Game PC Bouw</a></li>
+          <li><a href="#aan-huis">Reparatie &amp; Hulp aan Huis</a></li>
+          <li><a href="#remote-support">TeamViewer Support op Afstand</a></li>
+        </ul>
+      </div>
+
+      <!-- Opening Hours & Support -->
+      <div class="footer-col">
+        <h4 class="footer-heading">Openingstijden &amp; Adres</h4>
+        <p class="footer-contact-line">
+          <strong>Quality Computer Centre</strong><br>
+          Goudreinetstraat 253<br>
+          2564 PS Den Haag
+        </p>
+        <p class="footer-contact-line">
+          <strong>Di t/m Vr:</strong> 10:00 – 17:30<br>
+          <strong>Zaterdag:</strong> 10:00 – 16:30<br>
+          <strong>Zo &amp; Ma:</strong> Gesloten
+        </p>
+      </div>
+
+      <!-- Contact Direct -->
+      <div class="footer-col">
+        <h4 class="footer-heading">Contact Opnemen</h4>
+        <ul class="footer-contact-list">
+          <li>
+            <a href="tel:0703236991" class="footer-action-link">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+              <span>(070) 323 69 91</span>
+            </a>
+          </li>
+          <li>
+            <a href="mailto:info@qualitycomputer.nl" class="footer-action-link">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+              <span>info@qualitycomputer.nl</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://wa.me/31703236991" target="_blank" rel="noopener noreferrer" class="footer-action-link">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 2C6.505 2 2 6.503 2 12.028c0 1.942.556 3.754 1.518 5.29L2 22l4.832-1.488A9.97 9.97 0 0 0 12.031 22C17.556 22 22 17.503 22 12.028 22 6.503 17.556 2 12.031 2zm5.72 14.18c-.24.67-1.4 1.28-1.94 1.34-.51.06-1.18.08-3.41-.83-2.85-1.17-4.68-4.08-4.82-4.27-.14-.19-1.15-1.53-1.15-2.92 0-1.39.73-2.07 1-2.35.26-.28.58-.35.77-.35.19 0 .39 0 .56.01.18.01.42-.07.66.5.24.58.82 2 .89 2.15.07.15.12.33.02.53-.1.2-.15.32-.3.49-.15.17-.32.38-.45.51-.15.15-.31.31-.13.62.18.31.79 1.3 1.7 2.11 1.17 1.04 2.15 1.36 2.46 1.51.31.15.49.13.67-.08.19-.21.79-.92 1-1.23.21-.31.42-.26.7-.15.28.11 1.78.84 2.09.99.31.15.51.23.59.36.08.13.08.76-.16 1.43z"/></svg>
+              <span>WhatsApp Chat</span>
+            </a>
+          </li>
+        </ul>
+        <div class="footer-remote-downloads">
+          <span class="sub-label">Directe TeamViewer Links:</span>
+          <div class="dl-pills">
+            <a href="https://download.teamviewer.com/download/TeamViewerQS.exe" target="_blank" rel="noopener noreferrer" class="pill-link">Windows (.exe)</a>
+            <a href="https://download.teamviewer.com/download/TeamViewerQS.dmg" target="_blank" rel="noopener noreferrer" class="pill-link">Mac (.dmg)</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="container footer-bottom-bar">
+      <div class="footer-copy">
+        &copy; 1997 – 2026 <strong>Quality Computer Centre</strong>. Alle rechten voorbehouden.
+      </div>
+      <div class="footer-legal">
+        <span>Goudreinetstraat 253, 2564 PS Den Haag</span>
+        <span class="sep">&bull;</span>
+        <a href="#contact">Algemene Voorwaarden</a>
+        <span class="sep">&bull;</span>
+        <a href="#contact">Privacybeleid</a>
       </div>
     </div>
   </footer>
 
+  <!-- Floating Quick-Contact Button (Mobile / Desktop) -->
+  <aside class="floating-contact-bubble" aria-label="Snelle contactknoppen">
+    <a href="https://wa.me/31703236991" target="_blank" rel="noopener noreferrer" class="bubble-btn bubble-whatsapp" title="WhatsApp direct met QCC">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 2C6.505 2 2 6.503 2 12.028c0 1.942.556 3.754 1.518 5.29L2 22l4.832-1.488A9.97 9.97 0 0 0 12.031 22C17.556 22 22 17.503 22 12.028 22 6.503 17.556 2 12.031 2zm5.72 14.18c-.24.67-1.4 1.28-1.94 1.34-.51.06-1.18.08-3.41-.83-2.85-1.17-4.68-4.08-4.82-4.27-.14-.19-1.15-1.53-1.15-2.92 0-1.39.73-2.07 1-2.35.26-.28.58-.35.77-.35.19 0 .39 0 .56.01.18.01.42-.07.66.5.24.58.82 2 .89 2.15.07.15.12.33.02.53-.1.2-.15.32-.3.49-.15.17-.32.38-.45.51-.15.15-.31.31-.13.62.18.31.79 1.3 1.7 2.11 1.17 1.04 2.15 1.36 2.46 1.51.31.15.49.13.67-.08.19-.21.79-.92 1-1.23.21-.31.42-.26.7-.15.28.11 1.78.84 2.09.99.31.15.51.23.59.36.08.13.08.76-.16 1.43z"/></svg>
+    </a>
+    <a href="tel:0703236991" class="bubble-btn bubble-call" title="Bel direct naar Quality Computer Centre">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+    </a>
+  </aside>
+
+  <!-- JavaScript logic -->
   <script src="main.js"></script>
 </body>
 </html>
