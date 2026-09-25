@@ -19,6 +19,7 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="assets/qcc-icon.png">
   <link rel="apple-touch-icon" href="assets/qcc-icon.png">
+  <meta name="theme-color" content="#ffffff">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -95,7 +96,18 @@
 </head>
 <body>
 
-  <!-- Modern Floating Glassmorphic Navbar -->
+  <!-- Top USP Bar (Coolblue Stijl) -->
+  <div class="top-usp-bar">
+    <div class="container top-usp-inner">
+      <div class="usp-item"><span class="usp-icon">📍</span> Goudreinetstraat 253, Den Haag</div>
+      <div class="usp-item"><span class="usp-icon">⏱️</span> Klaar terwijl u wacht reparaties</div>
+      <div class="usp-item"><span class="usp-icon">🛡️</span> No Cure, No Pay &amp; 6 Mnd Garantie</div>
+      <div class="usp-item"><span class="usp-icon">⭐</span> 4.8 / 5 op Google (250+ reviews)</div>
+      <div class="usp-item usp-phone"><a href="tel:0703236991">📞 070 - 323 69 91</a></div>
+    </div>
+  </div>
+
+  <!-- Hoofdnavigatie -->
   <header class="site-header" id="navbar">
     <div class="nav-container">
       
@@ -116,12 +128,12 @@
 
       <!-- Desktop Navigation Links in EXACT scroll order -->
       <nav class="nav-links" id="nav-links" aria-label="Hoofdnavigatie">
+        <a href="#calculator" class="nav-item">Reparatie Hub</a>
         <a href="#diensten" class="nav-item">Diensten</a>
-        <a href="#calculator" class="nav-item">Calculator</a>
+        <a href="#fix-portal" class="nav-item">Merkenwijzer</a>
         <a href="#shop" class="nav-item">Webshop</a>
         <a href="#aan-huis" class="nav-item">Aan Huis</a>
         <a href="#high-end" class="nav-item">Game PC's</a>
-        <a href="#remote-support" class="nav-item">Support</a>
         <a href="#reviews" class="nav-item">Ervaringen</a>
         <a href="#contact" class="nav-item">Contact</a>
       </nav>
@@ -163,12 +175,13 @@
         <span id="mobile-live-status">Openingstijden controleren...</span>
       </div>
       <nav class="mobile-nav" aria-label="Mobiele navigatie">
+        <a href="#calculator" class="mobile-nav-link">Reparatie Hub &amp; Tarieven</a>
         <a href="#diensten" class="mobile-nav-link">Diensten &amp; Reparaties</a>
-        <a href="#calculator" class="mobile-nav-link">Reparatie Calculator &amp; Prijzen</a>
+        <a href="#fix-portal" class="mobile-nav-link">Merken- &amp; Toestelwijzer</a>
         <a href="#shop" class="mobile-nav-link">Webshop &amp; Hardware</a>
         <a href="#aan-huis" class="mobile-nav-link">Reparatie &amp; Hulp op Locatie</a>
         <a href="#high-end" class="mobile-nav-link">High-End Game PC Projecten</a>
-        <a href="#remote-support" class="mobile-nav-link">Support op Afstand &amp; Abonnement</a>
+        <a href="#remote-support" class="mobile-nav-link">Support op Afstand</a>
         <a href="#reviews" class="mobile-nav-link">Klantbeoordelingen (4.8/5)</a>
         <a href="#contact" class="mobile-nav-link">Contact &amp; Openingstijden</a>
       </nav>
@@ -186,119 +199,228 @@
 
   </header>
 
-  <!-- Hero Section -->
+  <!-- Service & Reparatie Hub Hero (Coolblue / The Phone Lab Stijl) -->
   <section class="hero-section" id="home">
-    <div class="hero-bg-glow"></div>
-    <div class="container hero-container">
-      <div class="hero-content">
+    <div class="container hero-hub-container">
+      
+      <!-- Linkerzijde: Vriendelijke Introductie & Vertrouwen -->
+      <div class="hero-intro-col">
         <div class="hero-badge">
           <span class="badge-dot"></span>
-          <span class="badge-text">Vertrouwd sinds 1997 &bull; Den Haag</span>
-          <span class="badge-stars">★★★★★ 4.8</span>
+          <span class="badge-text">Dé IT- &amp; Computerspecialist van Den Haag sinds 1997</span>
         </div>
 
         <h1 class="hero-title">
-          Werkt uw PC of telefoon niet mee? <br>
-          <span class="text-gradient">Bel dé specialist QCC!</span>
+          Wat mogen we vandaag voor u repareren?
         </h1>
 
         <p class="hero-description">
-          Al meer dan 28 jaar het toonaangevende reparatiecentrum van Den Haag voor 
-          <strong>computers, laptops, Apple MacBooks, smartphones, tablets en gameconsoles</strong>. 
-          Vakkundige monteurs, originele kwaliteitsonderdelen en transparante prijzen.
+          Laptop traag, smartphone scherm gebarsten of start uw computer niet meer op? 
+          Onze vakkundige monteurs aan de Goudreinetstraat staan direct voor u klaar — 
+          <strong>zonder afspraak binnenlopen</strong> of bereken hiernaast direct uw reparatie.
         </p>
 
-        <!-- Trust Features Grid -->
-        <div class="hero-trust-list">
-          <div class="trust-item">
-            <div class="trust-icon-box">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        <!-- Snelle Voordelen Bullets -->
+        <ul class="hero-hub-benefits">
+          <li>
+            <span class="benefit-icon">☕</span>
+            <div class="benefit-content">
+              <strong>Klaar terwijl u wacht</strong>
+              <span>Geniet van een lekker kopje koffie terwijl wij uw toestel direct vakkundig herstellen.</span>
             </div>
-            <span>Klaar terwijl u wacht reparaties</span>
-          </div>
-          <div class="trust-item">
-            <div class="trust-icon-box">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </li>
+          <li>
+            <span class="benefit-icon">🔍</span>
+            <div class="benefit-content">
+              <strong>Altijd vooraf vaste prijsopgave</strong>
+              <span>No Cure, No Pay garantie en 6 maanden garantie op alle originele onderdelen.</span>
             </div>
-            <span>No Cure, No Pay garantie</span>
-          </div>
-          <div class="trust-item">
-            <div class="trust-icon-box">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </li>
+          <li>
+            <span class="benefit-icon">🚗</span>
+            <div class="benefit-content">
+              <strong>Ook computerhulp bij u aan huis</strong>
+              <span>Geen zin om te slepen? Wij komen naar u toe in heel Den Haag voor &euro;12,50/kwartier.</span>
             </div>
-            <span>Reparatie bij u thuis &euro;12,50/kwartier</span>
-          </div>
-          <div class="trust-item">
-            <div class="trust-icon-box">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            </div>
-            <span>Eigen werkplaats aan Goudreinetstraat</span>
-          </div>
-        </div>
+          </li>
+        </ul>
 
-        <!-- Hero Action Buttons -->
-        <div class="hero-buttons">
-          <a href="#calculator" class="btn btn-primary btn-lg">
-            <span>Bereken Reparatieduur &amp; Prijs</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        <!-- Direct Contact Knoppen -->
+        <div class="hero-cta-buttons">
+          <a href="tel:0703236991" class="btn btn-primary btn-lg">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            <span>Direct Bellen: 070 - 323 69 91</span>
           </a>
-          <button type="button" class="btn btn-glass btn-lg open-appointment-modal">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-            <span>Reparatie Aanmelden</span>
-          </button>
-        </div>
-
-        <!-- Quick Contact Card Strip -->
-        <div class="hero-quick-strip">
-          <div class="strip-item">
-            <span class="strip-label">Direct contact:</span>
-            <a href="tel:0703236991" class="strip-val">070 - 323 69 91</a>
-          </div>
-          <div class="strip-divider"></div>
-          <div class="strip-item">
-            <span class="strip-label">Locatie:</span>
-            <span class="strip-val">Den Haag (Vruchtenbuurt)</span>
-          </div>
-          <div class="strip-divider"></div>
-          <div class="strip-item">
-            <span class="strip-label">Parkeren:</span>
-            <span class="strip-val">Ruime parkeergelegenheid</span>
-          </div>
+          <a href="https://wa.me/31703236991" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-lg whatsapp-btn">
+            <span>WhatsApp Ons Direct</span>
+          </a>
         </div>
       </div>
 
-      <!-- Hero Visual Showcase -->
-      <div class="hero-visual">
-        <div class="hero-card-wrapper">
-          <div class="hero-image-frame">
-            <img src="assets/hero-tech-lab.jpg" alt="Quality Computer Centre hightech reparatie werkplaats Den Haag" class="hero-main-img" loading="eager">
-            <div class="hero-img-overlay"></div>
+      <!-- Rechterzijde: De Interactieve Reparatie Wizard (Direct in de Hero!) -->
+      <div class="hero-calc-col" id="calculator">
+        <div class="calc-card hero-calc-card">
+          <div class="calc-card-header">
+            <span class="calc-mini-pill">Direct Inzicht &amp; Tarief</span>
+            <h2 class="calc-box-title">Kies uw apparaat &amp; defect</h2>
+            <p class="calc-box-sub">Selecteer uw apparaat voor directe prijsindicatie en doorlooptijd:</p>
           </div>
 
-          <!-- Floating Badges -->
-          <div class="floating-badge badge-top-right">
-            <div class="floating-badge-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-            </div>
-            <div>
-              <div class="floating-badge-title">6 Maanden Garantie</div>
-              <div class="floating-badge-sub">Op alle onderdelen &amp; reparaties</div>
+          <!-- Stap 1: Categorie Knoppen -->
+          <div class="calc-step">
+            <div class="calc-category-grid" id="calc-categories">
+              <button type="button" class="category-btn active" data-category="laptop">
+                <span class="cat-icon">💻</span>
+                <span class="cat-name">Laptop &amp; PC</span>
+                <span class="cat-sub">Windows &amp; Mac</span>
+              </button>
+              <button type="button" class="category-btn" data-category="smartphone">
+                <span class="cat-icon">📱</span>
+                <span class="cat-name">Smartphone</span>
+                <span class="cat-sub">iPhone &amp; Samsung</span>
+              </button>
+              <button type="button" class="category-btn" data-category="tablet">
+                <span class="cat-icon">📟</span>
+                <span class="cat-name">Tablet</span>
+                <span class="cat-sub">iPad &amp; Tab</span>
+              </button>
+              <button type="button" class="category-btn" data-category="console">
+                <span class="cat-icon">🎮</span>
+                <span class="cat-name">Console</span>
+                <span class="cat-sub">PS5, Xbox, Switch</span>
+              </button>
             </div>
           </div>
 
-          <div class="floating-badge badge-bottom-left">
-            <div class="floating-badge-avatar">
-              <img src="assets/qcc-icon.png" alt="QCC Icon" width="28" height="28">
+          <!-- Stap 2 & 3: Dropdowns -->
+          <div class="calc-step-row">
+            <div class="calc-step-col">
+              <label class="calc-label" for="calc-brand">Kies merk of model:</label>
+              <div class="select-wrapper">
+                <select id="calc-brand" class="form-select">
+                  <!-- Dynamically populated by main.js -->
+                </select>
+              </div>
             </div>
-            <div>
-              <div class="floating-badge-title">25.000+ Reparaties</div>
-              <div class="floating-badge-sub">Tevreden klanten in Haaglanden</div>
+
+            <div class="calc-step-col">
+              <label class="calc-label" for="calc-issue">Wat is het probleem?</label>
+              <div class="select-wrapper">
+                <select id="calc-issue" class="form-select">
+                  <!-- Dynamically populated by main.js -->
+                </select>
+              </div>
             </div>
           </div>
+
+          <!-- Resultaat Box -->
+          <div class="calc-result-box" id="calc-result">
+            <div class="result-details">
+              <div class="result-header">
+                <span class="result-badge" id="res-badge">Directe Reparatie</span>
+                <h3 class="result-title" id="res-title">Schermvervanging &amp; Display Reparatie</h3>
+              </div>
+              <p class="result-desc" id="res-desc">
+                Professionele vervanging met A-kwaliteit / origineel displaypaneel.
+              </p>
+              <div class="result-metrics">
+                <div class="metric-item">
+                  <span class="metric-icon">⏱️</span>
+                  <div>
+                    <span class="metric-label">Doorlooptijd</span>
+                    <span class="metric-val" id="res-time">30 - 60 minuten</span>
+                  </div>
+                </div>
+                <div class="metric-item">
+                  <span class="metric-icon">🛡️</span>
+                  <div>
+                    <span class="metric-label">Garantie</span>
+                    <span class="metric-val" id="res-warranty">6 maanden garantie</span>
+                  </div>
+                </div>
+                <div class="metric-item">
+                  <span class="metric-icon">💶</span>
+                  <div>
+                    <span class="metric-label">Kostenindicatie</span>
+                    <span class="metric-val text-red" id="res-price">Vanaf € 69,- (incl. btw)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="result-cta-col">
+              <button type="button" class="btn btn-primary btn-block open-appointment-modal" id="calc-submit-btn">
+                <span>Afspraak Maken of Langskomen</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </button>
+              <div class="calc-walkin-hint">
+                <span>✓ Zonder afspraak welkom • Goudreinetstraat 253</span>
+              </div>
+            </div>
+          </div>
+
         </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Snelle Categorie Tegels (Coolblue Snelkiezer Stijl) -->
+  <section class="section-quick-tiles">
+    <div class="container">
+      <div class="quick-tiles-grid">
+        <a href="#diensten" class="quick-tile-card">
+          <span class="tile-icon">💻</span>
+          <div class="tile-text">
+            <span class="tile-title">Laptops (Windows &amp; Mac)</span>
+            <span class="tile-desc">Schermen, SSD upgrades &amp; accu's</span>
+          </div>
+          <span class="tile-arrow">&rarr;</span>
+        </a>
+        <a href="#fix-portal" class="quick-tile-card">
+          <span class="tile-icon">📱</span>
+          <div class="tile-text">
+            <span class="tile-title">Smartphones &amp; Tablets</span>
+            <span class="tile-desc">Klaar binnen 30-45 minuten</span>
+          </div>
+          <span class="tile-arrow">&rarr;</span>
+        </a>
+        <a href="#high-end" class="quick-tile-card">
+          <span class="tile-icon">🖥️</span>
+          <div class="tile-text">
+            <span class="tile-title">PC's &amp; Custom Game PC's</span>
+            <span class="tile-desc">Assemblage, reparatie &amp; onderhoud</span>
+          </div>
+          <span class="tile-arrow">&rarr;</span>
+        </a>
+        <a href="#aan-huis" class="quick-tile-card">
+          <span class="tile-icon">🏠</span>
+          <div class="tile-text">
+            <span class="tile-title">Hulp aan Huis in Den Haag</span>
+            <span class="tile-desc">Slechts €12,50 per kwartier</span>
+          </div>
+          <span class="tile-arrow">&rarr;</span>
+        </a>
+        <a href="#fix-portal" class="quick-tile-card">
+          <span class="tile-icon">🎮</span>
+          <div class="tile-text">
+            <span class="tile-title">Spelcomputers &amp; Consoles</span>
+            <span class="tile-desc">PS5, Xbox, Switch HDMI poorten</span>
+          </div>
+          <span class="tile-arrow">&rarr;</span>
+        </a>
+        <a href="#remote-support" class="quick-tile-card">
+          <span class="tile-icon">🛡️</span>
+          <div class="tile-text">
+            <span class="tile-title">Hulp op Afstand (TeamViewer)</span>
+            <span class="tile-desc">Direct ondersteuning zonder wachttijd</span>
+          </div>
+          <span class="tile-arrow">&rarr;</span>
+        </a>
       </div>
     </div>
   </section>
+
 
   <!-- 1. Uitgebreide Diensten Sectie -->
   <section class="section services-section" id="diensten">
@@ -1054,122 +1176,84 @@
     </div>
   </section>
 
-  <!-- 2. Interactive Reparatie Prijs- & Duurberekening Tool -->
-  <section class="section calculator-section" id="calculator">
+  <!-- 2. Hoe Werkt Het & Transparante Vaste Tarieven -->
+  <section class="section how-it-works-section" id="werkwijze">
     <div class="container">
       <div class="section-header text-center">
-        <div class="section-pill">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-          Direct Inzicht
-        </div>
-        <h2 class="section-title">Wat heeft reparatie nodig?</h2>
+        <div class="section-pill">Helder &amp; Eerlijk</div>
+        <h2 class="section-title">Hoe werkt een reparatie bij QCC?</h2>
         <p class="section-subtitle">
-          Kies uw type apparaat en defect voor een directe indicatie van doorlooptijd, garantie en reparatiemogelijkheden.
+          Geen onverwachte rekeningen achteraf. Wij geloven in eerlijk advies, duidelijke afspraken en no-cure-no-pay garantie.
         </p>
       </div>
 
-      <div class="calc-card">
-        <!-- Step 1: Select Category -->
-        <div class="calc-step">
-          <label class="calc-label">Stap 1: Kies uw categorie</label>
-          <div class="calc-category-grid" id="calc-categories">
-            <button type="button" class="category-btn active" data-category="laptop">
-              <span class="cat-icon">💻</span>
-              <span class="cat-name">Laptop &amp; PC</span>
-              <span class="cat-sub">Windows &amp; Mac</span>
-            </button>
-            <button type="button" class="category-btn" data-category="smartphone">
-              <span class="cat-icon">📱</span>
-              <span class="cat-name">Smartphone</span>
-              <span class="cat-sub">iPhone &amp; Android</span>
-            </button>
-            <button type="button" class="category-btn" data-category="tablet">
-              <span class="cat-icon">📟</span>
-              <span class="cat-name">Tablet &amp; iPad</span>
-              <span class="cat-sub">Apple &amp; Samsung</span>
-            </button>
-            <button type="button" class="category-btn" data-category="console">
-              <span class="cat-icon">🎮</span>
-              <span class="cat-name">Game Console</span>
-              <span class="cat-sub">PlayStation, Xbox, Switch</span>
-            </button>
-          </div>
+      <!-- 3 Stappen Grid -->
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number-pill">Stap 1</div>
+          <div class="step-icon">📍</div>
+          <h3 class="step-title">Langskomen of Aan Huis</h3>
+          <p class="step-desc">
+            Kom zonder afspraak binnenlopen in onze winkel aan de Goudreinetstraat 253 (gratis parkeren voor de deur). Slecht ter been of een vaste PC? Wij komen ook aan huis in heel Den Haag.
+          </p>
         </div>
 
-        <!-- Step 2: Select Brand / Model -->
-        <div class="calc-step-row">
-          <div class="calc-step-col">
-            <label class="calc-label" for="calc-brand">Stap 2: Kies merk of type</label>
-            <div class="select-wrapper">
-              <select id="calc-brand" class="form-select">
-                <!-- Dynamically populated -->
-              </select>
-            </div>
-          </div>
-
-          <div class="calc-step-col">
-            <label class="calc-label" for="calc-issue">Stap 3: Wat is het probleem?</label>
-            <div class="select-wrapper">
-              <select id="calc-issue" class="form-select">
-                <!-- Dynamically populated -->
-              </select>
-            </div>
-          </div>
+        <div class="step-card">
+          <div class="step-number-pill">Stap 2</div>
+          <div class="step-icon">🔍</div>
+          <h3 class="step-title">Gratis Diagnose &amp; Prijsopgave</h3>
+          <p class="step-desc">
+            Onze monteurs onderzoeken uw toestel direct. We bellen of WhatsAppen u altijd eerst met de exacte kosten en doorlooptijd. Pas na uw akkoord gaan we aan de slag.
+          </p>
         </div>
 
-        <!-- Step 3: Interactive Result Card -->
-        <div class="calc-result-box" id="calc-result">
-          <div class="result-details">
-            <div class="result-header">
-              <span class="result-badge" id="res-badge">Directe Reparatie</span>
-              <h3 class="result-title" id="res-title">Schermvervanging &amp; Display Reparatie</h3>
-            </div>
-            <p class="result-desc" id="res-desc">
-              Professionele vervanging met A-kwaliteit / origineel displaypaneel. Inclusief grondige test van touch-respons, kleurcalibratie en behuizingscontrole.
-            </p>
-            <div class="result-metrics">
-              <div class="metric-item">
-                <span class="metric-icon">⏱️</span>
-                <div>
-                  <span class="metric-label">Geschatte doorlooptijd</span>
-                  <span class="metric-val" id="res-time">30 - 60 minuten</span>
-                </div>
-              </div>
-              <div class="metric-item">
-                <span class="metric-icon">🛡️</span>
-                <div>
-                  <span class="metric-label">Garantieperiode</span>
-                  <span class="metric-val" id="res-warranty">6 maanden garantie</span>
-                </div>
-              </div>
-              <div class="metric-item">
-                <span class="metric-icon">💶</span>
-                <div>
-                  <span class="metric-label">Kostenindicatie</span>
-                  <span class="metric-val text-red" id="res-price">Vanaf € 69,- (incl. btw &amp; montage)</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="result-cta-col">
-            <div class="cta-callout">
-              <strong>Klaar terwijl u wacht?</strong>
-              <p>Meld uw apparaat van tevoren aan zodat het juiste onderdeel direct klaarligt op de werkbank.</p>
-            </div>
-            <button type="button" class="btn btn-primary btn-block open-appointment-modal" id="calc-submit-btn">
-              <span>Direct Afspraak Inplannen</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-            </button>
-            <a href="https://wa.me/31703236991" target="_blank" rel="noopener noreferrer" class="btn btn-glass btn-block btn-sm">
-              <span>Stel vraag via WhatsApp</span>
-            </a>
-          </div>
+        <div class="step-card">
+          <div class="step-number-pill">Stap 3</div>
+          <div class="step-icon">✅</div>
+          <h3 class="step-title">Snel Weer Zorgeloos Verder</h3>
+          <p class="step-desc">
+            Vaak dezelfde dag of klaar terwijl u wacht met een kopje koffie. Inclusief 6 maanden garantie op onderdelen en ons vertrouwde no-cure-no-pay principe.
+          </p>
         </div>
-
       </div>
+
+      <!-- Vaste Populaire Tarieven Box -->
+      <div class="fixed-rates-box">
+        <div class="rates-header">
+          <span class="rates-badge">Vaste All-In Tarieven</span>
+          <h3 class="rates-title">Meest Gekozen Reparaties &amp; Onderhoud</h3>
+        </div>
+        <div class="rates-grid">
+          <div class="rate-card">
+            <span class="rate-cat">Laptops &amp; PC's</span>
+            <h4 class="rate-name">SSD Snelheidsupgrade</h4>
+            <span class="rate-price">Vanaf &euro; 79,-</span>
+            <p class="rate-info">Maakt uw trage laptop of pc tot 10x sneller. Inclusief SSD, data-overzetting en montage.</p>
+          </div>
+          <div class="rate-card">
+            <span class="rate-cat">Onderhoud</span>
+            <h4 class="rate-name">APK &amp; Grondig Opschonen</h4>
+            <span class="rate-price">&euro; 59,-</span>
+            <p class="rate-info">Virusvrij maken, stofvrij blazen, verse Arctic koelpasta en optimalisatie van Windows 11.</p>
+          </div>
+          <div class="rate-card">
+            <span class="rate-cat">Smartphones</span>
+            <h4 class="rate-name">Scherm- of Accuvervanging</h4>
+            <span class="rate-price">Vanaf &euro; 45,-</span>
+            <p class="rate-info">Klaar binnen 30-45 minuten met behoud van al uw foto's, apps en gegevens.</p>
+          </div>
+          <div class="rate-card">
+            <span class="rate-cat">Aan Huis</span>
+            <h4 class="rate-name">Hulp op Locatie in Den Haag</h4>
+            <span class="rate-price">&euro; 12,50 / kwartier</span>
+            <p class="rate-info">Eerlijke afrekening per kwartier voor wifi, printers, e-mail en computerstoringen thuis.</p>
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
+
 
   <!-- 3. Webshop & Hardware Showroom (shop.qualitycomputer.nl) -->
   <section class="section shop-section" id="shop">
