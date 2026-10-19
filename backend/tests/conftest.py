@@ -102,3 +102,28 @@ def auth_headers(make_token):
         return {"Authorization": f"Bearer {make_token(**kwargs)}"}
 
     return _headers
+
+
+class FakeStorage:
+    """Opslag in het geheugen in plaats van Supabase Storage."""
+
+    prefix = "https://opslag.test/logos/"
+
+    def __init__(self):
+        self.files: dict[str, bytes] = {}
+
+    def upload(self, path: str, data: bytes, content_type: str) -> str:
+        self.files[path] = data
+        return self.prefix + path
+
+    def delete(self, url: str) -> None:
+        self.files.pop(url.removeprefix(self.prefix), None)
+
+
+@pytest.fixture
+def storage(client):
+    from app.services.storage import get_storage
+
+    fake = FakeStorage()
+    app.dependency_overrides[get_storage] = lambda: fake
+    return fake

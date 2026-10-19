@@ -55,7 +55,8 @@ De app draait op http://localhost:3000.
 4. **Project Settings → API Keys**: kopieer
    - de project-URL en de *publishable key* → `frontend/.env.local`
    - de project-URL en de *secret key* → `backend/.env` (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`)
-5. Zet in `backend/.env` bij `ALLOWED_EMAILS` de e-mailadressen die mogen registreren (kommagescheiden).
+5. Maak de opslag voor logo's aan (eenmalig, in de map `backend`): `python -m scripts.setup_storage`
+6. Zet in `backend/.env` bij `ALLOWED_EMAILS` de e-mailadressen die mogen registreren (kommagescheiden).
 
 **Zo werkt de toegang:**
 - Registreren controleert eerst of het e-mailadres op de allowlist staat.
