@@ -1,5 +1,6 @@
-"""Welke publisher hoort bij welk platform. In fase 2 komen hier de echte publishers bij."""
+"""Welke publisher hoort bij welk platform."""
 
+from app.config import Settings
 from app.models import Platform
 from app.publishers.base import Publisher
 
@@ -25,6 +26,8 @@ def available_platforms() -> list[Platform]:
     return list(_publishers)
 
 
-# Fase 2, bijvoorbeeld:
-#   from app.publishers.linkedin import LinkedInPublisher
-#   register(LinkedInPublisher())
+def register_defaults(settings: Settings) -> None:
+    """Registreert de echte publishers. Nieuwe platforms komen hier bij."""
+    from app.publishers.linkedin import LinkedInPublisher
+
+    register(LinkedInPublisher(settings))

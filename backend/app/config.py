@@ -50,6 +50,20 @@ class Settings(BaseSettings):
     # Alleen deze e-mailadressen mogen een account hebben (kommagescheiden)
     allowed_emails: str = ""
 
+    # Geheim voor het versleutelen van platform-tokens en ondertekenen van OAuth-state.
+    # Maak er een met: python -c "import secrets; print(secrets.token_urlsafe(48))"
+    app_secret_key: str = ""
+
+    # Publieke adressen: waar LinkedIn naar terugstuurt (backend) en waar de app draait (frontend)
+    backend_public_url: str = "http://localhost:8000"
+    frontend_url: str = "http://localhost:3000"
+
+    # LinkedIn-app (linkedin.com/developers → My apps → Auth)
+    linkedin_client_id: str = ""
+    linkedin_client_secret: str = ""
+    # Versie van de LinkedIn-API (JJJJMM); versies vervallen na ongeveer een jaar
+    linkedin_api_version: str = "202610"
+
     @property
     def cors_origin_list(self) -> list[str]:
         return [o.strip() for o in self.cors_origins.split(",") if o.strip()]

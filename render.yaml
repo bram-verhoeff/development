@@ -32,3 +32,15 @@ services:
         value: logos
       - key: ALLOWED_EMAILS
         sync: false
+      - key: APP_SECRET_KEY
+        generateValue: true
+      - key: BACKEND_PUBLIC_URL
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      - key: LINKEDIN_CLIENT_ID
+        sync: false
+      - key: LINKEDIN_CLIENT_SECRET
+        sync: false
+      - key: LINKEDIN_API_VERSION
+        value: "202610"

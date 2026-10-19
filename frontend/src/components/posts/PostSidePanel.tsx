@@ -15,6 +15,8 @@ import {
 } from "@/app/(app)/posts/actions";
 import { Alert } from "@/components/ui/Alert";
 import { StatusBadge } from "@/components/ui/Badges";
+
+import { PublishCard } from "./PublishCard";
 import { SubmitButton } from "@/components/ui/SubmitButton";
 import { Stagger, StaggerItem } from "@/components/motion/Reveal";
 import { buttonClass, cardClass, inputClass } from "@/components/ui/styles";
@@ -35,6 +37,9 @@ export function PostSidePanel({ post }: { post: PostDetail }) {
     <Stagger className="space-y-5" delay={0.1} step={0.07}>
       <StaggerItem>
         <StatusCard post={post} />
+      </StaggerItem>
+      <StaggerItem>
+        <PublishCard post={post} />
       </StaggerItem>
       <StaggerItem>
         <ScheduleCard post={post} />
@@ -69,7 +74,7 @@ function StatusCard({ post }: { post: PostDetail }) {
     <section className={`${cardClass} p-5`}>
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold">{t("panel.status")}</h2>
-        <StatusBadge status={post.status} scheduled={Boolean(post.scheduled_at)} />
+        <StatusBadge status={post.status} scheduled={Boolean(post.scheduled_at)} published={Boolean(post.published_at)} />
       </div>
       {result.error && <div className="mt-3"><Alert tone="error">{errorText(result.error)}</Alert></div>}
       <div className="mt-4 flex flex-wrap gap-2">

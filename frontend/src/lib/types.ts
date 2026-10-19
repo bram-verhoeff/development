@@ -44,6 +44,9 @@ export type Post = {
   char_count: number;
   max_chars: number;
   warnings: PostWarning[];
+  published_at: string | null;
+  external_url: string | null;
+  publish_error: string | null;
 };
 
 export type PostVersion = {
@@ -56,7 +59,21 @@ export type PostVersion = {
   created_at: string;
 };
 
-export type PostDetail = Post & { versions: PostVersion[] };
+export type Connection = {
+  platform: Platform;
+  display_name: string;
+  avatar_url: string | null;
+  expires_at: string | null;
+  expired: boolean;
+  connected_at: string;
+};
+
+export type ConnectionsData = {
+  platforms: { platform: Platform; supported: boolean; configured: boolean }[];
+  connections: Connection[];
+};
+
+export type PostDetail = Post & { versions: PostVersion[]; connection: Connection | null };
 
 export type Dashboard = {
   brands: number;

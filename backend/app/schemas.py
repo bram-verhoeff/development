@@ -101,6 +101,9 @@ class PostOut(BaseModel):
     char_count: int
     max_chars: int
     warnings: list[PostWarning]
+    published_at: datetime | None = None
+    external_url: str | None = None
+    publish_error: str | None = None
 
 
 class PostVersionOut(BaseModel):
@@ -117,6 +120,8 @@ class PostVersionOut(BaseModel):
 
 class PostDetailOut(PostOut):
     versions: list[PostVersionOut]
+    # Gekoppeld account voor het platform van deze post (nodig om te publiceren)
+    connection: "ConnectionOut | None" = None
 
 
 class PostUpdateIn(BaseModel):
@@ -182,3 +187,33 @@ class DashboardOut(BaseModel):
     generation_daily_limit: int
     upcoming: list[PostOut]
     recent_concepts: list[PostOut]
+
+
+# ---------- Koppelingen ----------
+
+
+class ConnectionOut(BaseModel):
+    platform: Platform
+    display_name: str
+    avatar_url: str | None
+    expires_at: datetime | None
+    expired: bool
+    connected_at: datetime
+
+
+class AvailablePlatformOut(BaseModel):
+    platform: Platform
+    supported: bool  # al gebouwd in PostPilot
+    configured: bool  # client-ID/geheim ingesteld in de backend
+
+
+class ConnectionsOut(BaseModel):
+    platforms: list[AvailablePlatformOut]
+    connections: list[ConnectionOut]
+
+
+class ConnectStartOut(BaseModel):
+    authorization_url: str
+
+
+PostDetailOut.model_rebuild()

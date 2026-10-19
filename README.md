@@ -7,6 +7,7 @@ PostPilot is een webapplicatie om per merk social-mediacontent te laten schrijve
 - **Beoordelen**: elke post is *concept*, *goedgekeurd* of *afgewezen*. Je kunt hem zelf bewerken of opnieuw laten schrijven met extra instructies. Elke versie wordt bewaard.
 - **Kalender**: goedgekeurde posts inplannen (Nederlandse tijd), met filters op merk en platform.
 - **Toegang**: inloggen en registreren via Supabase. Alleen e-mailadressen op een allowlist mogen registreren.
+- **Koppelen en plaatsen**: koppel per merk een LinkedIn-account en plaats goedgekeurde posts met één klik. Andere platforms volgen.
 
 > Fase 2 (nog niet gebouwd): automatisch publiceren via de platform-API's. De code is daarop voorbereid, zie [Fase 2: publiceren](#fase-2-publiceren).
 
@@ -105,6 +106,11 @@ Alle sleutels staan in `backend/.env` en `frontend/.env.local`. Die bestanden st
 | `SUPABASE_JWT_SECRET` | alleen voor oudere Supabase-projecten met HS256-tokens; anders leeg |
 | `STORAGE_BUCKET` | naam van de bucket voor logo's (standaard `logos`) |
 | `ALLOWED_EMAILS` | wie mag registreren en de app gebruiken |
+| `APP_SECRET_KEY` | geheim (min. 32 tekens) voor het versleutelen van platform-tokens; nooit wijzigen na het koppelen |
+| `BACKEND_PUBLIC_URL` | publiek adres van de backend (waar LinkedIn naar terugstuurt) |
+| `FRONTEND_URL` | publiek adres van de frontend (waar je na het koppelen terugkomt) |
+| `LINKEDIN_CLIENT_ID`, `LINKEDIN_CLIENT_SECRET` | van je LinkedIn-app, zie hieronder |
+| `LINKEDIN_API_VERSION` | versie van de LinkedIn-API (`JJJJMM`); versies vervallen na ongeveer een jaar |
 
 **Frontend** (`frontend/.env.local`)
 
@@ -183,9 +189,23 @@ Een taal toevoegen:
 
 De taal van de gegenereerde posts stel je per merk in.
 
+## LinkedIn koppelen
+
+1. Ga naar [linkedin.com/developers/apps](https://www.linkedin.com/developers/apps) → **Create app**.
+   - Een LinkedIn-app moet aan een bedrijfspagina hangen. Heb je die niet, maak er dan eerst een aan (dat kan gratis).
+2. **Products**: voeg **Sign In with LinkedIn using OpenID Connect** en **Share on LinkedIn** toe. Die zijn direct actief.
+3. **Auth** → *Authorized redirect URLs for your app*: voeg `http://localhost:8000/connections/linkedin/callback` toe. Online ook `https://<backend-adres>/connections/linkedin/callback`.
+4. Kopieer op het tabblad **Auth** de *Client ID* en het *Primary Client Secret* naar `backend/.env` (`LINKEDIN_CLIENT_ID`, `LINKEDIN_CLIENT_SECRET`) en herstart de backend.
+5. Open in PostPilot een merk → **Koppelingen** → **LinkedIn koppelen**.
+
+**Goed om te weten:**
+- PostPilot post op het **persoonlijke profiel** van het gekoppelde account. Posten op een bedrijfspagina vereist een product dat LinkedIn eerst moet goedkeuren (Community Management API).
+- Een gratis LinkedIn-app krijgt geen refresh-tokens. Een koppeling verloopt daarom na ongeveer 60 dagen; PostPilot laat zien wanneer, en dan koppel je opnieuw.
+- Tokens worden versleuteld opgeslagen met `APP_SECRET_KEY`. Verander je die sleutel, dan moeten alle accounts opnieuw gekoppeld worden.
+
 ## Fase 2: publiceren
 
-`backend/app/publishers/` bevat de gedeelde interface:
+Koppelen (OAuth) zit in `backend/app/services/social/` (`OAuthProvider`, met `linkedin.py`). Publiceren zit in `backend/app/publishers/`:
 
 - `base.py`: `Publisher` met `validate(post)` en `publish(post, account) -> PublishResult`.
 - `registry.py`: koppelt een platform aan een publisher.
@@ -194,4 +214,5 @@ De taal van de gegenereerde posts stel je per merk in.
 Een platform toevoegen:
 1. Maak bijvoorbeeld `publishers/linkedin.py` met een subklasse van `Publisher`.
 2. Registreer die in `registry.py`.
-3. Bouw de koppeling: een tabel `social_accounts` (versleutelde OAuth-tokens per merk en platform), een tabel `publish_jobs`, en een scheduler die ingeplande, goedgekeurde posts op het juiste moment via `get_publisher(platform).publish(...)` plaatst.
+3. Voeg de OAuth-koppeling toe als subklasse van `OAuthProvider` en zet het platform in `SUPPORTED` in `services/social/registry.py`. De tabel `social_accounts` en het versleutelen van tokens zijn al klaar.
+4. Nog te bouwen: een scheduler die ingeplande, goedgekeurde posts op het juiste moment via `get_publisher(platform).publish(...)` plaatst (nu kan dat met de knop "Nu plaatsen").

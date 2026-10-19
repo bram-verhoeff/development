@@ -1,6 +1,6 @@
 "use client";
 
-import { CircleCheck, CircleDashed, CircleX, Clock } from "lucide-react";
+import { CircleCheck, CircleDashed, CircleX, Clock, Send } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import type { Platform, PostStatus } from "@/lib/types";
@@ -48,17 +48,18 @@ export function PlatformBadge({ platform }: { platform: Platform }) {
   );
 }
 
-const statusStyle: Record<PostStatus | "scheduled", { className: string; Icon: typeof Clock }> = {
+const statusStyle: Record<PostStatus | "scheduled" | "published", { className: string; Icon: typeof Clock }> = {
   concept: { className: "bg-amber-50 text-amber-800 ring-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:ring-amber-900", Icon: CircleDashed },
   approved: { className: "bg-emerald-50 text-emerald-800 ring-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:ring-emerald-900", Icon: CircleCheck },
   rejected: { className: "bg-rose-50 text-rose-700 ring-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:ring-rose-900", Icon: CircleX },
   scheduled: { className: "bg-accent-soft text-accent ring-accent/25", Icon: Clock },
+  published: { className: "bg-sky-50 text-sky-800 ring-sky-200 dark:bg-sky-950/40 dark:text-sky-300 dark:ring-sky-900", Icon: Send },
 };
 
-/** Status van een post; een goedgekeurde post met datum toont "Ingepland". */
-export function StatusBadge({ status, scheduled = false }: { status: PostStatus; scheduled?: boolean }) {
+/** Status van een post; goedgekeurd + datum = "Ingepland", geplaatst = "Gepubliceerd". */
+export function StatusBadge({ status, scheduled = false, published = false }: { status: PostStatus; scheduled?: boolean; published?: boolean }) {
   const t = useTranslations("status");
-  const key = status === "approved" && scheduled ? "scheduled" : status;
+  const key = published ? "published" : status === "approved" && scheduled ? "scheduled" : status;
   const { className, Icon } = statusStyle[key];
   return (
     <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold ring-1 ${className}`}>

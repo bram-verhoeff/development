@@ -11,6 +11,7 @@ from app.config import Settings
 from app.database import utcnow
 from app.models import Brand, GenerationRun, Platform, Post, PostVersion, VersionOrigin
 from app.schemas import PostDetailOut, PostOut, PostVersionOut
+from app.services import connections as connection_service
 from app.services.ai.platforms import RULES, full_text
 from app.services.checks import post_warnings
 
@@ -31,12 +32,17 @@ def to_out(post: Post) -> PostOut:
         char_count=len(full_text(post.hook, post.body, post.hashtags)),
         max_chars=RULES[Platform(post.platform)].max_chars,
         warnings=post_warnings(post.platform, post.hook, post.body, post.hashtags, post.brand),
+        published_at=post.published_at,
+        external_url=post.external_url,
+        publish_error=post.publish_error,
     )
 
 
 def to_detail(post: Post) -> PostDetailOut:
     versions = [PostVersionOut.model_validate(v) for v in reversed(post.versions)]  # nieuwste eerst
-    return PostDetailOut(**to_out(post).model_dump(), versions=versions)
+    account = next((a for a in post.brand.social_accounts if a.platform == post.platform), None)
+    connection = connection_service.to_out(account) if account else None
+    return PostDetailOut(**to_out(post).model_dump(), versions=versions, connection=connection)
 
 
 def set_content(

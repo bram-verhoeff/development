@@ -31,6 +31,11 @@ def settings() -> Settings:
         supabase_jwt_secret=HS_SECRET,
         allowed_emails=f"{ALLOWED_EMAIL}, tweede@voorbeeld.nl",
         gemini_api_key="test-key",
+        app_secret_key="test-geheim-" + "x" * 40,
+        linkedin_client_id="li-client",
+        linkedin_client_secret="li-secret",
+        backend_public_url="https://api.test",
+        frontend_url="https://app.test",
         anthropic_api_key="test-key",
     )
 

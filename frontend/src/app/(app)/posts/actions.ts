@@ -77,3 +77,8 @@ export async function deletePost(postId: number) {
   refresh();
   redirect("/posts");
 }
+
+/** Plaatst de post nu meteen op het gekoppelde account. */
+export async function publishPost(postId: number): Promise<ActionResult> {
+  return run(postId, () => apiFetch(`/posts/${postId}/publish`, { method: "POST" }));
+}

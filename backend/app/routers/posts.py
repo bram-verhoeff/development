@@ -10,6 +10,7 @@ from app.auth import CurrentUser, get_current_user
 from app.config import Settings, get_settings
 from app.database import get_db, utcnow
 from app.models import Brand, GenerationRun, Platform, Post, PostStatus, VersionOrigin
+from app.publishers import registry as publisher_registry
 from app.schemas import (
     PostDetailOut,
     PostOut,
@@ -18,6 +19,7 @@ from app.schemas import (
     PostUpdateIn,
     RegenerateIn,
 )
+from app.services import connections as connection_service
 from app.services import posts as post_service
 from app.services.ai.writer import BaseWriter, get_writer
 
@@ -160,3 +162,41 @@ def delete_post(post_id: int, db: Session = Depends(get_db), user: CurrentUser =
     db.delete(post_service.get_owned_post(post_id, db, user))
     db.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@router.post("/{post_id}/publish", response_model=PostDetailOut)
+def publish_post(
+    post_id: int,
+    db: Session = Depends(get_db),
+    user: CurrentUser = Depends(get_current_user),
+    settings: Settings = Depends(get_settings),
+):
+    """Plaatst een goedgekeurde post nu meteen op het gekoppelde account."""
+    post = post_service.get_owned_post(post_id, db, user)
+    if post.status != PostStatus.APPROVED:
+        raise HTTPException(status.HTTP_409_CONFLICT, "post_not_approved")
+    if post.published_at is not None:
+        raise HTTPException(status.HTTP_409_CONFLICT, "already_published")
+    account = connection_service.get_account(db, post.brand_id, post.platform)
+    if account is None:
+        raise HTTPException(status.HTTP_409_CONFLICT, "not_connected")
+    if connection_service.is_expired(account):
+        raise HTTPException(status.HTTP_409_CONFLICT, "connection_expired")
+    try:
+        publisher = publisher_registry.get_publisher(post.platform)
+    except publisher_registry.PublisherNotAvailable:
+        raise HTTPException(status.HTTP_501_NOT_IMPLEMENTED, "platform_not_supported")
+
+    result = publisher.publish(post, connection_service.credentials(account, settings))
+    if not result.success:
+        post.publish_error = result.error
+        db.commit()
+        raise HTTPException(status.HTTP_502_BAD_GATEWAY, result.error or "publish_failed")
+
+    post.published_at = utcnow()
+    post.external_post_id = result.external_id
+    post.external_url = result.url
+    post.publish_error = None
+    post.scheduled_at = None  # staat nu online; niet meer "gepland"
+    db.commit()
+    return post_service.to_detail(post)

@@ -39,8 +39,8 @@ export function PostCard({ post }: { post: Post }) {
       <header className="flex flex-wrap items-center gap-2">
         <PlatformBadge platform={post.platform} />
         {/* key: de badge "popt" bij een statuswissel */}
-        <motion.span key={`${post.status}-${Boolean(post.scheduled_at)}`} initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
-          <StatusBadge status={post.status} scheduled={Boolean(post.scheduled_at)} />
+        <motion.span key={`${post.status}-${Boolean(post.scheduled_at)}-${Boolean(post.published_at)}`} initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
+          <StatusBadge status={post.status} scheduled={Boolean(post.scheduled_at)} published={Boolean(post.published_at)} />
         </motion.span>
         <span className="ml-auto truncate text-xs text-muted">{post.brand_name}</span>
       </header>

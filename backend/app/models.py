@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime
 from enum import StrEnum
 
-from sqlalchemy import JSON, ForeignKey, Integer, String, Text, Uuid
+from sqlalchemy import JSON, ForeignKey, Integer, String, Text, UniqueConstraint, Uuid
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base, UTCDateTime, utcnow
@@ -62,6 +62,9 @@ class Brand(TimestampMixin, Base):
     generation_runs: Mapped[list["GenerationRun"]] = relationship(
         back_populates="brand", cascade="all, delete-orphan", passive_deletes=True
     )
+    social_accounts: Mapped[list["SocialAccount"]] = relationship(
+        back_populates="brand", cascade="all, delete-orphan", passive_deletes=True
+    )
 
 
 class GenerationRun(Base):
@@ -101,6 +104,12 @@ class Post(TimestampMixin, Base):
     status: Mapped[str] = mapped_column(String(20), default=PostStatus.CONCEPT, index=True)
     scheduled_at: Mapped[datetime | None] = mapped_column(UTCDateTime, index=True)
 
+    # Publicatie op het platform (fase 2)
+    published_at: Mapped[datetime | None] = mapped_column(UTCDateTime)
+    external_post_id: Mapped[str | None] = mapped_column(String(200))
+    external_url: Mapped[str | None] = mapped_column(String(1000))
+    publish_error: Mapped[str | None] = mapped_column(String(100))
+
     brand: Mapped[Brand] = relationship(back_populates="posts")
     versions: Mapped[list["PostVersion"]] = relationship(
         back_populates="post", cascade="all, delete-orphan", passive_deletes=True, order_by="PostVersion.id"
@@ -122,3 +131,23 @@ class PostVersion(Base):
     created_at: Mapped[datetime] = mapped_column(UTCDateTime, default=utcnow)
 
     post: Mapped[Post] = relationship(back_populates="versions")
+
+
+class SocialAccount(TimestampMixin, Base):
+    """Gekoppeld social-media-account van een merk. Tokens staan versleuteld opgeslagen."""
+
+    __tablename__ = "social_accounts"
+    __table_args__ = (UniqueConstraint("brand_id", "platform", name="uq_social_accounts_brand_platform"),)
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    brand_id: Mapped[int] = mapped_column(ForeignKey("brands.id", ondelete="CASCADE"), index=True)
+    platform: Mapped[str] = mapped_column(String(20))
+    external_account_id: Mapped[str] = mapped_column(String(200))
+    display_name: Mapped[str] = mapped_column(String(300), default="")
+    avatar_url: Mapped[str | None] = mapped_column(String(1000))
+    access_token_encrypted: Mapped[str] = mapped_column(Text)
+    refresh_token_encrypted: Mapped[str | None] = mapped_column(Text)
+    expires_at: Mapped[datetime | None] = mapped_column(UTCDateTime)
+    scopes: Mapped[str] = mapped_column(String(500), default="")
+
+    brand: Mapped[Brand] = relationship(back_populates="social_accounts")
