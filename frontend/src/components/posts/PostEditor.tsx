@@ -1,14 +1,15 @@
 "use client";
 
-import { Save, TriangleAlert } from "lucide-react";
+import { LoaderCircle, Save, TriangleAlert } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useActionState, useState } from "react";
+import { motion } from "motion/react";
+import { useState, useTransition } from "react";
 
 import { updatePost } from "@/app/(app)/posts/actions";
 import { Alert } from "@/components/ui/Alert";
 import { PlatformIcon } from "@/components/ui/Badges";
-import { SubmitButton } from "@/components/ui/SubmitButton";
-import { cardClass, inputClass } from "@/components/ui/styles";
+import { buttonClass, cardClass, inputClass } from "@/components/ui/styles";
+import { useToast } from "@/components/ui/Toast";
 import type { PostDetail } from "@/lib/types";
 
 const joinTags = (tags: string[]) => tags.join(" ");
@@ -22,7 +23,9 @@ const parseTags = (value: string) =>
 export function PostEditor({ post }: { post: PostDetail }) {
   const t = useTranslations("posts");
   const tErrors = useTranslations("errors");
-  const [state, action] = useActionState(updatePost.bind(null, post.id), {});
+  const toast = useToast();
+  const [saving, startSaving] = useTransition();
+  const [error, setError] = useState<string>();
   const [hook, setHook] = useState(post.hook);
   const [body, setBody] = useState(post.body);
   const [tags, setTags] = useState(joinTags(post.hashtags));
@@ -35,10 +38,19 @@ export function PostEditor({ post }: { post: PostDetail }) {
 
   return (
     <div className="grid gap-5 xl:grid-cols-[1fr_0.9fr]">
-      <form action={action} className={`${cardClass} space-y-4 p-5`}>
+      <form
+        action={(formData) =>
+          startSaving(async () => {
+            const result = await updatePost(post.id, {}, formData);
+            setError(result.error);
+            // De melding komt uit de provider en blijft staan, ook als de editor daarna ververst
+            if (result.ok) toast(t("toast.saved"));
+          })
+        }
+        className={`${cardClass} space-y-4 p-5`}
+      >
         <h2 className="text-lg font-semibold">{t("editor.title")}</h2>
-        {state.error && <Alert tone="error">{tErrors.has(state.error) ? tErrors(state.error) : tErrors("unknown_error")}</Alert>}
-        {state.ok && !dirty && <Alert tone="success">{t("editor.saved")}</Alert>}
+        {error && <Alert tone="error">{tErrors.has(error) ? tErrors(error) : tErrors("unknown_error")}</Alert>}
 
         <label className="block">
           <span className="text-sm font-medium">{t("editor.hook")}</span>
@@ -60,9 +72,11 @@ export function PostEditor({ post }: { post: PostDetail }) {
             {over && <span className="font-semibold text-rose-600">{t("editor.tooLong")}</span>}
           </div>
           <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-line">
-            <div
-              className={`h-full rounded-full transition-all ${over ? "bg-rose-500" : ratio > 0.85 ? "bg-amber-500" : "bg-brand-gradient"}`}
-              style={{ width: `${ratio * 100}%` }}
+            <motion.div
+              className={`h-full rounded-full ${over ? "bg-rose-500" : ratio > 0.85 ? "bg-amber-500" : "bg-brand-gradient"}`}
+              initial={{ width: 0 }}
+              animate={{ width: `${ratio * 100}%` }}
+              transition={{ type: "spring", stiffness: 200, damping: 26 }}
             />
           </div>
         </div>
@@ -78,13 +92,19 @@ export function PostEditor({ post }: { post: PostDetail }) {
           </ul>
         )}
 
-        <SubmitButton pendingLabel={t("editor.saving")} fullWidth={false}>
-          <Save size={16} /> {t("editor.save")}
-        </SubmitButton>
+        <motion.button type="submit" disabled={saving || !dirty} whileTap={{ scale: 0.96 }} className={buttonClass.primary}>
+          {saving ? <LoaderCircle size={16} className="animate-spin" /> : <Save size={16} />}
+          {saving ? t("editor.saving") : t("editor.save")}
+        </motion.button>
       </form>
 
       {/* Voorbeeldweergave */}
-      <div className="xl:sticky xl:top-6 xl:self-start">
+      <motion.div
+        className="xl:sticky xl:top-6 xl:self-start"
+        initial={{ opacity: 0, x: 16 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.15 }}
+      >
         <p className="mb-2 text-xs font-semibold tracking-wide text-muted uppercase">{t("editor.preview")}</p>
         <div className={`${cardClass} overflow-hidden`}>
           <div className="flex items-center gap-3 border-b border-line p-4">
@@ -103,7 +123,7 @@ export function PostEditor({ post }: { post: PostDetail }) {
             {hashtags.length > 0 && <p className="font-medium text-accent">{hashtags.join(" ")}</p>}
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

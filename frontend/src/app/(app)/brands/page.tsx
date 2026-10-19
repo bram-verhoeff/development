@@ -4,9 +4,11 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
 import { BrandLogo } from "@/components/brands/BrandLogo";
+import { Stagger, StaggerItem } from "@/components/motion/Reveal";
+import { SpotlightCard } from "@/components/motion/SpotlightCard";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { buttonClass, cardClass } from "@/components/ui/styles";
+import { buttonClass } from "@/components/ui/styles";
 import { apiFetch } from "@/lib/api";
 import type { Brand } from "@/lib/types";
 
@@ -31,13 +33,11 @@ export default async function BrandsPage() {
       {brands.length === 0 ? (
         <EmptyState icon={Building2} title={t("empty.title")} body={t("empty.body")} action={newButton} />
       ) : (
-        <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <Stagger as="ul" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {brands.map((brand) => (
-            <li key={brand.id}>
-              <Link
-                href={`/brands/${brand.id}`}
-                className={`${cardClass} group flex h-full flex-col overflow-hidden transition hover:-translate-y-0.5 hover:shadow-lg`}
-              >
+            <StaggerItem as="li" key={brand.id}>
+              <SpotlightCard className="h-full">
+              <Link href={`/brands/${brand.id}`} className="group flex h-full flex-col">
                 {/* Kleurstrook met de merkkleuren */}
                 <div className="flex h-2">
                   {(brand.colors.length ? brand.colors : ["var(--accent)", "var(--coral)"]).map((color, i) => (
@@ -66,9 +66,10 @@ export default async function BrandsPage() {
                   </div>
                 )}
               </Link>
-            </li>
+              </SpotlightCard>
+            </StaggerItem>
           ))}
-        </ul>
+        </Stagger>
       )}
     </div>
   );

@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { DateTimeFormatOptions } from "next-intl";
 import { getFormatter, getTranslations } from "next-intl/server";
 
+import { FadeIn } from "@/components/motion/Reveal";
 import { PostFilters } from "@/components/posts/PostFilters";
 import { PlatformIcon, platformStyle } from "@/components/ui/Badges";
 import { buttonClass, cardClass } from "@/components/ui/styles";
@@ -89,7 +90,7 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
     <div>
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold capitalize sm:text-3xl">{dayLabel(first, { month: "long", year: "numeric" })}</h1>
+          <h1 className="text-3xl font-extrabold capitalize sm:text-4xl">{dayLabel(first, { month: "long", year: "numeric" })}</h1>
           <p className="mt-1 text-muted">{t("description", { count: scheduled.length })}</p>
         </div>
         <div className="flex items-center gap-2">
@@ -108,8 +109,8 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
       <PostFilters brands={brands} showStatus={false} />
 
       <div className="grid gap-5 xl:grid-cols-[1fr_280px]">
-        {/* Maandraster (vanaf tablet) */}
-        <div className={`${cardClass} hidden overflow-hidden md:block`}>
+        {/* Maandraster (vanaf tablet); key: opnieuw in beeld komen bij een andere maand */}
+        <FadeIn key={month} className={`${cardClass} hidden overflow-hidden md:block`}>
           <div className="grid grid-cols-7 border-b border-line bg-surface-2 text-center text-xs font-semibold tracking-wide text-muted uppercase">
             {days.slice(0, 7).map((d) => (
               <div key={keyOf(d)} className="py-2">
@@ -129,7 +130,7 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
                 >
                   <div
                     className={`mb-1 inline-flex h-6 min-w-6 items-center justify-center rounded-full px-1 text-xs font-semibold ${
-                      key === today ? "bg-brand-gradient text-white" : inMonth ? "text-foreground" : "text-muted/60"
+                      key === today ? "bg-brand-gradient text-white shadow-md shadow-accent/40" : inMonth ? "text-foreground" : "text-muted/60"
                     }`}
                   >
                     {d.getUTCDate()}
@@ -140,7 +141,7 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
                         key={post.id}
                         href={`/posts/${post.id}`}
                         title={`${post.brand_name}: ${post.hook}`}
-                        className={`flex items-center gap-1.5 rounded-md px-1.5 py-1 text-[11px] leading-tight transition hover:brightness-95 ${platformStyle[post.platform].soft}`}
+                        className={`flex items-center gap-1.5 rounded-md px-1.5 py-1 text-[11px] leading-tight shadow-sm transition-[scale,box-shadow] hover:scale-[1.04] hover:shadow-md ${platformStyle[post.platform].soft}`}
                       >
                         <PlatformIcon platform={post.platform} size={16} />
                         <span className="font-semibold tabular-nums">{time(post.scheduled_at!)}</span>
@@ -152,7 +153,7 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
               );
             })}
           </div>
-        </div>
+        </FadeIn>
 
         {/* Agenda (telefoon) */}
         <div className="space-y-3 md:hidden">

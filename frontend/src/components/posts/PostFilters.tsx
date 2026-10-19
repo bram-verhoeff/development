@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "motion/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 
@@ -44,11 +45,14 @@ export function PostFilters({
               role="tab"
               aria-selected={activeStatus === status}
               onClick={() => update("status", status)}
-              className={`rounded-lg px-3 py-1.5 text-sm font-medium transition ${
-                activeStatus === status ? "bg-accent text-accent-foreground shadow-sm" : "text-muted hover:text-foreground"
+              className={`relative rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                activeStatus === status ? "text-accent-foreground" : "text-muted hover:text-foreground"
               }`}
             >
-              {status ? t(`status.${status}`) : t("filters.all")}
+              {activeStatus === status && (
+                <motion.span layoutId="status-tab" className="absolute inset-0 rounded-lg bg-accent shadow-sm shadow-accent/30" />
+              )}
+              <span className="relative">{status ? t(`status.${status}`) : t("filters.all")}</span>
             </button>
           ))}
         </div>
@@ -58,18 +62,20 @@ export function PostFilters({
         {PLATFORMS.map((platform) => {
           const active = activePlatform === platform;
           return (
-            <button
+            <motion.button
               key={platform}
               type="button"
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.9 }}
               aria-pressed={active}
               title={t(`platforms.${platform}`)}
               onClick={() => update("platform", active ? null : platform)}
-              className={`rounded-xl border p-1.5 transition ${
+              className={`rounded-xl border p-1.5 transition-[color,background-color,border-color,box-shadow,opacity] ${
                 active ? "border-accent bg-accent-soft ring-2 ring-accent/30" : "border-line bg-surface opacity-70 hover:opacity-100"
               }`}
             >
               <PlatformIcon platform={platform} size={24} />
-            </button>
+            </motion.button>
           );
         })}
       </div>

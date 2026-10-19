@@ -19,7 +19,8 @@
     "card1Text": "Stop met posten zonder plan. Dit werkt wél →",
     "card2Label": "Goedgekeurd",
     "card2Text": "Ingepland voor dinsdag 09:30",
-    "footer": "Instagram · LinkedIn · TikTok · X · Facebook"
+    "footer": "Instagram · LinkedIn · TikTok · X · Facebook",
+    "dragHint": "Sleep gerust met de kaartjes"
   },
   "auth": {
     "email": "E-mailadres",
@@ -147,6 +148,16 @@
     "open": "Openen en bewerken",
     "backToConcept": "Terug naar concept",
     "backToPosts": "Terug naar posts",
+    "toast": {
+      "approved": "Goedgekeurd! Klaar om in te plannen.",
+      "rejected": "Afgewezen.",
+      "concept": "Terug naar concept.",
+      "scheduled": "Ingepland!",
+      "unscheduled": "Uit de kalender gehaald.",
+      "saved": "Wijzigingen opgeslagen.",
+      "regenerated": "Nieuwe versie geschreven.",
+      "restored": "Versie teruggezet."
+    },
     "editor": {
       "title": "Tekst",
       "saved": "Opgeslagen.",

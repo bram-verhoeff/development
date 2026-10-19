@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 
 import { logout } from "@/app/(auth)/actions";
+import { Aurora } from "@/components/motion/Aurora";
 import { Sidebar } from "@/components/Sidebar";
 import { Alert } from "@/components/ui/Alert";
 import { Logo } from "@/components/ui/Logo";
@@ -35,7 +36,8 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <div className="flex min-h-screen flex-col md:flex-row">
+    <div className="relative isolate flex min-h-screen flex-col md:flex-row">
+      <Aurora />
       <Sidebar email={me.email} />
       <main className="min-w-0 flex-1 px-4 py-6 sm:px-6 md:px-10 md:py-10">
         <div className="mx-auto max-w-6xl">{children}</div>

@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
-import { PostCard } from "@/components/posts/PostCard";
 import { PostFilters } from "@/components/posts/PostFilters";
+import { PostGrid } from "@/components/posts/PostGrid";
 import { Alert } from "@/components/ui/Alert";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { PageHeader } from "@/components/ui/PageHeader";
@@ -65,11 +65,7 @@ export default async function PostsPage({ searchParams }: { searchParams: Promis
           }
         />
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {posts.map((post) => (
-            <PostCard key={post.id} post={post} />
-          ))}
-        </div>
+        <PostGrid posts={posts} />
       )}
     </div>
   );

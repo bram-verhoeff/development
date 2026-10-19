@@ -1,8 +1,9 @@
 "use client";
 
 import { CalendarClock, CalendarX, Check, History, RotateCcw, Trash2, Undo2, WandSparkles, X } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import { useFormatter, useTranslations } from "next-intl";
-import { useActionState, useRef, useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 
 import {
   deletePost,
@@ -15,7 +16,9 @@ import {
 import { Alert } from "@/components/ui/Alert";
 import { StatusBadge } from "@/components/ui/Badges";
 import { SubmitButton } from "@/components/ui/SubmitButton";
+import { Stagger, StaggerItem } from "@/components/motion/Reveal";
 import { buttonClass, cardClass, inputClass } from "@/components/ui/styles";
+import { useToast } from "@/components/ui/Toast";
 import { utcIsoToZonedInput, zonedToUtcIso } from "@/lib/time";
 import type { PostDetail } from "@/lib/types";
 
@@ -29,13 +32,23 @@ function useErrorText() {
 // Rechterkolom: status, planning, herschrijven, versies en verwijderen
 export function PostSidePanel({ post }: { post: PostDetail }) {
   return (
-    <div className="space-y-5">
-      <StatusCard post={post} />
-      <ScheduleCard post={post} />
-      <RegenerateCard post={post} />
-      <VersionsCard post={post} />
-      <DeleteCard post={post} />
-    </div>
+    <Stagger className="space-y-5" delay={0.1} step={0.07}>
+      <StaggerItem>
+        <StatusCard post={post} />
+      </StaggerItem>
+      <StaggerItem>
+        <ScheduleCard post={post} />
+      </StaggerItem>
+      <StaggerItem>
+        <RegenerateCard post={post} />
+      </StaggerItem>
+      <StaggerItem>
+        <VersionsCard post={post} />
+      </StaggerItem>
+      <StaggerItem>
+        <DeleteCard post={post} />
+      </StaggerItem>
+    </Stagger>
   );
 }
 
@@ -43,8 +56,14 @@ function StatusCard({ post }: { post: PostDetail }) {
   const t = useTranslations("posts");
   const errorText = useErrorText();
   const [pending, startTransition] = useTransition();
+  const toast = useToast();
   const [result, setResult] = useState<ActionResult>({});
-  const change = (status: PostDetail["status"]) => startTransition(async () => setResult(await setPostStatus(post.id, status)));
+  const change = (status: PostDetail["status"]) =>
+    startTransition(async () => {
+      const r = await setPostStatus(post.id, status);
+      setResult(r);
+      if (r.ok) toast(t(`toast.${status}`), status === "approved" ? "success" : "magic");
+    });
 
   return (
     <section className={`${cardClass} p-5`}>
@@ -55,9 +74,15 @@ function StatusCard({ post }: { post: PostDetail }) {
       {result.error && <div className="mt-3"><Alert tone="error">{errorText(result.error)}</Alert></div>}
       <div className="mt-4 flex flex-wrap gap-2">
         {post.status !== "approved" && (
-          <button type="button" disabled={pending} onClick={() => change("approved")} className={`${buttonClass.success} flex-1`}>
+          <motion.button
+            type="button"
+            disabled={pending}
+            onClick={() => change("approved")}
+            whileTap={{ scale: 0.94 }}
+            className={`${buttonClass.success} flex-1`}
+          >
             <Check size={16} /> {t("approve")}
-          </button>
+          </motion.button>
         )}
         {post.status !== "rejected" && (
           <button type="button" disabled={pending} onClick={() => change("rejected")} className={`${buttonClass.secondary} flex-1`}>
@@ -83,12 +108,22 @@ function ScheduleCard({ post }: { post: PostDetail }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const approved = post.status === "approved";
 
+  const toast = useToast();
   const save = () => {
     const value = inputRef.current?.value;
     if (!value) return;
-    startTransition(async () => setResult(await schedulePost(post.id, zonedToUtcIso(value))));
+    startTransition(async () => {
+      const r = await schedulePost(post.id, zonedToUtcIso(value));
+      setResult(r);
+      if (r.ok) toast(t("toast.scheduled"));
+    });
   };
-  const clear = () => startTransition(async () => setResult(await schedulePost(post.id, null)));
+  const clear = () =>
+    startTransition(async () => {
+      const r = await schedulePost(post.id, null);
+      setResult(r);
+      if (r.ok) toast(t("toast.unscheduled"), "magic");
+    });
 
   return (
     <section className={`${cardClass} p-5`}>
@@ -99,11 +134,19 @@ function ScheduleCard({ post }: { post: PostDetail }) {
         <p className="mt-2 text-sm text-muted">{t("panel.scheduleNeedsApproval")}</p>
       ) : (
         <>
-          {post.scheduled_at && (
-            <p className="mt-2 rounded-lg bg-accent-soft px-3 py-2 text-sm font-medium text-accent">
-              {format.dateTime(new Date(post.scheduled_at), { dateStyle: "full", timeStyle: "short" })}
-            </p>
-          )}
+          <AnimatePresence initial={false}>
+            {post.scheduled_at && (
+              <motion.p
+                key={post.scheduled_at}
+                initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                animate={{ opacity: 1, height: "auto", marginTop: 8 }}
+                exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                className="overflow-hidden rounded-lg bg-accent-soft px-3 py-2 text-sm font-medium text-accent"
+              >
+                {format.dateTime(new Date(post.scheduled_at), { dateStyle: "full", timeStyle: "short" })}
+              </motion.p>
+            )}
+          </AnimatePresence>
           {result.error && <div className="mt-3"><Alert tone="error">{errorText(result.error)}</Alert></div>}
           <label className="mt-3 block">
             <span className="text-sm font-medium">{t("panel.when")}</span>
@@ -135,8 +178,19 @@ function ScheduleCard({ post }: { post: PostDetail }) {
 function RegenerateCard({ post }: { post: PostDetail }) {
   const t = useTranslations("posts");
   const errorText = useErrorText();
-  const [state, action] = useActionState(regeneratePost.bind(null, post.id), {});
+  const toast = useToast();
+  const [state, setState] = useState<ActionResult>({});
   const [instructions, setInstructions] = useState("");
+
+  // Async form-actie: useFormStatus (in SubmitButton) ziet zo dat hij bezig is
+  const action = async (formData: FormData) => {
+    const result = await regeneratePost(post.id, {}, formData);
+    setState(result);
+    if (result.ok) {
+      toast(t("toast.regenerated"), "magic");
+      setInstructions("");
+    }
+  };
 
   const addQuick = (key: (typeof QUICK_INSTRUCTIONS)[number]) => {
     const text = t(`quick.${key}`);
@@ -150,17 +204,18 @@ function RegenerateCard({ post }: { post: PostDetail }) {
       </h2>
       <p className="mt-1 text-sm text-muted">{t("panel.regenerateHint")}</p>
       {state.error && <div className="mt-3"><Alert tone="error">{errorText(state.error)}</Alert></div>}
-      {state.ok && <div className="mt-3"><Alert tone="success">{t("panel.regenerated")}</Alert></div>}
       <div className="mt-3 flex flex-wrap gap-1.5">
         {QUICK_INSTRUCTIONS.map((key) => (
-          <button
+          <motion.button
             key={key}
             type="button"
             onClick={() => addQuick(key)}
-            className="rounded-full border border-line bg-surface-2 px-2.5 py-1 text-xs font-medium hover:border-accent hover:text-accent"
+            whileHover={{ y: -2 }}
+            whileTap={{ scale: 0.92 }}
+            className="rounded-full border border-line bg-surface-2 px-2.5 py-1 text-xs font-medium transition-colors hover:border-accent hover:text-accent"
           >
             + {t(`quickLabels.${key}`)}
-          </button>
+          </motion.button>
         ))}
       </div>
       <textarea
@@ -185,8 +240,14 @@ function VersionsCard({ post }: { post: PostDetail }) {
   const t = useTranslations("posts");
   const format = useFormatter();
   const [pending, startTransition] = useTransition();
+  const toast = useToast();
   const [open, setOpen] = useState(false);
   const versions = open ? post.versions : post.versions.slice(0, 3);
+  const restore = (versionId: number) =>
+    startTransition(async () => {
+      const r = await restoreVersion(post.id, versionId);
+      if (r.ok) toast(t("toast.restored"), "magic");
+    });
 
   return (
     <section className={`${cardClass} p-5`}>
@@ -194,8 +255,16 @@ function VersionsCard({ post }: { post: PostDetail }) {
         <History size={18} className="text-muted" /> {t("panel.versions")}
       </h2>
       <ol className="mt-3 space-y-3">
-        {versions.map((version, index) => (
-          <li key={version.id} className="relative border-l-2 border-line pl-4">
+        <AnimatePresence initial={false}>
+          {versions.map((version, index) => (
+          <motion.li
+            key={version.id}
+            layout
+            initial={{ opacity: 0, x: -8 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0 }}
+            className="relative border-l-2 border-line pl-4"
+          >
             <span className={`absolute top-1.5 -left-[5px] h-2 w-2 rounded-full ${index === 0 ? "bg-accent" : "bg-line"}`} />
             <div className="flex items-center justify-between gap-2 text-xs text-muted">
               <span>
@@ -206,7 +275,7 @@ function VersionsCard({ post }: { post: PostDetail }) {
                 <button
                   type="button"
                   disabled={pending}
-                  onClick={() => startTransition(async () => void (await restoreVersion(post.id, version.id)))}
+                  onClick={() => restore(version.id)}
                   className="inline-flex items-center gap-1 font-medium text-accent hover:underline"
                 >
                   <RotateCcw size={12} /> {t("panel.restore")}
@@ -215,8 +284,9 @@ function VersionsCard({ post }: { post: PostDetail }) {
             </div>
             <p className="mt-0.5 line-clamp-2 text-sm">{version.hook}</p>
             {version.instructions && <p className="mt-0.5 text-xs text-muted italic">“{version.instructions}”</p>}
-          </li>
-        ))}
+          </motion.li>
+          ))}
+        </AnimatePresence>
       </ol>
       {post.versions.length > 3 && (
         <button type="button" onClick={() => setOpen(!open)} className="mt-3 text-sm font-medium text-accent hover:underline">

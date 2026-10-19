@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import { useActionState, useState } from "react";
 
 import { saveBrand } from "@/app/(app)/brands/actions";
+import { Stagger, StaggerItem } from "@/components/motion/Reveal";
 import { Alert } from "@/components/ui/Alert";
 import { Field, Select, TextArea } from "@/components/ui/Field";
 import { SubmitButton } from "@/components/ui/SubmitButton";
@@ -20,7 +21,8 @@ const MAX_LOGO_BYTES = 2 * 1024 * 1024;
 
 function Section({ icon: Icon, title, hint, children }: { icon: LucideIcon; title: string; hint: string; children: React.ReactNode }) {
   return (
-    <section className={`${cardClass} grid gap-5 p-5 sm:p-6 lg:grid-cols-[220px_1fr]`}>
+    <StaggerItem>
+      <section className={`${cardClass} grid gap-5 p-5 sm:p-6 lg:grid-cols-[220px_1fr]`}>
       <div>
         <h2 className="flex items-center gap-2 text-base font-semibold">
           <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-accent-soft text-accent">
@@ -31,7 +33,8 @@ function Section({ icon: Icon, title, hint, children }: { icon: LucideIcon; titl
         <p className="mt-2 text-sm text-muted">{hint}</p>
       </div>
       <div className="space-y-4">{children}</div>
-    </section>
+      </section>
+    </StaggerItem>
   );
 }
 
@@ -45,7 +48,8 @@ export function BrandForm({ brand, logoError }: { brand?: Brand; logoError?: str
   const error = fileError ?? state.error;
 
   return (
-    <form action={action} className="space-y-5">
+    <form action={action}>
+      <Stagger className="space-y-5" step={0.07}>
       {error && <Alert tone="error">{tErrors.has(error) ? tErrors(error) : tErrors("unknown_error")}</Alert>}
 
       <Section icon={Type} title={t("sections.basics")} hint={t("sections.basicsHint")}>
@@ -101,14 +105,15 @@ export function BrandForm({ brand, logoError }: { brand?: Brand; logoError?: str
         </fieldset>
       </Section>
 
-      <div className="flex flex-wrap justify-end gap-3">
+      <StaggerItem className="flex flex-wrap justify-end gap-3">
         <Link href="/brands" className={buttonClass.secondary}>
           {t("form.cancel")}
         </Link>
         <SubmitButton pendingLabel={t("form.saving")} fullWidth={false} variant="gradient">
           <Save size={16} /> {brand ? t("form.save") : t("form.create")}
         </SubmitButton>
-      </div>
+      </StaggerItem>
+      </Stagger>
     </form>
   );
 }
