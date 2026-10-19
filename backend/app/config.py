@@ -2,6 +2,7 @@
 
 from functools import lru_cache
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -9,7 +10,16 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
     # Database: lokaal SQLite, online de Postgres-URL van Supabase
-    database_url: str = "sqlite:///./contentroom.db"
+    database_url: str = "sqlite:///./postpilot.db"
+
+    @field_validator("database_url")
+    @classmethod
+    def _psycopg_driver(cls, url: str) -> str:
+        # Supabase geeft "postgresql://..." of "postgres://..."; SQLAlchemy heeft de driver nodig
+        for prefix in ("postgres://", "postgresql://"):
+            if url.startswith(prefix):
+                return "postgresql+psycopg://" + url.removeprefix(prefix)
+        return url
 
     # Kommagescheiden lijst van frontend-adressen die de API mogen aanroepen
     cors_origins: str = "http://localhost:3000"

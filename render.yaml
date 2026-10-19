@@ -1,0 +1,34 @@
+# Render-blueprint voor de PostPilot-backend (Render → New → Blueprint → kies deze repo/branch).
+# Geheimen (sync: false) vul je in het Render-dashboard in; ze staan nooit in git.
+services:
+  - type: web
+    name: postpilot-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    # Eerst de database bijwerken, dan de API starten
+    startCommand: alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    # De Python-versie staat in backend/.python-version
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: CLAUDE_MODEL
+        value: claude-opus-5-5
+      - key: CLAUDE_EFFORT
+        value: medium
+      - key: GENERATION_DAILY_LIMIT
+        value: "100"
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: STORAGE_BUCKET
+        value: logos
+      - key: ALLOWED_EMAILS
+        sync: false
