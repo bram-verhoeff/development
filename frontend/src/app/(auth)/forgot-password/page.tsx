@@ -15,8 +15,8 @@ export default function ForgotPasswordPage() {
   const [state, action] = useActionState(forgotPassword, {});
 
   return (
-    <form action={action} className="space-y-4">
-      <h1 className="text-lg font-semibold">{t("forgot.title")}</h1>
+    <form action={action} className="space-y-5">
+      <h1 className="text-3xl font-bold">{t("forgot.title")}</h1>
       {state.success ? (
         <Alert tone="success">{t("forgot.sent")}</Alert>
       ) : (
@@ -24,10 +24,10 @@ export default function ForgotPasswordPage() {
           <p className="text-sm text-muted">{t("forgot.intro")}</p>
           {state.error && <Alert tone="error">{t(`errors.${state.error}`)}</Alert>}
           <Field label={t("email")} name="email" type="email" autoComplete="email" required />
-          <SubmitButton pendingLabel={t("busy")}>{t("forgot.submit")}</SubmitButton>
+          <SubmitButton pendingLabel={t("busy")} variant="gradient">{t("forgot.submit")}</SubmitButton>
         </>
       )}
-      <Link href="/login" className="block text-sm text-accent hover:underline">
+      <Link href="/login" className="block text-center text-sm font-medium text-accent hover:underline">
         {t("backToLogin")}
       </Link>
     </form>

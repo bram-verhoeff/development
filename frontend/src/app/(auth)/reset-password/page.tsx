@@ -15,8 +15,8 @@ export default function ResetPasswordPage() {
   const [state, action] = useActionState(resetPassword, {});
 
   return (
-    <form action={action} className="space-y-4">
-      <h1 className="text-lg font-semibold">{t("reset.title")}</h1>
+    <form action={action} className="space-y-5">
+      <h1 className="text-3xl font-bold">{t("reset.title")}</h1>
       {state.error && <Alert tone="error">{t(`errors.${state.error}`)}</Alert>}
       <Field
         label={t("newPassword")}
@@ -28,7 +28,7 @@ export default function ResetPasswordPage() {
         required
       />
       <Field label={t("passwordConfirm")} name="passwordConfirm" type="password" autoComplete="new-password" required />
-      <SubmitButton pendingLabel={t("busy")}>{t("reset.submit")}</SubmitButton>
+      <SubmitButton pendingLabel={t("busy")} variant="gradient">{t("reset.submit")}</SubmitButton>
     </form>
   );
 }

@@ -30,6 +30,7 @@ SCHEDULE_GRACE = timedelta(minutes=5)
 @router.get("", response_model=list[PostOut])
 def list_posts(
     brand_id: int | None = None,
+    generation_run_id: int | None = None,
     platform: list[Platform] = Query(default=[]),
     status_: list[PostStatus] = Query(default=[], alias="status"),
     scheduled: bool | None = None,
@@ -42,6 +43,8 @@ def list_posts(
     query = select(Post).join(Brand).where(Brand.user_id == user.id)
     if brand_id is not None:
         query = query.where(Post.brand_id == brand_id)
+    if generation_run_id is not None:
+        query = query.where(Post.generation_run_id == generation_run_id)
     if platform:
         query = query.where(Post.platform.in_(platform))
     if status_:

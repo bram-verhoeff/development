@@ -183,6 +183,8 @@ def test_list_filters(client, owner, brand, writer):
     assert ids(f"start={quote(future(2))}&end={quote(future(4))}") == [x]
     assert ids(f"start={quote(future(5))}") == []
     assert ids(f"brand_id={brand['id'] + 1}") == []
+    run_id = generate(client, owner, brand["id"], platforms=["x"], posts_per_platform=1).json()["run_id"]
+    assert len(ids(f"generation_run_id={run_id}")) == 1
 
 
 def test_posts_are_private(client, owner, post, auth_headers):

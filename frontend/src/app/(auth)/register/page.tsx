@@ -16,10 +16,10 @@ export default function RegisterPage() {
 
   if (state.success) {
     return (
-      <div className="space-y-4">
-        <h1 className="text-lg font-semibold">{t("register.title")}</h1>
+      <div className="space-y-5">
+        <h1 className="text-3xl font-bold">{t("register.title")}</h1>
         <Alert tone="success">{t("register.checkEmail")}</Alert>
-        <Link href="/login" className="block text-sm text-accent hover:underline">
+        <Link href="/login" className="block text-center text-sm font-medium text-accent hover:underline">
           {t("backToLogin")}
         </Link>
       </div>
@@ -27,8 +27,8 @@ export default function RegisterPage() {
   }
 
   return (
-    <form action={action} className="space-y-4">
-      <h1 className="text-lg font-semibold">{t("register.title")}</h1>
+    <form action={action} className="space-y-5">
+      <h1 className="text-3xl font-bold">{t("register.title")}</h1>
       <p className="text-sm text-muted">{t("register.inviteOnly")}</p>
       {state.error && <Alert tone="error">{t(`errors.${state.error}`)}</Alert>}
       <Field label={t("email")} name="email" type="email" autoComplete="email" required />
@@ -42,8 +42,8 @@ export default function RegisterPage() {
         required
       />
       <Field label={t("passwordConfirm")} name="passwordConfirm" type="password" autoComplete="new-password" required />
-      <SubmitButton pendingLabel={t("busy")}>{t("register.submit")}</SubmitButton>
-      <Link href="/login" className="block text-sm text-accent hover:underline">
+      <SubmitButton pendingLabel={t("busy")} variant="gradient">{t("register.submit")}</SubmitButton>
+      <Link href="/login" className="block text-center text-sm font-medium text-accent hover:underline">
         {t("register.toLogin")}
       </Link>
     </form>

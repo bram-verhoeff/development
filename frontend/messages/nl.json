@@ -1,7 +1,7 @@
 {
   "app": {
-    "name": "ContentRoom",
-    "tagline": "Content maken en inplannen per merk"
+    "name": "PostPilot",
+    "tagline": "Social content maken en inplannen per merk, met AI als copiloot"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -11,10 +11,15 @@
     "calendar": "Kalender",
     "logout": "Uitloggen"
   },
-  "dashboard": {
-    "title": "Dashboard",
-    "intro": "Kies een merk, laat posts genereren, keur ze goed en plan ze in.",
-    "loggedInAs": "Ingelogd als {email}"
+  "authHero": {
+    "title": "Je social media op de",
+    "titleAccent": "automatische piloot.",
+    "body": "Leg je merk één keer vast. PostPilot schrijft posts die klinken als jij, jij keurt ze goed en plant ze in.",
+    "card1Label": "Nieuwe hook",
+    "card1Text": "Stop met posten zonder plan. Dit werkt wél →",
+    "card2Label": "Goedgekeurd",
+    "card2Text": "Ingepland voor dinsdag 09:30",
+    "footer": "Instagram · LinkedIn · TikTok · X · Facebook"
   },
   "auth": {
     "email": "E-mailadres",
@@ -25,9 +30,11 @@
     "busy": "Bezig…",
     "backToLogin": "Terug naar inloggen",
     "login": {
-      "title": "Inloggen",
+      "title": "Welkom terug",
+      "subtitle": "Log in om verder te gaan met je content.",
       "submit": "Inloggen",
       "forgot": "Wachtwoord vergeten?",
+      "noAccount": "Nog geen account?",
       "toRegister": "Account aanmaken"
     },
     "register": {
@@ -44,7 +51,7 @@
       "sent": "Als er een account bij dit adres hoort, is er nu een herstellink onderweg."
     },
     "reset": {
-      "title": "Nieuw wachtwoord instellen",
+      "title": "Nieuw wachtwoord",
       "submit": "Wachtwoord opslaan"
     },
     "noAccess": {
@@ -68,21 +75,217 @@
       "unknown": "Er ging iets mis. Probeer het opnieuw."
     }
   },
+  "dashboard": {
+    "greeting": {
+      "night": "Nog laat aan het werk",
+      "morning": "Goedemorgen",
+      "afternoon": "Goedemiddag",
+      "evening": "Goedenavond"
+    },
+    "hello": "Hoi",
+    "intro": "Er {concept, plural, =0 {wachten geen posts} one {wacht # post} other {wachten # posts}} op beoordeling en {ready, plural, =0 {er staan geen goedgekeurde posts klaar} one {# goedgekeurde post staat klaar} other {# goedgekeurde posts staan klaar}} om in te plannen.",
+    "introNoBrands": "Begin met je eerste merk. Daarna schrijft PostPilot posts in jouw stijl.",
+    "actions": {
+      "firstBrand": "Eerste merk aanmaken",
+      "generate": "Posts genereren",
+      "calendar": "Naar de kalender"
+    },
+    "stats": {
+      "concept": "Te beoordelen",
+      "ready": "Klaar om in te plannen",
+      "scheduled": "Ingepland",
+      "brands": "Merken"
+    },
+    "upcoming": {
+      "title": "Komende 7 dagen",
+      "all": "Hele kalender",
+      "empty": "Nog niets ingepland voor de komende week. Keur een post goed en kies een moment."
+    },
+    "review": {
+      "title": "Wacht op beoordeling",
+      "all": "Alles bekijken",
+      "empty": "Alles beoordeeld. Lekker bezig!"
+    },
+    "usage": {
+      "title": "AI-opdrachten vandaag",
+      "body": "Genereren en herschrijven tellen mee. De teller loopt over de laatste 24 uur."
+    }
+  },
+  "platforms": {
+    "instagram": "Instagram",
+    "linkedin": "LinkedIn",
+    "tiktok": "TikTok",
+    "x": "X",
+    "facebook": "Facebook"
+  },
+  "status": {
+    "concept": "Concept",
+    "approved": "Goedgekeurd",
+    "rejected": "Afgewezen",
+    "scheduled": "Ingepland"
+  },
+  "filters": {
+    "all": "Alle",
+    "brand": "Merk",
+    "allBrands": "Alle merken"
+  },
+  "posts": {
+    "title": "Posts",
+    "description": "Beoordeel, bewerk en keur je posts goed. Goedgekeurde posts kun je inplannen.",
+    "detailTitle": "Post bewerken",
+    "generateMore": "Nieuwe posts",
+    "justGenerated": "{count, plural, one {# nieuwe post} other {# nieuwe posts}} gegenereerd. Beoordeel ze hieronder.",
+    "empty": {
+      "title": "Geen posts gevonden",
+      "body": "Er zijn (nog) geen posts die bij deze filters passen. Laat PostPilot er een paar voor je schrijven.",
+      "action": "Posts genereren"
+    },
+    "chars": "{count} / {max} tekens",
+    "warningCount": "{count, plural, one {# aandachtspunt} other {# aandachtspunten}}",
+    "approve": "Goedkeuren",
+    "reject": "Afwijzen",
+    "open": "Openen en bewerken",
+    "backToConcept": "Terug naar concept",
+    "backToPosts": "Terug naar posts",
+    "editor": {
+      "title": "Tekst",
+      "saved": "Opgeslagen.",
+      "hook": "Hook (openingszin)",
+      "body": "Tekst",
+      "hashtags": "Hashtags",
+      "hashtagsHint": "Gescheiden door spaties. Het #-teken wordt automatisch toegevoegd.",
+      "tooLong": "Te lang voor dit platform",
+      "saving": "Opslaan…",
+      "save": "Wijzigingen opslaan",
+      "preview": "Voorbeeld",
+      "previewMeta": "Gesponsord · zo ongeveer ziet je post eruit"
+    },
+    "warnings": {
+      "too_long": "De post is langer dan de maximale {max} tekens van dit platform.",
+      "too_many_hashtags": "Meer hashtags dan aanbevolen (maximaal {max}).",
+      "avoid_terms": "Bevat woorden die het merk wil vermijden: {terms}."
+    },
+    "panel": {
+      "status": "Beoordeling",
+      "schedule": "Inplannen",
+      "scheduleNeedsApproval": "Keur de post eerst goed. Daarna kun je een datum en tijd kiezen.",
+      "when": "Datum en tijd",
+      "timezoneHint": "Nederlandse tijd.",
+      "plan": "Inplannen",
+      "reschedule": "Verzetten",
+      "unschedule": "Uit de kalender halen",
+      "regenerate": "Opnieuw laten schrijven",
+      "regenerateHint": "Vertel wat er anders moet. De huidige versie blijft bewaard in de geschiedenis.",
+      "regenerated": "Nieuwe versie geschreven. Beoordeel hem opnieuw.",
+      "instructionsPlaceholder": "Bijv. maak het persoonlijker en noem de gratis proefles.",
+      "regenerating": "PostPilot schrijft…",
+      "regenerateButton": "Herschrijf deze post",
+      "versions": "Geschiedenis",
+      "restore": "Terugzetten",
+      "showLess": "Minder tonen",
+      "showAll": "Alle {count} versies tonen",
+      "delete": "Post verwijderen",
+      "deleteConfirm": "Weet je zeker dat je deze post wilt verwijderen? Dit kan niet ongedaan worden gemaakt."
+    },
+    "quickLabels": {
+      "shorter": "Korter",
+      "funnier": "Meer humor",
+      "newHook": "Andere hook",
+      "moreFormal": "Formeler",
+      "addQuestion": "Eindig met vraag",
+      "moreEmoji": "Meer emoji"
+    },
+    "quick": {
+      "shorter": "Maak het korter en krachtiger.",
+      "funnier": "Voeg wat humor toe.",
+      "newHook": "Bedenk een compleet andere hook.",
+      "moreFormal": "Maak de toon wat formeler.",
+      "addQuestion": "Eindig met een vraag aan de lezer.",
+      "moreEmoji": "Gebruik iets meer emoji."
+    },
+    "origin": {
+      "generated": "Gegenereerd",
+      "edited": "Bewerkt",
+      "regenerated": "Herschreven"
+    }
+  },
+  "generate": {
+    "title": "Posts genereren",
+    "description": "Kies een merk en platforms. PostPilot schrijft per platform een paar varianten in de stijl van je merk.",
+    "steps": {
+      "brand": "Voor welk merk?",
+      "platforms": "Op welke platforms?",
+      "source": "Waar gaat het over?"
+    },
+    "count": "Varianten per platform",
+    "total": "{count, plural, one {# post in totaal} other {# posts in totaal}}",
+    "source": {
+      "none": "Vrij onderwerp",
+      "url": "Webpagina",
+      "text": "Eigen tekst",
+      "noneHint": "PostPilot kiest zelf onderwerpen op basis van het merkprofiel. Stuur bij met de instructies hieronder.",
+      "urlLabel": "Adres van de pagina",
+      "urlHint": "Bijvoorbeeld een blog, productpagina of nieuwsbericht. PostPilot leest de tekst en maakt er posts van.",
+      "textLabel": "Brontekst",
+      "textPlaceholder": "Plak hier een nieuwsbrief, persbericht, notities of aankondiging."
+    },
+    "instructions": "Extra instructies (optioneel)",
+    "instructionsPlaceholder": "Bijv. we lanceren vrijdag de herfstcollectie; noem de 10% korting voor nieuwsbriefleden.",
+    "submit": "Genereer posts",
+    "pending": {
+      "title": "PostPilot schrijft je posts…",
+      "profile": "Merkprofiel lezen",
+      "angles": "Invalshoeken kiezen",
+      "hooks": "Hooks bedenken",
+      "writing": "Posts schrijven per platform",
+      "polish": "Hashtags en laatste check"
+    },
+    "noBrands": {
+      "title": "Eerst een merk",
+      "body": "Om posts te kunnen schrijven heeft PostPilot een merkprofiel nodig: doelgroep, tone of voice en USP's.",
+      "action": "Merk aanmaken"
+    }
+  },
+  "calendar": {
+    "description": "{count, plural, =0 {Nog niets ingepland deze maand.} one {# post ingepland.} other {# posts ingepland.}}",
+    "previous": "Vorige maand",
+    "next": "Volgende maand",
+    "today": "Vandaag",
+    "emptyMonth": "Geen ingeplande posts in deze maand.",
+    "ready": {
+      "title": "Klaar om in te plannen",
+      "body": "Goedgekeurde posts zonder datum.",
+      "empty": "Geen goedgekeurde posts zonder datum."
+    }
+  },
   "brands": {
     "title": "Merken",
+    "description": "Elk merk heeft een eigen profiel. Hoe completer het profiel, hoe beter de posts.",
     "new": "Nieuw merk",
     "newTitle": "Nieuw merk",
+    "newDescription": "Vertel PostPilot wie dit merk is. Je kunt alles later aanpassen.",
+    "generateFor": "Posts genereren",
     "empty": {
       "title": "Nog geen merken",
       "body": "Maak je eerste merk aan. Het merkprofiel is de basis voor alle gegenereerde posts."
+    },
+    "sections": {
+      "basics": "Basis",
+      "basicsHint": "Naam, website en de taal waarin de posts geschreven worden.",
+      "voice": "Doelgroep en stem",
+      "voiceHint": "Voor wie schrijf je en hoe klinkt het merk?",
+      "message": "Boodschap",
+      "messageHint": "Wat maakt het merk uniek, en wat moet PostPilot juist vermijden?",
+      "look": "Uitstraling",
+      "lookHint": "Kleuren en logo, voor herkenning in PostPilot."
     },
     "form": {
       "name": "Naam",
       "website": "Website",
       "audience": "Doelgroep",
-      "audienceHint": "Voor wie is de content? Bijvoorbeeld leeftijd, beroep, interesses, problemen.",
+      "audienceHint": "Bijvoorbeeld leeftijd, beroep, interesses en problemen waar ze tegenaan lopen.",
       "tone": "Tone of voice",
-      "toneHint": "Hoe klinkt het merk? Bijvoorbeeld: informeel, deskundig, met humor, zonder jargon.",
+      "toneHint": "Bijvoorbeeld: informeel, deskundig, met humor, zonder jargon.",
       "usps": "USP's",
       "avoid": "Vermijden",
       "avoidHint": "Woorden of onderwerpen die nooit in posts mogen voorkomen.",
@@ -90,7 +293,7 @@
       "language": "Taal van de content",
       "colors": "Merkkleuren",
       "colorPicker": "Kies een kleur",
-      "colorFormat": "Hexcode, bijvoorbeeld #4338CA",
+      "colorFormat": "Hexcode, bijvoorbeeld #5B4CF0",
       "addColor": "Kleur toevoegen",
       "removeColor": "Kleur verwijderen",
       "logo": "Logo",
@@ -106,24 +309,41 @@
       "en": "Engels"
     },
     "delete": {
-      "button": "Merk verwijderen",
+      "button": "Verwijderen",
       "busy": "Verwijderen…",
       "confirm": "Weet je zeker dat je \"{name}\" wilt verwijderen? Alle posts van dit merk worden ook verwijderd. Dit kan niet ongedaan worden gemaakt."
     }
   },
   "errors": {
-    "backend_unreachable": "De server is niet bereikbaar. Probeer het later opnieuw.",
-    "unknown_error": "Er ging iets mis. Probeer het opnieuw.",
+    "page_failed_title": "Er ging iets mis",
     "page_failed": "Deze pagina kon niet geladen worden. Probeer het opnieuw; blijft het misgaan, controleer dan of de backend draait.",
     "retry": "Opnieuw proberen",
+    "backend_unreachable": "De server is niet bereikbaar. Probeer het later opnieuw.",
+    "unknown_error": "Er ging iets mis. Probeer het opnieuw.",
     "validation_error": "Niet alle velden zijn goed ingevuld. Controleer het formulier.",
     "not_authenticated": "Je sessie is verlopen. Log opnieuw in.",
     "brand_not_found": "Dit merk bestaat niet (meer).",
+    "post_not_found": "Deze post bestaat niet (meer).",
+    "version_not_found": "Deze versie bestaat niet (meer).",
+    "post_not_approved": "Alleen goedgekeurde posts kunnen ingepland worden.",
+    "schedule_in_past": "Dit moment ligt in het verleden. Kies een datum en tijd in de toekomst.",
     "logo_too_large": "Het logo is groter dan 2 MB. Kies een kleiner bestand.",
     "logo_invalid_type": "Dit bestandstype wordt niet ondersteund. Gebruik PNG, JPG of WebP.",
-    "storage_failed": "Het merk is opgeslagen, maar het logo kon niet worden geüpload. Probeer het opnieuw."
-  },
-  "common": {
-    "comingSoon": "Dit onderdeel wordt in een volgende stap gebouwd."
+    "storage_failed": "Het merk is opgeslagen, maar het logo kon niet worden geüpload. Probeer het opnieuw.",
+    "choose_brand": "Kies een merk.",
+    "choose_platform": "Kies minstens één platform.",
+    "generation_limit_reached": "Je daglimiet voor AI-opdrachten is bereikt. Probeer het later opnieuw.",
+    "ai_not_configured": "De AI is nog niet ingesteld: vul ANTHROPIC_API_KEY in het .env-bestand van de backend in.",
+    "ai_auth_failed": "De Anthropic API-sleutel wordt niet geaccepteerd. Controleer de sleutel in de backend.",
+    "ai_rate_limited": "De AI krijgt even te veel verzoeken. Wacht een minuut en probeer het opnieuw.",
+    "ai_bad_request": "De AI kon dit verzoek niet verwerken. Probeer het met een kortere bron of andere instructies.",
+    "ai_unavailable": "De AI is tijdelijk niet bereikbaar. Probeer het over een paar minuten opnieuw.",
+    "ai_refused": "De AI wilde deze opdracht niet uitvoeren. Pas de bron of instructies aan.",
+    "ai_truncated": "Het antwoord van de AI werd te lang. Kies minder varianten of platforms tegelijk.",
+    "ai_invalid_output": "De AI gaf een onbruikbaar antwoord. Probeer het opnieuw.",
+    "source_invalid_url": "Dit adres kan niet gebruikt worden. Gebruik een openbare http(s)-webpagina.",
+    "source_unreachable": "De webpagina kon niet worden opgehaald. Controleer het adres.",
+    "source_unsupported": "Deze pagina is geen leesbare webpagina (bijvoorbeeld een pdf of afbeelding). Plak de tekst als eigen tekst.",
+    "source_empty": "Op deze pagina is geen leesbare tekst gevonden. Plak de tekst als eigen tekst."
   }
 }

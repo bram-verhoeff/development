@@ -1,44 +1,115 @@
 @import "tailwindcss";
 
-/* Kleurtokens: licht en donker. Gebruik in Tailwind als bg-surface, text-muted, enz. */
+/*
+  PostPilot-kleuren: diep nachtblauw met een indigo/koraal "afterburner"-accent.
+  Gebruik in Tailwind als bg-surface, text-muted, bg-accent, enz.
+*/
 :root {
-  --background: #f4f5f7;
+  --background: #f4f5fb;
   --surface: #ffffff;
-  --foreground: #16181d;
-  --muted: #5f6673;
-  --line: #e2e5ea;
-  --accent: #4338ca;
-  --accent-soft: #e8e7fb;
+  --surface-2: #f8f9fd;
+  --foreground: #121631;
+  --muted: #646b86;
+  --line: #e3e6f1;
+  --accent: #5b4cf0;
+  --accent-soft: #ecebfe;
   --accent-foreground: #ffffff;
+  --coral: #ff6a3d;
+  --coral-soft: #fff0ea;
+  --nav: #0d1330;
+  --nav-2: #161d45;
+  --nav-foreground: #c9cdea;
+  --shadow: 0 1px 2px rgb(18 22 49 / 0.05), 0 8px 24px -12px rgb(18 22 49 / 0.12);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0f1115;
-    --surface: #171a20;
-    --foreground: #e8eaee;
-    --muted: #9aa1ad;
-    --line: #2a2f38;
-    --accent: #8b87f5;
-    --accent-soft: #24233f;
-    --accent-foreground: #0f1115;
+    --background: #090d1f;
+    --surface: #11173a;
+    --surface-2: #151c44;
+    --foreground: #e9ebfa;
+    --muted: #9aa0c0;
+    --line: #242c5a;
+    --accent: #8c82ff;
+    --accent-soft: #221f55;
+    --accent-foreground: #0b0f26;
+    --coral: #ff8a63;
+    --coral-soft: #3a1f1a;
+    --nav: #070a19;
+    --nav-2: #10163a;
+    --nav-foreground: #b4b9dc;
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px -12px rgb(0 0 0 / 0.5);
   }
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-line: var(--line);
   --color-accent: var(--accent);
   --color-accent-soft: var(--accent-soft);
   --color-accent-foreground: var(--accent-foreground);
+  --color-coral: var(--coral);
+  --color-coral-soft: var(--coral-soft);
+  --color-nav: var(--nav);
+  --color-nav-2: var(--nav-2);
+  --color-nav-foreground: var(--nav-foreground);
+  --shadow-card: var(--shadow);
   --font-sans: var(--font-geist-sans);
+  --font-display: var(--font-bricolage);
   --font-mono: var(--font-geist-mono);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-bricolage);
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+/* Merkverloop van PostPilot: indigo → koraal */
+.bg-brand-gradient {
+  background-image: linear-gradient(135deg, #5b4cf0 0%, #9b4de0 55%, #ff6a3d 100%);
+}
+
+.text-brand-gradient {
+  background-image: linear-gradient(135deg, #7a6cff 0%, #c260e8 50%, #ff7a4d 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Zachte stippen-achtergrond voor hero's en de loginpagina */
+.bg-dots {
+  background-image: radial-gradient(rgb(255 255 255 / 0.14) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0) rotate(var(--r, 0deg));
+  }
+  50% {
+    transform: translateY(-8px) rotate(var(--r, 0deg));
+  }
+}
+
+.animate-float {
+  animation: float-slow 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float {
+    animation: none;
+  }
 }
