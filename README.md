@@ -26,6 +26,7 @@ python -m venv .venv
 .venv\Scripts\activate          # macOS/Linux: source .venv/bin/activate
 pip install -r requirements.txt
 copy .env.example .env          # macOS/Linux: cp .env.example .env  → daarna invullen
+alembic upgrade head            # maakt of bijwerkt de databasetabellen
 uvicorn app.main:app --reload
 ```
 
@@ -47,6 +48,17 @@ De app draait op http://localhost:3000.
 ## Configuratie
 
 Alle sleutels en geheimen staan in `backend/.env` en `frontend/.env.local`. Die bestanden staan niet in git; de `.env.example`-bestanden laten zien welke variabelen nodig zijn.
+
+## Database en migraties
+
+- Lokaal: SQLite (`backend/contentroom.db`). Online: PostgreSQL van Supabase, via `DATABASE_URL`.
+- Wijzig je een model in `backend/app/models.py`, maak dan een migratie en voer die uit:
+
+  ```bash
+  alembic revision --autogenerate -m "korte omschrijving"
+  alembic upgrade head
+  ```
+- Op PostgreSQL zet de eerste migratie Row Level Security aan op alle tabellen (zonder policies). Daardoor kan alleen de backend de data lezen, niet de publieke Supabase-API.
 
 ## Talen
 
