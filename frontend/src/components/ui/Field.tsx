@@ -1,19 +1,45 @@
-import type { InputHTMLAttributes } from "react";
+import type { InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes } from "react";
 
-type FieldProps = InputHTMLAttributes<HTMLInputElement> & { label: string; hint?: string };
+import { inputClass } from "./styles";
 
-// Label + invoerveld in de standaardstijl
-export function Field({ label, hint, id, ...props }: FieldProps) {
-  const inputId = id ?? props.name;
+type Labelled = { label: string; hint?: string };
+
+function Label({ htmlFor, label, hint, children }: Labelled & { htmlFor?: string; children: React.ReactNode }) {
   return (
-    <label htmlFor={inputId} className="block">
+    <label htmlFor={htmlFor} className="block">
       <span className="text-sm font-medium">{label}</span>
-      <input
-        id={inputId}
-        className="mt-1 block w-full rounded-md border border-line bg-surface px-3 py-2 text-sm outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
-        {...props}
-      />
+      {children}
       {hint && <span className="mt-1 block text-xs text-muted">{hint}</span>}
     </label>
+  );
+}
+
+// Label + invoerveld in de standaardstijl
+export function Field({ label, hint, id, ...props }: Labelled & InputHTMLAttributes<HTMLInputElement>) {
+  const inputId = id ?? props.name;
+  return (
+    <Label htmlFor={inputId} label={label} hint={hint}>
+      <input id={inputId} className={inputClass} {...props} />
+    </Label>
+  );
+}
+
+export function TextArea({ label, hint, id, ...props }: Labelled & TextareaHTMLAttributes<HTMLTextAreaElement>) {
+  const inputId = id ?? props.name;
+  return (
+    <Label htmlFor={inputId} label={label} hint={hint}>
+      <textarea id={inputId} rows={3} className={inputClass} {...props} />
+    </Label>
+  );
+}
+
+export function Select({ label, hint, id, children, ...props }: Labelled & SelectHTMLAttributes<HTMLSelectElement>) {
+  const inputId = id ?? props.name;
+  return (
+    <Label htmlFor={inputId} label={label} hint={hint}>
+      <select id={inputId} className={inputClass} {...props}>
+        {children}
+      </select>
+    </Label>
   );
 }

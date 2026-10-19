@@ -28,7 +28,8 @@ async function request<T>(path: string, init: RequestInit = {}, token?: string):
 
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
-    throw new ApiError(res.status, typeof body.detail === "string" ? body.detail : "unknown_error");
+    if (typeof body.detail === "string") throw new ApiError(res.status, body.detail);
+    throw new ApiError(res.status, res.status === 422 ? "validation_error" : "unknown_error");
   }
   return (res.status === 204 ? undefined : await res.json()) as T;
 }

@@ -2,15 +2,21 @@
 
 import { useFormStatus } from "react-dom";
 
+import { buttonClass } from "./styles";
+
 // Verzendknop die zichzelf uitschakelt zolang het formulier bezig is
-export function SubmitButton({ children, pendingLabel }: { children: React.ReactNode; pendingLabel: string }) {
+export function SubmitButton({
+  children,
+  pendingLabel,
+  fullWidth = true,
+}: {
+  children: React.ReactNode;
+  pendingLabel: string;
+  fullWidth?: boolean;
+}) {
   const { pending } = useFormStatus();
   return (
-    <button
-      type="submit"
-      disabled={pending}
-      className="w-full rounded-md bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
-    >
+    <button type="submit" disabled={pending} className={`${buttonClass.primary} ${fullWidth ? "w-full" : ""}`}>
       {pending ? pendingLabel : children}
     </button>
   );

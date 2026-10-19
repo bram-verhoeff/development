@@ -68,9 +68,58 @@
       "unknown": "Er ging iets mis. Probeer het opnieuw."
     }
   },
+  "brands": {
+    "title": "Merken",
+    "new": "Nieuw merk",
+    "newTitle": "Nieuw merk",
+    "empty": {
+      "title": "Nog geen merken",
+      "body": "Maak je eerste merk aan. Het merkprofiel is de basis voor alle gegenereerde posts."
+    },
+    "form": {
+      "name": "Naam",
+      "website": "Website",
+      "audience": "Doelgroep",
+      "audienceHint": "Voor wie is de content? Bijvoorbeeld leeftijd, beroep, interesses, problemen.",
+      "tone": "Tone of voice",
+      "toneHint": "Hoe klinkt het merk? Bijvoorbeeld: informeel, deskundig, met humor, zonder jargon.",
+      "usps": "USP's",
+      "avoid": "Vermijden",
+      "avoidHint": "Woorden of onderwerpen die nooit in posts mogen voorkomen.",
+      "onePerLine": "Eén per regel.",
+      "language": "Taal van de content",
+      "colors": "Merkkleuren",
+      "colorPicker": "Kies een kleur",
+      "colorFormat": "Hexcode, bijvoorbeeld #4338CA",
+      "addColor": "Kleur toevoegen",
+      "removeColor": "Kleur verwijderen",
+      "logo": "Logo",
+      "logoHint": "PNG, JPG of WebP, maximaal 2 MB.",
+      "removeLogo": "Huidig logo verwijderen",
+      "create": "Merk aanmaken",
+      "save": "Opslaan",
+      "saving": "Opslaan…",
+      "cancel": "Annuleren"
+    },
+    "languages": {
+      "nl": "Nederlands",
+      "en": "Engels"
+    },
+    "delete": {
+      "button": "Merk verwijderen",
+      "busy": "Verwijderen…",
+      "confirm": "Weet je zeker dat je \"{name}\" wilt verwijderen? Alle posts van dit merk worden ook verwijderd. Dit kan niet ongedaan worden gemaakt."
+    }
+  },
   "errors": {
     "backend_unreachable": "De server is niet bereikbaar. Probeer het later opnieuw.",
-    "unknown_error": "Er ging iets mis. Probeer het opnieuw."
+    "unknown_error": "Er ging iets mis. Probeer het opnieuw.",
+    "validation_error": "Niet alle velden zijn goed ingevuld. Controleer het formulier.",
+    "not_authenticated": "Je sessie is verlopen. Log opnieuw in.",
+    "brand_not_found": "Dit merk bestaat niet (meer).",
+    "logo_too_large": "Het logo is groter dan 2 MB. Kies een kleiner bestand.",
+    "logo_invalid_type": "Dit bestandstype wordt niet ondersteund. Gebruik PNG, JPG of WebP.",
+    "storage_failed": "Het merk is opgeslagen, maar het logo kon niet worden geüpload. Probeer het opnieuw."
   },
   "common": {
     "comingSoon": "Dit onderdeel wordt in een volgende stap gebouwd."

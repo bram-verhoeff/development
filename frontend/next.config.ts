@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    // Logo's (max 2 MB) gaan via een Server Action naar de backend; ruimte voor formulier-overhead
+    serverActions: { bodySizeLimit: "3mb" },
+  },
   turbopack: {
     // Tailwind CSS v4 via de Turbopack-loader
     rules: {
