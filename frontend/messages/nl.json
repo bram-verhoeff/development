@@ -114,6 +114,8 @@
   "errors": {
     "backend_unreachable": "De server is niet bereikbaar. Probeer het later opnieuw.",
     "unknown_error": "Er ging iets mis. Probeer het opnieuw.",
+    "page_failed": "Deze pagina kon niet geladen worden. Probeer het opnieuw; blijft het misgaan, controleer dan of de backend draait.",
+    "retry": "Opnieuw proberen",
     "validation_error": "Niet alle velden zijn goed ingevuld. Controleer het formulier.",
     "not_authenticated": "Je sessie is verlopen. Log opnieuw in.",
     "brand_not_found": "Dit merk bestaat niet (meer).",
