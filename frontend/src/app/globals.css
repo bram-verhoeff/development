@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+/* Kleurtokens: licht en donker. Gebruik in Tailwind als bg-surface, text-muted, enz. */
+:root {
+  --background: #f4f5f7;
+  --surface: #ffffff;
+  --foreground: #16181d;
+  --muted: #5f6673;
+  --line: #e2e5ea;
+  --accent: #4338ca;
+  --accent-soft: #e8e7fb;
+  --accent-foreground: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0f1115;
+    --surface: #171a20;
+    --foreground: #e8eaee;
+    --muted: #9aa1ad;
+    --line: #2a2f38;
+    --accent: #8b87f5;
+    --accent-soft: #24233f;
+    --accent-foreground: #0f1115;
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-foreground: var(--accent-foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}

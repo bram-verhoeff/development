@@ -1,0 +1,20 @@
+{
+  "app": {
+    "name": "ContentRoom",
+    "tagline": "Content maken en inplannen per merk"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "brands": "Merken",
+    "generate": "Genereren",
+    "posts": "Posts",
+    "calendar": "Kalender"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "intro": "Kies een merk, laat posts genereren, keur ze goed en plan ze in."
+  },
+  "common": {
+    "comingSoon": "Dit onderdeel wordt in een volgende stap gebouwd."
+  }
+}
