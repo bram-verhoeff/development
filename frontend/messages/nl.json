@@ -8,11 +8,69 @@
     "brands": "Merken",
     "generate": "Genereren",
     "posts": "Posts",
-    "calendar": "Kalender"
+    "calendar": "Kalender",
+    "logout": "Uitloggen"
   },
   "dashboard": {
     "title": "Dashboard",
-    "intro": "Kies een merk, laat posts genereren, keur ze goed en plan ze in."
+    "intro": "Kies een merk, laat posts genereren, keur ze goed en plan ze in.",
+    "loggedInAs": "Ingelogd als {email}"
+  },
+  "auth": {
+    "email": "E-mailadres",
+    "password": "Wachtwoord",
+    "newPassword": "Nieuw wachtwoord",
+    "passwordConfirm": "Herhaal wachtwoord",
+    "passwordHint": "Minimaal 8 tekens.",
+    "busy": "Bezig…",
+    "backToLogin": "Terug naar inloggen",
+    "login": {
+      "title": "Inloggen",
+      "submit": "Inloggen",
+      "forgot": "Wachtwoord vergeten?",
+      "toRegister": "Account aanmaken"
+    },
+    "register": {
+      "title": "Account aanmaken",
+      "inviteOnly": "Registreren kan alleen met een uitgenodigd e-mailadres.",
+      "submit": "Account aanmaken",
+      "checkEmail": "Bijna klaar! We hebben je een e-mail gestuurd. Klik op de link in die mail om je account te bevestigen.",
+      "toLogin": "Heb je al een account? Inloggen"
+    },
+    "forgot": {
+      "title": "Wachtwoord vergeten",
+      "intro": "Vul je e-mailadres in. Je krijgt een link om een nieuw wachtwoord in te stellen.",
+      "submit": "Stuur herstellink",
+      "sent": "Als er een account bij dit adres hoort, is er nu een herstellink onderweg."
+    },
+    "reset": {
+      "title": "Nieuw wachtwoord instellen",
+      "submit": "Wachtwoord opslaan"
+    },
+    "noAccess": {
+      "title": "Geen toegang",
+      "body": "Je bent ingelogd, maar dit e-mailadres staat niet op de lijst met toegestane gebruikers."
+    },
+    "errors": {
+      "invalid_credentials": "E-mailadres of wachtwoord klopt niet.",
+      "email_not_confirmed": "Bevestig eerst je e-mailadres via de link in je mail.",
+      "user_already_exists": "Er bestaat al een account met dit e-mailadres.",
+      "weak_password": "Dit wachtwoord is te zwak. Kies een langer of minder voorspelbaar wachtwoord.",
+      "same_password": "Het nieuwe wachtwoord moet anders zijn dan het oude.",
+      "over_email_send_rate_limit": "Er zijn te veel e-mails verstuurd. Probeer het over een paar minuten opnieuw.",
+      "over_request_rate_limit": "Te veel pogingen. Probeer het over een paar minuten opnieuw.",
+      "email_not_allowed": "Dit e-mailadres heeft geen toegang. Vraag de beheerder om een uitnodiging.",
+      "invalid_email": "Dit is geen geldig e-mailadres.",
+      "password_too_short": "Het wachtwoord moet minimaal 8 tekens hebben.",
+      "passwords_do_not_match": "De wachtwoorden komen niet overeen.",
+      "link_invalid": "Deze link is ongeldig of verlopen. Vraag een nieuwe aan.",
+      "backend_unreachable": "De server is niet bereikbaar. Probeer het later opnieuw.",
+      "unknown": "Er ging iets mis. Probeer het opnieuw."
+    }
+  },
+  "errors": {
+    "backend_unreachable": "De server is niet bereikbaar. Probeer het later opnieuw.",
+    "unknown_error": "Er ging iets mis. Probeer het opnieuw."
   },
   "common": {
     "comingSoon": "Dit onderdeel wordt in een volgende stap gebouwd."

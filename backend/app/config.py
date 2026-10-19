@@ -21,6 +21,8 @@ class Settings(BaseSettings):
     # Supabase (auth en opslag)
     supabase_url: str = ""
     supabase_service_role_key: str = ""
+    # Alleen nodig voor oudere projecten die tokens met een gedeeld geheim (HS256) ondertekenen
+    supabase_jwt_secret: str = ""
     storage_bucket: str = "logos"
 
     # Alleen deze e-mailadressen mogen een account hebben (kommagescheiden)
@@ -29,6 +31,14 @@ class Settings(BaseSettings):
     @property
     def cors_origin_list(self) -> list[str]:
         return [o.strip() for o in self.cors_origins.split(",") if o.strip()]
+
+    @property
+    def supabase_issuer(self) -> str:
+        return f"{self.supabase_url.rstrip('/')}/auth/v1"
+
+    @property
+    def supabase_jwks_url(self) -> str:
+        return f"{self.supabase_issuer}/.well-known/jwks.json"
 
     @property
     def allowed_email_set(self) -> set[str]:

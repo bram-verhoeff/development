@@ -45,6 +45,22 @@ npm run dev
 
 De app draait op http://localhost:3000.
 
+## Supabase instellen (login en registratie)
+
+1. Maak een project aan op [supabase.com](https://supabase.com).
+2. **Authentication → Sign In / Providers**: zet *Email* aan, met *Confirm email* aan.
+3. **Authentication → URL Configuration**:
+   - *Site URL*: `http://localhost:3000` (later het online adres)
+   - *Redirect URLs*: voeg `http://localhost:3000/auth/callback` toe (later ook het online adres + `/auth/callback`)
+4. **Project Settings → API Keys**: kopieer
+   - de project-URL en de *publishable key* → `frontend/.env.local`
+   - de project-URL en de *secret key* → `backend/.env` (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`)
+5. Zet in `backend/.env` bij `ALLOWED_EMAILS` de e-mailadressen die mogen registreren (kommagescheiden).
+
+**Zo werkt de toegang:**
+- Registreren controleert eerst of het e-mailadres op de allowlist staat.
+- De backend controleert bij elke aanroep het token van Supabase en de allowlist. Een account zonder toegang kan daardoor niets doen, ook niet als het buiten de app om is aangemaakt.
+
 ## Configuratie
 
 Alle sleutels en geheimen staan in `backend/.env` en `frontend/.env.local`. Die bestanden staan niet in git; de `.env.example`-bestanden laten zien welke variabelen nodig zijn.
