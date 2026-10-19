@@ -16,7 +16,11 @@ class Settings(BaseSettings):
 
     # Claude API
     anthropic_api_key: str = ""
-    claude_model: str = "claude-sonnet-5-5"
+    claude_model: str = "claude-opus-5-5"
+    # Denkdiepte van het model: low | medium | high (hoger = grondiger, trager en duurder)
+    claude_effort: str = "medium"
+    # Maximaal aantal AI-opdrachten (genereren + herschrijven) per gebruiker per 24 uur
+    generation_daily_limit: int = 100
 
     # Supabase (auth en opslag)
     supabase_url: str = ""

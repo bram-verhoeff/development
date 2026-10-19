@@ -127,3 +127,36 @@ def storage(client):
     fake = FakeStorage()
     app.dependency_overrides[get_storage] = lambda: fake
     return fake
+
+
+class FakeWriter:
+    """Nep-Claude: geeft voorspelbare posts terug en onthoudt de aanroepen."""
+
+    def __init__(self):
+        self.calls: list[tuple] = []
+
+    def generate(self, brand, platforms, count, source_text, instructions):
+        from app.services.ai.client import DraftPost, GenerationResult, Usage
+
+        self.calls.append(("generate", [str(p) for p in platforms], count, source_text, instructions))
+        posts = {
+            p: [DraftPost(hook=f"Hook {i + 1} voor {p}", body=f"Tekst {i + 1} over {brand.name}", hashtags=["#test", "koffie"]) for i in range(count)]
+            for p in platforms
+        }
+        return GenerationResult(posts=posts, usage=Usage(model="test-model", input_tokens=100, output_tokens=50))
+
+    def regenerate(self, brand, platform, hook, body, hashtags, instructions):
+        from app.services.ai.client import DraftPost, RegenerationResult, Usage
+
+        self.calls.append(("regenerate", str(platform), instructions))
+        draft = DraftPost(hook="Nieuwe hook", body=f"Herschreven: {instructions}", hashtags=["#nieuw"])
+        return RegenerationResult(post=draft, usage=Usage(model="test-model", input_tokens=10, output_tokens=5))
+
+
+@pytest.fixture
+def writer(client):
+    from app.services.ai.client import get_writer
+
+    fake = FakeWriter()
+    app.dependency_overrides[get_writer] = lambda: fake
+    return fake

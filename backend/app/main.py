@@ -1,14 +1,17 @@
-"""FastAPI-app: CORS, routers en een health-check."""
+"""FastAPI-app: CORS, routers, foutafhandeling en een health-check."""
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 from app.config import get_settings
-from app.routers import auth, brands
+from app.routers import auth, brands, dashboard, generate, posts
+from app.services.ai.client import AIError
+from app.services.source_fetcher import SourceError
 
 settings = get_settings()
 
-app = FastAPI(title="ContentRoom API", version="0.1.0")
+app = FastAPI(title="PostPilot API", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -18,8 +21,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(auth.router)
-app.include_router(brands.router)
+for module in (auth, brands, generate, posts, dashboard):
+    app.include_router(module.router)
+
+
+# Fouten uit de AI- en bronlaag als vertaalbare code teruggeven ({"detail": "<code>"})
+@app.exception_handler(AIError)
+def _ai_error(_request: Request, exc: AIError):
+    return JSONResponse(status_code=exc.status, content={"detail": exc.code})
+
+
+@app.exception_handler(SourceError)
+def _source_error(_request: Request, exc: SourceError):
+    return JSONResponse(status_code=422, content={"detail": exc.code})
 
 
 @app.get("/health")
