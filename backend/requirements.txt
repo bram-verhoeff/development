@@ -13,7 +13,8 @@ psycopg[binary]==3.3.6
 # Auth (Supabase JWT-controle)
 pyjwt[crypto]==2.15.1
 
-# AI en bronnen ophalen
+# AI (Gemini standaard, Claude als alternatief) en bronnen ophalen
+google-genai==2.31.0
 anthropic==1.15.0
 httpx==0.28.1
 beautifulsoup4==4.15.0

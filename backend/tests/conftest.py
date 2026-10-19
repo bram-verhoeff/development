@@ -30,6 +30,7 @@ def settings() -> Settings:
         supabase_url=SUPABASE_URL,
         supabase_jwt_secret=HS_SECRET,
         allowed_emails=f"{ALLOWED_EMAIL}, tweede@voorbeeld.nl",
+        gemini_api_key="test-key",
         anthropic_api_key="test-key",
     )
 
@@ -136,7 +137,7 @@ class FakeWriter:
         self.calls: list[tuple] = []
 
     def generate(self, brand, platforms, count, source_text, instructions):
-        from app.services.ai.client import DraftPost, GenerationResult, Usage
+        from app.services.ai.writer import DraftPost, GenerationResult, Usage
 
         self.calls.append(("generate", [str(p) for p in platforms], count, source_text, instructions))
         posts = {
@@ -146,7 +147,7 @@ class FakeWriter:
         return GenerationResult(posts=posts, usage=Usage(model="test-model", input_tokens=100, output_tokens=50))
 
     def regenerate(self, brand, platform, hook, body, hashtags, instructions):
-        from app.services.ai.client import DraftPost, RegenerationResult, Usage
+        from app.services.ai.writer import DraftPost, RegenerationResult, Usage
 
         self.calls.append(("regenerate", str(platform), instructions))
         draft = DraftPost(hook="Nieuwe hook", body=f"Herschreven: {instructions}", hashtags=["#nieuw"])
@@ -155,7 +156,7 @@ class FakeWriter:
 
 @pytest.fixture
 def writer(client):
-    from app.services.ai.client import get_writer
+    from app.services.ai.writer import get_writer
 
     fake = FakeWriter()
     app.dependency_overrides[get_writer] = lambda: fake

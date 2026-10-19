@@ -16,12 +16,12 @@ services:
         sync: false
       - key: CORS_ORIGINS
         sync: false
-      - key: ANTHROPIC_API_KEY
+      - key: AI_PROVIDER
+        value: gemini
+      - key: GEMINI_API_KEY
         sync: false
-      - key: CLAUDE_MODEL
-        value: claude-opus-5-5
-      - key: CLAUDE_EFFORT
-        value: medium
+      - key: GEMINI_MODEL
+        value: gemini-flash-latest
       - key: GENERATION_DAILY_LIMIT
         value: "100"
       - key: SUPABASE_URL

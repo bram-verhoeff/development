@@ -1,6 +1,6 @@
 # PostPilot
 
-PostPilot is een webapplicatie om per merk social-mediacontent te laten schrijven door AI (Claude), die posts te beoordelen en ze in een kalender in te plannen.
+PostPilot is een webapplicatie om per merk social-mediacontent te laten schrijven door AI (Google Gemini; Claude kan ook), die posts te beoordelen en ze in een kalender in te plannen.
 
 - **Merken**: onbeperkt merkprofielen met doelgroep, tone of voice, USP's, kleuren, logo en woorden die vermeden moeten worden.
 - **Genereren**: posts, hooks en hashtags voor Instagram, LinkedIn, TikTok, X en Facebook, met de juiste lengte en stijl per platform. Optioneel op basis van een webpagina of eigen tekst.
@@ -19,13 +19,13 @@ Browser ─► Next.js (frontend/, Vercel) ── Supabase Auth: registreren, in
            FastAPI (backend/, Render) ── controleert het token (JWKS) + allowlist
               ├─► Database via SQLAlchemy + Alembic (lokaal SQLite, online Supabase Postgres)
               ├─► Supabase Storage (logo's)
-              └─► Claude API (Anthropic SDK)
+              └─► Gemini API (google-genai SDK), of Claude via AI_PROVIDER=claude
 ```
 
 | Map | Inhoud |
 |---|---|
 | `backend/app/routers/` | API-routes: `auth`, `brands`, `generate`, `posts`, `dashboard` |
-| `backend/app/services/ai/` | Claude-aanroepen, prompts opbouwen, regels per platform |
+| `backend/app/services/ai/` | AI-aanroepen (`gemini.py`, `claude.py` op een gedeelde basis in `writer.py`), prompts, regels per platform |
 | `backend/app/services/` | bron ophalen (SSRF-veilig), controles, opslag van logo's, postlogica |
 | `backend/app/publishers/` | gedeelde interface voor publiceren per platform (fase 2) |
 | `backend/prompts/` | de prompts als `.md`-bestanden; aan te passen zonder codewijziging |
@@ -37,7 +37,7 @@ Browser ─► Next.js (frontend/, Vercel) ── Supabase Auth: registreren, in
 
 - Python 3.12 of nieuwer (getest met 3.13)
 - Node.js 20 of nieuwer (getest met 24)
-- Een Supabase-project (gratis) en een Anthropic API-sleutel
+- Een Supabase-project (gratis) en een Gemini API-sleutel ([Google AI Studio](https://aistudio.google.com/apikey))
 
 ## Lokaal opstarten
 
@@ -95,9 +95,10 @@ Alle sleutels staan in `backend/.env` en `frontend/.env.local`. Die bestanden st
 |---|---|
 | `DATABASE_URL` | `sqlite:///./postpilot.db` lokaal; online de Supabase-connection string (`postgresql://…` mag zo geplakt worden) |
 | `CORS_ORIGINS` | adres(sen) van de frontend, kommagescheiden |
-| `ANTHROPIC_API_KEY` | sleutel van [console.anthropic.com](https://console.anthropic.com) |
-| `CLAUDE_MODEL` | `claude-opus-5-5` (standaard, beste kwaliteit) of `claude-sonnet-5-5` (goedkoper) |
-| `CLAUDE_EFFORT` | denkdiepte: `low`, `medium` (standaard) of `high` |
+| `AI_PROVIDER` | `gemini` (standaard) of `claude` |
+| `GEMINI_API_KEY` | sleutel van [Google AI Studio](https://aistudio.google.com/apikey) |
+| `GEMINI_MODEL` | `gemini-flash-latest` (standaard, snel en voordelig) of `gemini-pro-latest` (grondiger) |
+| `ANTHROPIC_API_KEY`, `CLAUDE_MODEL`, `CLAUDE_EFFORT` | alleen bij `AI_PROVIDER=claude` |
 | `GENERATION_DAILY_LIMIT` | maximaal aantal AI-opdrachten per gebruiker per 24 uur (standaard 100) |
 | `SUPABASE_URL` | project-URL van Supabase |
 | `SUPABASE_SERVICE_ROLE_KEY` | *secret key* (of oude *service_role key*). Alleen in de backend! |
@@ -118,7 +119,7 @@ Alle sleutels staan in `backend/.env` en `frontend/.env.local`. Die bestanden st
 
 ```bash
 cd backend
-pytest                          # alle backendtests (Claude en Supabase worden nagebootst)
+pytest                          # alle backendtests (Gemini, Claude en Supabase worden nagebootst)
 
 cd frontend
 npx tsc --noEmit                # typecontrole
@@ -128,12 +129,13 @@ npm run build
 
 ## Hoe de AI werkt
 
-- Per platform gaat er één aanroep naar Claude. Die aanroepen lopen tegelijk, dus genereren voor meerdere platforms duurt niet veel langer.
+- Per platform gaat er één aanroep naar de AI. Die aanroepen lopen tegelijk, dus genereren voor meerdere platforms duurt niet veel langer.
 - Het model antwoordt in een vast JSON-formaat (hook, tekst, hashtags) dat de backend met Pydantic controleert.
 - De prompts staan in `backend/prompts/`. De regels per platform (lengte, stijl, aantal hashtags) staan in `backend/app/services/ai/platforms.py`.
 - Een webpagina als bron wordt server-side opgehaald, alleen van publieke adressen. Interne netwerkadressen worden geblokkeerd.
 - Na het schrijven controleert PostPilot elke post op lengte, aantal hashtags en te vermijden woorden, en toont waarschuwingen.
-- Weigert het model een verzoek, dan probeert de API het automatisch met een ander model (server-side fallback).
+- Blokkeert het model een verzoek (veiligheidsfilter), dan krijg je een duidelijke melding om de bron of instructies aan te passen. Bij Claude probeert de API het eerst nog automatisch met een ander model.
+- Een andere AI-dienst toevoegen: een subklasse van `BaseWriter` in `backend/app/services/ai/` die alleen `_ask` implementeert.
 - Genereren en herschrijven tellen mee voor de daglimiet. Tokens per opdracht worden opgeslagen in `generation_runs`.
 
 ## Database en migraties

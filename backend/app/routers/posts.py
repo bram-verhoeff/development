@@ -19,7 +19,7 @@ from app.schemas import (
     RegenerateIn,
 )
 from app.services import posts as post_service
-from app.services.ai.client import PostWriter, get_writer
+from app.services.ai.writer import BaseWriter, get_writer
 
 router = APIRouter(prefix="/posts", tags=["posts"])
 
@@ -113,7 +113,7 @@ def regenerate_post(
     db: Session = Depends(get_db),
     user: CurrentUser = Depends(get_current_user),
     settings: Settings = Depends(get_settings),
-    writer: PostWriter = Depends(get_writer),
+    writer: BaseWriter = Depends(get_writer),
 ):
     """Laat Claude de post herschrijven. Nieuwe tekst = opnieuw beoordelen, dus terug naar concept."""
     post = post_service.get_owned_post(post_id, db, user)

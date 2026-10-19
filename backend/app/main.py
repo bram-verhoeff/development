@@ -6,7 +6,7 @@ from fastapi.responses import JSONResponse
 
 from app.config import get_settings
 from app.routers import auth, brands, dashboard, generate, posts
-from app.services.ai.client import AIError
+from app.services.ai.writer import AIError
 from app.services.source_fetcher import SourceError
 
 settings = get_settings()

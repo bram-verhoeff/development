@@ -87,7 +87,7 @@ def test_generation_limit(client, owner, brand, writer, settings):
 
 
 def test_ai_errors_are_returned_as_codes(client, owner, brand, settings):
-    settings.anthropic_api_key = ""  # echte ClaudeWriter zonder sleutel
+    settings.gemini_api_key = ""  # echte GeminiWriter zonder sleutel
     response = generate(client, owner, brand["id"])
     assert response.status_code == 503 and response.json()["detail"] == "ai_not_configured"
 

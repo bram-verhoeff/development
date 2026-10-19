@@ -1,6 +1,7 @@
 """Instellingen uit omgevingsvariabelen of backend/.env (nooit hardcoded)."""
 
 from functools import lru_cache
+from typing import Literal
 
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -24,10 +25,17 @@ class Settings(BaseSettings):
     # Kommagescheiden lijst van frontend-adressen die de API mogen aanroepen
     cors_origins: str = "http://localhost:3000"
 
-    # Claude API
+    # Welke AI-dienst de posts schrijft
+    ai_provider: Literal["gemini", "claude"] = "gemini"
+
+    # Google Gemini (aistudio.google.com → Get API key)
+    gemini_api_key: str = ""
+    gemini_model: str = "gemini-flash-latest"
+
+    # Anthropic Claude (alternatief)
     anthropic_api_key: str = ""
     claude_model: str = "claude-opus-5-5"
-    # Denkdiepte van het model: low | medium | high (hoger = grondiger, trager en duurder)
+    # Denkdiepte van Claude: low | medium | high (hoger = grondiger, trager en duurder)
     claude_effort: str = "medium"
     # Maximaal aantal AI-opdrachten (genereren + herschrijven) per gebruiker per 24 uur
     generation_daily_limit: int = 100

@@ -8,9 +8,10 @@ import httpx
 import pytest
 
 from app.models import Brand, Platform
-from app.services.ai import client as ai_client
+from app.services.ai import claude as claude_module
 from app.services.ai import prompts
-from app.services.ai.client import AIError, ClaudeWriter, DraftPost, DraftPosts
+from app.services.ai.claude import ClaudeWriter
+from app.services.ai.writer import AIError, DraftPost, DraftPosts, get_writer
 from app.services.checks import post_warnings
 
 
@@ -93,6 +94,15 @@ def test_writer_requires_api_key(settings):
     assert exc.value.code == "ai_not_configured"
 
 
+def test_provider_setting_picks_writer(settings):
+    from app.services.ai.gemini import GeminiWriter
+
+    settings.ai_provider = "gemini"
+    assert isinstance(get_writer(settings), GeminiWriter)
+    settings.ai_provider = "claude"
+    assert isinstance(get_writer(settings), ClaudeWriter)
+
+
 def test_writer_generate_one_call_per_platform_and_sums_usage(settings):
     calls = []
 
@@ -108,7 +118,7 @@ def test_writer_generate_one_call_per_platform_and_sums_usage(settings):
     first = calls[0]
     assert first["model"] == settings.claude_model
     assert first["output_format"] is DraftPosts
-    assert first["fallbacks"] == "default" and ai_client.FALLBACK_BETA in first["betas"]
+    assert first["fallbacks"] == "default" and claude_module.FALLBACK_BETA in first["betas"]
     assert first["output_config"] == {"effort": settings.claude_effort}
 
 
@@ -134,6 +144,7 @@ def _status_error(cls, status):
         (lambda: _status_error(anthropic.AuthenticationError, 401), "ai_auth_failed"),
         (lambda: _status_error(anthropic.RateLimitError, 429), "ai_rate_limited"),
         (lambda: _status_error(anthropic.BadRequestError, 400), "ai_bad_request"),
+        (lambda: _status_error(anthropic.NotFoundError, 404), "ai_model_not_found"),
         (lambda: _status_error(anthropic.InternalServerError, 500), "ai_unavailable"),
         (lambda: anthropic.APIConnectionError(request=httpx.Request("POST", "https://api.anthropic.com")), "ai_unavailable"),
     ],

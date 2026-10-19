@@ -10,7 +10,7 @@ from app.models import GenerationRun, Post, SourceType, VersionOrigin
 from app.routers.brands import get_owned_brand
 from app.schemas import GenerateIn, GenerateOut
 from app.services import posts as post_service
-from app.services.ai.client import PostWriter, get_writer
+from app.services.ai.writer import BaseWriter, get_writer
 from app.services.source_fetcher import fetch_source_text
 
 router = APIRouter(tags=["generate"])
@@ -22,7 +22,7 @@ def generate(
     db: Session = Depends(get_db),
     user: CurrentUser = Depends(get_current_user),
     settings: Settings = Depends(get_settings),
-    writer: PostWriter = Depends(get_writer),
+    writer: BaseWriter = Depends(get_writer),
 ):
     brand = get_owned_brand(data.brand_id, db, user)
     post_service.ensure_within_limit(db, user, settings)
