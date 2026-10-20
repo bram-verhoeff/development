@@ -369,6 +369,7 @@
     "not_connected": "Koppel eerst een account voor dit platform.",
     "connection_expired": "De koppeling is verlopen. Koppel het account opnieuw.",
     "already_published": "Deze post is al gepubliceerd.",
+    "publish_in_progress": "Deze post wordt op dit moment al geplaatst. Ververs de pagina over een minuut.",
     "publish_forbidden": "Het platform staat het plaatsen niet toe. Controleer de rechten van de app (Share on LinkedIn).",
     "platform_version_outdated": "De ingestelde API-versie van het platform is verouderd. Pas LINKEDIN_API_VERSION aan in de backend.",
     "platform_rate_limited": "Het platform krijgt even te veel verzoeken. Probeer het later opnieuw.",
@@ -424,6 +425,8 @@
     "reconnect": "{platform} opnieuw koppelen",
     "notYet": "Automatisch plaatsen op {platform} volgt later. Kopieer de tekst voorlopig zelf.",
     "lastError": "Vorige poging mislukt: {error}",
+    "autoAt": "Wordt automatisch geplaatst op {date}.",
+    "retryAt": "Automatisch plaatsen lukte nog niet. Nieuwe poging op {date}.",
     "mediaRequired": "{platform} accepteert alleen posts met een afbeelding of video. Maak hiernaast beeld en download het om zelf te plaatsen; automatisch plaatsen op {platform} volgt."
   },
   "media": {

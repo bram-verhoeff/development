@@ -23,7 +23,7 @@ Laatst bijgewerkt: 2026-10-20
 | Koppelen: LinkedIn, X, Facebook, Instagram, TikTok ("Alles koppelen") | ✅ |
 | Handmatig plaatsen ("Nu plaatsen"): LinkedIn, X, Facebook | ✅ |
 | Plaatsen op Instagram en TikTok (vereist media) | ⏳ |
-| **Automatisch publiceren op het geplande moment (scheduler)** | ❌ |
+| **Automatisch publiceren op het geplande moment (scheduler)** | ✅ (cronjob nog instellen) |
 | Analytics | ❌ |
 | Betalingen / abonnementen | ❌ |
 
@@ -55,12 +55,14 @@ Laatst bijgewerkt: 2026-10-20
     - Supabase-instellingen, OAuth-redirect-URL's van alle platforms en `CORS_ORIGINS`/`FRONTEND_URL`/`BACKEND_PUBLIC_URL` daarop aanpassen
   - [ ] een mailbox (bijvoorbeeld `noreply@postpilotai.nl`) als SMTP voor Supabase Auth, met SPF, DKIM en DMARC ingesteld, zodat bevestigings- en herstelmails van het eigen adres komen en niet tegen de limiet van de standaardmail van Supabase aanlopen
   - [ ] een cronjob in DirectAdmin die elke minuut de scheduler aanroept (zie hieronder)
-- [ ] **Scheduler**: een beveiligd endpoint `POST /internal/run-scheduler` (geheime header) dat elke minuut door een cronjob wordt aangeroepen en de ingeplande, goedgekeurde posts plaatst via `get_publisher(platform).publish(...)`. Geen apart proces dat altijd aan moet staan.
-  - [ ] dezelfde post nooit dubbel plaatsen (vergrendeling per post, idempotent)
-  - [ ] opnieuw proberen met backoff, rate limits per platform respecteren
-  - [ ] status per post: `scheduled → publishing → published / failed`, met foutmelding
-  - [ ] melding (e-mail) bij mislukte publicatie, met een knop "Opnieuw proberen"
-  - [ ] tokens automatisch vernieuwen vóór ze verlopen; melding als opnieuw koppelen nodig is
+- [x] **Scheduler**: een beveiligd endpoint `POST /internal/run-scheduler` (header `X-Cron-Secret`) dat elke minuut door een cronjob wordt aangeroepen en de ingeplande, goedgekeurde posts plaatst. Geen apart proces dat altijd aan moet staan.
+  - [x] dezelfde post nooit dubbel plaatsen (atomaire vergrendeling per post, ook tegenover "Nu plaatsen")
+  - [x] opnieuw proberen met backoff (2, 10, 30, 120 min) bij tijdelijke fouten en rate limits; direct stoppen bij blijvende fouten
+  - [x] in de app zichtbaar: "Wordt automatisch geplaatst op …", "Nieuwe poging op …" en de laatste foutmelding
+  - [ ] melding (e-mail) bij mislukte publicatie, met een knop "Opnieuw proberen" (wacht op de SMTP-mailbox via Vimexx)
+  - [x] tokens automatisch vernieuwen vóór ze verlopen
+  - [ ] melding als opnieuw koppelen nodig is
+  - [ ] **cronjob aanmaken in DirectAdmin** en `CRON_SECRET` invullen bij Render (zie README → Automatisch publiceren)
 - [ ] **Instagram publiceren** (afbeelding, carrousel, Reel) via de Instagram Graph API
 - [ ] **TikTok publiceren** via de Content Posting API
 - [ ] **App-reviews nu al aanvragen** bij Meta en TikTok: die duren weken

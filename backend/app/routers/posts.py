@@ -10,7 +10,6 @@ from app.auth import CurrentUser, get_current_user
 from app.config import Settings, get_settings
 from app.database import get_db, utcnow
 from app.models import Brand, GenerationRun, Platform, Post, PostStatus, VersionOrigin
-from app.publishers import registry as publisher_registry
 from app.schemas import (
     PostDetailOut,
     PostOut,
@@ -19,14 +18,22 @@ from app.schemas import (
     PostUpdateIn,
     RegenerateIn,
 )
-from app.services import connections as connection_service
 from app.services import posts as post_service
+from app.services import publishing, scheduler
 from app.services.ai.writer import BaseWriter, get_writer
 
 router = APIRouter(prefix="/posts", tags=["posts"])
 
 # Een klein beetje speling, zodat "nu" inplannen niet faalt door klokverschil
 SCHEDULE_GRACE = timedelta(minutes=5)
+
+# Foutcodes van publiceren die geen platformfout (502) zijn
+PUBLISH_ERROR_STATUS = {
+    "not_connected": status.HTTP_409_CONFLICT,
+    "connection_expired": status.HTTP_409_CONFLICT,
+    "platform_not_supported": status.HTTP_501_NOT_IMPLEMENTED,
+    "secret_not_configured": status.HTTP_503_SERVICE_UNAVAILABLE,
+}
 
 
 @router.get("", response_model=list[PostOut])
@@ -104,6 +111,7 @@ def schedule_post(
         if data.scheduled_at < utcnow() - SCHEDULE_GRACE:
             raise HTTPException(422, "schedule_in_past")
     post.scheduled_at = data.scheduled_at.astimezone(UTC) if data.scheduled_at else None
+    scheduler.reset_attempts(post)
     db.commit()
     return post_service.to_detail(post)
 
@@ -177,27 +185,14 @@ def publish_post(
         raise HTTPException(status.HTTP_409_CONFLICT, "post_not_approved")
     if post.published_at is not None:
         raise HTTPException(status.HTTP_409_CONFLICT, "already_published")
-    account = connection_service.get_account(db, post.brand_id, post.platform)
-    if account is None:
-        raise HTTPException(status.HTTP_409_CONFLICT, "not_connected")
-    if connection_service.is_expired(account):
-        raise HTTPException(status.HTTP_409_CONFLICT, "connection_expired")
+    # Vergrendelen, zodat de scheduler deze post niet tegelijk ook plaatst
+    if not publishing.claim(db, post.id, utcnow()):
+        raise HTTPException(status.HTTP_409_CONFLICT, "publish_in_progress")
+    db.refresh(post)
     try:
-        publisher = publisher_registry.get_publisher(post.platform)
-    except publisher_registry.PublisherNotAvailable:
-        raise HTTPException(status.HTTP_501_NOT_IMPLEMENTED, "platform_not_supported")
-
-    # Ververst het token eerst als dat nodig is (X: elke 2 uur, TikTok: elke dag)
-    result = publisher.publish(post, connection_service.fresh_credentials(db, account, settings))
-    if not result.success:
-        post.publish_error = result.error
-        db.commit()
-        raise HTTPException(status.HTTP_502_BAD_GATEWAY, result.error or "publish_failed")
-
-    post.published_at = utcnow()
-    post.external_post_id = result.external_id
-    post.external_url = result.url
-    post.publish_error = None
-    post.scheduled_at = None  # staat nu online; niet meer "gepland"
-    db.commit()
-    return post_service.to_detail(post)
+        result = publishing.attempt_publish(db, post, settings)
+        if result.success:
+            return post_service.to_detail(post)
+        raise HTTPException(PUBLISH_ERROR_STATUS.get(result.error, status.HTTP_502_BAD_GATEWAY), result.error or "publish_failed")
+    finally:
+        publishing.release(db, post)

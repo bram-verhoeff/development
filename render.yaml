@@ -34,6 +34,9 @@ services:
         sync: false
       - key: APP_SECRET_KEY
         generateValue: true
+      # Zelfde waarde als in de cronjob die /internal/run-scheduler aanroept
+      - key: CRON_SECRET
+        sync: false
       - key: BACKEND_PUBLIC_URL
         sync: false
       - key: FRONTEND_URL

@@ -62,6 +62,10 @@ class Settings(BaseSettings):
     # Maak er een met: python -c "import secrets; print(secrets.token_urlsafe(48))"
     app_secret_key: str = ""
 
+    # Geheim voor de cronjob die elke minuut /internal/run-scheduler aanroept (minimaal 32 tekens).
+    # Leeg = de scheduler staat uit. Maak er een met hetzelfde commando als hierboven.
+    cron_secret: str = ""
+
     # Publieke adressen: waar LinkedIn naar terugstuurt (backend) en waar de app draait (frontend)
     backend_public_url: str = "http://localhost:8000"
     frontend_url: str = "http://localhost:3000"

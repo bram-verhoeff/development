@@ -47,6 +47,7 @@ export type Post = {
   published_at: string | null;
   external_url: string | null;
   publish_error: string | null;
+  next_attempt_at: string | null;
   thumbnail_url: string | null;
   thumbnail_kind: "image" | "video" | null;
 };

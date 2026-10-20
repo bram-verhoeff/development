@@ -35,6 +35,7 @@ def to_out(post: Post) -> PostOut:
         published_at=post.published_at,
         external_url=post.external_url,
         publish_error=post.publish_error,
+        next_attempt_at=post.next_attempt_at,
         **_thumbnail(post),
     )
 

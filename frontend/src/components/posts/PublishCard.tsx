@@ -1,6 +1,6 @@
 "use client";
 
-import { ExternalLink, Link2, LoaderCircle, PartyPopper, Send, TriangleAlert } from "lucide-react";
+import { CalendarClock, ExternalLink, Link2, LoaderCircle, PartyPopper, Send, TriangleAlert } from "lucide-react";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { useFormatter, useTranslations } from "next-intl";
@@ -29,6 +29,7 @@ export function PublishCard({ post }: { post: PostDetail }) {
   const [burst, setBurst] = useState(0);
   const platform = tPlatforms(post.platform);
   const errorText = (code: string) => (tErrors.has(code) ? tErrors(code) : tErrors("unknown_error"));
+  const when = (iso: string) => format.dateTime(new Date(iso), { dateStyle: "medium", timeStyle: "short" });
 
   const publish = () => {
     if (!confirm(t("confirm", { platform, account: post.connection?.display_name ?? "" }))) return;
@@ -47,7 +48,7 @@ export function PublishCard({ post }: { post: PostDetail }) {
     content = (
       <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="space-y-3">
         <p className="flex items-center gap-2 rounded-lg bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300">
-          <PartyPopper size={16} /> {t("publishedAt", { date: format.dateTime(new Date(post.published_at), { dateStyle: "medium", timeStyle: "short" }) })}
+          <PartyPopper size={16} /> {t("publishedAt", { date: when(post.published_at) })}
         </p>
         {post.external_url && (
           <a href={post.external_url} target="_blank" rel="noopener noreferrer" className={`${buttonClass.secondary} w-full`}>
@@ -75,6 +76,12 @@ export function PublishCard({ post }: { post: PostDetail }) {
     content = (
       <div className="space-y-3">
         <p className="text-sm text-muted">{t("asAccount", { account: post.connection.display_name })}</p>
+        {post.scheduled_at && (
+          <p className="flex items-center gap-2 rounded-lg bg-indigo-50 px-3 py-2 text-sm text-indigo-800 dark:bg-indigo-950/40 dark:text-indigo-200">
+            <CalendarClock size={16} className="shrink-0" />
+            {post.next_attempt_at ? t("retryAt", { date: when(post.next_attempt_at) }) : t("autoAt", { date: when(post.scheduled_at) })}
+          </p>
+        )}
         <motion.button
           type="button"
           disabled={pending}

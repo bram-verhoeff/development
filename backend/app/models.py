@@ -120,6 +120,11 @@ class Post(TimestampMixin, Base):
     external_post_id: Mapped[str | None] = mapped_column(String(200))
     external_url: Mapped[str | None] = mapped_column(String(1000))
     publish_error: Mapped[str | None] = mapped_column(String(100))
+    # Automatisch publiceren (scheduler): aantal mislukte pogingen, wanneer opnieuw,
+    # en een vergrendeling zodat een post nooit twee keer tegelijk geplaatst wordt
+    publish_attempts: Mapped[int] = mapped_column(Integer, default=0)
+    next_attempt_at: Mapped[datetime | None] = mapped_column(UTCDateTime)
+    publishing_started_at: Mapped[datetime | None] = mapped_column(UTCDateTime)
 
     brand: Mapped[Brand] = relationship(back_populates="posts")
     versions: Mapped[list["PostVersion"]] = relationship(

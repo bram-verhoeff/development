@@ -104,6 +104,8 @@ class PostOut(BaseModel):
     published_at: datetime | None = None
     external_url: str | None = None
     publish_error: str | None = None
+    # Wanneer de scheduler het na een tijdelijke fout opnieuw probeert
+    next_attempt_at: datetime | None = None
     # Eerste klare afbeelding (of video) voor in overzichten
     thumbnail_url: str | None = None
     thumbnail_kind: str | None = None

@@ -10,7 +10,7 @@ PostPilot is een webapplicatie om per merk social-mediacontent te laten schrijve
 - **Toegang**: inloggen en registreren via Supabase. Alleen e-mailadressen op een allowlist mogen registreren.
 - **Koppelen en plaatsen**: koppel per merk LinkedIn, X, een Facebook-pagina, Instagram en TikTok, of allemaal tegelijk met **Alles koppelen**. Goedgekeurde posts plaats je met één klik op LinkedIn, X en Facebook. Instagram en TikTok accepteren alleen posts met afbeelding of video; dat volgt.
 
-> Fase 2 (nog niet gebouwd): automatisch publiceren via de platform-API's. De code is daarop voorbereid, zie [Fase 2: publiceren](#fase-2-publiceren).
+- **Automatisch plaatsen**: goedgekeurde, ingeplande posts worden op het geplande moment vanzelf geplaatst, met nieuwe pogingen bij tijdelijke fouten. Zie [Automatisch publiceren (scheduler)](#automatisch-publiceren-scheduler).
 
 ## Architectuur
 
@@ -113,6 +113,7 @@ Alle sleutels staan in `backend/.env` en `frontend/.env.local`. Die bestanden st
 | `STORAGE_BUCKET` | naam van de bucket voor logo's (standaard `logos`) |
 | `ALLOWED_EMAILS` | wie mag registreren en de app gebruiken |
 | `APP_SECRET_KEY` | geheim (min. 32 tekens) voor het versleutelen van platform-tokens; nooit wijzigen na het koppelen |
+| `CRON_SECRET` | geheim voor de cronjob van de scheduler; leeg = automatisch plaatsen staat uit |
 | `BACKEND_PUBLIC_URL` | publiek adres van de backend (waar LinkedIn naar terugstuurt) |
 | `FRONTEND_URL` | publiek adres van de frontend (waar je na het koppelen terugkomt) |
 | `LINKEDIN_CLIENT_ID`, `LINKEDIN_CLIENT_SECRET` | van je LinkedIn-app, zie hieronder |
@@ -274,6 +275,32 @@ Goed om te weten:
 - TikTok accepteert alleen video's en foto's.
 - Zonder audit door TikTok worden posts alleen privé geplaatst. Plaatsen via PostPilot volgt samen met ondersteuning voor media.
 
+## Automatisch publiceren (scheduler)
+
+Goedgekeurde posts met een geplande tijd worden automatisch geplaatst. Er draait geen apart proces: een cronjob roept elke minuut dit endpoint aan.
+
+```
+POST /internal/run-scheduler      header: X-Cron-Secret: <CRON_SECRET>
+```
+
+Per run (`backend/app/services/scheduler.py`):
+- Alle posts die **goedgekeurd** zijn, **nog niet online** staan en waarvan de **geplande tijd voorbij** is, worden geplaatst (maximaal 25 per run, ruim binnen een minuut).
+- Elke post wordt eerst **vergrendeld** met één database-update. Twee runs tegelijk, of een run en de knop "Nu plaatsen", kunnen een post dus nooit dubbel plaatsen. Een vergrendeling die ouder is dan 10 minuten (vastgelopen poging) wordt overgenomen.
+- **Tijdelijke fout** (storing, rate limit): nieuwe poging na 2, 10, 30 en 120 minuten; daarna stopt de scheduler.
+- **Blijvende fout** (koppeling verlopen, post geweigerd): de scheduler stopt meteen. De foutcode staat bij de post. Opnieuw inplannen of "Nu plaatsen" begint weer bij nul.
+- Het antwoord laat zien wat er gebeurde: `{"published": [...], "retrying": [...], "failed": [...]}`.
+
+**Instellen**
+1. Maak een geheim: `python -c "import secrets; print(secrets.token_urlsafe(48))"` en zet het als `CRON_SECRET` in de backend (lokaal in `backend/.env`, online in het dashboard van Render). Zonder `CRON_SECRET` staat automatisch plaatsen uit.
+2. Maak een cronjob die elke minuut draait. Bijvoorbeeld in **DirectAdmin (Vimexx) → Geavanceerde functies → Cronjobs**, met als tijd `* * * * *` en als commando:
+   ```
+   curl -fsS -m 55 -X POST -H "X-Cron-Secret: <CRON_SECRET>" https://api.postpilotai.nl/internal/run-scheduler > /dev/null
+   ```
+   Werkt ook met Vercel Cron: die stuurt `Authorization: Bearer <CRON_SECRET>`, wat de backend ook accepteert.
+3. Lokaal testen: `curl -X POST -H "X-Cron-Secret: <CRON_SECRET>" http://localhost:8000/internal/run-scheduler`
+
+Let op: op het gratis plan van Render slaapt de backend; de eerste aanroep na een pauze kan dan te laat komen. Gebruik voor automatisch plaatsen een plan dat altijd aan staat.
+
 ## Fase 2: publiceren
 
 Koppelen (OAuth) zit in `backend/app/services/social/` (`OAuthProvider`, met `linkedin.py`). Publiceren zit in `backend/app/publishers/`:
@@ -286,4 +313,4 @@ Een platform toevoegen:
 1. Maak bijvoorbeeld `publishers/linkedin.py` met een subklasse van `Publisher`.
 2. Registreer die in `registry.py`.
 3. Voeg de OAuth-koppeling toe als subklasse van `OAuthProvider` en zet het platform in `SUPPORTED` in `services/social/registry.py`. De tabel `social_accounts` en het versleutelen van tokens zijn al klaar.
-4. Nog te bouwen: een scheduler die ingeplande, goedgekeurde posts op het juiste moment via `get_publisher(platform).publish(...)` plaatst (nu kan dat met de knop "Nu plaatsen").
+4. Klaar: de scheduler en "Nu plaatsen" gebruiken het nieuwe platform vanzelf via `services/publishing.py`.
