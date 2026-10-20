@@ -1,6 +1,19 @@
 {
   "branches": [
     {
+      "branch": "ContentRoom",
+      "commit": "HEAD",
+      "subject": "feat: PostPilot online - AI-content per merk, kalender en social koppelingen",
+      "dateIso": "2026-10-20 12:00:00 +0200",
+      "dateRelative": "zojuist",
+      "title": "PostPilot | AI social media content & planning",
+      "description": "Laat per merk posts schrijven door AI, keur ze goed, plan ze in de kalender en koppel LinkedIn, X, Facebook, Instagram en TikTok met één knop.",
+      "hasIndex": true,
+      "isMain": false,
+      "url": "https://postpilot-hazel-omega.vercel.app",
+      "status": "ONLINE"
+    },
+    {
       "branch": "qualitycomputercentre",
       "commit": "HEAD",
       "subject": "feat: herontwerp Quality Computer Centre met reparatiecalculator, webshop en custom PC catalogus",
