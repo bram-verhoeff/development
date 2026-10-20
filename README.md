@@ -7,7 +7,7 @@ PostPilot is een webapplicatie om per merk social-mediacontent te laten schrijve
 - **Beoordelen**: elke post is *concept*, *goedgekeurd* of *afgewezen*. Je kunt hem zelf bewerken of opnieuw laten schrijven met extra instructies. Elke versie wordt bewaard.
 - **Kalender**: goedgekeurde posts inplannen (Nederlandse tijd), met filters op merk en platform.
 - **Toegang**: inloggen en registreren via Supabase. Alleen e-mailadressen op een allowlist mogen registreren.
-- **Koppelen en plaatsen**: koppel per merk een LinkedIn-account en plaats goedgekeurde posts met één klik. Andere platforms volgen.
+- **Koppelen en plaatsen**: koppel per merk LinkedIn, X, een Facebook-pagina, Instagram en TikTok, of allemaal tegelijk met **Alles koppelen**. Goedgekeurde posts plaats je met één klik op LinkedIn, X en Facebook. Instagram en TikTok accepteren alleen posts met afbeelding of video; dat volgt.
 
 > Fase 2 (nog niet gebouwd): automatisch publiceren via de platform-API's. De code is daarop voorbereid, zie [Fase 2: publiceren](#fase-2-publiceren).
 
@@ -111,6 +111,11 @@ Alle sleutels staan in `backend/.env` en `frontend/.env.local`. Die bestanden st
 | `FRONTEND_URL` | publiek adres van de frontend (waar je na het koppelen terugkomt) |
 | `LINKEDIN_CLIENT_ID`, `LINKEDIN_CLIENT_SECRET` | van je LinkedIn-app, zie hieronder |
 | `LINKEDIN_API_VERSION` | versie van de LinkedIn-API (`JJJJMM`); versies vervallen na ongeveer een jaar |
+| `X_CLIENT_ID`, `X_CLIENT_SECRET` | van je X-app (OAuth 2.0) |
+| `META_APP_ID`, `META_APP_SECRET` | van je Meta-app (Facebook-pagina's) |
+| `INSTAGRAM_APP_ID`, `INSTAGRAM_APP_SECRET` | Instagram-app-ID en -geheim uit dezelfde Meta-app (Instagram Login) |
+| `META_GRAPH_VERSION` | versie van de Graph API, bijv. `v26.0` |
+| `TIKTOK_CLIENT_KEY`, `TIKTOK_CLIENT_SECRET` | van je TikTok-app |
 
 **Frontend** (`frontend/.env.local`)
 
@@ -189,7 +194,17 @@ Een taal toevoegen:
 
 De taal van de gegenereerde posts stel je per merk in.
 
-## LinkedIn koppelen
+## Social media koppelen
+
+Op de pagina van een merk staat **Koppelingen**:
+- **Alles koppelen** gaat alle ingestelde, nog niet gekoppelde platforms na elkaar langs. Annuleer je er een, of mislukt het, dan slaat hij dat platform in die ronde over.
+- Een platform verschijnt pas als koppelbaar als de client-ID en het geheim in `backend/.env` staan. Herstart daarna de backend.
+
+De redirect-URL die je bij elk platform invult, is steeds `<BACKEND_PUBLIC_URL>/connections/<platform>/callback`. Lokaal is dat bijvoorbeeld `http://localhost:8000/connections/x/callback`.
+
+> Sommige platforms (zeker TikTok, en Instagram) accepteren alleen **https**-adressen als redirect-URL, dus niet `http://localhost`. Koppel die na het online zetten, of gebruik lokaal een tunnel (bijv. ngrok) en zet `BACKEND_PUBLIC_URL` op dat https-adres.
+
+### LinkedIn
 
 1. Ga naar [linkedin.com/developers/apps](https://www.linkedin.com/developers/apps) → **Create app**.
    - Een LinkedIn-app moet aan een bedrijfspagina hangen. Heb je die niet, maak er dan eerst een aan (dat kan gratis).
@@ -202,6 +217,44 @@ De taal van de gegenereerde posts stel je per merk in.
 - PostPilot post op het **persoonlijke profiel** van het gekoppelde account. Posten op een bedrijfspagina vereist een product dat LinkedIn eerst moet goedkeuren (Community Management API).
 - Een gratis LinkedIn-app krijgt geen refresh-tokens. Een koppeling verloopt daarom na ongeveer 60 dagen; PostPilot laat zien wanneer, en dan koppel je opnieuw.
 - Tokens worden versleuteld opgeslagen met `APP_SECRET_KEY`. Verander je die sleutel, dan moeten alle accounts opnieuw gekoppeld worden.
+
+### X
+1. Maak op [developer.x.com](https://developer.x.com) een project en app aan.
+2. Kies bij **User authentication settings**: OAuth 2.0, type **Web App** (confidential client), met de rechten *Read and write*.
+3. Vul de redirect-URL `…/connections/x/callback` en een website-URL in.
+4. Kopieer bij **Keys and tokens** de *OAuth 2.0 Client ID* en het *Client Secret* naar `X_CLIENT_ID` en `X_CLIENT_SECRET`.
+
+Goed om te weten:
+- Toegangstokens gelden 2 uur. PostPilot ververst ze automatisch.
+- Posten via de X-API kost geld volgens het tarief van X (pay-per-use). Zonder tegoed krijg je een melding.
+
+### Facebook (pagina)
+1. Maak op [developers.facebook.com](https://developers.facebook.com/apps) een app aan, type **Business**.
+2. Voeg **Facebook Login for Business** toe en zet `…/connections/facebook/callback` bij de geldige OAuth-redirect-URI's.
+3. Kopieer onder *App settings → Basic* het *App ID* en het *App secret* naar `META_APP_ID` en `META_APP_SECRET`.
+
+Goed om te weten:
+- PostPilot koppelt de **eerste pagina** die je beheert, en post daar als die pagina. Het pagina-token verloopt niet.
+- In ontwikkelmodus werkt het alleen voor mensen met een rol in de app. Voor anderen moet Meta de rechten `pages_manage_posts` en `pages_read_engagement` eerst beoordelen.
+
+### Instagram
+1. Voeg in dezelfde Meta-app het product **Instagram** toe, en kies daar **API setup with Instagram login**.
+2. Zet `…/connections/instagram/callback` bij de redirect-URL's.
+3. Kopieer het *Instagram app ID* en het *Instagram app secret* naar `INSTAGRAM_APP_ID` en `INSTAGRAM_APP_SECRET`.
+
+Goed om te weten:
+- Je hebt een **professioneel** Instagram-account nodig (zakelijk of creator).
+- Het token geldt 60 dagen. PostPilot ververst het automatisch, ruim voordat het verloopt.
+- Instagram accepteert alleen posts met een afbeelding of video. Plaatsen via PostPilot volgt zodra afbeeldingen ondersteund worden.
+
+### TikTok
+1. Maak op [developers.tiktok.com](https://developers.tiktok.com) een app aan, met de producten **Login Kit** en **Content Posting API**.
+2. Zet de redirect-URL `…/connections/tiktok/callback`. Dat moet een https-adres zijn, zie de opmerking hierboven.
+3. Kopieer de *Client key* en het *Client secret* naar `TIKTOK_CLIENT_KEY` en `TIKTOK_CLIENT_SECRET`.
+
+Goed om te weten:
+- TikTok accepteert alleen video's en foto's.
+- Zonder audit door TikTok worden posts alleen privé geplaatst. Plaatsen via PostPilot volgt samen met ondersteuning voor media.
 
 ## Fase 2: publiceren
 

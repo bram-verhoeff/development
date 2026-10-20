@@ -3,18 +3,13 @@
 Documentatie: learn.microsoft.com/linkedin (authentication, sign-in-with-linkedin-v2, posts-api, little-text-format).
 """
 
-import logging
 import re
-from datetime import timedelta
 from urllib.parse import urlencode
 
 import httpx
 
 from app.config import Settings
-from app.database import utcnow
-from app.services.social.base import OAuthProvider, Profile, SocialError, TokenSet
-
-logger = logging.getLogger(__name__)
+from app.services.social.base import Connected, OAuthProvider, Profile, TokenSet, expires_in
 
 AUTHORIZE_URL = "https://www.linkedin.com/oauth/v2/authorization"
 TOKEN_URL = "https://www.linkedin.com/oauth/v2/accessToken"
@@ -36,50 +31,33 @@ class LinkedInOAuth(OAuthProvider):
     def configured(self) -> bool:
         return bool(self.client_id and self.client_secret)
 
-    def authorization_url(self, state: str, redirect_uri: str) -> str:
+    def authorization_url(self, state, redirect_uri, code_challenge=None):
         query = urlencode(
             {"response_type": "code", "client_id": self.client_id, "redirect_uri": redirect_uri, "state": state, "scope": SCOPES}
         )
         return f"{AUTHORIZE_URL}?{query}"
 
-    def exchange_code(self, code: str, redirect_uri: str) -> TokenSet:
-        try:
-            response = self.http.post(
-                TOKEN_URL,
-                data={
-                    "grant_type": "authorization_code",
-                    "code": code,
-                    "redirect_uri": redirect_uri,
-                    "client_id": self.client_id,
-                    "client_secret": self.client_secret,
-                },
-            )
-        except httpx.HTTPError:
-            raise SocialError("platform_unreachable")
-        if response.status_code != 200:
-            logger.warning("LinkedIn token-uitwisseling mislukt (%s): %.300s", response.status_code, response.text)
-            raise SocialError("connect_failed")
-
-        data = response.json()
-        expires_in = data.get("expires_in")
-        return TokenSet(
+    def complete(self, code, redirect_uri, code_verifier=None):
+        data = self._request(
+            "POST",
+            TOKEN_URL,
+            data={
+                "grant_type": "authorization_code",
+                "code": code,
+                "redirect_uri": redirect_uri,
+                "client_id": self.client_id,
+                "client_secret": self.client_secret,
+            },
+        )
+        tokens = TokenSet(
             access_token=data["access_token"],
-            expires_at=utcnow() + timedelta(seconds=int(expires_in)) if expires_in else None,
+            expires_at=expires_in(data.get("expires_in")),
             # Alleen goedgekeurde partners krijgen refresh-tokens; anders is dit leeg
             refresh_token=data.get("refresh_token"),
             scopes=data.get("scope", ""),
         )
-
-    def fetch_profile(self, access_token: str) -> Profile:
-        try:
-            response = self.http.get(USERINFO_URL, headers={"Authorization": f"Bearer {access_token}"})
-        except httpx.HTTPError:
-            raise SocialError("platform_unreachable")
-        if response.status_code != 200:
-            logger.warning("LinkedIn userinfo mislukt (%s): %.300s", response.status_code, response.text)
-            raise SocialError("connect_failed")
-        data = response.json()
-        return Profile(external_account_id=data["sub"], display_name=data.get("name", ""), avatar_url=data.get("picture"))
+        me = self._request("GET", USERINFO_URL, headers={"Authorization": f"Bearer {tokens.access_token}"})
+        return Connected(tokens, Profile(external_account_id=me["sub"], display_name=me.get("name", ""), avatar_url=me.get("picture")))
 
 
 # ---------- Tekst in LinkedIns "little"-formaat ----------

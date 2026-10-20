@@ -16,9 +16,9 @@ export default async function EditBrandPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ logoError?: string; connected?: string; connectError?: string }>;
+  searchParams: Promise<{ logoError?: string; connected?: string; connectError?: string; wizard?: string; platform?: string }>;
 }) {
-  const [{ id }, { logoError, connected, connectError }] = await Promise.all([params, searchParams]);
+  const [{ id }, { logoError, connected, connectError, wizard, platform }] = await Promise.all([params, searchParams]);
   const t = await getTranslations("brands");
 
   let brand: Brand;
@@ -47,7 +47,14 @@ export default async function EditBrandPage({
           <DeleteBrandButton brandId={brand.id} brandName={brand.name} />
         </div>
       </div>
-      <ConnectionsPanel brandId={brand.id} data={connections} connected={connected} connectError={connectError} />
+      <ConnectionsPanel
+        brandId={brand.id}
+        data={connections}
+        connected={connected}
+        connectError={connectError}
+        wizard={wizard === "1"}
+        returnedPlatform={platform ?? connected}
+      />
       <BrandForm brand={brand} logoError={logoError} />
     </div>
   );

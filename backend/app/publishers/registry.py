@@ -28,6 +28,14 @@ def available_platforms() -> list[Platform]:
 
 def register_defaults(settings: Settings) -> None:
     """Registreert de echte publishers. Nieuwe platforms komen hier bij."""
+    from app.publishers.facebook import FacebookPublisher
     from app.publishers.linkedin import LinkedInPublisher
+    from app.publishers.media_required import MediaRequiredPublisher
+    from app.publishers.x import XPublisher
 
     register(LinkedInPublisher(settings))
+    register(XPublisher())
+    register(FacebookPublisher(settings))
+    # Alleen met afbeelding/video; volgt zodra PostPilot media ondersteunt
+    register(MediaRequiredPublisher(Platform.INSTAGRAM))
+    register(MediaRequiredPublisher(Platform.TIKTOK))

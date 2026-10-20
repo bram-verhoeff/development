@@ -10,12 +10,15 @@ export type ConnectionResult = { error?: string; ok?: boolean };
 
 const errorCode = (e: unknown) => (e instanceof ApiError ? e.code : "unknown_error");
 
-/** Start het koppelen: de browser gaat naar de inlogpagina van het platform. */
-export async function startConnection(brandId: number, platform: Platform): Promise<ConnectionResult> {
+/**
+ * Start het koppelen: de browser gaat naar de inlogpagina van het platform.
+ * `wizard`: onderdeel van "Alles koppelen"; na terugkomst gaat het volgende platform automatisch verder.
+ */
+export async function startConnection(brandId: number, platform: Platform, wizard = false): Promise<ConnectionResult> {
   let url: string;
   try {
     ({ authorization_url: url } = await apiFetch<{ authorization_url: string }>(
-      `/brands/${brandId}/connections/${platform}/start`,
+      `/brands/${brandId}/connections/${platform}/start${wizard ? "?wizard=true" : ""}`,
       { method: "POST" },
     ));
   } catch (e) {

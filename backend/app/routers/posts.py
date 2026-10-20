@@ -187,7 +187,8 @@ def publish_post(
     except publisher_registry.PublisherNotAvailable:
         raise HTTPException(status.HTTP_501_NOT_IMPLEMENTED, "platform_not_supported")
 
-    result = publisher.publish(post, connection_service.credentials(account, settings))
+    # Ververst het token eerst als dat nodig is (X: elke 2 uur, TikTok: elke dag)
+    result = publisher.publish(post, connection_service.fresh_credentials(db, account, settings))
     if not result.success:
         post.publish_error = result.error
         db.commit()

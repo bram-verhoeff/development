@@ -14,7 +14,7 @@ from app.publishers.base import PublishResult
 from app.publishers.linkedin import LinkedInPublisher
 from app.routers import connections as connections_router
 from app.services import crypto
-from app.services.social.base import Profile, SocialError, TokenSet
+from app.services.social.base import Connected, Profile, SocialError, TokenSet
 from app.services.social.linkedin import LinkedInOAuth, to_little_text
 from tests.test_brands import BRAND
 
@@ -32,22 +32,21 @@ def brand(client, owner):
 class FakeProvider:
     platform = "linkedin"
     configured = True
+    uses_pkce = False
 
     def __init__(self, fail: str | None = None):
         self.fail = fail
         self.exchanged: list[tuple[str, str]] = []
 
-    def authorization_url(self, state, redirect_uri):
+    def authorization_url(self, state, redirect_uri, code_challenge=None):
         return f"https://linkedin.test/auth?state={state}&redirect_uri={redirect_uri}"
 
-    def exchange_code(self, code, redirect_uri):
+    def complete(self, code, redirect_uri, code_verifier=None):
         if self.fail:
             raise SocialError(self.fail)
         self.exchanged.append((code, redirect_uri))
-        return TokenSet(access_token=f"token-{code}", expires_at=datetime.now(UTC) + timedelta(days=60), scopes="w_member_social")
-
-    def fetch_profile(self, access_token):
-        return Profile(external_account_id="abc123", display_name="Bram V", avatar_url="https://media.test/p.jpg")
+        tokens = TokenSet(access_token=f"token-{code}", expires_at=datetime.now(UTC) + timedelta(days=60), scopes="w_member_social")
+        return Connected(tokens, Profile(external_account_id="abc123", display_name="Bram V", avatar_url="https://media.test/p.jpg"))
 
 
 @pytest.fixture
@@ -109,7 +108,7 @@ def test_list_platforms_and_configuration(client, owner, brand, settings):
     data = client.get(f"/brands/{brand['id']}/connections", headers=owner).json()
     platforms = {p["platform"]: p for p in data["platforms"]}
     assert platforms["linkedin"] == {"platform": "linkedin", "supported": True, "configured": True}
-    assert platforms["instagram"]["supported"] is False
+    assert platforms["instagram"]["supported"] is True and platforms["instagram"]["configured"] is False
     assert data["connections"] == []
 
     settings.linkedin_client_secret = ""
@@ -183,13 +182,13 @@ def test_callback_rejects_state_for_someone_elses_brand(client, owner, brand, pr
 
 def test_callback_when_user_cancels(client, owner, brand, provider):
     response = callback(client, state=start_state(client, owner, brand["id"]), error="user_cancelled_authorize")
-    assert response.headers["location"].endswith(f"/brands/{brand['id']}?connectError=connect_denied")
+    assert response.headers["location"].endswith(f"/brands/{brand['id']}?connectError=connect_denied&platform=linkedin")
 
 
 def test_callback_when_platform_fails(client, owner, brand, provider):
     provider.fail = "connect_failed"
     response = connect(client, owner, brand["id"])
-    assert response.headers["location"].endswith("connectError=connect_failed")
+    assert response.headers["location"].endswith("connectError=connect_failed&platform=linkedin")
 
 
 def test_connections_are_private(client, owner, brand, provider, auth_headers):
@@ -297,15 +296,15 @@ def test_linkedin_oauth_exchange_and_profile(settings):
         return httpx.Response(200, json={"sub": "782bbtaQ", "name": "John Doe", "picture": "https://p"})
 
     oauth = LinkedInOAuth(settings, http=httpx.Client(transport=httpx.MockTransport(handler)))
-    tokens = oauth.exchange_code("code", "https://api.test/cb")
-    assert tokens.access_token == "AT" and tokens.expires_at > datetime.now(UTC) + timedelta(days=59)
-    assert oauth.fetch_profile("AT") == Profile("782bbtaQ", "John Doe", "https://p")
+    connected = oauth.complete("code", "https://api.test/cb")
+    assert connected.tokens.access_token == "AT" and connected.tokens.expires_at > datetime.now(UTC) + timedelta(days=59)
+    assert connected.profile == Profile("782bbtaQ", "John Doe", "https://p")
 
 
 def test_linkedin_oauth_failure(settings):
     oauth = LinkedInOAuth(settings, http=httpx.Client(transport=httpx.MockTransport(lambda r: httpx.Response(400, json={"error": "invalid_grant"}))))
     with pytest.raises(SocialError) as exc:
-        oauth.exchange_code("oud", "https://api.test/cb")
+        oauth.complete("oud", "https://api.test/cb")
     assert exc.value.code == "connect_failed"
 
 

@@ -15,7 +15,7 @@ from app.routers.brands import get_owned_brand
 from app.schemas import AvailablePlatformOut, ConnectionsOut, ConnectStartOut
 from app.services import connections as connection_service
 from app.services import crypto
-from app.services.social.base import SocialError
+from app.services.social.base import SocialError, new_pkce_pair
 from app.services.social.registry import SUPPORTED, get_oauth_provider
 
 logger = logging.getLogger(__name__)
@@ -29,8 +29,10 @@ def _redirect_uri(platform: str, settings: Settings) -> str:
     return f"{settings.backend_public_url.rstrip('/')}/connections/{platform}/callback"
 
 
-def _back_to_app(settings: Settings, brand_id: int | None, **params: str) -> RedirectResponse:
+def _back_to_app(settings: Settings, brand_id: int | None, wizard: bool = False, **params: str) -> RedirectResponse:
     path = f"/brands/{brand_id}" if brand_id else "/brands"
+    if wizard:
+        params["wizard"] = "1"  # de frontend gaat dan door met het volgende platform
     return RedirectResponse(f"{settings.frontend_url.rstrip('/')}{path}?{urlencode(params)}", status_code=303)
 
 
@@ -57,17 +59,28 @@ def list_connections(
 def start_connection(
     brand_id: int,
     platform: str,
+    wizard: bool = False,
     db: Session = Depends(get_db),
     user: CurrentUser = Depends(get_current_user),
     settings: Settings = Depends(get_settings),
 ):
-    """Geeft de inlog-URL van het platform; de frontend stuurt de browser daarheen."""
+    """Geeft de inlog-URL van het platform; de frontend stuurt de browser daarheen.
+
+    `wizard=true`: onderdeel van "Alles koppelen", na terugkomst gaat de frontend door naar het volgende platform.
+    """
     brand = get_owned_brand(brand_id, db, user)
     provider = get_oauth_provider(platform, settings)
     if not provider.configured:
         raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, "platform_not_configured")
-    state = crypto.sign_state({"uid": str(user.id), "bid": brand.id, "p": platform}, settings)
-    return ConnectStartOut(authorization_url=provider.authorization_url(state, _redirect_uri(platform, settings)))
+
+    data = {"uid": str(user.id), "bid": brand.id, "p": platform, "w": int(wizard)}
+    challenge = None
+    if provider.uses_pkce:
+        # De verifier reist versleuteld mee in de state, zodat alleen onze backend hem kan lezen
+        verifier, challenge = new_pkce_pair()
+        data["cv"] = crypto.encrypt(verifier, settings)
+    state = crypto.sign_state(data, settings)
+    return ConnectStartOut(authorization_url=provider.authorization_url(state, _redirect_uri(platform, settings), challenge))
 
 
 @router.get("/connections/{platform}/callback", include_in_schema=False)
@@ -90,21 +103,23 @@ def connection_callback(
     if data.get("p") != platform or brand is None or str(brand.user_id) != data.get("uid"):
         return _back_to_app(settings, None, connectError="connect_state_invalid")
 
+    wizard = bool(data.get("w"))
     if error or not code:
-        return _back_to_app(settings, brand_id, connectError="connect_denied" if error in CANCELLED else "connect_failed")
+        reason = "connect_denied" if error in CANCELLED else "connect_failed"
+        return _back_to_app(settings, brand_id, wizard, connectError=reason, platform=platform)
 
     try:
         provider = get_oauth_provider(platform, settings)
-        tokens = provider.exchange_code(code, _redirect_uri(platform, settings))
-        profile = provider.fetch_profile(tokens.access_token)
-        connection_service.save_account(db, brand, platform, tokens, profile, settings)
+        verifier = crypto.decrypt(data["cv"], settings) if data.get("cv") else None
+        connected = provider.complete(code, _redirect_uri(platform, settings), verifier)
+        connection_service.save_account(db, brand, platform, connected, settings)
     except SocialError as e:
-        return _back_to_app(settings, brand_id, connectError=e.code)
+        return _back_to_app(settings, brand_id, wizard, connectError=e.code, platform=platform)
     except crypto.CryptoError:
         logger.error("APP_SECRET_KEY ontbreekt of is ongeldig; koppeling niet opgeslagen")
-        return _back_to_app(settings, brand_id, connectError="secret_not_configured")
+        return _back_to_app(settings, brand_id, wizard, connectError="secret_not_configured", platform=platform)
 
-    return _back_to_app(settings, brand_id, connected=platform)
+    return _back_to_app(settings, brand_id, wizard, connected=platform)
 
 
 @router.delete("/brands/{brand_id}/connections/{platform}", status_code=status.HTTP_204_NO_CONTENT)

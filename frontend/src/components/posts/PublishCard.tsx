@@ -13,8 +13,10 @@ import { buttonClass, cardClass } from "@/components/ui/styles";
 import { useToast } from "@/components/ui/Toast";
 import type { Platform, PostDetail } from "@/lib/types";
 
-// Platforms waarvoor PostPilot al zelf kan publiceren
-const PUBLISHABLE: Platform[] = ["linkedin"];
+// Platforms waarvoor PostPilot al zelf (tekst) kan publiceren
+const PUBLISHABLE: Platform[] = ["linkedin", "x", "facebook"];
+// Platforms die alleen posts met afbeelding of video accepteren
+const MEDIA_ONLY: Platform[] = ["instagram", "tiktok"];
 
 // Nu meteen plaatsen op het gekoppelde account
 export function PublishCard({ post }: { post: PostDetail }) {
@@ -54,6 +56,8 @@ export function PublishCard({ post }: { post: PostDetail }) {
         )}
       </motion.div>
     );
+  } else if (MEDIA_ONLY.includes(post.platform)) {
+    content = <p className="text-sm text-muted">{t("mediaRequired", { platform })}</p>;
   } else if (!PUBLISHABLE.includes(post.platform)) {
     content = <p className="text-sm text-muted">{t("notYet", { platform })}</p>;
   } else if (!post.connection || post.connection.expired) {

@@ -64,6 +64,21 @@ class Settings(BaseSettings):
     # Versie van de LinkedIn-API (JJJJMM); versies vervallen na ongeveer een jaar
     linkedin_api_version: str = "202610"
 
+    # X-app (developer.x.com → Projects & Apps → User authentication settings, type "Web App")
+    x_client_id: str = ""
+    x_client_secret: str = ""
+
+    # Meta: Facebook-app voor pagina's en Instagram-app-ID voor Instagram Login (developers.facebook.com)
+    meta_app_id: str = ""
+    meta_app_secret: str = ""
+    instagram_app_id: str = ""
+    instagram_app_secret: str = ""
+    meta_graph_version: str = "v26.0"
+
+    # TikTok-app (developers.tiktok.com → Manage apps)
+    tiktok_client_key: str = ""
+    tiktok_client_secret: str = ""
+
     @property
     def cors_origin_list(self) -> list[str]:
         return [o.strip() for o in self.cors_origins.split(",") if o.strip()]

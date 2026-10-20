@@ -376,11 +376,14 @@
     "publish_rejected": "Het platform heeft de post geweigerd. Controleer de tekst en probeer het opnieuw.",
     "publish_failed": "Plaatsen is mislukt. Probeer het opnieuw.",
     "too_long": "De post is te lang voor dit platform.",
-    "too_many_hashtags": "De post heeft te veel hashtags voor dit platform."
+    "too_many_hashtags": "De post heeft te veel hashtags voor dit platform.",
+    "no_facebook_page": "Er is geen Facebook-pagina gevonden die je beheert. Koppel een account dat een pagina beheert.",
+    "media_required": "Dit platform accepteert alleen posts met een afbeelding of video.",
+    "platform_payment_required": "X vraagt betaling voor API-gebruik. Vul tegoed aan in je X-ontwikkelaarsaccount."
   },
   "connections": {
     "title": "Koppelingen",
-    "description": "Koppel de social-media-accounts van dit merk, zodat PostPilot er posts op kan plaatsen.",
+    "description": "Koppel de social-media-accounts van dit merk. Met één klik loop je ze allemaal na elkaar langs.",
     "connect": "Koppelen",
     "reconnect": "Opnieuw koppelen",
     "disconnect": "Ontkoppelen",
@@ -392,7 +395,14 @@
     "validUntil": "Gekoppeld · geldig tot {date}",
     "connectedToast": "{platform} is gekoppeld!",
     "disconnectedToast": "{platform} is ontkoppeld.",
-    "disconnectConfirm": "Weet je zeker dat je {platform} wilt ontkoppelen? PostPilot kan dan niet meer namens dit account posten."
+    "disconnectConfirm": "Weet je zeker dat je {platform} wilt ontkoppelen? PostPilot kan dan niet meer namens dit account posten.",
+    "connectAll": "Alles koppelen",
+    "progress": "{done} van {total} gekoppeld",
+    "noneConfigured": "Nog geen platform ingesteld in de backend",
+    "upNext": "Is nu aan de beurt…",
+    "wizardNext": "Nu {platform} koppelen…",
+    "wizardDone": "Klaar! Alle ingestelde platforms zijn langsgegaan.",
+    "allConnected": "Alle ingestelde platforms zijn al gekoppeld."
   },
   "publish": {
     "title": "Publiceren",
@@ -409,6 +419,7 @@
     "expired": "De koppeling met {platform} is verlopen. Koppel opnieuw om te kunnen plaatsen.",
     "reconnect": "{platform} opnieuw koppelen",
     "notYet": "Automatisch plaatsen op {platform} volgt later. Kopieer de tekst voorlopig zelf.",
-    "lastError": "Vorige poging mislukt: {error}"
+    "lastError": "Vorige poging mislukt: {error}",
+    "mediaRequired": "{platform} accepteert alleen posts met een afbeelding of video. Dat ondersteunt PostPilot nog niet; kopieer de tekst voorlopig zelf."
   }
 }
