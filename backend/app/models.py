@@ -30,6 +30,17 @@ class SourceType(StrEnum):
     TEXT = "text"
 
 
+class MediaKind(StrEnum):
+    IMAGE = "image"
+    VIDEO = "video"
+
+
+class MediaStatus(StrEnum):
+    PENDING = "pending"  # video wordt nog gemaakt
+    READY = "ready"
+    FAILED = "failed"
+
+
 class VersionOrigin(StrEnum):
     GENERATED = "generated"
     EDITED = "edited"
@@ -114,6 +125,9 @@ class Post(TimestampMixin, Base):
     versions: Mapped[list["PostVersion"]] = relationship(
         back_populates="post", cascade="all, delete-orphan", passive_deletes=True, order_by="PostVersion.id"
     )
+    media: Mapped[list["PostMedia"]] = relationship(
+        back_populates="post", cascade="all, delete-orphan", passive_deletes=True, order_by="PostMedia.id.desc()"
+    )
 
 
 class PostVersion(Base):
@@ -151,3 +165,25 @@ class SocialAccount(TimestampMixin, Base):
     scopes: Mapped[str] = mapped_column(String(500), default="")
 
     brand: Mapped[Brand] = relationship(back_populates="social_accounts")
+
+
+class PostMedia(TimestampMixin, Base):
+    """Gegenereerde afbeelding of video bij een post. Video's worden op de achtergrond gemaakt."""
+
+    __tablename__ = "post_media"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    post_id: Mapped[int] = mapped_column(ForeignKey("posts.id", ondelete="CASCADE"), index=True)
+    kind: Mapped[str] = mapped_column(String(10))
+    status: Mapped[str] = mapped_column(String(10), default=MediaStatus.PENDING)
+    url: Mapped[str | None] = mapped_column(String(1000))
+    mime_type: Mapped[str | None] = mapped_column(String(50))
+    aspect_ratio: Mapped[str] = mapped_column(String(10), default="1:1")
+    prompt: Mapped[str] = mapped_column(Text, default="")
+    instructions: Mapped[str | None] = mapped_column(Text)
+    model: Mapped[str] = mapped_column(String(100), default="")
+    # Naam van de langlopende taak bij de AI-dienst (alleen video)
+    operation_name: Mapped[str | None] = mapped_column(String(300))
+    error: Mapped[str | None] = mapped_column(String(100))
+
+    post: Mapped[Post] = relationship(back_populates="media")

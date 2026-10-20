@@ -47,6 +47,8 @@ export type Post = {
   published_at: string | null;
   external_url: string | null;
   publish_error: string | null;
+  thumbnail_url: string | null;
+  thumbnail_kind: "image" | "video" | null;
 };
 
 export type PostVersion = {
@@ -73,7 +75,19 @@ export type ConnectionsData = {
   connections: Connection[];
 };
 
-export type PostDetail = Post & { versions: PostVersion[]; connection: Connection | null };
+export type PostMedia = {
+  id: number;
+  kind: "image" | "video";
+  status: "pending" | "ready" | "failed";
+  url: string | null;
+  mime_type: string | null;
+  aspect_ratio: string;
+  instructions: string | null;
+  error: string | null;
+  created_at: string;
+};
+
+export type PostDetail = Post & { versions: PostVersion[]; connection: Connection | null; media: PostMedia[] };
 
 export type Dashboard = {
   brands: number;

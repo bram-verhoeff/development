@@ -31,6 +31,14 @@ class Settings(BaseSettings):
     # Google Gemini (aistudio.google.com → Get API key)
     gemini_api_key: str = ""
     gemini_model: str = "gemini-flash-latest"
+    # Beelden en video's (met dezelfde Gemini-sleutel)
+    gemini_image_model: str = "gemini-3.1-flash-image"
+    gemini_video_model: str = "veo-3.1-fast-generate-preview"
+    # Lengte van gegenereerde video's in seconden (Veo 3.1: 4, 6 of 8)
+    video_duration_seconds: int = 8
+    # Video's zijn duur: aparte daglimiet per gebruiker
+    video_daily_limit: int = 5
+    media_bucket: str = "media"
 
     # Anthropic Claude (alternatief)
     anthropic_api_key: str = ""

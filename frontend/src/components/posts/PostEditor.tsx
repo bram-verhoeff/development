@@ -34,6 +34,8 @@ export function PostEditor({ post }: { post: PostDetail }) {
   const length = [hook.trim(), body.trim(), hashtags.join(" ")].filter(Boolean).join("\n\n").length;
   const ratio = Math.min(length / post.max_chars, 1);
   const over = length > post.max_chars;
+  // Eerste klare afbeelding of video in het voorbeeld laten zien
+  const preview = post.media.find((m) => m.status === "ready" && m.url);
   const dirty = hook !== post.hook || body !== post.body || joinTags(hashtags) !== joinTags(post.hashtags);
 
   return (
@@ -117,6 +119,13 @@ export function PostEditor({ post }: { post: PostDetail }) {
             </div>
             <PlatformIcon platform={post.platform} size={26} />
           </div>
+          {preview?.url &&
+            (preview.kind === "video" ? (
+              <video src={preview.url} controls playsInline loop className="w-full bg-black" style={{ aspectRatio: preview.aspect_ratio.replace(":", " / ") }} />
+            ) : (
+              // eslint-disable-next-line @next/next/no-img-element -- gegenereerd beeld uit Supabase Storage
+              <img src={preview.url} alt="" className="w-full object-cover" style={{ aspectRatio: preview.aspect_ratio.replace(":", " / ") }} />
+            ))}
           <div className="space-y-3 p-4 text-[15px] leading-relaxed">
             <p className="font-semibold whitespace-pre-line">{hook}</p>
             <p className="whitespace-pre-line">{body}</p>

@@ -1,4 +1,4 @@
-"""Opslag van logo's in Supabase Storage (publieke bucket), achter een kleine interface."""
+"""Opslag van logo's en gegenereerde media in Supabase Storage (publieke buckets), achter een kleine interface."""
 
 import secrets
 from typing import Protocol
@@ -10,6 +10,10 @@ from app.config import Settings, get_settings
 
 EXTENSIONS = {"image/png": "png", "image/jpeg": "jpg", "image/webp": "webp"}
 MAX_LOGO_BYTES = 2 * 1024 * 1024
+
+# Gegenereerde beelden en video's (eigen bucket; 50 MB is de maximale bestandsgrootte op het gratis Supabase-plan)
+MEDIA_EXTENSIONS = EXTENSIONS | {"video/mp4": "mp4"}
+MAX_MEDIA_BYTES = 50 * 1024 * 1024
 
 
 def detect_image_type(data: bytes) -> str | None:
@@ -44,9 +48,17 @@ class LogoStorage(Protocol):
 
 
 class SupabaseStorage:
-    def __init__(self, settings: Settings):
+    def __init__(
+        self,
+        settings: Settings,
+        bucket: str | None = None,
+        file_size_limit: int = MAX_LOGO_BYTES,
+        mime_types: list[str] | None = None,
+    ):
         self.base = f"{settings.supabase_url.rstrip('/')}/storage/v1"
-        self.bucket = settings.storage_bucket
+        self.bucket = bucket or settings.storage_bucket
+        self.file_size_limit = file_size_limit
+        self.mime_types = mime_types or list(EXTENSIONS)
         self.headers = {
             "apikey": settings.supabase_service_role_key,
             "Authorization": f"Bearer {settings.supabase_service_role_key}",
@@ -61,7 +73,7 @@ class SupabaseStorage:
             f"{self.base}/object/{self.bucket}/{path}",
             content=data,
             headers=self.headers | {"Content-Type": content_type, "x-upsert": "true"},
-            timeout=30,
+            timeout=120,  # video's kunnen tientallen MB zijn
         )
         if response.status_code >= 400:
             raise StorageError(f"Upload mislukt ({response.status_code}): {response.text[:200]}")
@@ -92,8 +104,8 @@ class SupabaseStorage:
                 "id": self.bucket,
                 "name": self.bucket,
                 "public": True,
-                "file_size_limit": MAX_LOGO_BYTES,
-                "allowed_mime_types": list(EXTENSIONS),
+                "file_size_limit": self.file_size_limit,
+                "allowed_mime_types": self.mime_types,
             },
             headers=self.headers,
             timeout=30,
@@ -106,3 +118,12 @@ class SupabaseStorage:
 def get_storage(settings: Settings = Depends(get_settings)) -> LogoStorage:
     """FastAPI-dependency; tests vervangen dit door een opslag in het geheugen."""
     return SupabaseStorage(settings)
+
+
+def media_storage(settings: Settings) -> SupabaseStorage:
+    return SupabaseStorage(settings, settings.media_bucket, MAX_MEDIA_BYTES, list(MEDIA_EXTENSIONS))
+
+
+def get_media_storage(settings: Settings = Depends(get_settings)) -> LogoStorage:
+    """FastAPI-dependency voor gegenereerde beelden en video's."""
+    return media_storage(settings)

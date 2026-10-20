@@ -9,8 +9,8 @@ from sqlalchemy.orm import Session
 from app.auth import CurrentUser
 from app.config import Settings
 from app.database import utcnow
-from app.models import Brand, GenerationRun, Platform, Post, PostVersion, VersionOrigin
-from app.schemas import PostDetailOut, PostOut, PostVersionOut
+from app.models import Brand, GenerationRun, MediaStatus, Platform, Post, PostVersion, VersionOrigin
+from app.schemas import PostDetailOut, PostMediaOut, PostOut, PostVersionOut
 from app.services import connections as connection_service
 from app.services.ai.platforms import RULES, full_text
 from app.services.checks import post_warnings
@@ -35,14 +35,21 @@ def to_out(post: Post) -> PostOut:
         published_at=post.published_at,
         external_url=post.external_url,
         publish_error=post.publish_error,
+        **_thumbnail(post),
     )
+
+
+def _thumbnail(post: Post) -> dict:
+    ready = next((m for m in post.media if m.status == MediaStatus.READY), None)
+    return {"thumbnail_url": ready.url, "thumbnail_kind": ready.kind} if ready else {}
 
 
 def to_detail(post: Post) -> PostDetailOut:
     versions = [PostVersionOut.model_validate(v) for v in reversed(post.versions)]  # nieuwste eerst
     account = next((a for a in post.brand.social_accounts if a.platform == post.platform), None)
     connection = connection_service.to_out(account) if account else None
-    return PostDetailOut(**to_out(post).model_dump(), versions=versions, connection=connection)
+    media = [PostMediaOut.model_validate(m) for m in post.media]
+    return PostDetailOut(**to_out(post).model_dump(), versions=versions, connection=connection, media=media)
 
 
 def set_content(

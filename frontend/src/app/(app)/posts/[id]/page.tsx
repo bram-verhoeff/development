@@ -4,6 +4,7 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
+import { MediaPanel } from "@/components/posts/MediaPanel";
 import { PostEditor } from "@/components/posts/PostEditor";
 import { PostSidePanel } from "@/components/posts/PostSidePanel";
 import { PlatformBadge } from "@/components/ui/Badges";
@@ -41,7 +42,10 @@ export default async function PostPage({ params }: { params: Promise<{ id: strin
 
       {/* key: na herschrijven of terugzetten opnieuw vullen met de nieuwe tekst */}
       <div className="grid gap-5 lg:grid-cols-[1fr_340px]">
-        <PostEditor key={post.updated_at} post={post} />
+        <div className="min-w-0 space-y-5">
+          <PostEditor key={post.updated_at} post={post} />
+          <MediaPanel post={post} />
+        </div>
         <PostSidePanel post={post} />
       </div>
     </div>

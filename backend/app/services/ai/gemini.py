@@ -44,7 +44,7 @@ class GeminiWriter(BaseWriter):
                 ),
             )
         except errors.ClientError as e:
-            raise _client_error(e)
+            raise map_client_error(e)
         except errors.ServerError as e:
             logger.error("Gemini-serverfout %s: %s", e.code, e.message)
             raise AIError("ai_unavailable", status=503)
@@ -77,11 +77,14 @@ class GeminiWriter(BaseWriter):
         )
 
 
-def _client_error(e: errors.ClientError) -> AIError:
+def map_client_error(e: errors.ClientError) -> AIError:
     message = (e.message or "").lower()
     if e.code in (401, 403) or "api key" in message or e.status == "PERMISSION_DENIED":
         return AIError("ai_auth_failed", status=503)
     if e.code == 429:
+        # "free_tier ... limit: 0": dit model zit niet in het gratis plan (bijv. beelden en video's)
+        if "free_tier" in message and "limit: 0" in message:
+            return AIError("ai_billing_required", status=402)
         return AIError("ai_rate_limited", status=429)
     if e.code == 404:
         logger.error("Gemini-model niet gevonden: %s", e.message)

@@ -36,6 +36,16 @@ export function PostCard({ post }: { post: Post }) {
 
   return (
     <SpotlightCard className={`flex h-full flex-col p-4 ${pending ? "opacity-70" : ""}`}>
+      {post.thumbnail_url && (
+        <Link href={`/posts/${post.id}`} className="-mx-4 -mt-4 mb-3 block aspect-video overflow-hidden bg-surface-2">
+          {post.thumbnail_kind === "video" ? (
+            <video src={post.thumbnail_url} muted playsInline preload="metadata" className="h-full w-full object-cover" />
+          ) : (
+            // eslint-disable-next-line @next/next/no-img-element -- gegenereerd beeld uit Supabase Storage
+            <img src={post.thumbnail_url} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover/spot:scale-105" />
+          )}
+        </Link>
+      )}
       <header className="flex flex-wrap items-center gap-2">
         <PlatformBadge platform={post.platform} />
         {/* key: de badge "popt" bij een statuswissel */}

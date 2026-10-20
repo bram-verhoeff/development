@@ -5,6 +5,7 @@ PostPilot is een webapplicatie om per merk social-mediacontent te laten schrijve
 - **Merken**: onbeperkt merkprofielen met doelgroep, tone of voice, USP's, kleuren, logo en woorden die vermeden moeten worden.
 - **Genereren**: posts, hooks en hashtags voor Instagram, LinkedIn, TikTok, X en Facebook, met de juiste lengte en stijl per platform. Optioneel op basis van een webpagina of eigen tekst.
 - **Beoordelen**: elke post is *concept*, *goedgekeurd* of *afgewezen*. Je kunt hem zelf bewerken of opnieuw laten schrijven met extra instructies. Elke versie wordt bewaard.
+- **Beeld en video**: laat bij een post een afbeelding (Gemini Image) of korte video (Veo) maken in de stijl en kleuren van het merk, met de juiste verhouding per platform.
 - **Kalender**: goedgekeurde posts inplannen (Nederlandse tijd), met filters op merk en platform.
 - **Toegang**: inloggen en registreren via Supabase. Alleen e-mailadressen op een allowlist mogen registreren.
 - **Koppelen en plaatsen**: koppel per merk LinkedIn, X, een Facebook-pagina, Instagram en TikTok, of allemaal tegelijk met **Alles koppelen**. Goedgekeurde posts plaats je met één klik op LinkedIn, X en Facebook. Instagram en TikTok accepteren alleen posts met afbeelding of video; dat volgt.
@@ -99,6 +100,11 @@ Alle sleutels staan in `backend/.env` en `frontend/.env.local`. Die bestanden st
 | `AI_PROVIDER` | `gemini` (standaard) of `claude` |
 | `GEMINI_API_KEY` | sleutel van [Google AI Studio](https://aistudio.google.com/apikey) |
 | `GEMINI_MODEL` | `gemini-flash-latest` (standaard, snel en voordelig) of `gemini-pro-latest` (grondiger) |
+| `GEMINI_IMAGE_MODEL` | beeldmodel, standaard `gemini-3.1-flash-image` |
+| `GEMINI_VIDEO_MODEL` | videomodel, standaard `veo-3.1-fast-generate-preview` (`veo-3.1-lite-…` is goedkoper, `veo-3.1-generate-preview` mooier) |
+| `VIDEO_DURATION_SECONDS` | lengte van video's: 4, 6 of 8 |
+| `VIDEO_DAILY_LIMIT` | maximaal aantal video's per gebruiker per 24 uur (standaard 5) |
+| `MEDIA_BUCKET` | bucket voor gegenereerde media (standaard `media`; aanmaken met `python -m scripts.setup_storage`) |
 | `ANTHROPIC_API_KEY`, `CLAUDE_MODEL`, `CLAUDE_EFFORT` | alleen bij `AI_PROVIDER=claude` |
 | `GENERATION_DAILY_LIMIT` | maximaal aantal AI-opdrachten per gebruiker per 24 uur (standaard 100) |
 | `SUPABASE_URL` | project-URL van Supabase |
@@ -148,6 +154,18 @@ npm run build
 - Blokkeert het model een verzoek (veiligheidsfilter), dan krijg je een duidelijke melding om de bron of instructies aan te passen. Bij Claude probeert de API het eerst nog automatisch met een ander model.
 - Een andere AI-dienst toevoegen: een subklasse van `BaseWriter` in `backend/app/services/ai/` die alleen `_ask` implementeert.
 - Genereren en herschrijven tellen mee voor de daglimiet. Tokens per opdracht worden opgeslagen in `generation_runs`.
+
+## Beeld en video
+
+Op de pagina van een post staat het blok **Beeld & video**:
+- **Afbeelding**: klaar in ongeveer 10 seconden.
+- **Video**: Veo maakt op de achtergrond een clip van 4 tot 8 seconden. Dat duurt meestal 1 à 3 minuten. De pagina vraagt zelf op wanneer hij klaar is, en je mag de pagina intussen verlaten.
+
+Wat je verder moet weten:
+- Het merkprofiel (kleuren, toon, doelgroep) en de tekst van de post gaan mee in de prompt. De prompts staan in `backend/prompts/image.md` en `video.md`.
+- De beeldverhouding past bij het platform: Instagram 4:5, TikTok 9:16, X 16:9, LinkedIn en Facebook 1:1. Video's zijn 9:16 of 16:9.
+- Bestanden komen in de publieke Supabase-bucket `media`. Je kunt ze downloaden of verwijderen.
+- **Kosten**: beelden en video's zitten niet in het gratis plan van Google. Zet *Billing* aan in Google AI Studio. Video's kosten per seconde, en daarom is er een aparte daglimiet.
 
 ## Database en migraties
 

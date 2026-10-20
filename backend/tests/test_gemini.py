@@ -93,6 +93,10 @@ def _api_error(cls, code, status, message):
         (lambda: _api_error(errors.ClientError, 400, "INVALID_ARGUMENT", "API key not valid. Please pass a valid API key."), "ai_auth_failed"),
         (lambda: _api_error(errors.ClientError, 403, "PERMISSION_DENIED", "Permission denied"), "ai_auth_failed"),
         (lambda: _api_error(errors.ClientError, 429, "RESOURCE_EXHAUSTED", "Quota exceeded"), "ai_rate_limited"),
+        (
+            lambda: _api_error(errors.ClientError, 429, "RESOURCE_EXHAUSTED", "Quota exceeded for metric: generate_content_free_tier_requests, limit: 0, model: x"),
+            "ai_billing_required",
+        ),
         (lambda: _api_error(errors.ClientError, 404, "NOT_FOUND", "models/x is not found"), "ai_model_not_found"),
         (lambda: _api_error(errors.ClientError, 400, "INVALID_ARGUMENT", "Request contains an invalid argument."), "ai_bad_request"),
         (lambda: _api_error(errors.ServerError, 503, "UNAVAILABLE", "The model is overloaded."), "ai_unavailable"),

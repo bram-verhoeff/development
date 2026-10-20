@@ -379,7 +379,11 @@
     "too_many_hashtags": "De post heeft te veel hashtags voor dit platform.",
     "no_facebook_page": "Er is geen Facebook-pagina gevonden die je beheert. Koppel een account dat een pagina beheert.",
     "media_required": "Dit platform accepteert alleen posts met een afbeelding of video.",
-    "platform_payment_required": "X vraagt betaling voor API-gebruik. Vul tegoed aan in je X-ontwikkelaarsaccount."
+    "platform_payment_required": "X vraagt betaling voor API-gebruik. Vul tegoed aan in je X-ontwikkelaarsaccount.",
+    "ai_billing_required": "Afbeeldingen en video's zitten niet in het gratis plan van Google. Zet betaald gebruik aan in Google AI Studio (Billing) en probeer het opnieuw.",
+    "video_limit_reached": "Je daglimiet voor video's is bereikt. Probeer het morgen opnieuw.",
+    "media_not_found": "Deze afbeelding of video bestaat niet (meer).",
+    "media_failed": "Het maken is mislukt. Probeer het opnieuw, eventueel met andere instructies."
   },
   "connections": {
     "title": "Koppelingen",
@@ -420,6 +424,38 @@
     "reconnect": "{platform} opnieuw koppelen",
     "notYet": "Automatisch plaatsen op {platform} volgt later. Kopieer de tekst voorlopig zelf.",
     "lastError": "Vorige poging mislukt: {error}",
-    "mediaRequired": "{platform} accepteert alleen posts met een afbeelding of video. Dat ondersteunt PostPilot nog niet; kopieer de tekst voorlopig zelf."
+    "mediaRequired": "{platform} accepteert alleen posts met een afbeelding of video. Maak hiernaast beeld en download het om zelf te plaatsen; automatisch plaatsen op {platform} volgt."
+  },
+  "media": {
+    "title": "Beeld & video",
+    "description": "Laat een afbeelding of korte video maken die bij deze post en het merk past.",
+    "placeholder": "Extra wensen (optioneel), bijv. close-up van een cappuccino op een houten tafel",
+    "image": "Genereer afbeelding",
+    "imageBusy": "Afbeelding maken…",
+    "imageReady": "Afbeelding gemaakt!",
+    "video": "Genereer video",
+    "videoStarted": "Video wordt gemaakt. Dat duurt meestal 1 à 3 minuten.",
+    "videoConfirm": "Een video maken kost duidelijk meer dan een afbeelding (betaald per seconde bij Google). Doorgaan?",
+    "videoBusy": "Video wordt gemaakt…",
+    "videoBusyHint": "Meestal 1 à 3 minuten. Je mag deze pagina verlaten.",
+    "videoReady": "Je video is klaar!",
+    "videoFailed": "De video kon niet gemaakt worden.",
+    "failed": "Maken mislukt",
+    "altImage": "Gegenereerde afbeelding bij de post",
+    "download": "Downloaden",
+    "delete": "Verwijderen",
+    "deleteConfirm": "Deze afbeelding of video verwijderen?",
+    "quickLabels": {
+      "photo": "Foto",
+      "illustration": "Illustratie",
+      "flatlay": "Flatlay",
+      "people": "Met mensen"
+    },
+    "quick": {
+      "photo": "Realistische foto, natuurlijk licht.",
+      "illustration": "Kleurrijke, moderne illustratie.",
+      "flatlay": "Flatlay van bovenaf.",
+      "people": "Met mensen in beeld (niet herkenbaar)."
+    }
   }
 }

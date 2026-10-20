@@ -104,6 +104,9 @@ class PostOut(BaseModel):
     published_at: datetime | None = None
     external_url: str | None = None
     publish_error: str | None = None
+    # Eerste klare afbeelding (of video) voor in overzichten
+    thumbnail_url: str | None = None
+    thumbnail_kind: str | None = None
 
 
 class PostVersionOut(BaseModel):
@@ -118,8 +121,28 @@ class PostVersionOut(BaseModel):
     created_at: datetime
 
 
+class PostMediaOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    kind: str
+    status: str
+    url: str | None
+    mime_type: str | None
+    aspect_ratio: str
+    instructions: str | None
+    error: str | None
+    created_at: datetime
+
+
+class GenerateMediaIn(BaseModel):
+    kind: Literal["image", "video"]
+    instructions: Annotated[str, StringConstraints(strip_whitespace=True, max_length=1000)] = ""
+
+
 class PostDetailOut(PostOut):
     versions: list[PostVersionOut]
+    media: list[PostMediaOut] = []
     # Gekoppeld account voor het platform van deze post (nodig om te publiceren)
     connection: "ConnectionOut | None" = None
 

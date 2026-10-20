@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { ApiError, apiFetch } from "@/lib/api";
-import type { PostDetail, PostStatus } from "@/lib/types";
+import type { PostDetail, PostMedia, PostStatus } from "@/lib/types";
 
 export type ActionResult = { error?: string; ok?: boolean };
 
@@ -81,4 +81,35 @@ export async function deletePost(postId: number) {
 /** Plaatst de post nu meteen op het gekoppelde account. */
 export async function publishPost(postId: number): Promise<ActionResult> {
   return run(postId, () => apiFetch(`/posts/${postId}/publish`, { method: "POST" }));
+}
+
+export type MediaResult = { error?: string; media?: PostMedia };
+
+/** Afbeelding (direct klaar) of video (wordt op de achtergrond gemaakt) laten genereren. */
+export async function generateMedia(postId: number, kind: PostMedia["kind"], instructions: string): Promise<MediaResult> {
+  try {
+    const media = await apiFetch<PostMedia>(`/posts/${postId}/media`, {
+      method: "POST",
+      body: JSON.stringify({ kind, instructions }),
+    });
+    refresh(postId);
+    return { media };
+  } catch (e) {
+    return { error: errorCode(e) };
+  }
+}
+
+/** Status van een video die nog gemaakt wordt; ververst de pagina zodra hij klaar of mislukt is. */
+export async function checkMedia(postId: number, mediaId: number): Promise<MediaResult> {
+  try {
+    const media = await apiFetch<PostMedia>(`/posts/${postId}/media/${mediaId}`);
+    if (media.status !== "pending") refresh(postId);
+    return { media };
+  } catch (e) {
+    return { error: errorCode(e) };
+  }
+}
+
+export async function deleteMedia(postId: number, mediaId: number): Promise<ActionResult> {
+  return run(postId, () => apiFetch(`/posts/${postId}/media/${mediaId}`, { method: "DELETE" }));
 }

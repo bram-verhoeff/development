@@ -6,7 +6,7 @@ from fastapi.responses import JSONResponse
 
 from app.config import get_settings
 from app.publishers.registry import register_defaults
-from app.routers import auth, brands, connections, dashboard, generate, posts
+from app.routers import auth, brands, connections, dashboard, generate, media, posts
 from app.services.crypto import CryptoError
 from app.services.ai.writer import AIError
 from app.services.social.base import SocialError
@@ -24,7 +24,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-for module in (auth, brands, generate, posts, dashboard, connections):
+for module in (auth, brands, generate, posts, media, dashboard, connections):
     app.include_router(module.router)
 
 # Echte publishers (LinkedIn, ...) beschikbaar maken
