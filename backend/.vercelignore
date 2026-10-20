@@ -1,0 +1,10 @@
+# Nooit uploaden: geheimen, lokale database, virtuele omgeving en tests
+.env
+.env.*
+!.env.example
+.venv/
+*.db
+uploads/
+tests/
+__pycache__/
+.pytest_cache/

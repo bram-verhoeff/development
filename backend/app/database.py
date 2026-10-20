@@ -42,8 +42,12 @@ def utcnow() -> datetime:
 
 
 def make_engine(url: str, **kwargs) -> Engine:
-    connect_args = {"check_same_thread": False} if url.startswith("sqlite") else {}
-    return create_engine(url, connect_args=connect_args, pool_pre_ping=True, **kwargs)
+    if url.startswith("sqlite"):
+        return create_engine(url, connect_args={"check_same_thread": False}, pool_pre_ping=True, **kwargs)
+    if "poolclass" not in kwargs:
+        # Online (serverless + Supabase-pooler): weinig verbindingen per instantie, anders raakt de limiet op
+        kwargs.update(pool_size=2, max_overflow=3)
+    return create_engine(url, pool_pre_ping=True, pool_recycle=300, **kwargs)
 
 
 @event.listens_for(Engine, "connect")
