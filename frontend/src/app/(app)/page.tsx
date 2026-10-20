@@ -75,7 +75,7 @@ export default async function DashboardPage() {
       </FadeIn>
 
       {/* Kerncijfers */}
-      <Stagger className="grid grid-cols-2 gap-4 lg:grid-cols-4" delay={0.15}>
+      <Stagger className="grid grid-cols-2 gap-4 lg:grid-cols-4" delay={0.03}>
         {stats.map(({ key, value, Icon, href, tone, glow }) => (
           <StaggerItem key={key}>
             <SpotlightCard glow={glow}>
@@ -96,7 +96,7 @@ export default async function DashboardPage() {
 
       <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr]">
         {/* Komende 7 dagen */}
-        <FadeIn delay={0.3}>
+        <FadeIn delay={0.06}>
           <section className={`${cardClass} h-full p-5 sm:p-6`}>
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold">{t("upcoming.title")}</h2>
@@ -107,7 +107,7 @@ export default async function DashboardPage() {
             {data.upcoming.length === 0 ? (
               <p className="mt-4 rounded-xl bg-surface-2 p-4 text-sm text-muted">{t("upcoming.empty")}</p>
             ) : (
-              <Stagger as="ul" className="mt-4 space-y-1" delay={0.4}>
+              <Stagger as="ul" className="mt-4 space-y-1" delay={0.08}>
                 {data.upcoming.map((post) => (
                   <StaggerItem as="li" key={post.id}>
                     <Link href={`/posts/${post.id}`} className="group flex items-center gap-4 rounded-xl p-2.5 transition hover:bg-accent-soft/40">
@@ -137,7 +137,7 @@ export default async function DashboardPage() {
 
         <div className="space-y-6">
           {/* Wacht op beoordeling */}
-          <FadeIn delay={0.4}>
+          <FadeIn delay={0.08}>
             <section className={`${cardClass} p-5 sm:p-6`}>
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-semibold">{t("review.title")}</h2>
@@ -148,7 +148,7 @@ export default async function DashboardPage() {
               {data.recent_concepts.length === 0 ? (
                 <p className="mt-4 rounded-xl bg-surface-2 p-4 text-sm text-muted">{t("review.empty")}</p>
               ) : (
-                <Stagger as="ul" className="mt-4 space-y-2" delay={0.5}>
+                <Stagger as="ul" className="mt-4 space-y-2" delay={0.1}>
                   {data.recent_concepts.map((post) => (
                     <StaggerItem as="li" key={post.id}>
                       <Link
@@ -170,7 +170,7 @@ export default async function DashboardPage() {
           </FadeIn>
 
           {/* AI-verbruik */}
-          <FadeIn delay={0.5}>
+          <FadeIn delay={0.1}>
             <section className={`${cardClass} p-5 sm:p-6`}>
               <div className="flex items-center justify-between text-sm">
                 <h2 className="flex items-center gap-2 text-lg font-semibold">

@@ -5,8 +5,9 @@ import { motion, type Variants } from "motion/react";
 // Bouwstenen om onderdelen speels in beeld te laten komen
 
 const item: Variants = {
-  hidden: { opacity: 0, y: 14, scale: 0.98, filter: "blur(6px)" },
-  show: { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", transition: { type: "spring", stiffness: 260, damping: 26 } },
+  // Kort en zonder filter: een blur-animatie is duur en laat de inhoud trager aanvoelen
+  hidden: { opacity: 0, y: 8 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.22, ease: [0.16, 1, 0.3, 1] } },
 };
 
 /** Eén element dat (na een eventuele vertraging) omhoog in beeld komt. */
@@ -23,7 +24,7 @@ export function Stagger({
   children,
   className,
   delay = 0,
-  step = 0.06,
+  step = 0.03,
   as = "div",
 }: {
   children: React.ReactNode;
