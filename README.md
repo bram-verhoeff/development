@@ -291,15 +291,13 @@ Per run (`backend/app/services/scheduler.py`):
 - Het antwoord laat zien wat er gebeurde: `{"published": [...], "retrying": [...], "failed": [...]}`.
 
 **Instellen**
-1. Maak een geheim: `python -c "import secrets; print(secrets.token_urlsafe(48))"` en zet het als `CRON_SECRET` in de backend (lokaal in `backend/.env`, online in het dashboard van Render). Zonder `CRON_SECRET` staat automatisch plaatsen uit.
-2. Maak een cronjob die elke minuut draait. Bijvoorbeeld in **DirectAdmin (Vimexx) → Geavanceerde functies → Cronjobs**, met als tijd `* * * * *` en als commando:
+1. Maak een geheim: `python -c "import secrets; print(secrets.token_urlsafe(48))"` en zet het als `CRON_SECRET` in de backend (lokaal in `backend/.env`, online als environment variable van het Vercel-project `postpilot-api`, daarna opnieuw deployen). Zonder `CRON_SECRET` staat automatisch plaatsen uit.
+2. Maak een cronjob die elke minuut draait. Vercel Cron kan dat op het gratis plan niet (maximaal één keer per dag), dus gebruik bijvoorbeeld **DirectAdmin (Vimexx) → Geavanceerde functies → Cronjobs**, met als tijd `* * * * *` en als commando:
    ```
-   curl -fsS -m 55 -X POST -H "X-Cron-Secret: <CRON_SECRET>" https://api.postpilotai.nl/internal/run-scheduler > /dev/null
+   curl -fsS -m 55 -X POST -H "X-Cron-Secret: <CRON_SECRET>" https://postpilot-api-eight.vercel.app/internal/run-scheduler > /dev/null
    ```
-   Werkt ook met Vercel Cron: die stuurt `Authorization: Bearer <CRON_SECRET>`, wat de backend ook accepteert.
+   Vercel Cron (betaald plan) werkt ook: die stuurt `Authorization: Bearer <CRON_SECRET>`, wat de backend ook accepteert.
 3. Lokaal testen: `curl -X POST -H "X-Cron-Secret: <CRON_SECRET>" http://localhost:8000/internal/run-scheduler`
-
-Let op: op het gratis plan van Render slaapt de backend; de eerste aanroep na een pauze kan dan te laat komen. Gebruik voor automatisch plaatsen een plan dat altijd aan staat.
 
 ## Fase 2: publiceren
 
