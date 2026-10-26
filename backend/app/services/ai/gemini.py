@@ -29,26 +29,30 @@ class GeminiWriter(BaseWriter):
         if not settings.gemini_api_key:
             raise AIError("ai_not_configured", status=503)
         self.model = settings.gemini_model
+        # Bij drukte of storing (503/504) nog één keer met dit model; leeg = niet
+        fallback = settings.gemini_fallback_model
+        self.models = [self.model] + ([fallback] if fallback and fallback != self.model else [])
         self.client = _client(settings.gemini_api_key)
 
     def _ask(self, system, prompt, output_format):
-        try:
-            response = self.client.models.generate_content(
-                model=self.model,
-                contents=prompt,
-                config=types.GenerateContentConfig(
-                    system_instruction=system,
-                    response_mime_type="application/json",
-                    response_json_schema=output_format.model_json_schema(),
-                    max_output_tokens=MAX_OUTPUT_TOKENS,
-                ),
-            )
-        except errors.ClientError as e:
-            raise map_client_error(e)
-        except errors.ServerError as e:
-            logger.error("Gemini-serverfout %s: %s", e.code, e.message)
-            raise AIError("ai_unavailable", status=503)
-        except (httpx.HTTPError, TimeoutError, ConnectionError):
+        config = types.GenerateContentConfig(
+            system_instruction=system,
+            response_mime_type="application/json",
+            response_json_schema=output_format.model_json_schema(),
+            max_output_tokens=MAX_OUTPUT_TOKENS,
+        )
+        response, model = None, self.model
+        for model in self.models:
+            try:
+                response = self.client.models.generate_content(model=model, contents=prompt, config=config)
+                break
+            except errors.ClientError as e:
+                raise map_client_error(e)
+            except errors.ServerError as e:
+                logger.error("Gemini-serverfout bij %s (%s): %s", model, e.code, e.message)
+            except (httpx.HTTPError, TimeoutError, ConnectionError) as e:
+                logger.error("Gemini niet bereikbaar bij %s: %s", model, type(e).__name__)
+        if response is None:
             raise AIError("ai_unavailable", status=503)
 
         if response.prompt_feedback and response.prompt_feedback.block_reason:
@@ -74,6 +78,7 @@ class GeminiWriter(BaseWriter):
             input_tokens=(usage.prompt_token_count or 0) if usage else 0,
             # Denk-tokens worden ook betaald, dus tellen we mee
             output_tokens=((usage.candidates_token_count or 0) + (usage.thoughts_token_count or 0)) if usage else 0,
+            model=model,
         )
 
 

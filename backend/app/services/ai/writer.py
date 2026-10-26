@@ -83,6 +83,8 @@ class Answer:
     output: BaseModel
     input_tokens: int
     output_tokens: int
+    # Welk model het antwoord gaf, als dat een ander is dan self.model (bijv. het reservemodel)
+    model: str | None = None
 
 
 class BaseWriter(ABC):
@@ -105,7 +107,8 @@ class BaseWriter(ABC):
         with ThreadPoolExecutor(max_workers=len(platforms)) as pool:
             answers = list(pool.map(one, platforms))
 
-        usage = Usage(model=self.model)
+        used = sorted({a.model or self.model for _, a in answers})
+        usage = Usage(model=", ".join(used)[:100])
         posts: dict[Platform, list[DraftPost]] = {}
         for platform, answer in answers:
             usage.input_tokens += answer.input_tokens
@@ -118,7 +121,7 @@ class BaseWriter(ABC):
     ) -> RegenerationResult:
         prompt = prompts.regenerate_prompt(brand, platform, hook, body, hashtags, instructions)
         answer = self._ask(prompts.load_prompt("system"), prompt, DraftPost)
-        usage = Usage(model=self.model, input_tokens=answer.input_tokens, output_tokens=answer.output_tokens)
+        usage = Usage(model=answer.model or self.model, input_tokens=answer.input_tokens, output_tokens=answer.output_tokens)
         return RegenerationResult(post=answer.output, usage=usage)
 
 

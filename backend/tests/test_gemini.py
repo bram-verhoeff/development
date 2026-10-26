@@ -112,6 +112,43 @@ def test_sdk_errors_become_codes(settings, error, code):
     assert exc.value.code == code
 
 
+def test_falls_back_to_lighter_model_when_busy(settings):
+    calls = []
+
+    def generate_content(model, **_):
+        calls.append(model)
+        if model == "gemini-flash-latest":
+            raise _api_error(errors.ServerError, 503, "UNAVAILABLE", "This model is currently experiencing high demand.")
+        return response(json.dumps({"hook": "Nieuw", "body": "Kort", "hashtags": []}))
+
+    result = make_writer(settings, generate_content).regenerate(brand(), Platform.X, "h", "b", [], "korter")
+    assert calls == ["gemini-flash-latest", "gemini-flash-lite-latest"]
+    assert result.post.hook == "Nieuw" and result.usage.model == "gemini-flash-lite-latest"
+
+
+def test_no_fallback_for_client_errors_or_when_disabled(settings):
+    calls = []
+
+    def generate_content(model, **_):
+        calls.append(model)
+        raise _api_error(errors.ClientError, 400, "INVALID_ARGUMENT", "bad")
+
+    with pytest.raises(AIError):
+        make_writer(settings, generate_content).regenerate(brand(), Platform.X, "h", "b", [], "korter")
+    assert calls == ["gemini-flash-latest"]  # een fout in het verzoek wordt met een ander model niet beter
+
+    settings.gemini_fallback_model = ""
+    calls.clear()
+
+    def busy(model, **_):
+        calls.append(model)
+        raise _api_error(errors.ServerError, 503, "UNAVAILABLE", "busy")
+
+    with pytest.raises(AIError) as exc:
+        make_writer(settings, busy).regenerate(brand(), Platform.X, "h", "b", [], "korter")
+    assert exc.value.code == "ai_unavailable" and calls == ["gemini-flash-latest"]
+
+
 def test_regenerate_returns_single_post(settings):
     def generate_content(**kwargs):
         assert "korter" in kwargs["contents"]
