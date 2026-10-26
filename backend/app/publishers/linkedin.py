@@ -1,4 +1,4 @@
-"""Publiceert een post op het LinkedIn-profiel van het gekoppelde account (Posts API)."""
+"""Publiceert een post op LinkedIn (Posts API): op je eigen profiel of op een gekoppelde bedrijfspagina."""
 
 import logging
 
@@ -8,8 +8,15 @@ from app.config import Settings
 from app.models import Platform, Post
 from app.publishers.base import ConnectedAccount, PublishResult, Publisher
 from app.services.social.linkedin import POSTS_URL, to_little_text
+from app.services.social.registry import LINKEDIN_PAGES
 
 logger = logging.getLogger(__name__)
+
+
+def author_urn(account: ConnectedAccount) -> str:
+    """Via de pagina-koppeling post je als bedrijfspagina, anders als jezelf."""
+    kind = "organization" if account.platform == LINKEDIN_PAGES else "person"
+    return f"urn:li:{kind}:{account.external_account_id}"
 
 
 class LinkedInPublisher(Publisher):
@@ -28,7 +35,7 @@ class LinkedInPublisher(Publisher):
             return PublishResult(success=False, error=problems[0])
 
         body = {
-            "author": f"urn:li:person:{account.external_account_id}",
+            "author": author_urn(account),
             "commentary": self.render(post),
             "visibility": "PUBLIC",
             "distribution": {"feedDistribution": "MAIN_FEED", "targetEntities": [], "thirdPartyDistributionChannels": []},

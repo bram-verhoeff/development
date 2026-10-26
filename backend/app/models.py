@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime
 from enum import StrEnum
 
-from sqlalchemy import JSON, ForeignKey, Integer, String, Text, UniqueConstraint, Uuid
+from sqlalchemy import JSON, Boolean, ForeignKey, Integer, String, Text, UniqueConstraint, Uuid
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base, UTCDateTime, utcnow
@@ -125,6 +125,8 @@ class Post(TimestampMixin, Base):
     publish_attempts: Mapped[int] = mapped_column(Integer, default=0)
     next_attempt_at: Mapped[datetime | None] = mapped_column(UTCDateTime)
     publishing_started_at: Mapped[datetime | None] = mapped_column(UTCDateTime)
+    # LinkedIn: id van de bedrijfspagina waarop de post komt; leeg = je eigen profiel
+    publish_as: Mapped[str | None] = mapped_column(String(200))
 
     brand: Mapped[Brand] = relationship(back_populates="posts")
     versions: Mapped[list["PostVersion"]] = relationship(
@@ -170,6 +172,26 @@ class SocialAccount(TimestampMixin, Base):
     scopes: Mapped[str] = mapped_column(String(500), default="")
 
     brand: Mapped[Brand] = relationship(back_populates="social_accounts")
+    pages: Mapped[list["SocialPage"]] = relationship(
+        back_populates="account", cascade="all, delete-orphan", passive_deletes=True, order_by="SocialPage.id"
+    )
+
+
+class SocialPage(Base):
+    """Pagina waar een gekoppeld account namens mag posten (nu: LinkedIn-bedrijfspagina's)."""
+
+    __tablename__ = "social_pages"
+    __table_args__ = (UniqueConstraint("social_account_id", "external_id", name="uq_social_pages_account_external"),)
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    social_account_id: Mapped[int] = mapped_column(ForeignKey("social_accounts.id", ondelete="CASCADE"), index=True)
+    external_id: Mapped[str] = mapped_column(String(200))
+    name: Mapped[str] = mapped_column(String(300), default="")
+    avatar_url: Mapped[str | None] = mapped_column(String(1000))
+    # Standaardpagina voor nieuwe LinkedIn-posts van dit merk
+    is_default: Mapped[bool] = mapped_column(Boolean, default=False)
+
+    account: Mapped[SocialAccount] = relationship(back_populates="pages")
 
 
 class PostMedia(TimestampMixin, Base):

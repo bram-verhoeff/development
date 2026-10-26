@@ -233,9 +233,23 @@ De redirect-URL die je bij elk platform invult, is steeds `<BACKEND_PUBLIC_URL>/
 5. Open in PostPilot een merk → **Koppelingen** → **LinkedIn koppelen**.
 
 **Goed om te weten:**
-- PostPilot post op het **persoonlijke profiel** van het gekoppelde account. Posten op een bedrijfspagina vereist een product dat LinkedIn eerst moet goedkeuren (Community Management API).
+- Deze koppeling post op het **persoonlijke profiel** van het gekoppelde account. Voor bedrijfspagina's: zie hieronder.
 - Een gratis LinkedIn-app krijgt geen refresh-tokens. Een koppeling verloopt daarom na ongeveer 60 dagen; PostPilot laat zien wanneer, en dan koppel je opnieuw.
 - Tokens worden versleuteld opgeslagen met `APP_SECRET_KEY`. Verander je die sleutel, dan moeten alle accounts opnieuw gekoppeld worden.
+
+### LinkedIn-bedrijfspagina's
+
+Posten als bedrijfspagina gaat via de **Community Management API**. LinkedIn geeft die alleen aan een app **zonder andere producten**, dus dit is een tweede LinkedIn-app naast die hierboven.
+
+1. Maak een nieuwe app aan (niet "Linked" of "In" in de naam) en laat een super-admin van de bedrijfspagina de app verifiëren (**Settings** → *Verify*).
+2. **Products**: vraag alleen **Community Management API** aan. LinkedIn beoordeelt de aanvraag (geregistreerd bedrijf, zakelijk e-mailadres, website en privacybeleid op `/privacy`).
+3. Na goedkeuring: **Auth** → redirect-URL `http://localhost:8000/connections/linkedin_pages/callback` en online `https://<backend-adres>/connections/linkedin_pages/callback`.
+4. Zet *Client ID* en *Primary Client Secret* als `LINKEDIN_PAGES_CLIENT_ID` en `LINKEDIN_PAGES_CLIENT_SECRET` in de backend.
+5. In PostPilot: merk → **Koppelingen** → **LinkedIn-pagina's koppelen**. PostPilot haalt de pagina's op waar je beheerder of contentbeheerder bent.
+
+Daarna kies je per merk een **standaardpagina** (of je eigen profiel) voor nieuwe LinkedIn-posts, en per post bij **Publiceren** → **Plaatsen als**. Beheer je een pagina niet meer, dan weigert PostPilot de post (`page_not_available`) in plaats van hem op je eigen profiel te zetten.
+
+In de Development-tier mag een app 500 API-aanroepen per dag doen; voor veel gebruikers is de Standard-tier nodig (aanvragen met een schermopname van de app).
 
 ### X
 1. Maak op [developer.x.com](https://developer.x.com) een project en app aan.

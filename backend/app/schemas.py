@@ -109,6 +109,8 @@ class PostOut(BaseModel):
     # Eerste klare afbeelding (of video) voor in overzichten
     thumbnail_url: str | None = None
     thumbnail_kind: str | None = None
+    # LinkedIn: id van de bedrijfspagina; leeg = eigen profiel
+    publish_as: str | None = None
 
 
 class PostVersionOut(BaseModel):
@@ -145,8 +147,23 @@ class GenerateMediaIn(BaseModel):
 class PostDetailOut(PostOut):
     versions: list[PostVersionOut]
     media: list[PostMediaOut] = []
-    # Gekoppeld account voor het platform van deze post (nodig om te publiceren)
+    # Gekoppeld account waarmee deze post geplaatst wordt (nodig om te publiceren)
     connection: "ConnectionOut | None" = None
+    # Naam van het profiel of de pagina waarop de post komt
+    publish_as_label: str | None = None
+    # LinkedIn: waar je uit kunt kiezen (eigen profiel en de gekoppelde bedrijfspagina's)
+    publish_options: list["PublishOptionOut"] = []
+
+
+class PublishOptionOut(BaseModel):
+    value: str | None  # id van de pagina; None = eigen profiel
+    label: str  # naam van het profiel of de pagina; leeg = eigen profiel (nog) niet gekoppeld
+    kind: Literal["profile", "page"]
+    avatar_url: str | None = None
+
+
+class PublishAsIn(BaseModel):
+    publish_as: Annotated[str, StringConstraints(max_length=200)] | None
 
 
 class PostUpdateIn(BaseModel):
@@ -217,17 +234,30 @@ class DashboardOut(BaseModel):
 # ---------- Koppelingen ----------
 
 
+class PageOut(BaseModel):
+    id: str  # id van de pagina bij het platform
+    name: str
+    avatar_url: str | None
+    is_default: bool
+
+
 class ConnectionOut(BaseModel):
-    platform: Platform
+    platform: str  # een Platform, of "linkedin_pages"
     display_name: str
     avatar_url: str | None
     expires_at: datetime | None
     expired: bool
     connected_at: datetime
+    pages: list[PageOut] = []
+
+
+class DefaultPageIn(BaseModel):
+    # None = nieuwe LinkedIn-posts gaan standaard naar je eigen profiel
+    page_id: Annotated[str, StringConstraints(max_length=200)] | None
 
 
 class AvailablePlatformOut(BaseModel):
-    platform: Platform
+    platform: str  # een Platform, of "linkedin_pages"
     supported: bool  # al gebouwd in PostPilot
     configured: bool  # client-ID/geheim ingesteld in de backend
 

@@ -6,10 +6,10 @@ import Link from "next/link";
 import { useFormatter, useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 
-import { publishPost } from "@/app/(app)/posts/actions";
+import { publishPost, setPublishAs } from "@/app/(app)/posts/actions";
 import { Burst } from "@/components/motion/Burst";
 import { PlatformIcon } from "@/components/ui/Badges";
-import { buttonClass, cardClass } from "@/components/ui/styles";
+import { buttonClass, cardClass, inputClass } from "@/components/ui/styles";
 import { useToast } from "@/components/ui/Toast";
 import type { Platform, PostDetail } from "@/lib/types";
 
@@ -28,11 +28,13 @@ export function PublishCard({ post }: { post: PostDetail }) {
   const [pending, startTransition] = useTransition();
   const [burst, setBurst] = useState(0);
   const platform = tPlatforms(post.platform);
+  // Profiel of bedrijfspagina waarop de post komt
+  const account = post.publish_as_label ?? post.connection?.display_name ?? "";
   const errorText = (code: string) => (tErrors.has(code) ? tErrors(code) : tErrors("unknown_error"));
   const when = (iso: string) => format.dateTime(new Date(iso), { dateStyle: "medium", timeStyle: "short" });
 
   const publish = () => {
-    if (!confirm(t("confirm", { platform, account: post.connection?.display_name ?? "" }))) return;
+    if (!confirm(t("confirm", { platform, account }))) return;
     startTransition(async () => {
       const result = await publishPost(post.id);
       if (result.error) toast(errorText(result.error), "error");
@@ -75,7 +77,7 @@ export function PublishCard({ post }: { post: PostDetail }) {
   } else {
     content = (
       <div className="space-y-3">
-        <p className="text-sm text-muted">{t("asAccount", { account: post.connection.display_name })}</p>
+        <p className="text-sm text-muted">{t("asAccount", { account })}</p>
         {post.scheduled_at && (
           <p className="flex items-center gap-2 rounded-lg bg-indigo-50 px-3 py-2 text-sm text-indigo-800 dark:bg-indigo-950/40 dark:text-indigo-200">
             <CalendarClock size={16} className="shrink-0" />
@@ -108,7 +110,52 @@ export function PublishCard({ post }: { post: PostDetail }) {
           <TriangleAlert size={16} className="mt-0.5 shrink-0" /> {t("lastError", { error: errorText(post.publish_error) })}
         </p>
       )}
+      {!post.published_at && <PublishAsPicker post={post} />}
       <div className="mt-3">{content}</div>
     </section>
+  );
+}
+
+// LinkedIn: kiezen tussen je eigen profiel en een gekoppelde bedrijfspagina
+function PublishAsPicker({ post }: { post: PostDetail }) {
+  const t = useTranslations("publish");
+  const tErrors = useTranslations("errors");
+  const toast = useToast();
+  const [pending, startTransition] = useTransition();
+  const [choice, setChoice] = useState(post.publish_as ?? "");
+
+  // Alleen tonen als er echt iets te kiezen valt (er zijn bedrijfspagina's gekoppeld)
+  if (!post.publish_options.some((o) => o.kind === "page")) return null;
+
+  const change = (value: string) => {
+    const previous = choice;
+    setChoice(value);
+    startTransition(async () => {
+      const result = await setPublishAs(post.id, value || null);
+      if (result.error) {
+        setChoice(previous);
+        toast(tErrors.has(result.error) ? tErrors(result.error) : tErrors("unknown_error"), "error");
+      }
+    });
+  };
+
+  return (
+    <label className="mt-3 block">
+      <span className="mb-1 flex items-center gap-1.5 text-xs font-semibold text-muted">
+        {t("publishAs")}
+        {pending && <LoaderCircle size={12} className="animate-spin" />}
+      </span>
+      <select value={choice} disabled={pending} onChange={(e) => change(e.target.value)} className={inputClass}>
+        {post.publish_options.map((option) => (
+          <option key={option.value ?? "profiel"} value={option.value ?? ""}>
+            {option.kind === "page"
+              ? option.label
+              : option.label
+                ? t("ownProfileNamed", { name: option.label })
+                : t("ownProfileMissing")}
+          </option>
+        ))}
+      </select>
+    </label>
   );
 }

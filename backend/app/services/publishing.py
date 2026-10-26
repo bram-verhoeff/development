@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 
 from app.config import Settings
 from app.database import utcnow
-from app.models import Post
+from app.models import Platform, Post
 from app.publishers import registry as publisher_registry
 from app.publishers.base import PublishResult
 from app.services import connections as connection_service
@@ -68,7 +68,8 @@ def attempt_publish(db: Session, post: Post, settings: Settings) -> PublishResul
 
 
 def _publish(db: Session, post: Post, settings: Settings) -> PublishResult:
-    account = connection_service.get_account(db, post.brand_id, post.platform)
+    # Je eigen profiel, of bij een LinkedIn-bedrijfspagina de pagina-koppeling
+    account = connection_service.account_for(db, post)
     if account is None:
         return PublishResult(success=False, error="not_connected")
     if connection_service.is_expired(account):
@@ -80,7 +81,8 @@ def _publish(db: Session, post: Post, settings: Settings) -> PublishResult:
 
     try:
         # Ververst het token eerst als dat nodig is (X: elke 2 uur, TikTok: elke dag)
-        credentials = connection_service.fresh_credentials(db, account, settings)
+        page_id = post.publish_as if post.platform == Platform.LINKEDIN else None
+        credentials = connection_service.fresh_credentials(db, account, settings, page_id)
         return publisher.publish(post, credentials)
     except SocialError as exc:
         return PublishResult(success=False, error=exc.code, retryable=exc.status >= 500)

@@ -16,11 +16,13 @@ from app.schemas import (
     PostScheduleIn,
     PostStatusIn,
     PostUpdateIn,
+    PublishAsIn,
     RegenerateIn,
 )
 from app.services import posts as post_service
 from app.services import publishing, scheduler
 from app.services.ai.writer import BaseWriter, get_writer
+from app.services.social.registry import LINKEDIN_PAGES
 
 router = APIRouter(prefix="/posts", tags=["posts"])
 
@@ -111,6 +113,27 @@ def schedule_post(
         if data.scheduled_at < utcnow() - SCHEDULE_GRACE:
             raise HTTPException(422, "schedule_in_past")
     post.scheduled_at = data.scheduled_at.astimezone(UTC) if data.scheduled_at else None
+    scheduler.reset_attempts(post)
+    db.commit()
+    return post_service.to_detail(post)
+
+
+@router.put("/{post_id}/publish-as", response_model=PostDetailOut)
+def set_publish_as(
+    post_id: int, data: PublishAsIn, db: Session = Depends(get_db), user: CurrentUser = Depends(get_current_user)
+):
+    """LinkedIn: plaatsen op je eigen profiel (None) of op een gekoppelde bedrijfspagina."""
+    post = post_service.get_owned_post(post_id, db, user)
+    if post.platform != Platform.LINKEDIN:
+        raise HTTPException(422, "publish_as_linkedin_only")
+    if post.published_at is not None:
+        raise HTTPException(status.HTTP_409_CONFLICT, "already_published")
+    if data.publish_as is not None:
+        account = next((a for a in post.brand.social_accounts if a.platform == LINKEDIN_PAGES), None)
+        if account is None or data.publish_as not in {p.external_id for p in account.pages}:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "page_not_available")
+    post.publish_as = data.publish_as
+    # Een eerdere fout hoorde bij de vorige keuze; de scheduler begint opnieuw
     scheduler.reset_attempts(post)
     db.commit()
     return post_service.to_detail(post)

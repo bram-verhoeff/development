@@ -43,11 +43,21 @@ class Profile:
 
 
 @dataclass(frozen=True)
+class Page:
+    """Pagina waar het gekoppelde account namens mag posten (bijv. een LinkedIn-bedrijfspagina)."""
+
+    external_id: str
+    name: str
+    avatar_url: str | None = None
+
+
+@dataclass(frozen=True)
 class Connected:
     """Resultaat van een afgeronde koppeling: welke tokens horen bij welk account."""
 
     tokens: TokenSet
     profile: Profile
+    pages: tuple[Page, ...] = ()
 
 
 def expires_in(seconds: int | str | None) -> datetime | None:

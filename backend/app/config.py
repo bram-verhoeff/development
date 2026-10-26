@@ -73,6 +73,9 @@ class Settings(BaseSettings):
     # LinkedIn-app (linkedin.com/developers → My apps → Auth)
     linkedin_client_id: str = ""
     linkedin_client_secret: str = ""
+    # Tweede LinkedIn-app met alleen de Community Management API: posten als bedrijfspagina
+    linkedin_pages_client_id: str = ""
+    linkedin_pages_client_secret: str = ""
     # Versie van de LinkedIn-API (JJJJMM); versies vervallen na ongeveer een jaar
     linkedin_api_version: str = "202610"
 

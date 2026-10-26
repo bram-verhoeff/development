@@ -83,6 +83,13 @@ export async function publishPost(postId: number): Promise<ActionResult> {
   return run(postId, () => apiFetch(`/posts/${postId}/publish`, { method: "POST" }));
 }
 
+/** LinkedIn: plaatsen op je eigen profiel (null) of op een gekoppelde bedrijfspagina. */
+export async function setPublishAs(postId: number, publishAs: string | null): Promise<ActionResult> {
+  return run(postId, () =>
+    apiFetch(`/posts/${postId}/publish-as`, { method: "PUT", body: JSON.stringify({ publish_as: publishAs }) }),
+  );
+}
+
 export type MediaResult = { error?: string; media?: PostMedia };
 
 /** Afbeelding (direct klaar) of video (wordt op de achtergrond gemaakt) laten genereren. */

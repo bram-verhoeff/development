@@ -2,6 +2,8 @@
 
 export const PLATFORMS = ["instagram", "linkedin", "tiktok", "x", "facebook"] as const;
 export type Platform = (typeof PLATFORMS)[number];
+// Soorten koppelingen: per platform, plus de LinkedIn-bedrijfspagina's (aparte LinkedIn-app)
+export type ConnectionKind = Platform | "linkedin_pages";
 
 export const STATUSES = ["concept", "approved", "rejected"] as const;
 export type PostStatus = (typeof STATUSES)[number];
@@ -50,6 +52,8 @@ export type Post = {
   next_attempt_at: string | null;
   thumbnail_url: string | null;
   thumbnail_kind: "image" | "video" | null;
+  // LinkedIn: id van de bedrijfspagina; null = eigen profiel
+  publish_as: string | null;
 };
 
 export type PostVersion = {
@@ -62,17 +66,20 @@ export type PostVersion = {
   created_at: string;
 };
 
+export type LinkedInPage = { id: string; name: string; avatar_url: string | null; is_default: boolean };
+
 export type Connection = {
-  platform: Platform;
+  platform: ConnectionKind;
   display_name: string;
   avatar_url: string | null;
   expires_at: string | null;
   expired: boolean;
   connected_at: string;
+  pages: LinkedInPage[];
 };
 
 export type ConnectionsData = {
-  platforms: { platform: Platform; supported: boolean; configured: boolean }[];
+  platforms: { platform: ConnectionKind; supported: boolean; configured: boolean }[];
   connections: Connection[];
 };
 
@@ -88,7 +95,16 @@ export type PostMedia = {
   created_at: string;
 };
 
-export type PostDetail = Post & { versions: PostVersion[]; connection: Connection | null; media: PostMedia[] };
+// Waar een LinkedIn-post op kan komen: je eigen profiel (value null) of een bedrijfspagina
+export type PublishOption = { value: string | null; label: string; kind: "profile" | "page"; avatar_url: string | null };
+
+export type PostDetail = Post & {
+  versions: PostVersion[];
+  connection: Connection | null;
+  media: PostMedia[];
+  publish_as_label: string | null;
+  publish_options: PublishOption[];
+};
 
 export type Dashboard = {
   brands: number;

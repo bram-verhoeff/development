@@ -1,30 +1,32 @@
 "use client";
 
-import { CircleAlert, Link2, LoaderCircle, Plug, Sparkles, Unplug } from "lucide-react";
+import { Building2, Check, CircleAlert, Link2, LoaderCircle, Plug, Sparkles, Unplug, UserRound } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { usePathname, useRouter } from "next/navigation";
 import { useFormatter, useTranslations } from "next-intl";
 import { useEffect, useState, useTransition } from "react";
 
-import { disconnect, startConnection } from "@/app/(app)/brands/connections-actions";
+import { disconnect, setDefaultPage, startConnection } from "@/app/(app)/brands/connections-actions";
 import { PlatformIcon } from "@/components/ui/Badges";
 import { buttonClass, cardClass } from "@/components/ui/styles";
 import { useToast } from "@/components/ui/Toast";
-import type { Connection, ConnectionsData, Platform } from "@/lib/types";
+import type { Connection, ConnectionKind, ConnectionsData, Platform } from "@/lib/types";
 
 // Volgorde waarin "Alles koppelen" de platforms langsgaat
-const ORDER: Platform[] = ["linkedin", "x", "facebook", "instagram", "tiktok"];
+const ORDER: ConnectionKind[] = ["linkedin", "linkedin_pages", "x", "facebook", "instagram", "tiktok"];
+// De bedrijfspagina's krijgen het LinkedIn-icoon
+const iconFor = (kind: ConnectionKind): Platform => (kind === "linkedin_pages" ? "linkedin" : kind);
 
 // Platforms die je in deze ronde hebt overgeslagen (geannuleerd/mislukt), zodat de wizard niet blijft herhalen
 const skipKey = (brandId: number) => `postpilot-wizard-skip-${brandId}`;
-function readSkipped(brandId: number): Platform[] {
+function readSkipped(brandId: number): ConnectionKind[] {
   try {
     return JSON.parse(sessionStorage.getItem(skipKey(brandId)) ?? "[]");
   } catch {
     return [];
   }
 }
-function writeSkipped(brandId: number, list: Platform[] | null) {
+function writeSkipped(brandId: number, list: ConnectionKind[] | null) {
   try {
     if (list) sessionStorage.setItem(skipKey(brandId), JSON.stringify(list));
     else sessionStorage.removeItem(skipKey(brandId));
@@ -58,17 +60,17 @@ export function ConnectionsPanel({
   const toast = useToast();
   const router = useRouter();
   const pathname = usePathname();
-  const [busy, setBusy] = useState<Platform | null>(null);
-  const [next, setNext] = useState<Platform | null>(null);
+  const [busy, setBusy] = useState<ConnectionKind | null>(null);
+  const [next, setNext] = useState<ConnectionKind | null>(null);
   const [, startTransition] = useTransition();
 
   const errorText = (code: string) => (tErrors.has(code) ? tErrors(code) : tErrors("unknown_error"));
-  const connectionOf = (platform: Platform) => data.connections.find((c) => c.platform === platform);
+  const connectionOf = (platform: ConnectionKind) => data.connections.find((c) => c.platform === platform);
   const configured = ORDER.filter((p) => data.platforms.find((x) => x.platform === p)?.configured);
-  const todo = (skipped: Platform[] = []) => configured.filter((p) => !isActive(connectionOf(p)) && !skipped.includes(p));
+  const todo = (skipped: ConnectionKind[] = []) => configured.filter((p) => !isActive(connectionOf(p)) && !skipped.includes(p));
   const doneCount = configured.filter((p) => isActive(connectionOf(p))).length;
 
-  const go = (platform: Platform, viaWizard: boolean) => {
+  const go = (platform: ConnectionKind, viaWizard: boolean) => {
     setBusy(platform);
     startTransition(async () => {
       const result = await startConnection(brandId, platform, viaWizard);
@@ -97,7 +99,7 @@ export function ConnectionsPanel({
 
       // sessionStorage: welke platforms je in deze ronde al hebt overgeslagen
       const skipped = readSkipped(brandId);
-      if (connectError && returnedPlatform && !skipped.includes(returnedPlatform as Platform)) skipped.push(returnedPlatform as Platform);
+      if (connectError && returnedPlatform && !skipped.includes(returnedPlatform as ConnectionKind)) skipped.push(returnedPlatform as ConnectionKind);
       const remaining = todo(skipped);
       if (remaining.length === 0) {
         writeSkipped(brandId, null);
@@ -121,7 +123,7 @@ export function ConnectionsPanel({
     else go(remaining[0], true);
   };
 
-  const unlink = (platform: Platform) => {
+  const unlink = (platform: ConnectionKind) => {
     if (!confirm(t("disconnectConfirm", { platform: tPlatforms(platform) }))) return;
     setBusy(platform);
     startTransition(async () => {
@@ -190,11 +192,11 @@ export function ConnectionsPanel({
                   // eslint-disable-next-line @next/next/no-img-element -- profielfoto van het platform
                   <img src={connection.avatar_url} alt="" className="h-10 w-10 rounded-full object-cover" />
                 ) : (
-                  <PlatformIcon platform={platform} size={40} />
+                  <PlatformIcon platform={iconFor(platform)} size={40} />
                 )}
                 {connection && (
                   <span className="absolute -right-1 -bottom-1">
-                    <PlatformIcon platform={platform} size={18} />
+                    <PlatformIcon platform={iconFor(platform)} size={18} />
                   </span>
                 )}
               </div>
@@ -241,6 +243,10 @@ export function ConnectionsPanel({
         })}
       </ul>
 
+      {isActive(connectionOf("linkedin_pages")) && (connectionOf("linkedin_pages")?.pages.length ?? 0) > 0 && (
+        <DefaultPagePicker brandId={brandId} pages={connectionOf("linkedin_pages")!} profile={connectionOf("linkedin")} />
+      )}
+
       {/* Tussenscherm van de wizard: "volgende: X" */}
       <AnimatePresence>
         {next && (
@@ -251,7 +257,7 @@ export function ConnectionsPanel({
             className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-surface/85 backdrop-blur-sm"
           >
             <motion.div initial={{ scale: 0.6, rotate: -10 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: "spring", stiffness: 300, damping: 16 }}>
-              <PlatformIcon platform={next} size={56} />
+              <PlatformIcon platform={iconFor(next)} size={56} />
             </motion.div>
             <p className="font-display text-lg font-semibold">{t("wizardNext", { platform: tPlatforms(next) })}</p>
             <LoaderCircle size={20} className="animate-spin text-accent" />
@@ -259,5 +265,64 @@ export function ConnectionsPanel({
         )}
       </AnimatePresence>
     </motion.section>
+  );
+}
+
+// Op welke bedrijfspagina (of je eigen profiel) nieuwe LinkedIn-posts van dit merk standaard komen
+function DefaultPagePicker({ brandId, pages, profile }: { brandId: number; pages: Connection; profile?: Connection }) {
+  const t = useTranslations("connections");
+  const tErrors = useTranslations("errors");
+  const toast = useToast();
+  const [pending, startTransition] = useTransition();
+  const current = pages.pages.find((p) => p.is_default)?.id ?? null;
+  const [choice, setChoice] = useState<string | null>(current);
+
+  const choose = (pageId: string | null) => {
+    if (pageId === choice) return;
+    const previous = choice;
+    setChoice(pageId);
+    startTransition(async () => {
+      const result = await setDefaultPage(brandId, pageId);
+      if (result.error) {
+        setChoice(previous);
+        toast(tErrors.has(result.error) ? tErrors(result.error) : tErrors("unknown_error"), "error");
+      } else toast(t("defaultSaved"), "magic");
+    });
+  };
+
+  const options = [
+    { id: null, label: profile ? t("ownProfileNamed", { name: profile.display_name }) : t("ownProfile"), page: false },
+    ...pages.pages.map((p) => ({ id: p.id, label: p.name, page: true })),
+  ];
+
+  return (
+    <div className="mt-5 rounded-xl border border-line p-4">
+      <h3 className="flex items-center gap-2 text-sm font-semibold">
+        <PlatformIcon platform="linkedin" size={18} /> {t("pagesTitle")}
+        {pending && <LoaderCircle size={14} className="animate-spin text-muted" />}
+      </h3>
+      <p className="mt-1 text-xs text-muted">{t("pagesDescription")}</p>
+      <div role="radiogroup" aria-label={t("pagesTitle")} className="mt-3 flex flex-wrap gap-2">
+        {options.map((option) => {
+          const selected = option.id === choice;
+          return (
+            <button
+              key={option.id ?? "profiel"}
+              type="button"
+              role="radio"
+              aria-checked={selected}
+              disabled={pending}
+              onClick={() => choose(option.id)}
+              className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm transition-colors ${
+                selected ? "border-accent bg-accent-soft font-medium text-accent" : "border-line hover:border-accent/50"
+              }`}
+            >
+              {selected ? <Check size={14} /> : option.page ? <Building2 size={14} /> : <UserRound size={14} />}
+              {option.label}
+            </button>
+          );
+        })}
+      </div>
+    </div>
   );
 }

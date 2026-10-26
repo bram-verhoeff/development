@@ -203,7 +203,8 @@
     "linkedin": "LinkedIn",
     "tiktok": "TikTok",
     "x": "X",
-    "facebook": "Facebook"
+    "facebook": "Facebook",
+    "linkedin_pages": "LinkedIn-pagina's"
   },
   "status": {
     "concept": "Concept",
@@ -470,7 +471,10 @@
     "ai_billing_required": "Afbeeldingen en video's zitten niet in het gratis plan van Google. Zet betaald gebruik aan in Google AI Studio (Billing) en probeer het opnieuw.",
     "video_limit_reached": "Je daglimiet voor video's is bereikt. Probeer het morgen opnieuw.",
     "media_not_found": "Deze afbeelding of video bestaat niet (meer).",
-    "media_failed": "Het maken is mislukt. Probeer het opnieuw, eventueel met andere instructies."
+    "media_failed": "Het maken is mislukt. Probeer het opnieuw, eventueel met andere instructies.",
+    "page_not_available": "Deze bedrijfspagina is niet (meer) gekoppeld. Kies een andere of koppel je LinkedIn-pagina's opnieuw.",
+    "no_linkedin_page": "Je beheert geen LinkedIn-bedrijfspagina waarop je mag posten.",
+    "publish_as_linkedin_only": "Kiezen tussen profiel en pagina kan alleen bij LinkedIn-posts."
   },
   "connections": {
     "title": "Koppelingen",
@@ -493,7 +497,13 @@
     "upNext": "Is nu aan de beurt…",
     "wizardNext": "Nu {platform} koppelen…",
     "wizardDone": "Klaar! Alle ingestelde platforms zijn langsgegaan.",
-    "allConnected": "Alle ingestelde platforms zijn al gekoppeld."
+    "allConnected": "Alle ingestelde platforms zijn al gekoppeld.",
+    "pagesTitle": "Standaard voor LinkedIn-posts",
+    "pagesDescription": "Nieuwe LinkedIn-posts van dit merk komen hierop. Per post kun je het nog aanpassen.",
+    "ownProfile": "Eigen profiel",
+    "ownProfileNamed": "Eigen profiel ({name})",
+    "pageCount": "{count, plural, one {# pagina} other {# pagina's}}",
+    "defaultSaved": "Standaard aangepast."
   },
   "publish": {
     "title": "Publiceren",
@@ -513,7 +523,11 @@
     "lastError": "Vorige poging mislukt: {error}",
     "autoAt": "Wordt automatisch geplaatst op {date}.",
     "retryAt": "Automatisch plaatsen lukte nog niet. Nieuwe poging op {date}.",
-    "mediaRequired": "{platform} accepteert alleen posts met een afbeelding of video. Maak hiernaast beeld en download het om zelf te plaatsen; automatisch plaatsen op {platform} volgt."
+    "mediaRequired": "{platform} accepteert alleen posts met een afbeelding of video. Maak hiernaast beeld en download het om zelf te plaatsen; automatisch plaatsen op {platform} volgt.",
+    "publishAs": "Plaatsen als",
+    "ownProfileNamed": "{name} (eigen profiel)",
+    "ownProfileMissing": "Eigen profiel (niet gekoppeld)",
+    "connectPages": "Bedrijfspagina's koppelen"
   },
   "media": {
     "title": "Beeld & video",

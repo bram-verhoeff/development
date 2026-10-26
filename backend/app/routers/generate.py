@@ -6,9 +6,10 @@ from sqlalchemy.orm import Session
 from app.auth import CurrentUser, get_current_user
 from app.config import Settings, get_settings
 from app.database import get_db
-from app.models import GenerationRun, Post, SourceType, VersionOrigin
+from app.models import GenerationRun, Platform, Post, SourceType, VersionOrigin
 from app.routers.brands import get_owned_brand
 from app.schemas import GenerateIn, GenerateOut
+from app.services import connections as connection_service
 from app.services import posts as post_service
 from app.services.ai.writer import BaseWriter, get_writer
 from app.services.source_fetcher import fetch_source_text
@@ -52,10 +53,14 @@ def generate(
     db.add(run)
     db.flush()  # run.id beschikbaar maken
 
+    # LinkedIn-posts komen standaard op de standaardpagina van het merk (anders je eigen profiel)
+    page = connection_service.default_page(brand)
     created: list[Post] = []
     for platform in data.platforms:  # volgorde zoals gekozen
         for draft in result.posts.get(platform, []):
             post = Post(brand=brand, platform=platform, generation_run_id=run.id)
+            if platform == Platform.LINKEDIN and page:
+                post.publish_as = page.external_id
             post_service.set_content(post, draft.hook, draft.body, draft.hashtags, VersionOrigin.GENERATED)
             db.add(post)
             created.append(post)

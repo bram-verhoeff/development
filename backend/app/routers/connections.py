@@ -10,13 +10,13 @@ from sqlalchemy.orm import Session
 from app.auth import CurrentUser, get_current_user
 from app.config import Settings, get_settings
 from app.database import get_db
-from app.models import Brand, Platform
+from app.models import Brand
 from app.routers.brands import get_owned_brand
-from app.schemas import AvailablePlatformOut, ConnectionsOut, ConnectStartOut
+from app.schemas import AvailablePlatformOut, ConnectionOut, ConnectionsOut, ConnectStartOut, DefaultPageIn
 from app.services import connections as connection_service
 from app.services import crypto
 from app.services.social.base import SocialError, new_pkce_pair
-from app.services.social.registry import SUPPORTED, get_oauth_provider
+from app.services.social.registry import CONNECTION_KINDS, LINKEDIN_PAGES, SUPPORTED, get_oauth_provider
 
 logger = logging.getLogger(__name__)
 router = APIRouter(tags=["connections"])
@@ -50,7 +50,7 @@ def list_connections(
             supported=p in SUPPORTED,
             configured=p in SUPPORTED and get_oauth_provider(p, settings).configured,
         )
-        for p in Platform
+        for p in CONNECTION_KINDS
     ]
     return ConnectionsOut(platforms=platforms, connections=[connection_service.to_out(a) for a in brand.social_accounts])
 
@@ -133,3 +133,20 @@ def delete_connection(
     db.delete(account)
     db.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@router.put("/brands/{brand_id}/connections/linkedin_pages/default", response_model=ConnectionOut)
+def set_default_page(
+    brand_id: int, data: DefaultPageIn, db: Session = Depends(get_db), user: CurrentUser = Depends(get_current_user)
+):
+    """Op welke bedrijfspagina nieuwe LinkedIn-posts van dit merk standaard komen (None = eigen profiel)."""
+    brand = get_owned_brand(brand_id, db, user)
+    account = connection_service.get_account(db, brand.id, LINKEDIN_PAGES)
+    if account is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "connection_not_found")
+    try:
+        connection_service.set_default_page(account, data.page_id)
+    except SocialError as e:
+        raise HTTPException(e.status, e.code)
+    db.commit()
+    return connection_service.to_out(account)

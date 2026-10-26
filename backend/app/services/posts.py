@@ -10,8 +10,9 @@ from app.auth import CurrentUser
 from app.config import Settings
 from app.database import utcnow
 from app.models import Brand, GenerationRun, MediaStatus, Platform, Post, PostVersion, VersionOrigin
-from app.schemas import PostDetailOut, PostMediaOut, PostOut, PostVersionOut
+from app.schemas import PostDetailOut, PostMediaOut, PostOut, PostVersionOut, PublishOptionOut
 from app.services import connections as connection_service
+from app.services.social.registry import LINKEDIN_PAGES
 from app.services.ai.platforms import RULES, full_text
 from app.services.checks import post_warnings
 
@@ -36,6 +37,7 @@ def to_out(post: Post) -> PostOut:
         external_url=post.external_url,
         publish_error=post.publish_error,
         next_attempt_at=post.next_attempt_at,
+        publish_as=post.publish_as,
         **_thumbnail(post),
     )
 
@@ -47,10 +49,39 @@ def _thumbnail(post: Post) -> dict:
 
 def to_detail(post: Post) -> PostDetailOut:
     versions = [PostVersionOut.model_validate(v) for v in reversed(post.versions)]  # nieuwste eerst
-    account = next((a for a in post.brand.social_accounts if a.platform == post.platform), None)
+    accounts = {a.platform: a for a in post.brand.social_accounts}
+    as_page = post.platform == Platform.LINKEDIN and post.publish_as
+    account = accounts.get(LINKEDIN_PAGES if as_page else post.platform)
     connection = connection_service.to_out(account) if account else None
     media = [PostMediaOut.model_validate(m) for m in post.media]
-    return PostDetailOut(**to_out(post).model_dump(), versions=versions, connection=connection, media=media)
+
+    label = account.display_name if account else None
+    if as_page:
+        page = next((p for p in account.pages if p.external_id == post.publish_as), None) if account else None
+        label = page.name if page else None
+
+    options: list[PublishOptionOut] = []
+    if post.platform == Platform.LINKEDIN:
+        profile = accounts.get(Platform.LINKEDIN)
+        options.append(
+            PublishOptionOut(
+                value=None,
+                label=profile.display_name if profile else "",
+                kind="profile",
+                avatar_url=profile.avatar_url if profile else None,
+            )
+        )
+        pages = accounts[LINKEDIN_PAGES].pages if LINKEDIN_PAGES in accounts else []
+        options += [PublishOptionOut(value=p.external_id, label=p.name, kind="page", avatar_url=p.avatar_url) for p in pages]
+
+    return PostDetailOut(
+        **to_out(post).model_dump(),
+        versions=versions,
+        connection=connection,
+        media=media,
+        publish_as_label=label,
+        publish_options=options,
+    )
 
 
 def set_content(

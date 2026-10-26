@@ -8,11 +8,11 @@ from sqlalchemy.orm import Session
 
 from app.config import Settings
 from app.database import utcnow
-from app.models import Brand, SocialAccount
-from app.schemas import ConnectionOut
+from app.models import Brand, Platform, Post, SocialAccount, SocialPage
+from app.schemas import ConnectionOut, PageOut
 from app.services import crypto
 from app.services.social.base import Connected, SocialError, TokenSet
-from app.services.social.registry import get_oauth_provider
+from app.services.social.registry import LINKEDIN_PAGES, get_oauth_provider
 
 # Ruim op tijd verversen, zodat een token niet halverwege een aanroep verloopt.
 # Instagram ververst met het toegangstoken zelf; dat moet dus ruim vóór het verloopt.
@@ -46,6 +46,7 @@ def to_out(account: SocialAccount) -> ConnectionOut:
         expires_at=None if refreshable else account.expires_at,
         expired=is_expired(account),
         connected_at=account.updated_at,
+        pages=[PageOut(id=p.external_id, name=p.name, avatar_url=p.avatar_url, is_default=p.is_default) for p in account.pages],
     )
 
 
@@ -70,14 +71,52 @@ def save_account(db: Session, brand: Brand, platform: str, connected: Connected,
     account.avatar_url = profile.avatar_url
     account.refresh_token_encrypted = None  # wordt hieronder gezet als het platform er een gaf
     _store_tokens(account, connected.tokens, settings)
+    _store_pages(account, connected)
     account.updated_at = utcnow()
     db.add(account)
     db.commit()
     return account
 
 
-def fresh_credentials(db: Session, account: SocialAccount, settings: Settings) -> Credentials:
-    """Geeft geldige inloggegevens; ververst het token eerst als dat (bijna) verlopen is."""
+def _store_pages(account: SocialAccount, connected: Connected) -> None:
+    """Werkt de pagina's bij; de standaardpagina blijft staan als je hem nog steeds beheert."""
+    existing = {p.external_id: p for p in account.pages}
+    pages = []
+    for page in connected.pages:
+        row = existing.get(page.external_id) or SocialPage(external_id=page.external_id)
+        row.name, row.avatar_url = page.name, page.avatar_url
+        pages.append(row)
+    account.pages = pages
+
+
+def default_page(brand: Brand) -> SocialPage | None:
+    """Standaardpagina voor nieuwe LinkedIn-posts van dit merk, of None (eigen profiel)."""
+    pages = next((a.pages for a in brand.social_accounts if a.platform == LINKEDIN_PAGES), [])
+    return next((p for p in pages if p.is_default), None)
+
+
+def set_default_page(account: SocialAccount, page_id: str | None) -> None:
+    if page_id is not None and page_id not in {p.external_id for p in account.pages}:
+        raise SocialError("page_not_available", status=404)
+    for page in account.pages:
+        page.is_default = page.external_id == page_id
+
+
+def account_for(db: Session, post: Post) -> SocialAccount | None:
+    """De koppeling waarmee deze post geplaatst wordt: je profiel, of bij een bedrijfspagina de pagina-koppeling."""
+    if post.platform == Platform.LINKEDIN and post.publish_as:
+        return get_account(db, post.brand_id, LINKEDIN_PAGES)
+    return get_account(db, post.brand_id, post.platform)
+
+
+def fresh_credentials(db: Session, account: SocialAccount, settings: Settings, page_id: str | None = None) -> Credentials:
+    """Geeft geldige inloggegevens; ververst het token eerst als dat (bijna) verlopen is.
+
+    `page_id`: posten als die pagina van het account (LinkedIn-bedrijfspagina) in plaats van als het account zelf.
+    """
+    if page_id is not None and page_id not in {p.external_id for p in account.pages}:
+        # Pagina niet meer gekoppeld (bijv. geen beheerder meer); nooit stilletjes naar je eigen profiel
+        raise SocialError("page_not_available", status=409)
     margin = REFRESH_MARGIN_PER_PLATFORM.get(account.platform, REFRESH_MARGIN)
     if account.expires_at is not None and account.expires_at <= utcnow() + margin:
         current = TokenSet(
@@ -96,6 +135,6 @@ def fresh_credentials(db: Session, account: SocialAccount, settings: Settings) -
 
     return Credentials(
         platform=account.platform,
-        external_account_id=account.external_account_id,
+        external_account_id=page_id or account.external_account_id,
         access_token=crypto.decrypt(account.access_token_encrypted, settings),
     )
