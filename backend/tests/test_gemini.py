@@ -117,13 +117,13 @@ def test_falls_back_to_lighter_model_when_busy(settings):
 
     def generate_content(model, **_):
         calls.append(model)
-        if model == "gemini-flash-latest":
+        if model == settings.gemini_model:
             raise _api_error(errors.ServerError, 503, "UNAVAILABLE", "This model is currently experiencing high demand.")
         return response(json.dumps({"hook": "Nieuw", "body": "Kort", "hashtags": []}))
 
     result = make_writer(settings, generate_content).regenerate(brand(), Platform.X, "h", "b", [], "korter")
-    assert calls == ["gemini-flash-latest", "gemini-flash-lite-latest"]
-    assert result.post.hook == "Nieuw" and result.usage.model == "gemini-flash-lite-latest"
+    assert calls == [settings.gemini_model, settings.gemini_fallback_model]
+    assert result.post.hook == "Nieuw" and result.usage.model == settings.gemini_fallback_model
 
 
 def test_no_fallback_for_client_errors_or_when_disabled(settings):
@@ -135,7 +135,7 @@ def test_no_fallback_for_client_errors_or_when_disabled(settings):
 
     with pytest.raises(AIError):
         make_writer(settings, generate_content).regenerate(brand(), Platform.X, "h", "b", [], "korter")
-    assert calls == ["gemini-flash-latest"]  # een fout in het verzoek wordt met een ander model niet beter
+    assert calls == [settings.gemini_model]  # een fout in het verzoek wordt met een ander model niet beter
 
     settings.gemini_fallback_model = ""
     calls.clear()
@@ -146,7 +146,7 @@ def test_no_fallback_for_client_errors_or_when_disabled(settings):
 
     with pytest.raises(AIError) as exc:
         make_writer(settings, busy).regenerate(brand(), Platform.X, "h", "b", [], "korter")
-    assert exc.value.code == "ai_unavailable" and calls == ["gemini-flash-latest"]
+    assert exc.value.code == "ai_unavailable" and calls == [settings.gemini_model]
 
 
 def test_regenerate_returns_single_post(settings):

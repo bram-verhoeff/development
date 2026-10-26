@@ -30,9 +30,25 @@ class Settings(BaseSettings):
 
     # Google Gemini (aistudio.google.com → Get API key)
     gemini_api_key: str = ""
-    gemini_model: str = "gemini-flash-latest"
+    gemini_model: str = "gemini-flash-lite-latest"
     # Reservemodel als het hoofdmodel overbelast of onbereikbaar is (503/504); leeg = geen reserve
-    gemini_fallback_model: str = "gemini-flash-lite-latest"
+    gemini_fallback_model: str = "gemini-3.1-flash-lite"
+
+    @field_validator("gemini_model")
+    @classmethod
+    def _safe_gemini_model(cls, model: str) -> str:
+        # gemini-flash-latest (Gemini 3.8 Flash) heeft bij Google zware vertragingen en 504 Deadline expired.
+        # We vangen dit proactief af naar het snelle en stabiele gemini-flash-lite-latest.
+        if model in ("gemini-flash-latest", "gemini-2.5-flash", ""):
+            return "gemini-flash-lite-latest"
+        return model
+
+    @field_validator("gemini_fallback_model")
+    @classmethod
+    def _safe_fallback_model(cls, model: str) -> str:
+        if model in ("gemini-flash-latest", "gemini-2.5-flash"):
+            return "gemini-3.1-flash-lite"
+        return model
     # Beelden en video's (met dezelfde Gemini-sleutel)
     gemini_image_model: str = "gemini-3.1-flash-image"
     gemini_video_model: str = "veo-3.1-fast-generate-preview"

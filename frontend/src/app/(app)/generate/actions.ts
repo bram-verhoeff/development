@@ -7,6 +7,8 @@ import { ApiError, apiFetch } from "@/lib/api";
 
 export type GenerateState = { error?: string };
 
+export const maxDuration = 60;
+
 /** Laat Claude posts schrijven en stuurt door naar het overzicht van deze nieuwe posts. */
 export async function generatePosts(_prev: GenerateState, formData: FormData): Promise<GenerateState> {
   const sourceType = String(formData.get("source_type") ?? "none");

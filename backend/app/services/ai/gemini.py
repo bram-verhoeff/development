@@ -20,8 +20,9 @@ BLOCKED = {"SAFETY", "BLOCKLIST", "PROHIBITED_CONTENT", "SPII", "RECITATION"}
 
 @lru_cache(maxsize=4)
 def _client(api_key: str) -> genai.Client:
-    # Een client opstarten kost bijna een seconde; daarom één per sleutel hergebruiken
-    return genai.Client(api_key=api_key, http_options=types.HttpOptions(timeout=180_000))  # timeout in ms
+    # Een client opstarten kost bijna een seconde; daarom één per sleutel hergebruiken.
+    # Time-out op 25s zodat bij vertraging of overbelasting het reservemodel op tijd kan inspringen.
+    return genai.Client(api_key=api_key, http_options=types.HttpOptions(timeout=25_000))  # timeout in ms
 
 
 class GeminiWriter(BaseWriter):
