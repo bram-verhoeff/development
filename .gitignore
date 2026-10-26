@@ -16,3 +16,6 @@ backend/uploads/
 # Editor/OS
 .DS_Store
 Thumbs.db
+
+# Persoonlijke Claude Code-instellingen
+.claude/settings.local.json

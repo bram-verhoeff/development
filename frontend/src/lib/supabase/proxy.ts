@@ -4,7 +4,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { supabaseKey, supabaseUrl } from "./env";
 
 // Pagina's die zonder login bereikbaar zijn
-const publicPaths = ["/login", "/register", "/forgot-password", "/auth"];
+const publicPaths = ["/login", "/register", "/forgot-password", "/auth", "/privacy"];
 // Pagina's waar een ingelogde gebruiker niets te zoeken heeft
 const guestOnlyPaths = ["/login", "/register", "/forgot-password"];
 

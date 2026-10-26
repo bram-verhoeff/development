@@ -3,6 +3,92 @@
     "name": "PostPilot",
     "tagline": "Social content maken en inplannen per merk, met AI als copiloot"
   },
+  "privacy": {
+    "title": "Privacybeleid",
+    "updated": "Laatst bijgewerkt: 26 oktober 2026",
+    "intro": "PostPilot is een dienst van Agevo. In dit privacybeleid lees je welke gegevens we verwerken als je PostPilot gebruikt, waarom we dat doen en welke rechten je hebt.",
+    "back": "Terug naar PostPilot",
+    "sections": [
+      {
+        "heading": "Wie zijn wij",
+        "paragraphs": [
+          "PostPilot wordt aangeboden door Agevo, ingeschreven bij de Kamer van Koophandel, eigenaar Bram Verhoeff. Agevo is verantwoordelijk voor de verwerking van je persoonsgegevens.",
+          "Vragen over privacy? Mail naar info@agevodev.nl."
+        ]
+      },
+      {
+        "heading": "Welke gegevens we verwerken",
+        "items": [
+          "Accountgegevens: je e-mailadres en een versleuteld wachtwoord, zodat je kunt inloggen.",
+          "Merkgegevens die je zelf invult: naam, website, doelgroep, tone of voice, logo en voorbeeldteksten.",
+          "Content: de posts, afbeeldingen en video's die je maakt, bewerkt, inplant of plaatst.",
+          "Gekoppelde social-media-accounts: de naam, profielfoto en het account-ID van het account of de pagina die je koppelt (bijvoorbeeld LinkedIn, X, Facebook, Instagram of TikTok), en de toegangssleutels om namens jou te posten. Die sleutels slaan we versleuteld op.",
+          "Technische gegevens: logbestanden met bijvoorbeeld tijdstip en foutmeldingen, nodig om de dienst veilig en werkend te houden."
+        ]
+      },
+      {
+        "heading": "Waarvoor we je gegevens gebruiken",
+        "items": [
+          "Om je account en merken te beheren en je te laten inloggen.",
+          "Om met AI posts, afbeeldingen en video's voor je merk te maken.",
+          "Om posts op het moment dat jij kiest te plaatsen op de accounts en pagina's die je hebt gekoppeld.",
+          "Om storingen op te lossen en misbruik te voorkomen."
+        ],
+        "paragraphs": [
+          "We doen dit omdat het nodig is om de dienst te leveren die je gebruikt (uitvoering van de overeenkomst) en, voor beveiliging en logbestanden, omdat we daar een gerechtvaardigd belang bij hebben."
+        ]
+      },
+      {
+        "heading": "Gegevens van social-mediaplatforms",
+        "paragraphs": [
+          "Als je een account koppelt, geef je PostPilot via het platform zelf toestemming. We gebruiken die toegang alleen om te zien welk account of welke pagina je koppelt en om posts te plaatsen die jij hebt gemaakt of goedgekeurd. We lezen geen privéberichten, verkopen geen gegevens en gebruiken ze niet voor advertenties.",
+          "Je kunt een koppeling op elk moment verbreken in PostPilot of in de instellingen van het platform. Dan verwijderen we de opgeslagen toegangssleutels."
+        ]
+      },
+      {
+        "heading": "Met wie we gegevens delen",
+        "paragraphs": [
+          "We verkopen je gegevens nooit. We schakelen alleen dienstverleners in die nodig zijn om PostPilot te laten werken:"
+        ],
+        "items": [
+          "Supabase: inloggen, database en opslag van bestanden.",
+          "Vercel: hosting van de website en de server.",
+          "Google (Gemini) en eventueel Anthropic (Claude): het maken van teksten, afbeeldingen en video's met AI. Zij krijgen alleen de merkinformatie en instructies die nodig zijn voor een post.",
+          "De social-mediaplatforms die je zelf koppelt: zij ontvangen de posts die je laat plaatsen."
+        ]
+      },
+      {
+        "heading": "Hoe lang we gegevens bewaren",
+        "paragraphs": [
+          "We bewaren je gegevens zolang je een account hebt. Verwijder je een merk, post of koppeling, dan verwijderen we die gegevens ook. Wil je je hele account laten verwijderen? Mail ons, dan doen we dat binnen 30 dagen."
+        ]
+      },
+      {
+        "heading": "Cookies",
+        "paragraphs": [
+          "PostPilot gebruikt alleen functionele cookies die nodig zijn om je ingelogd te houden en je taalkeuze te onthouden. We gebruiken geen tracking- of advertentiecookies."
+        ]
+      },
+      {
+        "heading": "Beveiliging",
+        "paragraphs": [
+          "Verbindingen lopen altijd via een beveiligde verbinding (HTTPS). Toegangssleutels van gekoppelde accounts slaan we versleuteld op, en alleen jij hebt toegang tot je eigen merken en posts."
+        ]
+      },
+      {
+        "heading": "Je rechten",
+        "paragraphs": [
+          "Je mag je gegevens inzien, laten aanpassen of laten verwijderen, en je kunt bezwaar maken tegen een verwerking of een kopie van je gegevens opvragen. Stuur daarvoor een mail naar info@agevodev.nl. Ben je het niet eens met hoe we met je gegevens omgaan, dan kun je een klacht indienen bij de Autoriteit Persoonsgegevens."
+        ]
+      },
+      {
+        "heading": "Wijzigingen",
+        "paragraphs": [
+          "We kunnen dit privacybeleid aanpassen als PostPilot verandert. De datum bovenaan laat zien wanneer het voor het laatst is bijgewerkt."
+        ]
+      }
+    ]
+  },
   "nav": {
     "dashboard": "Dashboard",
     "brands": "Merken",

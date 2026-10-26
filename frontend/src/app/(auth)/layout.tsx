@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
 import { AuthHero } from "@/components/auth/AuthHero";
@@ -8,6 +9,7 @@ import { Logo } from "@/components/ui/Logo";
 // Gesplitst scherm: links sfeer en uitleg (vanaf laptop), rechts het formulier
 export default async function AuthLayout({ children }: { children: React.ReactNode }) {
   const t = await getTranslations("authHero");
+  const tPrivacy = await getTranslations("privacy");
   const texts = {
     title: t("title"),
     titleAccent: t("titleAccent"),
@@ -33,7 +35,7 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
         <p className="relative text-sm text-white/50">{t("footer")}</p>
       </section>
 
-      <section className="relative flex items-center justify-center px-4 py-10 sm:px-8">
+      <section className="relative flex flex-col items-center justify-center gap-4 px-4 py-10 sm:px-8">
         <Aurora />
         <FadeIn className="w-full max-w-sm rounded-3xl border border-line bg-surface/80 p-6 shadow-2xl shadow-accent/10 backdrop-blur-xl sm:p-8">
           <div className="mb-8 lg:hidden">
@@ -41,6 +43,9 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
           </div>
           {children}
         </FadeIn>
+        <Link href="/privacy" className="relative text-xs text-muted hover:text-foreground hover:underline">
+          {tPrivacy("title")}
+        </Link>
       </section>
     </div>
   );
