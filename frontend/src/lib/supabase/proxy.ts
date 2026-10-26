@@ -4,7 +4,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { supabaseKey, supabaseUrl } from "./env";
 
 // Pagina's die zonder login bereikbaar zijn
-const publicPaths = ["/login", "/register", "/forgot-password", "/auth", "/privacy"];
+const publicPaths = ["/login", "/register", "/forgot-password", "/auth", "/privacy", "/welcome"];
 // Pagina's waar een ingelogde gebruiker niets te zoeken heeft
 const guestOnlyPaths = ["/login", "/register", "/forgot-password"];
 
@@ -48,6 +48,15 @@ export async function updateSession(request: NextRequest) {
     return redirect;
   };
 
+  // Bezoekers zonder login zien op "/" de landingspagina (de URL blijft "/")
+  if (!isLoggedIn && pathname === "/") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/welcome";
+    const rewrite = NextResponse.rewrite(url, { request });
+    response.cookies.getAll().forEach((cookie) => rewrite.cookies.set(cookie));
+    Object.entries(cacheHeaders).forEach(([key, value]) => rewrite.headers.set(key, value));
+    return rewrite;
+  }
   if (!isLoggedIn && !matches(pathname, publicPaths)) return redirectTo("/login");
   if (isLoggedIn && matches(pathname, guestOnlyPaths)) return redirectTo("/");
 

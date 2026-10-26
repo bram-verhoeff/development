@@ -100,13 +100,7 @@
   "authHero": {
     "title": "Je social media op de",
     "titleAccent": "automatische piloot.",
-    "body": "Leg je merk één keer vast. PostPilot schrijft posts die klinken als jij, jij keurt ze goed en plant ze in.",
-    "card1Label": "Nieuwe hook",
-    "card1Text": "Stop met posten zonder plan. Dit werkt wél →",
-    "card2Label": "Goedgekeurd",
-    "card2Text": "Ingepland voor dinsdag 09:30",
-    "footer": "Instagram · LinkedIn · TikTok · X · Facebook",
-    "dragHint": "Sleep gerust met de kaartjes"
+    "footer": "Instagram · LinkedIn · TikTok · X · Facebook"
   },
   "auth": {
     "email": "E-mailadres",
@@ -566,6 +560,89 @@
       "illustration": "Kleurrijke, moderne illustratie.",
       "flatlay": "Flatlay van bovenaf.",
       "people": "Met mensen in beeld (niet herkenbaar)."
+    }
+  },
+  "landing": {
+    "metaTitle": "Social media op de automatische piloot",
+    "nav": {
+      "features": "Functies",
+      "how": "Zo werkt het",
+      "login": "Inloggen"
+    },
+    "hero": {
+      "eyebrow": "AI-contentplanner voor merken",
+      "title": "Je social media op de",
+      "titleAccent": "automatische piloot.",
+      "body": "Leg je merk één keer vast. PostPilot schrijft posts die klinken als jij, jij keurt ze goed en plant ze in, voor elk platform tegelijk.",
+      "primary": "Inloggen",
+      "secondary": "Account aanmaken",
+      "invite": "PostPilot is nu alleen op uitnodiging beschikbaar."
+    },
+    "mockup": {
+      "brand": "Bakkerij De Molen",
+      "text": "Vers uit de oven: ons nieuwe zuurdesembrood 🥖 Elke ochtend om 7 uur klaar. Wie komt er proeven?",
+      "tags": "#ambacht #zuurdesem #lokaal",
+      "concept": "Concept",
+      "approved": "Goedgekeurd",
+      "scheduled": "Ingepland · di 09:30",
+      "writing": "PostPilot schrijft…"
+    },
+    "platforms": "Eén plek voor al je kanalen",
+    "features": {
+      "title": "Alles wat je nodig hebt om consistent te posten",
+      "subtitle": "Van idee tot ingeplande post, zonder te schakelen tussen tien tabbladen.",
+      "items": [
+        {
+          "title": "Jouw merkstem",
+          "body": "Leg tone of voice, doelgroep en kleuren per merk vast. Elke post klinkt als jij."
+        },
+        {
+          "title": "Posts in seconden",
+          "body": "Kies een onderwerp en platforms; de AI schrijft passende teksten met hooks en hashtags."
+        },
+        {
+          "title": "Jij houdt de regie",
+          "body": "Niets gaat live zonder jouw akkoord. Pas aan, keur goed of genereer opnieuw."
+        },
+        {
+          "title": "Overzichtelijke kalender",
+          "body": "Sleep posts naar de juiste dag en zie in één oogopslag wat er wanneer uitgaat."
+        },
+        {
+          "title": "Direct publiceren",
+          "body": "Koppel je accounts en plaats posts op LinkedIn, X en Facebook vanuit PostPilot."
+        },
+        {
+          "title": "Beeld erbij",
+          "body": "Laat er een passende afbeelding bij maken, of upload je eigen beeld."
+        }
+      ]
+    },
+    "how": {
+      "title": "Zo werkt het",
+      "steps": [
+        {
+          "title": "Leg je merk vast",
+          "body": "Vul één keer je merkprofiel in: wie je bent, voor wie je schrijft en hoe je klinkt."
+        },
+        {
+          "title": "Laat posts genereren",
+          "body": "Kies een onderwerp en de platforms. PostPilot maakt per kanaal een passende versie."
+        },
+        {
+          "title": "Keur goed en plan in",
+          "body": "Check de teksten, zet ze in de kalender en publiceer met één klik."
+        }
+      ]
+    },
+    "cta": {
+      "title": "Klaar om op te stijgen?",
+      "body": "Log in en zet je eerste week aan content in een paar minuten klaar.",
+      "button": "Inloggen"
+    },
+    "footer": {
+      "rights": "PostPilot",
+      "privacy": "Privacybeleid"
     }
   }
 }
