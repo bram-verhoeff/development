@@ -72,10 +72,30 @@ export async function restoreVersion(postId: number, versionId: number): Promise
   return run(postId, () => apiFetch(`/posts/${postId}/versions/${versionId}/restore`, { method: "POST" }));
 }
 
-export async function deletePost(postId: number) {
-  await apiFetch(`/posts/${postId}`, { method: "DELETE" });
+export async function deletePost(postId: number, redirectAfter = false): Promise<ActionResult> {
+  try {
+    await apiFetch(`/posts/${postId}`, { method: "DELETE" });
+  } catch (e) {
+    return { error: errorCode(e) };
+  }
   refresh();
-  redirect("/posts");
+  if (redirectAfter) {
+    redirect("/posts");
+  }
+  return { ok: true };
+}
+
+export async function deletePosts(postIds: number[]): Promise<ActionResult> {
+  try {
+    await apiFetch("/posts/bulk-delete", {
+      method: "POST",
+      body: JSON.stringify({ post_ids: postIds }),
+    });
+  } catch (e) {
+    return { error: errorCode(e) };
+  }
+  refresh();
+  return { ok: true };
 }
 
 /** Plaatst de post nu meteen op het gekoppelde account. */

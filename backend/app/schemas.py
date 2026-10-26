@@ -185,6 +185,10 @@ class RegenerateIn(BaseModel):
     instructions: Annotated[str, StringConstraints(strip_whitespace=True, max_length=2000)] = ""
 
 
+class PostBulkDeleteIn(BaseModel):
+    post_ids: list[int]
+
+
 # ---------- Genereren ----------
 
 

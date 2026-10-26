@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
+import { ClearRejectedButton } from "@/components/posts/ClearRejectedButton";
 import { PostFilters } from "@/components/posts/PostFilters";
 import { PostGrid } from "@/components/posts/PostGrid";
 import { Alert } from "@/components/ui/Alert";
@@ -52,6 +53,13 @@ export default async function PostsPage({ searchParams }: { searchParams: Promis
       )}
 
       <PostFilters brands={brands} statuses={STATUSES} />
+
+      {search.status === "rejected" && posts.length > 0 && (
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-rose-500/20 bg-rose-500/10 p-3.5 px-4 text-sm text-foreground">
+          <span>{t("rejectedCount", { count: posts.length })}</span>
+          <ClearRejectedButton postIds={posts.map((p) => p.id)} />
+        </div>
+      )}
 
       {posts.length === 0 ? (
         <EmptyState

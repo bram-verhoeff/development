@@ -310,7 +310,7 @@ function DeleteCard({ post }: { post: PostDetail }) {
       type="button"
       disabled={pending}
       onClick={() => {
-        if (confirm(t("panel.deleteConfirm"))) startTransition(() => deletePost(post.id));
+        if (confirm(t("panel.deleteConfirm"))) startTransition(async () => { await deletePost(post.id, true); });
       }}
       className={`${buttonClass.danger} w-full`}
     >

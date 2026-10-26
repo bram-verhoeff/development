@@ -203,6 +203,19 @@ def test_delete_post(client, owner, post):
     assert client.get(f"/posts/{post['id']}", headers=owner).status_code == 404
 
 
+def test_bulk_delete_posts(client, owner, auth_headers, brand, writer):
+    other = auth_headers(email="tweede@voorbeeld.nl")
+    posts = generate(client, owner, brand["id"], platforms=["instagram"], posts_per_platform=3).json()["posts"]
+    ids = [p["id"] for p in posts]
+    # Ander mag niet verwijderen
+    assert client.post("/posts/bulk-delete", json={"post_ids": ids}, headers=other).status_code == 204
+    assert len(client.get("/posts", headers=owner).json()) == 3
+    # Eigenaar verwijdert 2 van de 3
+    assert client.post("/posts/bulk-delete", json={"post_ids": ids[:2]}, headers=owner).status_code == 204
+    remaining = client.get("/posts", headers=owner).json()
+    assert len(remaining) == 1 and remaining[0]["id"] == ids[2]
+
+
 def test_dashboard(client, owner, brand, writer):
     posts = generate(client, owner, brand["id"], platforms=["instagram"], posts_per_platform=3).json()["posts"]
     a, b, c = (p["id"] for p in posts)

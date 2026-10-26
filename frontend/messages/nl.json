@@ -234,6 +234,11 @@
     "approve": "Goedkeuren",
     "reject": "Afwijzen",
     "open": "Openen en bewerken",
+    "delete": "Verwijderen",
+    "deleteConfirm": "Weet je zeker dat je deze post wilt verwijderen?",
+    "clearRejected": "Alle afgewezen posts verwijderen",
+    "clearRejectedConfirm": "Weet je zeker dat je alle {count} afgewezen posts wilt verwijderen?",
+    "rejectedCount": "{count, plural, one {# afgewezen post} other {# afgewezen posts}}",
     "backToConcept": "Terug naar concept",
     "backToPosts": "Terug naar posts",
     "toast": {
@@ -244,7 +249,9 @@
       "unscheduled": "Uit de kalender gehaald.",
       "saved": "Wijzigingen opgeslagen.",
       "regenerated": "Nieuwe versie geschreven.",
-      "restored": "Versie teruggezet."
+      "restored": "Versie teruggezet.",
+      "deleted": "Post verwijderd.",
+      "bulkDeleted": "{count, plural, one {# post verwijderd.} other {# posts verwijderd.}}"
     },
     "editor": {
       "title": "Tekst",

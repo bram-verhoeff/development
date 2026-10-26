@@ -11,6 +11,7 @@ from app.config import Settings, get_settings
 from app.database import get_db, utcnow
 from app.models import Brand, GenerationRun, Platform, Post, PostStatus, VersionOrigin
 from app.schemas import (
+    PostBulkDeleteIn,
     PostDetailOut,
     PostOut,
     PostScheduleIn,
@@ -186,6 +187,22 @@ def restore_version(
     post_service.set_content(post, version.hook, version.body, list(version.hashtags), VersionOrigin.EDITED)
     db.commit()
     return post_service.to_detail(post)
+
+
+@router.post("/bulk-delete", status_code=status.HTTP_204_NO_CONTENT)
+def bulk_delete_posts(
+    data: PostBulkDeleteIn, db: Session = Depends(get_db), user: CurrentUser = Depends(get_current_user)
+):
+    """Meerdere posts tegelijk verwijderen (bijv. alle afgewezen posts opschonen)."""
+    if not data.post_ids:
+        return Response(status_code=status.HTTP_204_NO_CONTENT)
+    posts = db.scalars(
+        select(Post).join(Brand).where(Brand.user_id == user.id, Post.id.in_(data.post_ids))
+    ).all()
+    for post in posts:
+        db.delete(post)
+    db.commit()
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @router.delete("/{post_id}", status_code=status.HTTP_204_NO_CONTENT)

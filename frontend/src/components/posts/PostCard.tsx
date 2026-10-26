@@ -1,12 +1,12 @@
 "use client";
 
-import { CalendarClock, Check, Pencil, TriangleAlert, X } from "lucide-react";
+import { CalendarClock, Check, Pencil, Trash2, TriangleAlert, X } from "lucide-react";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { useFormatter, useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 
-import { setPostStatus } from "@/app/(app)/posts/actions";
+import { deletePost, setPostStatus } from "@/app/(app)/posts/actions";
 import { Burst } from "@/components/motion/Burst";
 import { SpotlightCard } from "@/components/motion/SpotlightCard";
 import { PlatformBadge, StatusBadge } from "@/components/ui/Badges";
@@ -29,6 +29,15 @@ export function PostCard({ post }: { post: Post }) {
       const result = await setPostStatus(post.id, status);
       if (result.error) toast(tErrors.has(result.error) ? tErrors(result.error) : tErrors("unknown_error"), "error");
       else toast(status === "approved" ? t("toast.approved") : t("toast.rejected"), status === "approved" ? "success" : "magic");
+    });
+  };
+
+  const handleDelete = () => {
+    if (!confirm(t("deleteConfirm"))) return;
+    startTransition(async () => {
+      const result = await deletePost(post.id);
+      if (result.error) toast(tErrors.has(result.error) ? tErrors(result.error) : tErrors("unknown_error"), "error");
+      else toast(t("toast.deleted"), "magic");
     });
   };
 
@@ -100,9 +109,20 @@ export function PostCard({ post }: { post: Post }) {
             <X size={15} /> {t("reject")}
           </motion.button>
         )}
-        <Link href={`/posts/${post.id}`} className={`${buttonClass.ghost} px-3 py-1.5`} aria-label={t("open")}>
+        <Link href={`/posts/${post.id}`} className={`${buttonClass.ghost} px-2.5 py-1.5`} aria-label={t("open")}>
           <Pencil size={15} />
         </Link>
+        <motion.button
+          type="button"
+          disabled={pending}
+          onClick={handleDelete}
+          whileTap={{ scale: 0.92 }}
+          className={`${buttonClass.ghost} text-muted hover:text-rose-500 hover:bg-rose-500/10 px-2.5 py-1.5 transition-colors`}
+          aria-label={t("delete")}
+          title={t("delete")}
+        >
+          <Trash2 size={15} />
+        </motion.button>
       </footer>
     </SpotlightCard>
   );
