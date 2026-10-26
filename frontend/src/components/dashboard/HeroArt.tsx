@@ -34,8 +34,8 @@ export function HeroArt() {
         />
         <defs>
           <linearGradient id="route" x1="0" x2="1">
-            <stop offset="0%" stopColor="#8c82ff" stopOpacity="0.2" />
-            <stop offset="100%" stopColor="#ff8a63" stopOpacity="0.9" />
+            <stop offset="0%" stopColor="#2dd4bf" stopOpacity="0.2" />
+            <stop offset="100%" stopColor="#fbbf4a" stopOpacity="0.9" />
           </linearGradient>
         </defs>
       </svg>
@@ -47,7 +47,7 @@ export function HeroArt() {
         animate={{ offsetDistance: ["0%", "100%"] }}
         transition={{ duration: 7, repeat: Infinity, repeatDelay: 1.2, ease: "easeInOut" }}
       >
-        <svg width="30" height="30" viewBox="0 0 24 24" className="-translate-x-1/2 -translate-y-1/2 rotate-45 drop-shadow-[0_4px_12px_rgba(255,138,99,0.6)]">
+        <svg width="30" height="30" viewBox="0 0 24 24" className="-translate-x-1/2 -translate-y-1/2 rotate-45 drop-shadow-[0_4px_12px_rgba(251,191,74,0.6)]">
           <path d="M21.5 2.5 2.8 10.2c-.8.3-.8 1.5.1 1.7l6.6 1.9 1.9 6.6c.2.9 1.4.9 1.7.1L21.5 2.5Z" fill="white" />
         </svg>
       </motion.div>

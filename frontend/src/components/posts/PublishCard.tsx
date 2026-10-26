@@ -79,7 +79,7 @@ export function PublishCard({ post }: { post: PostDetail }) {
       <div className="space-y-3">
         <p className="text-sm text-muted">{t("asAccount", { account })}</p>
         {post.scheduled_at && (
-          <p className="flex items-center gap-2 rounded-lg bg-indigo-50 px-3 py-2 text-sm text-indigo-800 dark:bg-indigo-950/40 dark:text-indigo-200">
+          <p className="flex items-center gap-2 rounded-lg bg-accent-soft px-3 py-2 text-sm text-accent">
             <CalendarClock size={16} className="shrink-0" />
             {post.next_attempt_at ? t("retryAt", { date: when(post.next_attempt_at) }) : t("autoAt", { date: when(post.scheduled_at) })}
           </p>

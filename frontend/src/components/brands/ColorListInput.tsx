@@ -48,7 +48,7 @@ export function ColorListInput({ initial }: { initial: string[] }) {
         ))}
       </div>
       {colors.length < 10 && (
-        <button type="button" onClick={() => setColors((list) => [...list, "#4338CA"])} className={`${buttonClass.secondary} mt-2`}>
+        <button type="button" onClick={() => setColors((list) => [...list, "#0F7F75"])} className={`${buttonClass.secondary} mt-2`}>
           {t("addColor")}
         </button>
       )}

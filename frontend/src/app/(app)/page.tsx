@@ -28,8 +28,8 @@ export default async function DashboardPage() {
   const stats = [
     { key: "concept", value: data.concept, Icon: CircleDashed, href: "/posts?status=concept", tone: "text-amber-600 bg-amber-100/70 dark:bg-amber-950/50", glow: "rgba(245, 158, 11, 0.16)" },
     { key: "ready", value: data.approved_unscheduled, Icon: CircleCheck, href: "/calendar", tone: "text-emerald-600 bg-emerald-100/70 dark:bg-emerald-950/50", glow: "rgba(16, 185, 129, 0.16)" },
-    { key: "scheduled", value: data.scheduled_upcoming, Icon: CalendarClock, href: "/calendar", tone: "text-accent bg-accent-soft", glow: "rgba(124, 92, 240, 0.18)" },
-    { key: "brands", value: data.brands, Icon: Building2, href: "/brands", tone: "text-coral bg-coral-soft", glow: "rgba(255, 106, 61, 0.16)" },
+    { key: "scheduled", value: data.scheduled_upcoming, Icon: CalendarClock, href: "/calendar", tone: "text-accent bg-accent-soft", glow: "rgba(15, 148, 136, 0.18)" },
+    { key: "brands", value: data.brands, Icon: Building2, href: "/brands", tone: "text-sky-600 bg-sky-100/70 dark:bg-sky-950/50", glow: "rgba(14, 165, 233, 0.16)" },
   ] as const;
 
   const usage = Math.min(data.generations_today / Math.max(data.generation_daily_limit, 1), 1);
@@ -41,7 +41,7 @@ export default async function DashboardPage() {
         <section className="relative overflow-hidden rounded-3xl bg-nav p-6 text-white shadow-2xl shadow-accent/10 sm:p-8 lg:min-h-[220px]">
           <div aria-hidden className="bg-dots absolute inset-0 opacity-50" />
           <div aria-hidden className="bg-brand-gradient absolute -top-24 -right-16 h-72 w-72 rounded-full opacity-40 blur-3xl" />
-          <div aria-hidden className="absolute -bottom-24 left-1/3 h-56 w-56 rounded-full bg-indigo-500/30 blur-3xl" />
+          <div aria-hidden className="absolute -bottom-24 left-1/3 h-56 w-56 rounded-full bg-teal-500/30 blur-3xl" />
           <HeroArt />
           <div className="relative max-w-xl">
             <p className="text-sm font-medium text-white/60">{t(`greeting.${greetingKey()}`)}</p>

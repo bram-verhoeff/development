@@ -8,7 +8,7 @@ export function LogoMark({ size = 32 }: { size?: number }) {
     >
       <svg viewBox="0 0 24 24" width={size * 0.58} height={size * 0.58} fill="none">
         <path d="M21.5 2.5 2.8 10.2c-.8.3-.8 1.5.1 1.7l6.6 1.9 1.9 6.6c.2.9 1.4.9 1.7.1L21.5 2.5Z" fill="white" />
-        <path d="m9.5 13.8 5.2-5.2" stroke="#7a5cf0" strokeWidth="1.6" strokeLinecap="round" />
+        <path d="m9.5 13.8 5.2-5.2" stroke="#0f7f75" strokeWidth="1.6" strokeLinecap="round" />
       </svg>
     </span>
   );

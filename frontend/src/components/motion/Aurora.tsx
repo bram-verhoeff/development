@@ -2,9 +2,9 @@
 // Bewust niet geanimeerd: bewegende vlakken met blur-3xl laten de GPU elk frame het hele scherm
 // opnieuw tekenen (ook onder backdrop-blur), wat scrollen en klikken merkbaar traag maakt.
 const blobs = [
-  "left-[10%] top-[-10%] h-[32rem] w-[32rem] bg-indigo-500/25 dark:bg-indigo-500/30",
-  "right-[-5%] top-[20%] h-[28rem] w-[28rem] bg-fuchsia-500/20 dark:bg-fuchsia-500/25",
-  "left-[35%] bottom-[-15%] h-[30rem] w-[30rem] bg-orange-400/20 dark:bg-orange-500/20",
+  "left-[10%] top-[-10%] h-[32rem] w-[32rem] bg-teal-500/25 dark:bg-teal-500/30",
+  "right-[-5%] top-[20%] h-[28rem] w-[28rem] bg-emerald-400/20 dark:bg-emerald-500/20",
+  "left-[35%] bottom-[-15%] h-[30rem] w-[30rem] bg-amber-400/20 dark:bg-amber-500/20",
 ];
 
 export function Aurora() {

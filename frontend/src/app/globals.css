@@ -1,43 +1,44 @@
 @import "tailwindcss";
 
 /*
-  PostPilot-kleuren: diep nachtblauw met een indigo/koraal "afterburner"-accent.
+  PostPilot-kleuren: diep petrol met een teal-accent en amber als tweede kleur
+  (de token heet nog "coral").
   Gebruik in Tailwind als bg-surface, text-muted, bg-accent, enz.
 */
 :root {
-  --background: #f4f5fb;
+  --background: #f3f7f6;
   --surface: #ffffff;
-  --surface-2: #f8f9fd;
-  --foreground: #121631;
-  --muted: #646b86;
-  --line: #e3e6f1;
-  --accent: #5b4cf0;
-  --accent-soft: #ecebfe;
+  --surface-2: #f7faf9;
+  --foreground: #0f2326;
+  --muted: #5d7275;
+  --line: #dde7e5;
+  --accent: #0f7f75;
+  --accent-soft: #e1f4f1;
   --accent-foreground: #ffffff;
-  --coral: #ff6a3d;
-  --coral-soft: #fff0ea;
-  --nav: #0d1330;
-  --nav-2: #161d45;
-  --nav-foreground: #c9cdea;
-  --shadow: 0 1px 2px rgb(18 22 49 / 0.05), 0 8px 24px -12px rgb(18 22 49 / 0.12);
+  --coral: #e8930f;
+  --coral-soft: #fff4e0;
+  --nav: #0b2a2e;
+  --nav-2: #12393e;
+  --nav-foreground: #c3dbd8;
+  --shadow: 0 1px 2px rgb(15 35 38 / 0.05), 0 8px 24px -12px rgb(15 35 38 / 0.12);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #090d1f;
-    --surface: #11173a;
-    --surface-2: #151c44;
-    --foreground: #e9ebfa;
-    --muted: #9aa0c0;
-    --line: #242c5a;
-    --accent: #8c82ff;
-    --accent-soft: #221f55;
-    --accent-foreground: #0b0f26;
-    --coral: #ff8a63;
-    --coral-soft: #3a1f1a;
-    --nav: #070a19;
-    --nav-2: #10163a;
-    --nav-foreground: #b4b9dc;
+    --background: #071a1c;
+    --surface: #0d2629;
+    --surface-2: #112e32;
+    --foreground: #e6f2f0;
+    --muted: #93acaa;
+    --line: #1e4045;
+    --accent: #2dd4bf;
+    --accent-soft: #0f3b38;
+    --accent-foreground: #04201d;
+    --coral: #fbbf4a;
+    --coral-soft: #3a2a10;
+    --nav: #051416;
+    --nav-2: #0b2427;
+    --nav-foreground: #a9c4c1;
     --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px -12px rgb(0 0 0 / 0.5);
   }
 }
@@ -76,13 +77,13 @@ h3 {
   text-wrap: balance;
 }
 
-/* Merkverloop van PostPilot: indigo → koraal */
+/* Merkverloop van PostPilot: teal → amber */
 .bg-brand-gradient {
-  background-image: linear-gradient(135deg, #5b4cf0 0%, #9b4de0 55%, #ff6a3d 100%);
+  background-image: linear-gradient(135deg, #0f9488 0%, #22b07d 55%, #f5a524 100%);
 }
 
 .text-brand-gradient {
-  background-image: linear-gradient(135deg, #7a6cff 0%, #c260e8 50%, #ff7a4d 100%);
+  background-image: linear-gradient(135deg, #2dd4bf 0%, #5fd08a 50%, #fbbf4a 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -91,8 +92,8 @@ h3 {
 /* Fijn raster voor de achtergrond van het werkvlak */
 .bg-grid {
   background-image:
-    linear-gradient(to right, rgb(91 76 240 / 0.07) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(91 76 240 / 0.07) 1px, transparent 1px);
+    linear-gradient(to right, rgb(15 148 136 / 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(15 148 136 / 0.07) 1px, transparent 1px);
   background-size: 44px 44px;
 }
 
@@ -125,7 +126,7 @@ h3 {
   }
 }
 .text-brand-animated {
-  background-image: linear-gradient(90deg, #7a6cff, #c260e8, #ff7a4d, #c260e8, #7a6cff);
+  background-image: linear-gradient(90deg, #2dd4bf, #5fd08a, #fbbf4a, #5fd08a, #2dd4bf);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;

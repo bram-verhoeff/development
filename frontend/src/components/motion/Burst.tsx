@@ -3,7 +3,7 @@
 import { motion } from "motion/react";
 
 // Kleine feestelijke uitbarsting van stipjes (bijv. bij goedkeuren). Remount met een nieuwe key om opnieuw af te spelen.
-const COLORS = ["#10b981", "#8c82ff", "#ff8a63", "#fbbf24", "#22d3ee"];
+const COLORS = ["#10b981", "#2dd4bf", "#fbbf4a", "#fbbf24", "#22d3ee"];
 
 export function Burst({ count = 12 }: { count?: number }) {
   return (

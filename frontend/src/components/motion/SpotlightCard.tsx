@@ -6,7 +6,7 @@ import { motion, useMotionTemplate, useMotionValue } from "motion/react";
 export function SpotlightCard({
   children,
   className = "",
-  glow = "rgba(124, 92, 240, 0.16)",
+  glow = "rgba(15, 148, 136, 0.16)",
 }: {
   children: React.ReactNode;
   className?: string;
