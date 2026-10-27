@@ -576,3 +576,25 @@ select:hover, select:focus { border-color: var(--accent); outline: 0; }
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
   .onthul { opacity: 1; transform: none; }
 }
+
+/* ---------- Online opslag ---------- */
+.wolk-lijst { width: 300px; }
+.wolk-lijst a { color: var(--accent); font-weight: 600; }
+.wolk-lijst code { font-size: 0.85em; }
+.wolk-status { font-weight: 600; }
+.wolk-status.fout { color: var(--fout); }
+.wolk-invoer {
+  display: block; width: calc(100% - 24px); margin: 4px 12px 6px; padding: 9px 11px;
+  font: inherit; font-size: 0.88rem; color: var(--tekst);
+  background: transparent; border: 1px solid var(--rand); border-radius: 9px; outline: 0;
+}
+.wolk-invoer:focus { border-color: var(--accent); }
+.wolk-stip {
+  display: inline-block; width: 8px; height: 8px; margin-right: 7px; border-radius: 50%;
+  background: var(--muted); vertical-align: 1px; transition: background 0.2s;
+}
+.wolk-stip.ok { background: var(--accent); }
+.wolk-stip.bezig { background: var(--accent); animation: wolk-puls 1s ease-in-out infinite; }
+.wolk-stip.fout { background: var(--fout); }
+@keyframes wolk-puls { 50% { opacity: 0.3; } }
+@media (prefers-reduced-motion: reduce) { .wolk-stip.bezig { animation: none; } }

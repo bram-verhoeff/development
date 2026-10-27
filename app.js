@@ -570,14 +570,14 @@ $("#backupKnop").addEventListener("click", async () => {
   a.download = `opportunityscanner-backup-${new Date().toISOString().slice(0, 10)}.json`;
   a.click();
   URL.revokeObjectURL(a.href);
-  $(".menu").open = false;
+  $("#backupMenu").open = false;
   toast("Backup gedownload");
 });
 
 $("#backupBestand").addEventListener("change", async (e) => {
   const bestand = e.target.files[0];
   e.target.value = "";
-  $(".menu").open = false;
+  $("#backupMenu").open = false;
   if (!bestand) return;
   if (opslag.leads().length && !confirm("De huidige leads, statussen en mails in deze browser worden vervangen door de backup. Doorgaan?")) return;
   try {
@@ -588,6 +588,61 @@ $("#backupBestand").addEventListener("change", async (e) => {
   } catch (err) {
     toast(err.message, true);
   }
+});
+
+// --- Online opslag ---
+const tijdstip = (iso) => new Date(iso).toLocaleTimeString("nl-NL", { hour: "2-digit", minute: "2-digit" });
+
+opslag.opSyncStatus((s) => {
+  const gekoppeld = opslag.wolkGekoppeld();
+  $("#wolkForm").hidden = gekoppeld;
+  $("#wolkActies").hidden = !gekoppeld;
+  $("#wolkStip").className = `wolk-stip ${gekoppeld ? s.soort : ""}`;
+  const el = $("#wolkStatus");
+  el.classList.toggle("fout", s.soort === "fout");
+  el.textContent = !gekoppeld
+    ? "Uit: alles staat alleen in deze browser."
+    : s.soort === "bezig"
+      ? "Bezig met synchroniseren…"
+      : s.soort === "fout"
+        ? `Niet gesynchroniseerd: ${s.fout}`
+        : `Online opgeslagen${s.tijd ? ` · ${tijdstip(s.tijd)}` : ""}`;
+});
+
+// Wijzigingen van een ander apparaat zijn binnengekomen
+opslag.opWijziging(() => {
+  laadUitOpslag();
+  toonResultaten(false);
+});
+
+$("#wolkForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const knop = $("#wolkKoppel");
+  knop.disabled = true;
+  knop.textContent = "Bezig met koppelen…";
+  try {
+    await opslag.koppelWolk($("#wolkToken").value);
+    $("#wolkToken").value = "";
+    toast("Online opslag gekoppeld");
+  } catch (err) {
+    toast(err.message, true);
+  } finally {
+    knop.disabled = false;
+    knop.textContent = "Koppelen";
+  }
+});
+
+$("#wolkNu").addEventListener("click", () =>
+  opslag.sync().then(
+    () => toast("Gesynchroniseerd"),
+    (err) => toast(err.message, true),
+  ),
+);
+
+$("#wolkOntkoppel").addEventListener("click", () => {
+  if (!confirm("Deze browser stopt met online opslaan. Je gegevens blijven hier en in de online kluis staan. Doorgaan?")) return;
+  opslag.ontkoppelWolk();
+  toast("Online opslag ontkoppeld in deze browser");
 });
 
 // --- Onthullen bij scrollen ---

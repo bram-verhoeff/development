@@ -5,6 +5,7 @@ Webapp die bedrijven zoekt zonder eigen website (maar mét openbaar e-mailadres)
 - **Scannen** via OpenStreetMap (gratis, geen API-key), per plaats en branche.
 - **Wachtwoord** voor de hele site.
 - **Opslag** versleuteld in de browser: leads stapelen op over scans; status, verstuurde mails en afzender blijven bewaard.
+- **Online opslag** (optioneel) in een geheime GitHub Gist, versleuteld: op elk apparaat dezelfde leads en statussen.
 - **Backup** downloaden en terugzetten, om je gegevens naar een ander apparaat of andere browser over te zetten.
 - **Mail opstellen** per lead (je/u-vorm, per branche, wisselende formuleringen), openen in je mailprogramma of Gmail.
 
@@ -48,3 +49,10 @@ en open `http://localhost:8000` (direct openen als bestand werkt niet: ES-module
 | `mail.js` | mailsjablonen |
 | `opslag.js` | versleutelde opslag, wachtwoordcontrole en backup |
 | `OpportunityScanner/` | losse Python-scripts (OpenStreetMap en Google Places) |
+
+## Online opslag (GitHub Gist)
+1. Open **Online opslag** rechtsboven en klik op *Maak een GitHub-token*. Kies alleen het recht `gist` en een vervaldatum.
+2. Plak de token en klik **Koppelen**. De app zoekt een bestaande kluis-gist van je account, of maakt een nieuwe geheime gist.
+3. Doe hetzelfde op je andere apparaten (zelfde wachtwoord, zelfde of nieuwe token).
+
+Elke wijziging gaat na ruim een seconde automatisch online; bij terugkeren naar het tabblad worden wijzigingen van andere apparaten opgehaald. Per lead wint de laatst gewijzigde versie, dus wijzigingen op twee apparaten gaan niet verloren. De gist bevat alleen versleutelde tekst; de token staat versleuteld in je browser.

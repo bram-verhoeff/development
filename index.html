@@ -49,7 +49,23 @@
     </a>
     <div class="nav-rechts">
       <a class="nav-link" href="#hoe">Hoe werkt het?</a>
-      <details class="menu">
+      <details id="wolkMenu" class="menu">
+        <summary class="knop secundair klein"><span id="wolkStip" class="wolk-stip" aria-hidden="true"></span>Online opslag</summary>
+        <div class="menu-lijst wolk-lijst">
+          <p id="wolkStatus" class="wolk-status muted" role="status">Uit: alles staat alleen in deze browser.</p>
+          <form id="wolkForm">
+            <p class="muted">Bewaar je leads versleuteld in een geheime GitHub Gist, zodat je op elk apparaat dezelfde gegevens hebt. GitHub ziet alleen versleutelde tekst.</p>
+            <p><a href="https://github.com/settings/tokens/new?scopes=gist&amp;description=OpportunityScanner" target="_blank" rel="noopener">Maak een GitHub-token</a> met alleen het recht <code>gist</code> en plak hem hier.</p>
+            <input id="wolkToken" class="wolk-invoer" type="password" placeholder="ghp_…" autocomplete="off" spellcheck="false" aria-label="GitHub-token">
+            <button id="wolkKoppel" type="submit">Koppelen</button>
+          </form>
+          <div id="wolkActies" hidden>
+            <button id="wolkNu" type="button">Nu synchroniseren</button>
+            <button id="wolkOntkoppel" type="button">Ontkoppelen in deze browser</button>
+          </div>
+        </div>
+      </details>
+      <details id="backupMenu" class="menu">
         <summary class="knop secundair klein">Backup</summary>
         <div class="menu-lijst">
           <button id="backupKnop" type="button">Backup downloaden</button>

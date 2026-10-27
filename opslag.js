@@ -1,15 +1,20 @@
 // Versleutelde opslag in de browser (localStorage), beveiligd met het wachtwoord.
 // Alle data (leads, verstuurde mails, afzender) staat AES-GCM-versleuteld; de sleutel wordt met
 // PBKDF2 afgeleid van het wachtwoord. Het wachtwoord zelf staat nergens in de code, alleen een hash.
-// Overzetten naar een ander apparaat: backup downloaden en daar terugzetten (zelfde wachtwoord).
+// Online opslag (optioneel): dezelfde versleutelde kluis in een geheime GitHub Gist, zodat elk
+// apparaat dezelfde gegevens heeft. GitHub ziet alleen versleutelde tekst.
 
 // SHA-256 van "opportunityscanner|" + wachtwoord. Ander wachtwoord? Zie de README.
 const WACHTWOORD_HASH = "b2f4c3b81c4915180195fe40651d996a7ae5c7d8f36d7303e0a7ecc151b704d6";
 const ZOUT = new TextEncoder().encode("opportunityscanner-kluis-v1");
 const KLUIS = "os-kluis";
 const SESSIE = "os-sessie"; // sleutel voor dit tabblad, zodat herladen niet opnieuw om het wachtwoord vraagt
+const WOLK = "os-wolk"; // versleutelde GitHub-token en gist-id van de online opslag
 
-const LEEG = () => ({ leads: [], mails: [], afzender: null });
+const GIST_BESCHRIJVING = "OpportunityScanner kluis (versleuteld)";
+const GIST_BESTAND = "kluis.json";
+
+const LEEG = () => ({ leads: [], mails: [], afzender: null, afzenderTijd: null });
 let sleutel = null;
 let staat = LEEG();
 
@@ -20,6 +25,7 @@ function naarB64(bytes) {
   return btoa(s);
 }
 const vanB64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
+const nu = () => new Date().toISOString();
 
 async function hash(wachtwoord) {
   const h = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(`opportunityscanner|${wachtwoord}`));
@@ -63,18 +69,21 @@ async function laadKluis() {
   staat = { ...LEEG(), ...(tekst ? await ontsleutel(tekst) : {}) };
 }
 
+async function schrijfLokaal() {
+  const tekst = await versleutel(staat);
+  try {
+    localStorage.setItem(KLUIS, tekst);
+  } catch {
+    throw new Error("Opslaan mislukt: de opslag van je browser is vol of geblokkeerd. Download een backup.");
+  }
+}
+
 // Schrijfacties na elkaar uitvoeren, zodat een trage schrijfactie een nieuwere niet overschrijft.
 let wachtrij = Promise.resolve();
 function schrijf() {
-  const klaar = wachtrij.then(async () => {
-    const tekst = await versleutel(staat);
-    try {
-      localStorage.setItem(KLUIS, tekst);
-    } catch {
-      throw new Error("Opslaan mislukt: de opslag van je browser is vol of geblokkeerd. Download een backup.");
-    }
-  });
+  const klaar = wachtrij.then(schrijfLokaal);
   wachtrij = klaar.catch(() => {});
+  klaar.then(planSync, () => {});
   return klaar;
 }
 
@@ -92,6 +101,7 @@ export async function ontgrendel(wachtwoord) {
     } catch {}
     staat = LEEG();
   }
+  await laadWolk();
   try {
     sessionStorage.setItem(SESSIE, naarB64(await crypto.subtle.exportKey("raw", sleutel)));
   } catch {}
@@ -107,6 +117,7 @@ export async function herstelSessie() {
   try {
     sleutel = await crypto.subtle.importKey("raw", vanB64(ruw), "AES-GCM", true, ["encrypt", "decrypt"]);
     await laadKluis();
+    await laadWolk();
     return true;
   } catch {
     vergrendel();
@@ -117,6 +128,9 @@ export async function herstelSessie() {
 export function vergrendel() {
   sleutel = null;
   staat = LEEG();
+  wolk = null;
+  clearTimeout(syncTimer);
+  meldSync({ soort: "uit" });
   try {
     sessionStorage.removeItem(SESSIE);
   } catch {}
@@ -132,14 +146,14 @@ export const afzender = () => staat.afzender;
  */
 export async function bewaarLeads(nieuw, { alleenNieuw = false } = {}) {
   const opId = new Map(staat.leads.map((l) => [l.id, l]));
-  for (const { status, laatstGemaild, gevondenOp, ...gegevens } of nieuw) {
+  for (const { status, laatstGemaild, gevondenOp, gewijzigd, ...gegevens } of nieuw) {
     const bestaand = opId.get(gegevens.id);
     if (!bestaand) {
-      const lead = { ...gegevens, status: status || "", laatstGemaild: null, gevondenOp: new Date().toISOString() };
+      const lead = { ...gegevens, status: status || "", laatstGemaild: null, gevondenOp: nu(), gewijzigd: nu() };
       staat.leads.push(lead);
       opId.set(lead.id, lead);
     } else if (!alleenNieuw) {
-      Object.assign(bestaand, gegevens);
+      Object.assign(bestaand, gegevens, { gewijzigd: nu() });
     }
   }
   await schrijf();
@@ -147,22 +161,23 @@ export async function bewaarLeads(nieuw, { alleenNieuw = false } = {}) {
 
 export async function zetStatus(id, status) {
   const lead = staat.leads.find((l) => l.id === id);
-  if (lead) lead.status = status;
+  if (lead) Object.assign(lead, { status, gewijzigd: nu() });
   await schrijf();
 }
 
 /** Legt een mail vast en geeft het tijdstip terug. */
 export async function logMail(lead, onderwerp, tekst) {
-  const tijd = new Date().toISOString();
+  const tijd = nu();
   staat.mails.push({ id: lead.id, aan: lead.email, onderwerp, tekst, tijd });
   const opgeslagen = staat.leads.find((l) => l.id === lead.id);
-  if (opgeslagen) opgeslagen.laatstGemaild = tijd;
+  if (opgeslagen) Object.assign(opgeslagen, { laatstGemaild: tijd, gewijzigd: tijd });
   await schrijf();
   return tijd;
 }
 
 export async function bewaarAfzender(nieuweAfzender) {
   staat.afzender = { ...nieuweAfzender };
+  staat.afzenderTijd = nu();
   await schrijf();
 }
 
@@ -178,5 +193,179 @@ export async function zetBackupTerug(tekst) {
     throw new Error("Dit backupbestand is ongeldig of met een ander wachtwoord gemaakt.");
   }
   staat = { ...LEEG(), ...nieuw };
+  // De backup vervangt ook de online kopie, anders zou synchroniseren de oude gegevens terugmengen
   await schrijf();
+  if (wolk) await sync({ overschrijf: true });
 }
+
+// --- Online opslag (GitHub Gist) ---
+let wolk = null; // { token, gistId }
+let syncTimer;
+let syncBezig = null;
+const luisteraars = { sync: new Set(), wijziging: new Set() };
+let laatsteSync = { soort: "uit" };
+
+/** Meldingen over de online opslag: { soort: "uit" | "bezig" | "ok" | "fout", tijd?, fout? }. */
+export function opSyncStatus(cb) {
+  luisteraars.sync.add(cb);
+  cb(laatsteSync);
+}
+/** Wordt aangeroepen als er wijzigingen van een ander apparaat zijn binnengekomen. */
+export function opWijziging(cb) {
+  luisteraars.wijziging.add(cb);
+}
+function meldSync(s) {
+  laatsteSync = s;
+  luisteraars.sync.forEach((cb) => cb(s));
+}
+
+export const wolkGekoppeld = () => Boolean(wolk);
+
+async function laadWolk() {
+  const tekst = lees(WOLK);
+  wolk = null;
+  if (!tekst) return meldSync({ soort: "uit" });
+  try {
+    wolk = await ontsleutel(tekst);
+  } catch {
+    return meldSync({ soort: "uit" });
+  }
+  sync().catch(() => {});
+}
+
+async function github(pad, { methode = "GET", body, token = wolk?.token } = {}) {
+  let r;
+  try {
+    r = await fetch(`https://api.github.com${pad}`, {
+      method: methode,
+      headers: {
+        Accept: "application/vnd.github+json",
+        Authorization: `Bearer ${token}`,
+        ...(body ? { "Content-Type": "application/json" } : {}),
+      },
+      body: body ? JSON.stringify(body) : undefined,
+      cache: "no-store",
+    });
+  } catch {
+    throw new Error("Geen verbinding met GitHub.");
+  }
+  if (r.status === 401) throw new Error("GitHub-token is ongeldig of verlopen.");
+  if (r.status === 403 || r.status === 404) throw new Error("Geen toegang: geef de token het recht 'gist'.");
+  if (!r.ok) throw new Error(`GitHub gaf een fout (${r.status}).`);
+  return r.json();
+}
+
+async function leesGist(gist) {
+  const bestand = gist.files?.[GIST_BESTAND];
+  if (!bestand) return null;
+  if (!bestand.truncated) return bestand.content;
+  // Grote bestanden levert de API ingekort; dan de volledige inhoud apart ophalen
+  const r = await fetch(bestand.raw_url, { cache: "no-store" });
+  if (!r.ok) throw new Error("Kon de online kluis niet ophalen.");
+  return r.text();
+}
+
+const tijdVan = (lead) => lead.gewijzigd || lead.gevondenOp || "";
+
+/** Voegt twee versies samen: per lead wint de laatst gewijzigde, mails worden samengevoegd. */
+function voegSamen(a, b) {
+  const leads = new Map(a.leads.map((l) => [l.id, l]));
+  for (const l of b.leads) {
+    const bestaand = leads.get(l.id);
+    if (!bestaand || tijdVan(l) > tijdVan(bestaand)) leads.set(l.id, l);
+  }
+  const mails = new Map([...a.mails, ...b.mails].map((m) => [`${m.id}|${m.tijd}`, m]));
+  const afzenderVan = (b.afzenderTijd || "") > (a.afzenderTijd || "") ? b : a;
+  return {
+    ...LEEG(),
+    leads: [...leads.values()],
+    mails: [...mails.values()].sort((x, y) => x.tijd.localeCompare(y.tijd)),
+    afzender: afzenderVan.afzender,
+    afzenderTijd: afzenderVan.afzenderTijd,
+  };
+}
+
+function planSync() {
+  if (!wolk) return;
+  clearTimeout(syncTimer);
+  // Even wachten, zodat snel achter elkaar wijzigen één upload wordt
+  syncTimer = setTimeout(() => sync().catch(() => {}), 1500);
+}
+
+/** Haalt de online versie op, voegt samen met deze browser en zet het resultaat terug online. */
+export function sync({ overschrijf = false } = {}) {
+  if (!wolk) return Promise.resolve();
+  if (syncBezig) return syncBezig.then(() => sync({ overschrijf }));
+  syncBezig = (async () => {
+    meldSync({ soort: "bezig" });
+    try {
+      const gist = await github(`/gists/${wolk.gistId}`);
+      const tekst = overschrijf ? null : await leesGist(gist);
+      let online = LEEG();
+      if (tekst) {
+        try {
+          online = { ...LEEG(), ...(await ontsleutel(tekst)) };
+        } catch {
+          throw new Error("De online kluis is met een ander wachtwoord versleuteld.");
+        }
+      }
+      const samen = voegSamen(staat, online);
+      const lokaalVeranderd = JSON.stringify(samen) !== JSON.stringify({ ...LEEG(), ...staat });
+      if (lokaalVeranderd) {
+        staat = samen;
+        await schrijfLokaal();
+        luisteraars.wijziging.forEach((cb) => cb());
+      }
+      if (overschrijf || JSON.stringify(samen) !== JSON.stringify(online)) {
+        await github(`/gists/${wolk.gistId}`, { methode: "PATCH", body: { files: { [GIST_BESTAND]: { content: await versleutel(staat) } } } });
+      }
+      meldSync({ soort: "ok", tijd: nu() });
+    } catch (err) {
+      meldSync({ soort: "fout", fout: err.message });
+      throw err;
+    } finally {
+      syncBezig = null;
+    }
+  })();
+  return syncBezig;
+}
+
+/** Koppelt de online opslag: zoekt een bestaande kluis-gist van dit account, of maakt een nieuwe (geheim). */
+export async function koppelWolk(token) {
+  token = token.trim();
+  if (!token) throw new Error("Vul een GitHub-token in.");
+  let gistId = null;
+  for (let pagina = 1; pagina <= 10 && !gistId; pagina++) {
+    const gists = await github(`/gists?per_page=100&page=${pagina}`, { token });
+    gistId = gists.find((g) => g.description === GIST_BESCHRIJVING && g.files?.[GIST_BESTAND])?.id ?? null;
+    if (gists.length < 100) break;
+  }
+  if (!gistId) {
+    const gist = await github("/gists", {
+      methode: "POST",
+      token,
+      body: { description: GIST_BESCHRIJVING, public: false, files: { [GIST_BESTAND]: { content: await versleutel(staat) } } },
+    });
+    gistId = gist.id;
+  }
+  wolk = { token, gistId };
+  try {
+    localStorage.setItem(WOLK, await versleutel(wolk));
+  } catch {}
+  await sync();
+}
+
+/** Ontkoppelt deze browser; de online kluis zelf blijft bestaan. */
+export function ontkoppelWolk() {
+  wolk = null;
+  clearTimeout(syncTimer);
+  try {
+    localStorage.removeItem(WOLK);
+  } catch {}
+  meldSync({ soort: "uit" });
+}
+
+// Bij terugkeren naar het tabblad de wijzigingen van andere apparaten ophalen
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible" && wolk) sync().catch(() => {});
+});
