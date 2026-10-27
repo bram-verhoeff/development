@@ -70,6 +70,7 @@ def list_posts(
 
     # Ingeplande posts op volgorde van moment, de rest nieuwste eerst
     order = Post.scheduled_at.asc() if (scheduled or start or end) else Post.created_at.desc()
+    query = query.options(*post_service.LIST_LOAD)
     posts = db.scalars(query.order_by(order, Post.id.desc()).limit(limit)).all()
     return [post_service.to_out(p) for p in posts]
 

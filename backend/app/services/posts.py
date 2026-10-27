@@ -4,7 +4,7 @@ from datetime import timedelta
 
 from fastapi import HTTPException, status
 from sqlalchemy import func, select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
 from app.auth import CurrentUser
 from app.config import Settings
@@ -40,6 +40,10 @@ def to_out(post: Post) -> PostOut:
         publish_as=post.publish_as,
         **_thumbnail(post),
     )
+
+
+# Laadt merk en media van een lijst posts in één keer mee, in plaats van één query per post
+LIST_LOAD = (selectinload(Post.brand), selectinload(Post.media))
 
 
 def _thumbnail(post: Post) -> dict:
