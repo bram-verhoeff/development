@@ -139,6 +139,7 @@ export function vergrendel() {
 // --- Data ---
 export const leads = () => staat.leads;
 export const afzender = () => staat.afzender;
+export const mails = () => staat.mails;
 
 /**
  * Slaat gescande leads op. Bestaande leads krijgen nieuwe bedrijfsgegevens, maar hun status en
@@ -159,9 +160,35 @@ export async function bewaarLeads(nieuw, { alleenNieuw = false } = {}) {
   await schrijf();
 }
 
+// Statussen waarbij een lead klaar is: geen opvolging meer nodig
+export const AFGEROND = ["klant", "heeft_website", "geen_interesse"];
+const OPVOLGEN_NA_DAGEN = 7;
+
+/** Datum (JJJJ-MM-DD, lokale tijd) over een aantal dagen. */
+export function overDagen(dagen) {
+  const d = new Date();
+  d.setDate(d.getDate() + dagen);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
 export async function zetStatus(id, status) {
   const lead = staat.leads.find((l) => l.id === id);
-  if (lead) Object.assign(lead, { status, gewijzigd: nu() });
+  if (lead && (lead.status || "") !== status) {
+    lead.historie = [...(lead.historie || []), { status, tijd: nu() }];
+    // Benaderd: vanzelf over een week opvolgen; afgerond: niet meer opvolgen
+    if (status === "benaderd" && !lead.opvolgen) lead.opvolgen = overDagen(OPVOLGEN_NA_DAGEN);
+    if (AFGEROND.includes(status)) lead.opvolgen = null;
+    Object.assign(lead, { status, gewijzigd: nu() });
+  }
+  await schrijf();
+}
+
+/** Notitie en opvolgdatum van een lead bijwerken. */
+export async function werkLeadBij(id, velden) {
+  const lead = staat.leads.find((l) => l.id === id);
+  if (!lead) return;
+  for (const k of ["notitie", "opvolgen"]) if (k in velden) lead[k] = velden[k] || null;
+  lead.gewijzigd = nu();
   await schrijf();
 }
 
@@ -369,3 +396,5 @@ export function ontkoppelWolk() {
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "visible" && wolk) sync().catch(() => {});
 });
+// Weer online na offline werken: de tussentijdse wijzigingen alsnog uploaden
+addEventListener("online", () => wolk && sync().catch(() => {}));

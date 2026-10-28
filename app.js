@@ -6,6 +6,7 @@ const STATUSSEN = {
   "": "Nieuw",
   interessant: "Interessant",
   benaderd: "Benaderd",
+  in_gesprek: "In gesprek",
   klant: "Klant geworden",
   heeft_website: "Heeft toch website",
   geen_interesse: "Geen interesse",
@@ -218,28 +219,53 @@ function tekenBlips(lijst) {
 }
 
 // --- Filters ---
-$("#filterStatus").innerHTML =
-  `<option value="*">Alle statussen</option>` +
-  Object.entries(STATUSSEN).map(([k, v]) => `<option value="${k}">${v}</option>`).join("");
-$("#filterGebied").addEventListener("input", () => renderLijst(true));
-for (const id of ["#zoek", "#filterCategorie", "#filterType", "#filterStatus"]) {
-  $(id).addEventListener("input", () => renderLijst());
+const PAGINA = 60; // zoveel lead-kaartjes per keer, zodat duizenden leads vlot blijven
+const WEERGAVEN = ["lijst", "pipeline", "dashboard"];
+let weergave = WEERGAVEN.includes(laad("os-weergave", "lijst")) ? laad("os-weergave", "lijst") : "lijst";
+let getoond = PAGINA;
+let huidigeLijst = [];
+
+const vandaag = () => opslag.overDagen(0);
+const afgerond = (l) => opslag.AFGEROND.includes(l.status || "");
+const moetOpvolgen = (l) => Boolean(l.opvolgen) && l.opvolgen <= vandaag() && !afgerond(l);
+const dagenTussen = (van, tot) => Math.round((new Date(tot) - new Date(van)) / 864e5);
+
+/** "vandaag", "3 dagen te laat" of "op 4 nov". */
+function opvolgLabel(d) {
+  const verschil = dagenTussen(d, vandaag());
+  if (verschil === 0) return "vandaag";
+  if (verschil > 0) return verschil === 1 ? "1 dag te laat" : `${verschil} dagen te laat`;
+  return `op ${new Date(`${d}T12:00`).toLocaleDateString("nl-NL", { day: "numeric", month: "short" })}`;
 }
 
-function gefilterd() {
+$("#filterStatus").innerHTML =
+  `<option value="*">Alle statussen</option><option value="@opvolgen">Op te volgen</option>` +
+  Object.entries(STATUSSEN).map(([k, v]) => `<option value="${k}">${v}</option>`).join("");
+$("#filterGebied").addEventListener("input", () => renderLijst(true));
+for (const id of ["#filterCategorie", "#filterType", "#filterStatus"]) {
+  $(id).addEventListener("input", () => renderLijst());
+}
+// Zoeken pas na een korte pauze in het typen, niet bij elke toets
+let zoekTimer;
+$("#zoek").addEventListener("input", () => {
+  clearTimeout(zoekTimer);
+  zoekTimer = setTimeout(() => renderLijst(), 150);
+});
+
+function gefilterd({ metStatus = true } = {}) {
   const zoek = $("#zoek").value.trim().toLowerCase();
   const gebied = $("#filterGebied").value;
   const cat = $("#filterCategorie").value;
   const type = $("#filterType").value;
-  const status = $("#filterStatus").value;
+  const status = metStatus ? $("#filterStatus").value : "*";
   return leads.filter(
     (l) =>
-      (!zoek || `${l.naam} ${l.adres} ${l.plaats} ${l.email}`.toLowerCase().includes(zoek)) &&
+      (!zoek || `${l.naam} ${l.adres} ${l.plaats} ${l.email} ${l.notitie || ""}`.toLowerCase().includes(zoek)) &&
       (!gebied || l.gebied === gebied) &&
       (!cat || l.categorie === cat) &&
       (!type ||
         (type === "kans" ? !l.eigenDomein : type === "domein" ? !!l.eigenDomein : l.type === type)) &&
-      (status === "*" || (l.status || "") === status),
+      (status === "*" || (status === "@opvolgen" ? moetOpvolgen(l) : (l.status || "") === status)),
   );
 }
 
@@ -257,8 +283,24 @@ function vulSelect(sel, alles, waarden, naam = (w) => w) {
   if (huidig in telling) el.value = huidig;
 }
 
+// --- Weergave: lijst, pipeline of dashboard ---
+document.querySelectorAll('input[name="weergave"]').forEach((r) => {
+  r.checked = r.value === weergave;
+  r.addEventListener("change", () => {
+    weergave = r.value;
+    bewaar("os-weergave", weergave);
+    renderLijst(true);
+  });
+});
+
+function kiesWeergave(nieuw) {
+  weergave = nieuw;
+  bewaar("os-weergave", weergave);
+  document.querySelectorAll('input[name="weergave"]').forEach((r) => (r.checked = r.value === weergave));
+}
+
 // --- Resultaten ---
-function toonResultaten(nieuweScan, gebied) {
+function toonResultaten(nieuweScan, gebied, zoom = true) {
   $("#resultaten").hidden = !leads.length && !laatstePlaatsen;
   $("#leeg").hidden = leads.length > 0;
   $("#inhoud").hidden = leads.length === 0;
@@ -273,7 +315,7 @@ function toonResultaten(nieuweScan, gebied) {
   if (gebied !== undefined) $("#filterGebied").value = gebieden.has(gebied) ? gebied : "";
 
   renderStats(nieuweScan);
-  renderLijst(true);
+  renderLijst(zoom);
 }
 
 function renderStats(animeer) {
@@ -305,12 +347,56 @@ function telOp(el, doel) {
 }
 
 function renderLijst(zoomKaart = false) {
-  const lijst = gefilterd();
+  renderOpvolgen();
+  // De statusfilter hoort bij de lijst; pipeline en dashboard laten juist alle statussen zien
+  $("#filterStatus").hidden = weergave !== "lijst";
+  $("#weergaveLijst").hidden = weergave !== "lijst";
+  $("#weergavePipeline").hidden = weergave !== "pipeline";
+  $("#weergaveDashboard").hidden = weergave !== "dashboard";
+
+  const lijst = gefilterd({ metStatus: weergave === "lijst" });
   $("#aantal").textContent = `${lijst.length} van ${leads.length} leads`;
-  $("#lijst").innerHTML = lijst.map((l, i) => leadKaart(l, Math.min(i, 12) * 45)).join("");
   tekenBlips(lijst);
-  if (leads.length) tekenKaart(lijst, zoomKaart);
+  if (weergave === "lijst") {
+    getoond = PAGINA;
+    tekenLijst(lijst);
+    if (leads.length) tekenKaart(lijst, zoomKaart);
+  } else if (weergave === "pipeline") {
+    renderPipeline(lijst);
+  } else {
+    renderDashboard(lijst);
+  }
 }
+
+function tekenLijst(lijst) {
+  huidigeLijst = lijst;
+  $("#lijst").innerHTML = lijst.slice(0, getoond).map((l, i) => leadKaart(l, Math.min(i, 12) * 45)).join("");
+  werkMeerBij();
+}
+
+function toonMeer() {
+  if (getoond >= huidigeLijst.length) return;
+  const van = getoond;
+  getoond += PAGINA;
+  $("#lijst").insertAdjacentHTML(
+    "beforeend",
+    huidigeLijst.slice(van, getoond).map((l, i) => leadKaart(l, Math.min(i, 12) * 45)).join(""),
+  );
+  werkMeerBij();
+}
+
+function werkMeerBij() {
+  const over = huidigeLijst.length - getoond;
+  $("#meer").hidden = over <= 0;
+  $("#meerKnop").textContent = `Toon meer (${over} over)`;
+}
+
+$("#meerKnop").addEventListener("click", toonMeer);
+// Vanzelf bijladen als je richting het einde van de lijst scrolt
+new IntersectionObserver(([item]) => item.isIntersecting && toonMeer(), { rootMargin: "800px" }).observe($("#meer"));
+
+const icoonNotitie =
+  '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h10l4 4v12H5z" /><path d="M9 12h6M9 16h4" /></svg>';
 
 function leadKaart(l, vertraging, animeer = true) {
   const status = l.status || "";
@@ -342,15 +428,26 @@ function leadKaart(l, vertraging, animeer = true) {
       <button class="kopieer" type="button" data-kopieer="${esc(l.email)}">Kopieer</button>
     </div>
     <div class="extra">${extra.join("")}</div>
-    ${l.laatstGemaild ? `<p class="gemaild">✓ Gemaild op ${esc(datum(l.laatstGemaild))}</p>` : ""}
+    ${l.notitie ? `<p class="notitie-kort">${esc(l.notitie)}</p>` : ""}
+    ${
+      l.laatstGemaild || (l.opvolgen && !afgerond(l))
+        ? `<div class="lead-meta">
+            ${l.laatstGemaild ? `<span class="gemaild">✓ Gemaild op ${esc(datum(l.laatstGemaild))}</span>` : ""}
+            ${l.opvolgen && !afgerond(l) ? `<span class="opvolg-chip${moetOpvolgen(l) ? " nu" : ""}">Opvolgen ${esc(opvolgLabel(l.opvolgen))}</span>` : ""}
+          </div>`
+        : ""
+    }
     <div class="lead-voet">
       <button class="mail-knop" type="button" data-mail="${esc(l.id)}">
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></svg>
         ${l.laatstGemaild ? "Opnieuw mailen" : "Mail opstellen"}
       </button>
-      <select data-status="${esc(l.id)}" aria-label="Status van ${esc(l.naam)}">${Object.entries(STATUSSEN)
-        .map(([k, v]) => `<option value="${k}"${k === status ? " selected" : ""}>${v}</option>`)
-        .join("")}</select>
+      <div class="voet-rechts">
+        <button class="icoon-knop" type="button" data-lead="${esc(l.id)}" title="Notities en opvolgen" aria-label="Notities en opvolgen van ${esc(l.naam)}">${icoonNotitie}</button>
+        <select data-status="${esc(l.id)}" aria-label="Status van ${esc(l.naam)}">${Object.entries(STATUSSEN)
+          .map(([k, v]) => `<option value="${k}"${k === status ? " selected" : ""}>${v}</option>`)
+          .join("")}</select>
+      </div>
     </div>
   </article>`;
 }
@@ -361,25 +458,381 @@ function vervangKaart(lead) {
   if (kaartje) kaartje.outerHTML = leadKaart(lead, 0, false);
 }
 
-async function zetLeadStatus(lead, status) {
-  const oud = lead.status || "";
-  lead.status = status;
-  vervangKaart(lead);
+/** Alles bijwerken waar deze lead zichtbaar is, na een wijziging. */
+function verversLead(lead) {
   renderStats(false);
+  renderOpvolgen();
+  if (weergave === "lijst") vervangKaart(lead);
+  else renderLijst();
+  if (actieveLead?.id === lead.id && $("#leadDialoog").open) vulLead();
+}
+
+async function zetLeadStatus(lead, status) {
   try {
     await opslag.zetStatus(lead.id, status);
   } catch (err) {
-    lead.status = oud;
-    vervangKaart(lead);
-    renderStats(false);
     toast(`Status niet opgeslagen: ${err.message}`, true);
   }
-  if ($("#filterStatus").value !== "*") renderLijst();
+  verversLead(lead);
+  if (weergave === "lijst" && $("#filterStatus").value !== "*") renderLijst();
+}
+
+async function bewerkLead(lead, velden) {
+  try {
+    await opslag.werkLeadBij(lead.id, velden);
+  } catch (err) {
+    toast(`Niet opgeslagen: ${err.message}`, true);
+  }
+  verversLead(lead);
 }
 
 $("#lijst").addEventListener("change", (e) => {
   const lead = leads.find((l) => l.id === e.target.dataset.status);
   if (lead) zetLeadStatus(lead, e.target.value);
+});
+
+// --- Vandaag opvolgen ---
+function renderOpvolgen() {
+  const lijst = leads.filter(moetOpvolgen).sort((a, b) => a.opvolgen.localeCompare(b.opvolgen));
+  $("#opvolgBalk").hidden = !lijst.length;
+  if (!lijst.length) return;
+  $("#opvolgTitel").innerHTML = `<span class="opvolg-stip" aria-hidden="true"></span>Vandaag opvolgen <span class="teller">${lijst.length}</span>`;
+  $("#opvolgAlles").hidden = lijst.length <= 5;
+  $("#opvolgAlles").textContent = `Toon alle ${lijst.length} in de lijst`;
+  $("#opvolgLijst").innerHTML = lijst
+    .slice(0, 5)
+    .map(
+      (l) => `<li>
+        <div class="opvolg-wie">
+          <button class="naam" type="button" data-lead="${esc(l.id)}">${esc(l.naam)}</button>
+          <span class="muted">${esc(STATUSSEN[l.status || ""])} · ${esc(opvolgLabel(l.opvolgen))}</span>
+        </div>
+        <div class="opvolg-acties">
+          <button type="button" class="chipje" data-mail="${esc(l.id)}">Mailen</button>
+          <button type="button" class="chipje" data-uitstel="${esc(l.id)}">+3 dagen</button>
+          <button type="button" class="chipje" data-klaar="${esc(l.id)}">Klaar</button>
+        </div>
+      </li>`,
+    )
+    .join("");
+}
+
+$("#opvolgBalk").addEventListener("click", (e) => {
+  const knop = e.target.closest("button");
+  if (!knop) return;
+  if (knop.id === "opvolgAlles") {
+    kiesWeergave("lijst");
+    $("#filterStatus").value = "@opvolgen";
+    renderLijst(true);
+    return;
+  }
+  const lead = leads.find((l) => l.id === (knop.dataset.lead || knop.dataset.mail || knop.dataset.uitstel || knop.dataset.klaar));
+  if (!lead) return;
+  if (knop.dataset.lead) openLead(lead);
+  else if (knop.dataset.mail) openMail(lead);
+  else if (knop.dataset.uitstel) bewerkLead(lead, { opvolgen: opslag.overDagen(3) });
+  else bewerkLead(lead, { opvolgen: null });
+});
+
+// --- Pipeline ---
+const KOLOMMEN = [
+  ["", "Nieuw"],
+  ["interessant", "Interessant"],
+  ["benaderd", "Benaderd"],
+  ["in_gesprek", "In gesprek"],
+  ["klant", "Klant"],
+  ["afgevallen", "Afgevallen"],
+];
+const PER_KOLOM = 40;
+const kolomVan = (l) => (["heeft_website", "geen_interesse"].includes(l.status || "") ? "afgevallen" : l.status || "");
+
+function renderPipeline(lijst) {
+  const groepen = Object.fromEntries(KOLOMMEN.map(([k]) => [k, []]));
+  for (const l of lijst) groepen[kolomVan(l)]?.push(l);
+  $("#weergavePipeline").innerHTML = KOLOMMEN.map(([k, titel]) => {
+    // Op te volgen bovenaan, daarna de laatst gewijzigde
+    const items = groepen[k].sort(
+      (a, b) => moetOpvolgen(b) - moetOpvolgen(a) || (b.gewijzigd || "").localeCompare(a.gewijzigd || ""),
+    );
+    return `<section class="kolom" data-kolom="${k}" aria-label="${titel}">
+      <header class="kolom-kop"><h3>${titel}</h3><span class="teller">${items.length}</span></header>
+      <div class="kolom-lijst">
+        ${items.slice(0, PER_KOLOM).map(bordKaart).join("")}
+        ${items.length > PER_KOLOM ? `<p class="muted kolom-meer">+ ${items.length - PER_KOLOM} meer · verfijn met de filters</p>` : ""}
+        ${items.length ? "" : `<p class="muted kolom-leeg">Sleep een lead hierheen</p>`}
+      </div>
+    </section>`;
+  }).join("");
+}
+
+function bordKaart(l) {
+  const opvolg = l.opvolgen && !afgerond(l)
+    ? `<span class="opvolg-chip${moetOpvolgen(l) ? " nu" : ""}">${esc(opvolgLabel(l.opvolgen))}</span>`
+    : "";
+  return `<article class="bord-kaart" draggable="true" tabindex="0" data-lead="${esc(l.id)}" aria-label="${esc(l.naam)}, openen">
+    <strong>${esc(l.naam)}</strong>
+    <span class="muted">${esc(label(l.categorie))} · ${esc(l.plaats)}</span>
+    ${l.notitie ? `<span class="bord-notitie">${esc(l.notitie)}</span>` : ""}
+    ${opvolg}
+  </article>`;
+}
+
+const bord = $("#weergavePipeline");
+bord.addEventListener("click", (e) => {
+  const id = e.target.closest(".bord-kaart")?.dataset.lead;
+  if (id) openLead(leads.find((l) => l.id === id));
+});
+bord.addEventListener("keydown", (e) => {
+  const id = e.target.closest(".bord-kaart")?.dataset.lead;
+  if (id && (e.key === "Enter" || e.key === " ")) {
+    e.preventDefault();
+    openLead(leads.find((l) => l.id === id));
+  }
+});
+// Slepen tussen kolommen (op een touchscreen: tik op een kaart en kies de status)
+bord.addEventListener("dragstart", (e) => {
+  const kaartje = e.target.closest(".bord-kaart");
+  if (!kaartje) return;
+  e.dataTransfer.setData("text/plain", kaartje.dataset.lead);
+  e.dataTransfer.effectAllowed = "move";
+  kaartje.classList.add("sleept");
+});
+bord.addEventListener("dragend", () => {
+  bord.querySelectorAll(".sleept, .doel").forEach((el) => el.classList.remove("sleept", "doel"));
+});
+bord.addEventListener("dragover", (e) => {
+  const kolom = e.target.closest(".kolom");
+  if (!kolom) return;
+  e.preventDefault();
+  bord.querySelectorAll(".kolom.doel").forEach((k) => k !== kolom && k.classList.remove("doel"));
+  kolom.classList.add("doel");
+});
+bord.addEventListener("drop", (e) => {
+  const kolom = e.target.closest(".kolom");
+  if (!kolom) return;
+  e.preventDefault();
+  const lead = leads.find((l) => l.id === e.dataTransfer.getData("text/plain"));
+  const doel = kolom.dataset.kolom;
+  if (!lead || kolomVan(lead) === doel) return renderPipeline(gefilterd({ metStatus: false }));
+  zetLeadStatus(lead, doel === "afgevallen" ? "geen_interesse" : doel);
+});
+
+// --- Dashboard ---
+const ooitBenaderd = (l) =>
+  Boolean(l.laatstGemaild) || ["benaderd", "in_gesprek", "klant"].includes(l.status || "") ||
+  (l.historie || []).some((h) => ["benaderd", "in_gesprek", "klant"].includes(h.status));
+const ooitInGesprek = (l) =>
+  ["in_gesprek", "klant"].includes(l.status || "") || (l.historie || []).some((h) => ["in_gesprek", "klant"].includes(h.status));
+const procent = (deel, geheel) => (geheel ? Math.round((deel / geheel) * 100) : 0);
+
+/** Maandag van de week waarin dit tijdstip valt (lokale tijd). */
+function weekStart(iso) {
+  const d = new Date(iso);
+  d.setHours(0, 0, 0, 0);
+  d.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+  return d;
+}
+
+function perWeek(tijden, weken = 12) {
+  const deze = weekStart(new Date().toISOString());
+  const reeks = Array.from({ length: weken }, (_, i) => {
+    const d = new Date(deze);
+    d.setDate(d.getDate() - (weken - 1 - i) * 7);
+    return { start: d, n: 0 };
+  });
+  for (const t of tijden) {
+    const w = weekStart(t).getTime();
+    const vak = reeks.find((r) => r.start.getTime() === w);
+    if (vak) vak.n++;
+  }
+  return reeks;
+}
+
+const weekLabel = (d) => d.toLocaleDateString("nl-NL", { day: "numeric", month: "short" });
+
+/** Kolomgrafiek van één reeks per week, met een tabel als alternatief. */
+function weekGrafiek(titel, eenheid, reeks) {
+  const max = Math.max(1, ...reeks.map((r) => r.n));
+  const piek = reeks.reduce((a, b) => (b.n > a.n ? b : a), reeks[0]);
+  return `<figure class="grafiek kaartje">
+    <figcaption><h3>${titel}</h3><span class="muted">laatste ${reeks.length} weken</span></figcaption>
+    <div class="kolommen" role="img" aria-label="${titel}: ${reeks.map((r) => `week van ${weekLabel(r.start)} ${r.n}`).join(", ")}">
+      ${reeks
+        .map(
+          (r, i) => `<div class="kolom-vak" tabindex="0" data-tip="Week van ${weekLabel(r.start)}: ${r.n} ${eenheid}">
+            ${r === piek && r.n ? `<span class="kolom-waarde">${r.n}</span>` : ""}
+            <span class="kolom-staaf" style="height:${(r.n / max) * 100}%"></span>
+            <span class="kolom-as">${i % 3 === 0 || i === reeks.length - 1 ? weekLabel(r.start) : ""}</span>
+          </div>`,
+        )
+        .join("")}
+    </div>
+    <details class="als-tabel"><summary>Als tabel</summary>
+      <table><thead><tr><th>Week van</th><th>${eenheid}</th></tr></thead>
+      <tbody>${reeks.map((r) => `<tr><td>${weekLabel(r.start)}</td><td>${r.n}</td></tr>`).join("")}</tbody></table>
+    </details>
+  </figure>`;
+}
+
+/** Tabel met leads, benaderd, klanten en conversie per groep (branche of plaats). */
+function conversieTabel(titel, kolom, lijst, sleutel, naam = (w) => w) {
+  const groepen = new Map();
+  for (const l of lijst) {
+    const g = groepen.get(sleutel(l)) || { leads: 0, benaderd: 0, klant: 0 };
+    g.leads++;
+    if (ooitBenaderd(l)) g.benaderd++;
+    if (l.status === "klant") g.klant++;
+    groepen.set(sleutel(l), g);
+  }
+  const rijen = [...groepen.entries()].sort((a, b) => b[1].benaderd - a[1].benaderd || b[1].leads - a[1].leads).slice(0, 8);
+  return `<figure class="grafiek kaartje">
+    <figcaption><h3>${titel}</h3><span class="muted">klanten van benaderde leads</span></figcaption>
+    <table class="conversie">
+      <thead><tr><th>${kolom}</th><th>Leads</th><th>Benaderd</th><th>Klant</th><th>Conversie</th></tr></thead>
+      <tbody>${rijen
+        .map(([k, g]) => {
+          const p = procent(g.klant, g.benaderd);
+          return `<tr><td>${esc(naam(k))}</td><td>${g.leads}</td><td>${g.benaderd}</td><td>${g.klant}</td>
+            <td><span class="meter" data-tip="${g.klant} van ${g.benaderd} benaderd">
+              <span class="meter-spoor"><span class="meter-vulling" style="width:${p}%"></span></span><span>${g.benaderd ? `${p}%` : "–"}</span>
+            </span></td></tr>`;
+        })
+        .join("")}</tbody>
+    </table>
+  </figure>`;
+}
+
+function renderDashboard(lijst) {
+  const ids = new Set(lijst.map((l) => l.id));
+  const mails = opslag.mails().filter((m) => ids.has(m.id));
+  const benaderd = lijst.filter(ooitBenaderd).length;
+  const gesprek = lijst.filter(ooitInGesprek).length;
+  const klanten = lijst.filter((l) => l.status === "klant").length;
+  const trechter = [
+    ["Gevonden", lijst.length],
+    ["Benaderd", benaderd],
+    ["In gesprek", gesprek],
+    ["Klant", klanten],
+  ];
+  const deze = weekStart(new Date().toISOString()).getTime();
+  const tegels = [
+    [`${procent(klanten, benaderd)}%`, "conversie", `${klanten} klanten van ${benaderd} benaderde leads`],
+    [`${procent(gesprek, benaderd)}%`, "reactie", "benaderde leads die in gesprek kwamen"],
+    [mails.filter((m) => weekStart(m.tijd).getTime() === deze).length, "mails deze week", "sinds maandag"],
+    [lijst.filter(moetOpvolgen).length, "op te volgen", "vandaag of eerder"],
+  ];
+
+  $("#weergaveDashboard").innerHTML = `
+    <div class="tegels">${tegels
+      .map(([w, t, uitleg]) => `<div class="stat kaartje" title="${uitleg}"><strong>${w}</strong><span>${t}</span></div>`)
+      .join("")}</div>
+    <figure class="grafiek kaartje trechter">
+      <figcaption><h3>Van lead naar klant</h3><span class="muted">${lijst.length === leads.length ? "alle leads" : "binnen de filters"}</span></figcaption>
+      ${trechter
+        .map(([naam, n], i) => {
+          const vorige = i ? trechter[i - 1][1] : 0;
+          return `<div class="trechter-rij" tabindex="0" data-tip="${naam}: ${n}${i ? ` (${procent(n, vorige)}% van ${trechter[i - 1][0].toLowerCase()})` : ""}">
+            <span class="trechter-naam">${naam}</span>
+            <span class="trechter-baan"><span class="trechter-staaf" style="width:${trechter[0][1] ? Math.max((n / trechter[0][1]) * 100, n ? 1 : 0) : 0}%"></span></span>
+            <span class="trechter-waarde"><strong>${n}</strong>${i ? ` <span class="muted">${procent(n, vorige)}%</span>` : ""}</span>
+          </div>`;
+        })
+        .join("")}
+    </figure>
+    <div class="grafieken">
+      ${weekGrafiek("Mails per week", "mails", perWeek(mails.map((m) => m.tijd)))}
+      ${weekGrafiek("Nieuwe leads per week", "leads", perWeek(lijst.map((l) => l.gevondenOp).filter(Boolean)))}
+    </div>
+    <div class="grafieken">
+      ${conversieTabel("Per branche", "Branche", lijst, (l) => l.categorie, label)}
+      ${conversieTabel("Per plaats", "Plaats", lijst, (l) => l.gebied)}
+    </div>`;
+}
+
+// Tooltip voor grafieken: bij aanwijzen of focus
+function toonTip(el) {
+  const tip = $("#tooltip");
+  tip.textContent = el.dataset.tip;
+  tip.hidden = false;
+  const r = el.getBoundingClientRect();
+  const b = tip.getBoundingClientRect();
+  tip.style.left = `${Math.min(Math.max(8, r.left + r.width / 2 - b.width / 2), innerWidth - b.width - 8)}px`;
+  tip.style.top = `${Math.max(8, r.top - b.height - 8)}px`;
+}
+const verbergTip = () => ($("#tooltip").hidden = true);
+for (const [aan, uit] of [["pointerover", "pointerout"], ["focusin", "focusout"]]) {
+  $("#weergaveDashboard").addEventListener(aan, (e) => {
+    const el = e.target.closest("[data-tip]");
+    if (el) toonTip(el);
+  });
+  $("#weergaveDashboard").addEventListener(uit, verbergTip);
+}
+addEventListener("scroll", verbergTip, { passive: true });
+
+// --- Lead-venster: status, opvolgen, notities, geschiedenis ---
+let actieveLead = null;
+let notitieTimer;
+$("#leadStatus").innerHTML = Object.entries(STATUSSEN).map(([k, v]) => `<option value="${k}">${v}</option>`).join("");
+
+function openLead(lead) {
+  if (!lead) return;
+  actieveLead = lead;
+  vulLead();
+  $("#leadDialoog").showModal();
+}
+
+function vulLead() {
+  const l = actieveLead;
+  $("#leadTitel").textContent = l.naam;
+  $("#leadSub").textContent = `${label(l.categorie)} · ${[l.adres, l.plaats].filter(Boolean).join(", ")}`;
+  $("#leadContact").innerHTML = [
+    `<a href="mailto:${esc(l.email)}">${esc(l.email)}</a>`,
+    l.telefoon && `<a href="tel:${esc(l.telefoon.replace(/\s/g, ""))}">${esc(l.telefoon)}</a>`,
+    `<a href="${esc(l.googleMaps)}" target="_blank" rel="noopener">Google Maps ↗</a>`,
+  ]
+    .filter(Boolean)
+    .join("");
+  $("#leadStatus").value = l.status || "";
+  $("#leadOpvolgen").value = l.opvolgen || "";
+  if (document.activeElement !== $("#leadNotitie")) $("#leadNotitie").value = l.notitie || "";
+  const items = [
+    ...(l.historie || []).map((h) => ({ tekst: `Status: ${STATUSSEN[h.status] ?? h.status}`, tijd: h.tijd })),
+    ...opslag.mails().filter((m) => m.id === l.id).map((m) => ({ tekst: `Mail: ${m.onderwerp}`, tijd: m.tijd })),
+    { tekst: "Gevonden bij een scan", tijd: l.gevondenOp },
+  ]
+    .filter((x) => x.tijd)
+    .sort((a, b) => b.tijd.localeCompare(a.tijd));
+  $("#leadHistorie").innerHTML = items
+    .map((x) => `<li><span>${esc(x.tekst)}</span><time class="muted" datetime="${esc(x.tijd)}">${esc(datum(x.tijd))}</time></li>`)
+    .join("");
+}
+
+function bewaarNotitie() {
+  clearTimeout(notitieTimer);
+  if (!actieveLead) return;
+  const tekst = $("#leadNotitie").value.trim();
+  if (tekst !== (actieveLead.notitie || "")) bewerkLead(actieveLead, { notitie: tekst });
+}
+
+$("#leadStatus").addEventListener("change", (e) => zetLeadStatus(actieveLead, e.target.value));
+$("#leadOpvolgen").addEventListener("change", (e) => bewerkLead(actieveLead, { opvolgen: e.target.value || null }));
+document.querySelectorAll("#leadDialoog [data-dagen]").forEach((knop) =>
+  knop.addEventListener("click", () => {
+    const opvolgen = knop.dataset.dagen ? opslag.overDagen(Number(knop.dataset.dagen)) : null;
+    $("#leadOpvolgen").value = opvolgen || "";
+    bewerkLead(actieveLead, { opvolgen });
+  }),
+);
+$("#leadNotitie").addEventListener("input", () => {
+  clearTimeout(notitieTimer);
+  notitieTimer = setTimeout(bewaarNotitie, 700);
+});
+$("#leadNotitie").addEventListener("blur", bewaarNotitie);
+$("#leadDialoog").addEventListener("close", bewaarNotitie);
+$("#leadMail").addEventListener("click", () => {
+  const lead = actieveLead;
+  $("#leadDialoog").close();
+  openMail(lead);
 });
 
 $("#lijst").addEventListener("click", async (e) => {
@@ -399,6 +852,8 @@ $("#lijst").addEventListener("click", async (e) => {
   }
   const mailId = e.target.closest("[data-mail]")?.dataset.mail;
   if (mailId) return openMail(leads.find((l) => l.id === mailId));
+  const leadId = e.target.closest("[data-lead]")?.dataset.lead;
+  if (leadId) return openLead(leads.find((l) => l.id === leadId));
 
   const id = e.target.closest("[data-kaart]")?.dataset.kaart;
   const m = id && markers.get(id);
@@ -412,7 +867,8 @@ $("#lijst").addEventListener("click", async (e) => {
 function tekenKaart(lijst, zoomOpResultaten) {
   if (typeof L === "undefined") return; // Leaflet niet geladen: alleen de lijst
   if (!kaart) {
-    kaart = L.map("kaart", { scrollWheelZoom: false });
+    // Canvas: duizenden markers blijven vlot
+    kaart = L.map("kaart", { scrollWheelZoom: false, preferCanvas: true });
     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
@@ -528,24 +984,25 @@ for (const sel of ["#mailOpen", "#mailGmail"]) {
   $(sel).addEventListener("click", () => {
     const lead = mail.lead;
     if (["", "interessant"].includes(lead.status || "")) zetLeadStatus(lead, "benaderd");
+    else if (!opslag.AFGEROND.includes(lead.status || "")) bewerkLead(lead, { opvolgen: opslag.overDagen(7) });
     opslag.logMail(lead, $("#mailOnderwerp").value, $("#mailTekst").value)
       .then((tijd) => {
-        lead.laatstGemaild = tijd;
-        vervangKaart(lead);
-        renderStats(false);
+        verversLead(lead);
         toast("Mail vastgelegd");
       })
       .catch((err) => toast(`Mail niet vastgelegd: ${err.message}`, true));
   });
 }
-$("#mailDialoog").addEventListener("click", (e) => {
-  // Sluiten via de knop of door naast het venster te klikken.
-  if (e.target.closest("[data-sluit]") || e.target === e.currentTarget) e.currentTarget.close();
-});
+for (const dialoog of ["#mailDialoog", "#leadDialoog"]) {
+  $(dialoog).addEventListener("click", (e) => {
+    // Sluiten via de knop of door naast het venster te klikken.
+    if (e.target.closest("[data-sluit]") || e.target === e.currentTarget) e.currentTarget.close();
+  });
+}
 
 // --- Export ---
 $("#exportKnop").addEventListener("click", () => {
-  const kolommen = ["naam", "categorie", "gebied", "adres", "plaats", "email", "eigenDomein", "telefoon", "type", "status", "laatstGemaild", "social", "googleMaps", "osm"];
+  const kolommen = ["naam", "categorie", "gebied", "adres", "plaats", "email", "eigenDomein", "telefoon", "type", "status", "laatstGemaild", "opvolgen", "notitie", "social", "googleMaps", "osm"];
   const cel = (v) => (/[";\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v);
   const regels = gefilterd().map((l) =>
     kolommen
@@ -612,7 +1069,9 @@ opslag.opSyncStatus((s) => {
 // Wijzigingen van een ander apparaat zijn binnengekomen
 opslag.opWijziging(() => {
   laadUitOpslag();
-  toonResultaten(false);
+  if (actieveLead) actieveLead = leads.find((l) => l.id === actieveLead.id) || null;
+  toonResultaten(false, undefined, false);
+  if (actieveLead && $("#leadDialoog").open) vulLead();
 });
 
 $("#wolkForm").addEventListener("submit", async (e) => {
@@ -657,6 +1116,11 @@ const waarnemer = new IntersectionObserver(
   { threshold: 0.15 },
 );
 document.querySelectorAll(".onthul").forEach((el) => waarnemer.observe(el));
+
+// --- App: installeerbaar en offline bruikbaar ---
+if ("serviceWorker" in navigator && location.protocol === "https:") {
+  navigator.serviceWorker.register("sw.js").catch(() => {});
+}
 
 tekenBlips([]);
 start();

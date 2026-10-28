@@ -12,6 +12,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Scanner">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -123,13 +127,28 @@
           <h2>Resultaten</h2>
           <p id="resultaatInfo" class="muted"></p>
         </div>
-        <button id="exportKnop" type="button" class="knop secundair">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14" /></svg>
-          Exporteer CSV
-        </button>
+        <div class="kop-acties">
+          <div class="segment weergaven" role="tablist" aria-label="Weergave">
+            <label><input type="radio" name="weergave" value="lijst" checked><span>Lijst</span></label>
+            <label><input type="radio" name="weergave" value="pipeline"><span>Pipeline</span></label>
+            <label><input type="radio" name="weergave" value="dashboard"><span>Dashboard</span></label>
+          </div>
+          <button id="exportKnop" type="button" class="knop secundair">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14" /></svg>
+            CSV
+          </button>
+        </div>
       </div>
 
       <div id="stats" class="stats"></div>
+
+      <section id="opvolgBalk" class="opvolg kaartje" hidden aria-labelledby="opvolgTitel">
+        <div class="opvolg-kop">
+          <h3 id="opvolgTitel"><span class="opvolg-stip" aria-hidden="true"></span>Vandaag opvolgen</h3>
+          <button id="opvolgAlles" type="button" class="link-knop">Toon alle in de lijst</button>
+        </div>
+        <ul id="opvolgLijst" class="opvolg-lijst"></ul>
+      </section>
 
       <div id="leeg" class="kaartje leeg" hidden>
         <div class="leeg-icoon" aria-hidden="true"><span></span></div>
@@ -138,7 +157,6 @@
       </div>
 
       <div id="inhoud">
-        <div id="kaart" class="kaart kaartje"></div>
 
         <div class="filters">
           <span class="invoer zoekveld">
@@ -158,7 +176,16 @@
         </div>
 
         <p id="aantal" class="aantal muted"></p>
-        <div id="lijst" class="lijst"></div>
+
+        <div id="weergaveLijst">
+          <div id="kaart" class="kaart kaartje"></div>
+          <div id="lijst" class="lijst"></div>
+          <div id="meer" class="meer" hidden><button id="meerKnop" type="button" class="knop secundair">Toon meer</button></div>
+        </div>
+
+        <div id="weergavePipeline" class="bord" hidden></div>
+
+        <div id="weergaveDashboard" class="dashboard" hidden></div>
       </div>
     </section>
 
@@ -244,9 +271,52 @@
     </div>
   </dialog>
 
+  <dialog id="leadDialoog" class="dialoog" aria-labelledby="leadTitel">
+    <div class="dialoog-inhoud">
+      <div class="dialoog-kop">
+        <div>
+          <h3 id="leadTitel"></h3>
+          <p id="leadSub" class="muted"></p>
+        </div>
+        <button type="button" class="sluit" data-sluit aria-label="Sluiten">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
+        </button>
+      </div>
+      <div id="leadContact" class="extra"></div>
+      <div class="lead-velden">
+        <label class="veld klein-veld"><span class="label">Status</span><select id="leadStatus"></select></label>
+        <div class="veld klein-veld">
+          <label class="label" for="leadOpvolgen">Opvolgen op</label>
+          <div class="opvolg-invoer">
+            <input id="leadOpvolgen" type="date">
+            <button type="button" class="chipje" data-dagen="3">+3 dagen</button>
+            <button type="button" class="chipje" data-dagen="7">+1 week</button>
+            <button type="button" class="chipje" data-dagen="">Geen</button>
+          </div>
+        </div>
+      </div>
+      <label class="veld klein-veld">
+        <span class="label">Notities <small>wordt vanzelf opgeslagen</small></span>
+        <textarea id="leadNotitie" rows="5" placeholder="Bijv. gebeld, terugbellen na de vakantie, wil een webshop…"></textarea>
+      </label>
+      <div>
+        <span class="label">Geschiedenis</span>
+        <ol id="leadHistorie" class="historie"></ol>
+      </div>
+      <div class="dialoog-voet">
+        <button id="leadMail" type="button" class="knop">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></svg>
+          Mail opstellen
+        </button>
+      </div>
+    </div>
+  </dialog>
+
+  <div id="tooltip" class="tooltip" role="tooltip" hidden></div>
+
   <footer class="wrap voet">
     <p>Data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap-bijdragers</a>. OpenStreetMap is niet volledig: controleer elke lead voor je contact opneemt.</p>
-    <p>Let op: eenmanszaken mag je zonder toestemming geen ongevraagde reclame mailen (Telecommunicatiewet art. 11.7). Leads, statussen en mails worden versleuteld bewaard in deze browser; maak af en toe een backup.</p>
+    <p>Let op: eenmanszaken mag je zonder toestemming geen ongevraagde reclame mailen (Telecommunicatiewet art. 11.7). Leads, statussen en mails worden versleuteld bewaard in deze browser (en optioneel online); maak af en toe een backup.</p>
   </footer>
   </div>
 
