@@ -586,6 +586,33 @@ select:focus { outline: 0; border-color: var(--accent); box-shadow: 0 0 0 3px va
 .dialoog-voet { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
 .klein-noot { margin: -6px 0 0; font-size: 0.78rem; text-align: right; }
 
+/* Mailvenster: soort mail en AI */
+.mail-blok { display: flex; flex-direction: column; gap: 12px; padding: 14px; border-radius: 12px; background: var(--surface-2); }
+.mail-blok .dialoog-input, .mail-blok input[type="text"] { background: var(--surface); }
+.mail-soort { align-self: flex-start; background: var(--surface); border: 1px solid var(--rand); }
+.mail-soort span { padding: 6px 14px; }
+.mail-soort input:checked + span { background: var(--accent); color: var(--accent-tekst); box-shadow: none; }
+.mail-blok .segment { background: var(--surface); border: 1px solid var(--rand); }
+.mail-blok .segment input:checked + span { background: var(--accent-zacht); color: var(--accent); box-shadow: none; }
+.mail-blok .mail-soort input:checked + span { background: var(--accent); color: var(--accent-tekst); }
+.mail-verouderd { display: flex; flex-direction: column; gap: 12px; }
+.mail-verouderd .chip span { font-size: 0.8rem; padding: 4px 10px; }
+.mail-knoppen { display: flex; flex-wrap: wrap; gap: 8px; }
+.ai-status { margin: 0; font-size: 0.84rem; font-weight: 500; color: var(--muted); }
+.ai-status.bezig { color: var(--accent); }
+.ai-status.bezig::after { content: ""; animation: puntjes 1.2s steps(4) infinite; }
+.ai-status.klaar { color: var(--goed); }
+.ai-status.fout { color: var(--fout); }
+.ai-velden { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+.ai-velden p { margin: 0; font-size: 0.82rem; line-height: 1.5; }
+.ai-invoer { display: flex; flex-wrap: wrap; gap: 8px; }
+.dialoog input[type="password"] {
+  flex: 1 1 220px; min-width: 0; font: inherit; color: inherit;
+  background: var(--surface); border: 1px solid var(--rand-sterk); border-radius: 8px; padding: 8px 10px;
+}
+.dialoog input[type="password"]:focus { outline: 0; border-color: var(--accent); box-shadow: 0 0 0 3px var(--gloed); }
+#mailAI:disabled { opacity: 0.8; }
+
 .lead-velden { display: grid; grid-template-columns: minmax(150px, 1fr) auto; gap: 12px; align-items: end; }
 .lead-velden select { width: 100%; }
 .opvolg-invoer { display: flex; gap: 6px; align-items: center; }
@@ -645,6 +672,10 @@ select:focus { outline: 0; border-color: var(--accent); box-shadow: 0 0 0 3px va
   .kop-acties .knop { flex: 1; }
   .lead-velden { grid-template-columns: minmax(0, 1fr); }
   .opvolg-invoer { flex-wrap: wrap; }
+  .mail-soort { align-self: stretch; }
+  .mail-soort label { flex: 1; text-align: center; }
+  .mail-knoppen { width: 100%; }
+  .mail-knoppen .knop { flex: 1; }
   .afzender-velden { grid-template-columns: minmax(0, 1fr); }
   .dialoog { width: calc(100vw - 16px); max-height: calc(100dvh - 16px); }
   .dialoog-inhoud { padding: 16px; }

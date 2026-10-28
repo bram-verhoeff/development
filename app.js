@@ -1,5 +1,5 @@
 import { CATEGORIEEN, eigenDomein, scan, sorteer } from "./scan.js";
-import { STANDAARD_AFZENDER, maakMail, standaardVorm } from "./mail.js";
+import { PROBLEMEN, STANDAARD_AFZENDER, maakMail, schrijfMetAI, standaardSoort, standaardVorm } from "./mail.js";
 import * as opslag from "./opslag.js";
 
 const STATUSSEN = {
@@ -951,31 +951,67 @@ function tekenKaart(lijst, zoomOpResultaten) {
 }
 
 // --- E-mail opstellen ---
-const mail = { lead: null, vorm: "je", variant: 0 };
+// soort: "geen" (nog geen website) of "verouderd"; ai: true zodra de tekst door de AI is geschreven,
+// zodat een wijziging in de instellingen die tekst niet ongemerkt overschrijft.
+const mail = { lead: null, vorm: "je", variant: 0, soort: "geen", website: "", problemen: [], opgemerkt: "", ai: false, bezig: false };
 const afzenderVelden = { naam: "#afzNaam", bedrijf: "#afzBedrijf", website: "#afzWebsite", telefoon: "#afzTelefoon" };
 
+$("#mailProblemen").innerHTML = Object.entries(PROBLEMEN)
+  .map(([k, tekst]) => `<label class="chip"><input type="checkbox" value="${k}"><span>${tekst[0].toUpperCase() + tekst.slice(1)}</span></label>`)
+  .join("");
+
 function openMail(lead) {
-  Object.assign(mail, { lead, vorm: standaardVorm(lead), variant: 0 });
+  if (!lead) return;
+  const bewaard = lead.mail || {};
+  Object.assign(mail, {
+    lead,
+    vorm: bewaard.vorm || standaardVorm(lead),
+    variant: 0,
+    soort: bewaard.soort || standaardSoort(lead),
+    website: bewaard.website ?? (lead.eigenDomein ? `www.${lead.eigenDomein}` : ""),
+    problemen: bewaard.problemen || [],
+    opgemerkt: bewaard.opgemerkt || "",
+    ai: false,
+  });
   for (const [k, sel] of Object.entries(afzenderVelden)) $(sel).value = afzender[k] || "";
   $("#mailSub").textContent =
     `${lead.naam} · ${lead.plaats}` + (lead.laatstGemaild ? ` · eerder gemaild op ${datum(lead.laatstGemaild)}` : "");
   const waarschuwing = $("#mailWaarschuwing");
-  waarschuwing.hidden = !lead.eigenDomein;
+  waarschuwing.hidden = !lead.eigenDomein || mail.soort === "verouderd";
   if (lead.eigenDomein) {
     waarschuwing.innerHTML = `Let op: het e-mailadres staat op een eigen domein. Check eerst of
       <a href="https://${esc(lead.eigenDomein)}" target="_blank" rel="noopener">${esc(lead.eigenDomein)} ↗</a> al een website heeft.`;
   }
+  document.querySelector(`input[name="mailSoort"][value="${mail.soort}"]`).checked = true;
+  $("#mailWebsite").value = mail.website;
+  $("#mailOpgemerkt").value = mail.opgemerkt;
+  document.querySelectorAll("#mailProblemen input").forEach((i) => (i.checked = mail.problemen.includes(i.value)));
+  $("#mailVerouderd").hidden = mail.soort !== "verouderd";
+  zetAiStatus("");
+  werkAiInstellingenBij();
   vulMail();
   $("#mailGemaild").checked = Boolean(lead.laatstGemaild);
   $("#mailDialoog").showModal();
 }
 
+/** Mail uit de sjablonen (zonder AI). */
 function vulMail() {
-  const { aan, onderwerp, tekst } = maakMail(mail.lead, afzender, { vorm: mail.vorm, variant: mail.variant });
+  const { aan, onderwerp, tekst } = maakMail(mail.lead, afzender, {
+    vorm: mail.vorm, variant: mail.variant, soort: mail.soort, website: mail.website, problemen: mail.problemen,
+  });
+  mail.ai = false;
+  toonMail(aan, onderwerp, tekst);
+}
+
+function toonMail(aan, onderwerp, tekst) {
   document.querySelector(`input[name="vorm"][value="${mail.vorm}"]`).checked = true;
   $("#mailAan").value = aan;
   $("#mailOnderwerp").value = onderwerp;
   $("#mailTekst").value = tekst;
+  const veld = $("#mailTekst");
+  veld.classList.remove("ververst");
+  void veld.offsetWidth; // animatie opnieuw starten
+  veld.classList.add("ververst");
   werkLinksBij();
 }
 
@@ -989,26 +1025,142 @@ function werkLinksBij() {
     "https://mail.google.com/mail/?" + new URLSearchParams({ view: "cm", fs: "1", to: aan, su: onderwerp, body: tekst });
 }
 
+function zetAiStatus(tekst, soort = "") {
+  const el = $("#mailAIStatus");
+  el.hidden = !tekst;
+  el.textContent = tekst;
+  el.className = `ai-status ${soort}`;
+}
+
+// Keuzes per lead onthouden (soort, website, problemen, opmerking, je/u)
+let mailBewaarTimer;
+function bewaarMailKeuzes() {
+  clearTimeout(mailBewaarTimer);
+  const lead = mail.lead;
+  const keuzes = { vorm: mail.vorm, soort: mail.soort, website: mail.website, problemen: mail.problemen, opgemerkt: mail.opgemerkt };
+  mailBewaarTimer = setTimeout(() => opslag.werkLeadBij(lead.id, { mail: keuzes }).catch(() => {}), 600);
+}
+
+/** Na een wijziging in de instellingen: sjabloon direct bijwerken, een AI-tekst laten staan. */
+function keuzesGewijzigd() {
+  bewaarMailKeuzes();
+  if (mail.ai) zetAiStatus("Instellingen aangepast. Klik op ‘Schrijf met AI’ voor een nieuwe versie.");
+  else vulMail();
+}
+
+document.querySelectorAll('input[name="mailSoort"]').forEach((r) =>
+  r.addEventListener("change", () => {
+    mail.soort = r.value;
+    $("#mailVerouderd").hidden = mail.soort !== "verouderd";
+    $("#mailWaarschuwing").hidden = !mail.lead.eigenDomein || mail.soort === "verouderd";
+    keuzesGewijzigd();
+  }),
+);
+$("#mailProblemen").addEventListener("change", () => {
+  mail.problemen = [...document.querySelectorAll("#mailProblemen input:checked")].map((i) => i.value);
+  keuzesGewijzigd();
+});
+$("#mailWebsite").addEventListener("input", () => {
+  mail.website = $("#mailWebsite").value.trim();
+  keuzesGewijzigd();
+});
+$("#mailOpgemerkt").addEventListener("input", () => {
+  mail.opgemerkt = $("#mailOpgemerkt").value.trim();
+  bewaarMailKeuzes();
+});
 $("#mailOnderwerp").addEventListener("input", werkLinksBij);
 $("#mailTekst").addEventListener("input", werkLinksBij);
 document.querySelectorAll('input[name="vorm"]').forEach((r) =>
   r.addEventListener("change", () => {
     mail.vorm = r.value;
-    vulMail();
+    keuzesGewijzigd();
   }),
 );
+
+async function schrijfAI() {
+  if (mail.bezig) return;
+  const sleutel = opslag.aiSleutel();
+  if (!sleutel) {
+    $("#aiInstellingen").open = true;
+    $("#aiSleutel").focus();
+    zetAiStatus("Plak eerst je Gemini API-sleutel bij ‘AI-instellingen’ hieronder.", "fout");
+    return;
+  }
+  const knop = $("#mailAI");
+  const lead = mail.lead;
+  mail.bezig = true;
+  knop.disabled = $("#mailVariant").disabled = true;
+  knop.querySelector(".knop-tekst").textContent = "Bezig met schrijven…";
+  zetAiStatus("De AI schrijft een persoonlijke mail…", "bezig");
+  try {
+    const uitkomst = await schrijfMetAI(
+      lead,
+      afzender,
+      { vorm: mail.vorm, soort: mail.soort, website: mail.website, problemen: mail.problemen, opgemerkt: mail.opgemerkt, notitie: lead.notitie, variant: mail.variant },
+      sleutel,
+    );
+    if (mail.lead !== lead) return; // venster intussen voor een andere lead geopend
+    mail.ai = true;
+    toonMail(uitkomst.aan, uitkomst.onderwerp, uitkomst.tekst);
+    zetAiStatus("Geschreven door AI. Lees hem even na voordat je hem verstuurt.", "klaar");
+  } catch (err) {
+    zetAiStatus(err.message, "fout");
+  } finally {
+    mail.bezig = false;
+    knop.disabled = $("#mailVariant").disabled = false;
+    knop.querySelector(".knop-tekst").textContent = "Schrijf met AI";
+  }
+}
+
+$("#mailAI").addEventListener("click", () => {
+  if (mail.ai) mail.variant++;
+  schrijfAI();
+});
+// Andere versie: opnieuw met AI als de huidige tekst van de AI komt, anders een andere sjabloonvariant
 $("#mailVariant").addEventListener("click", () => {
   mail.variant++;
-  vulMail();
-  const tekst = $("#mailTekst");
-  tekst.classList.remove("ververst");
-  void tekst.offsetWidth; // animatie opnieuw starten
-  tekst.classList.add("ververst");
+  if (mail.ai) schrijfAI();
+  else {
+    vulMail();
+    zetAiStatus("");
+  }
+});
+
+// --- AI-instellingen (Gemini API-sleutel) ---
+function werkAiInstellingenBij() {
+  const heeft = Boolean(opslag.aiSleutel());
+  $("#aiWis").hidden = !heeft;
+  $("#aiSleutel").placeholder = heeft ? "Sleutel opgeslagen · plak een nieuwe om te vervangen" : "AIza…";
+  $("#aiSleutelKort").textContent = heeft ? "· sleutel opgeslagen ✓" : "· nog geen sleutel";
+}
+$("#aiBewaar").addEventListener("click", async () => {
+  const waarde = $("#aiSleutel").value.trim();
+  if (!waarde) return $("#aiSleutel").focus();
+  try {
+    await opslag.bewaarAiSleutel(waarde);
+    $("#aiSleutel").value = "";
+    werkAiInstellingenBij();
+    zetAiStatus("AI-sleutel opgeslagen. Klik op ‘Schrijf met AI’.", "klaar");
+  } catch (err) {
+    toast(err.message, true);
+  }
+});
+$("#aiSleutel").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    $("#aiBewaar").click();
+  }
+});
+$("#aiWis").addEventListener("click", async () => {
+  if (!confirm("De Gemini API-sleutel uit deze browser verwijderen?")) return;
+  await opslag.bewaarAiSleutel("");
+  werkAiInstellingenBij();
+  toast("AI-sleutel verwijderd");
 });
 for (const [k, sel] of Object.entries(afzenderVelden)) {
   $(sel).addEventListener("change", async () => {
     afzender[k] = $(sel).value.trim();
-    vulMail();
+    if (!mail.ai) vulMail();
     try {
       await opslag.bewaarAfzender(afzender);
       toast("Afzender opgeslagen");

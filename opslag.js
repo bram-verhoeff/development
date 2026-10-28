@@ -10,6 +10,7 @@ const ZOUT = new TextEncoder().encode("opportunityscanner-kluis-v1");
 const KLUIS = "os-kluis";
 const SESSIE = "os-sessie"; // sleutel voor dit tabblad, zodat herladen niet opnieuw om het wachtwoord vraagt
 const WOLK = "os-wolk"; // versleutelde GitHub-token en gist-id van de online opslag
+const AI = "os-ai"; // versleutelde Gemini API-sleutel (alleen in deze browser, niet in backup of gist)
 
 const GIST_BESCHRIJVING = "OpportunityScanner kluis (versleuteld)";
 const GIST_BESTAND = "kluis.json";
@@ -102,6 +103,7 @@ export async function ontgrendel(wachtwoord) {
     staat = LEEG();
   }
   await laadWolk();
+  await laadAi();
   try {
     sessionStorage.setItem(SESSIE, naarB64(await crypto.subtle.exportKey("raw", sleutel)));
   } catch {}
@@ -118,6 +120,7 @@ export async function herstelSessie() {
     sleutel = await crypto.subtle.importKey("raw", vanB64(ruw), "AES-GCM", true, ["encrypt", "decrypt"]);
     await laadKluis();
     await laadWolk();
+    await laadAi();
     return true;
   } catch {
     vergrendel();
@@ -129,6 +132,7 @@ export function vergrendel() {
   sleutel = null;
   staat = LEEG();
   wolk = null;
+  ai = null;
   clearTimeout(syncTimer);
   meldSync({ soort: "uit" });
   try {
@@ -209,7 +213,7 @@ export const GEMAILD = "@gemaild";
 export async function werkLeadBij(id, velden) {
   const lead = staat.leads.find((l) => l.id === id);
   if (!lead) return;
-  for (const k of ["notitie", "opvolgen"]) if (k in velden) lead[k] = velden[k] || null;
+  for (const k of ["notitie", "opvolgen", "mail"]) if (k in velden) lead[k] = velden[k] || null;
   lead.gewijzigd = nu();
   await schrijf();
 }
@@ -228,6 +232,31 @@ export async function bewaarAfzender(nieuweAfzender) {
   staat.afzender = { ...nieuweAfzender };
   staat.afzenderTijd = nu();
   await schrijf();
+}
+
+// --- AI-sleutel (Gemini) ---
+let ai = null;
+
+async function laadAi() {
+  ai = null;
+  const tekst = lees(AI);
+  if (!tekst) return;
+  try {
+    ai = await ontsleutel(tekst);
+  } catch {}
+}
+
+export const aiSleutel = () => ai?.sleutel || "";
+
+export async function bewaarAiSleutel(sleutelTekst) {
+  const schoon = sleutelTekst.trim();
+  ai = schoon ? { sleutel: schoon } : null;
+  try {
+    if (ai) localStorage.setItem(AI, await versleutel(ai));
+    else localStorage.removeItem(AI);
+  } catch {
+    throw new Error("Opslaan mislukt: de opslag van je browser is vol of geblokkeerd.");
+  }
 }
 
 // --- Backup ---

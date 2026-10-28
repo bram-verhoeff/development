@@ -244,6 +244,45 @@
         <span class="label">Aan</span>
         <input id="mailAan" type="text" readonly>
       </label>
+
+      <div class="mail-blok">
+        <div class="segment mail-soort" role="radiogroup" aria-label="Soort mail">
+          <label><input type="radio" name="mailSoort" value="geen"><span>Nog geen website</span></label>
+          <label><input type="radio" name="mailSoort" value="verouderd"><span>Verouderde website</span></label>
+        </div>
+        <div id="mailVerouderd" class="mail-verouderd" hidden>
+          <label class="veld klein-veld">
+            <span class="label">Huidige website</span>
+            <input id="mailWebsite" type="text" placeholder="www.voorbeeld.nl" autocomplete="off">
+          </label>
+          <fieldset class="veld klein-veld">
+            <legend class="label">Wat is er mis? <small>vink aan wat je zag</small></legend>
+            <div id="mailProblemen" class="chips"></div>
+          </fieldset>
+        </div>
+        <label class="veld klein-veld">
+          <span class="label">Wat viel je op? <small>optioneel, maakt de AI-mail persoonlijk</small></span>
+          <input id="mailOpgemerkt" type="text" placeholder="Bijv. mooie taarten op Instagram, al 25 jaar in de Hoofdstraat" autocomplete="off">
+        </label>
+        <div class="mail-opties">
+          <div class="segment" role="radiogroup" aria-label="Aanspreekvorm">
+            <label><input type="radio" name="vorm" value="je"><span>je</span></label>
+            <label><input type="radio" name="vorm" value="u"><span>u</span></label>
+          </div>
+          <div class="mail-knoppen">
+            <button id="mailVariant" type="button" class="knop secundair">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 14-5.3L20 9M20 4v5h-5M20 12a8 8 0 0 1-14 5.3L4 15M4 20v-5h5" /></svg>
+              Andere versie
+            </button>
+            <button id="mailAI" type="button" class="knop">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8L12 3ZM19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9L19 15Z" /></svg>
+              <span class="knop-tekst">Schrijf met AI</span>
+            </button>
+          </div>
+        </div>
+        <p id="mailAIStatus" class="ai-status" role="status" hidden></p>
+      </div>
+
       <label class="veld klein-veld">
         <span class="label">Onderwerp</span>
         <input id="mailOnderwerp" type="text">
@@ -253,16 +292,17 @@
         <textarea id="mailTekst" rows="14"></textarea>
       </label>
 
-      <div class="mail-opties">
-        <div class="segment" role="radiogroup" aria-label="Aanspreekvorm">
-          <label><input type="radio" name="vorm" value="je"><span>je</span></label>
-          <label><input type="radio" name="vorm" value="u"><span>u</span></label>
+      <details id="aiInstellingen" class="afzender">
+        <summary>AI-instellingen <small id="aiSleutelKort"></small></summary>
+        <div class="ai-velden">
+          <p class="muted">De AI-mails worden geschreven door Google Gemini. Maak een gratis API-sleutel aan in <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio</a> en plak hem hier. De sleutel wordt versleuteld in deze browser bewaard. Bij het schrijven gaan de bedrijfsgegevens van de lead, je opmerkingen en je notities naar Google.</p>
+          <div class="ai-invoer">
+            <input id="aiSleutel" type="password" placeholder="AIza…" autocomplete="off" spellcheck="false" aria-label="Gemini API-sleutel">
+            <button id="aiBewaar" type="button" class="knop secundair">Opslaan</button>
+            <button id="aiWis" type="button" class="knop secundair" hidden>Verwijderen</button>
+          </div>
         </div>
-        <button id="mailVariant" type="button" class="knop secundair">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 14-5.3L20 9M20 4v5h-5M20 12a8 8 0 0 1-14 5.3L4 15M4 20v-5h5" /></svg>
-          Andere formulering
-        </button>
-      </div>
+      </details>
 
       <details class="afzender">
         <summary>Afzender</summary>

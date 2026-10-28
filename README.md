@@ -12,7 +12,7 @@ Webapp die bedrijven zoekt zonder eigen website (maar mét openbaar e-mailadres)
 - **Als app**: installeerbaar (Toevoegen aan beginscherm / Installeren) en bruikbaar zonder internet; scannen en online opslag hebben wel internet nodig.
 - **Online opslag** (optioneel) in een geheime GitHub Gist, versleuteld: op elk apparaat dezelfde leads en statussen.
 - **Backup** downloaden en terugzetten, om je gegevens naar een ander apparaat of andere browser over te zetten.
-- **Mail opstellen** per lead (je/u-vorm, per branche, wisselende formuleringen), openen in je mailprogramma of Gmail.
+- **Mail opstellen** per lead: kies *Nog geen website* of *Verouderde website* (met de punten die je zag), vul optioneel in wat je opviel, en laat **Gemini** een persoonlijke mail schrijven. Zonder Gemini-sleutel gebruikt de app sjablonen. De afmeldzin en je ondertekening voegt de app altijd zelf toe.
 
 ## Online zetten
 Geen server of database nodig. Commit en push de branch `OpportunityScanner`; de workflow [`deploy-pages.yml`](.github/workflows/deploy-pages.yml) zet hem online op:
@@ -61,6 +61,12 @@ en open `http://localhost:8000` (direct openen als bestand werkt niet: ES-module
 3. Doe hetzelfde op je andere apparaten (zelfde wachtwoord, zelfde of nieuwe token).
 
 Elke wijziging gaat na ruim een seconde automatisch online; bij terugkeren naar het tabblad worden wijzigingen van andere apparaten opgehaald. Per lead wint de laatst gewijzigde versie, dus wijzigingen op twee apparaten gaan niet verloren. De gist bevat alleen versleutelde tekst; de token staat versleuteld in je browser.
+
+
+## AI-mails (Gemini)
+1. Maak een gratis API-sleutel aan in [Google AI Studio](https://aistudio.google.com/apikey).
+2. Open bij een lead **Mail opstellen** → **AI-instellingen**, plak de sleutel en klik **Opslaan** (versleuteld in deze browser; niet in de backup of de online kluis).
+3. Klik **Schrijf met AI**; **Andere versie** schrijft een nieuwe. Lees de mail altijd even na. Bij het schrijven gaan de bedrijfsgegevens, je opmerkingen en notities naar Google.
 
 ---
 OpportunityScanner is een product van **Agevo** · KvK 42160840
