@@ -2,8 +2,9 @@
 // Eigen bestanden: eerst het netwerk (altijd de nieuwste versie), offline uit de cache.
 // Leaflet en lettertypes: uit de cache, op de achtergrond ververst.
 // Scans, kaarttegels en GitHub gaan altijd gewoon over het netwerk.
+// Lukt de cache niet (volle of geblokkeerde opslag), dan werkt alles gewoon via het netwerk.
 
-const CACHE = "opportunityscanner-v1";
+const CACHE = "opportunityscanner-v2";
 const APP = [
   "./",
   "index.html",
@@ -14,17 +15,17 @@ const APP = [
   "style.css",
   "manifest.webmanifest",
   "icons/icon-192.png",
+  "icons/icon.svg",
   "icons/icon-512.png",
 ];
 const BIBLIOTHEKEN = ["https://unpkg.com/leaflet@1.9.4/dist/leaflet.css", "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"];
 const EXTERN_CACHEN = ["unpkg.com", "fonts.googleapis.com", "fonts.gstatic.com"];
 
+const openCache = () => caches.open(CACHE).catch(() => null);
+
 self.addEventListener("install", (e) => {
   e.waitUntil(
-    caches.open(CACHE).then((cache) =>
-      // Eén mislukt bestand mag de installatie niet tegenhouden
-      Promise.allSettled([...APP, ...BIBLIOTHEKEN].map((url) => cache.add(url))),
-    ),
+    openCache().then((cache) => cache && Promise.allSettled([...APP, ...BIBLIOTHEKEN].map((url) => cache.add(url)))),
   );
   self.skipWaiting();
 });
@@ -34,6 +35,7 @@ self.addEventListener("activate", (e) => {
     caches
       .keys()
       .then((namen) => Promise.all(namen.filter((n) => n !== CACHE).map((n) => caches.delete(n))))
+      .catch(() => {})
       .then(() => self.clients.claim()),
   );
 });
@@ -50,25 +52,38 @@ self.addEventListener("fetch", (e) => {
   }
 });
 
+async function bewaar(request, antwoord) {
+  const cache = await openCache();
+  if (cache) cache.put(request, antwoord).catch(() => {});
+}
+
+async function uitCache(request) {
+  const cache = await openCache();
+  if (!cache) return null;
+  return (await cache.match(request, { ignoreSearch: true }).catch(() => null)) || null;
+}
+
 async function netwerkEerst(request) {
-  const cache = await caches.open(CACHE);
   try {
     const antwoord = await fetch(request);
-    if (antwoord.ok) cache.put(request, antwoord.clone());
+    if (antwoord.ok) bewaar(request, antwoord.clone());
     return antwoord;
-  } catch {
-    return (await cache.match(request, { ignoreSearch: true })) || (await cache.match("index.html")) || Response.error();
+  } catch (fout) {
+    const bewaard = (await uitCache(request)) || (request.mode === "navigate" && (await uitCache(new Request("index.html"))));
+    if (bewaard) return bewaard;
+    throw fout;
   }
 }
 
 async function cacheEerst(request) {
-  const cache = await caches.open(CACHE);
-  const bewaard = await cache.match(request);
-  const vers = fetch(request)
-    .then((antwoord) => {
-      if (antwoord.ok || antwoord.type === "opaque") cache.put(request, antwoord.clone());
-      return antwoord;
-    })
-    .catch(() => bewaard);
-  return bewaard || vers;
+  const bewaard = await uitCache(request);
+  const vers = fetch(request).then((antwoord) => {
+    if (antwoord.ok || antwoord.type === "opaque") bewaar(request, antwoord.clone());
+    return antwoord;
+  });
+  if (bewaard) {
+    vers.catch(() => {});
+    return bewaard;
+  }
+  return vers;
 }

@@ -6,11 +6,12 @@
   <title>OpportunityScanner</title>
   <meta name="description" content="Vind lokale bedrijven zonder eigen website, met een openbaar e-mailadres: een gratis lead-lijst voor webdesign.">
   <meta name="robots" content="noindex, nofollow">
-  <meta name="theme-color" content="#060a13">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%230a1222'/%3E%3Ccircle cx='16' cy='16' r='10' fill='none' stroke='%233ddc97' stroke-width='2'/%3E%3Cpath d='M16 16 L25 9' stroke='%233ddc97' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='21' cy='20' r='2.2' fill='%23ff8d3a'/%3E%3C/svg%3E">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#111114" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
@@ -19,16 +20,13 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="achtergrond" aria-hidden="true">
-    <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
-    <span class="raster"></span>
-  </div>
-
   <div id="login" class="login" hidden>
-    <form id="loginForm" class="kaartje login-kaart">
-      <div class="login-radar" aria-hidden="true"><span class="sweep"></span><span class="kern"></span></div>
-      <h1>Opportunity<strong>Scanner</strong></h1>
-      <p class="muted">Voer het wachtwoord in om verder te gaan.</p>
+    <form id="loginForm" class="login-kaart">
+      <span class="login-merk" aria-hidden="true">
+        <svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="11" /><path d="M16 16 L24 10" /><circle class="stip" cx="21" cy="20" r="2.2" /></svg>
+      </span>
+      <h1>OpportunityScanner</h1>
+      <p class="muted">Voer je wachtwoord in om verder te gaan.</p>
       <input type="text" name="username" value="OpportunityScanner" autocomplete="username" hidden>
       <label class="veld">
         <span class="label">Wachtwoord</span>
@@ -37,179 +35,196 @@
           <input id="loginWachtwoord" type="password" autocomplete="current-password" required>
         </span>
       </label>
-      <button id="loginKnop" class="knop" type="submit">
-        <span class="knop-tekst">Ontgrendelen</span>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-      </button>
+      <button id="loginKnop" class="knop" type="submit"><span class="knop-tekst">Ontgrendelen</span></button>
       <p id="loginFout" class="login-fout" role="alert"></p>
     </form>
   </div>
 
-  <div id="app" hidden>
-  <header class="nav wrap">
-    <a class="logo" href="#">
-      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13" /><circle cx="16" cy="16" r="7" /><path d="M16 16 L27 9" /><circle class="stip" cx="22" cy="20" r="2" /></svg>
-      <span>Opportunity<strong>Scanner</strong></span>
-    </a>
-    <div class="nav-rechts">
-      <a class="nav-link" href="#hoe">Hoe werkt het?</a>
-      <details id="wolkMenu" class="menu">
-        <summary class="knop secundair klein"><span id="wolkStip" class="wolk-stip" aria-hidden="true"></span>Online opslag</summary>
-        <div class="menu-lijst wolk-lijst">
-          <p id="wolkStatus" class="wolk-status muted" role="status">Uit: alles staat alleen in deze browser.</p>
-          <form id="wolkForm">
-            <p class="muted">Bewaar je leads versleuteld in een geheime GitHub Gist, zodat je op elk apparaat dezelfde gegevens hebt. GitHub ziet alleen versleutelde tekst.</p>
-            <p><a href="https://github.com/settings/tokens/new?scopes=gist&amp;description=OpportunityScanner" target="_blank" rel="noopener">Maak een GitHub-token</a> met alleen het recht <code>gist</code> en plak hem hier.</p>
-            <input id="wolkToken" class="wolk-invoer" type="password" placeholder="ghp_…" autocomplete="off" spellcheck="false" aria-label="GitHub-token">
-            <button id="wolkKoppel" type="submit">Koppelen</button>
-          </form>
-          <div id="wolkActies" hidden>
-            <button id="wolkNu" type="button">Nu synchroniseren</button>
-            <button id="wolkOntkoppel" type="button">Ontkoppelen in deze browser</button>
+  <div id="app" class="shell" hidden>
+    <aside class="zijbalk">
+      <a class="logo" href="#" aria-label="OpportunityScanner">
+        <span class="logo-merk" aria-hidden="true">
+          <svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="11" /><path d="M16 16 L24 10" /><circle class="stip" cx="21" cy="20" r="2.2" /></svg>
+        </span>
+        <span class="logo-tekst">OpportunityScanner</span>
+      </a>
+
+      <nav class="navigatie" aria-label="Onderdelen">
+        <label class="nav-item">
+          <input type="radio" name="weergave" value="scan">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+          <span>Scannen</span>
+        </label>
+        <label class="nav-item">
+          <input type="radio" name="weergave" value="lijst" checked>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12" /><circle cx="4" cy="6" r="1" /><circle cx="4" cy="12" r="1" /><circle cx="4" cy="18" r="1" /></svg>
+          <span>Leads</span>
+          <span id="navOpvolg" class="nav-teller" hidden></span>
+        </label>
+        <label class="nav-item">
+          <input type="radio" name="weergave" value="pipeline">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="5" height="16" rx="1.5" /><rect x="10" y="4" width="5" height="11" rx="1.5" /><rect x="17" y="4" width="4" height="7" rx="1.5" /></svg>
+          <span>Pipeline</span>
+        </label>
+        <label class="nav-item">
+          <input type="radio" name="weergave" value="dashboard">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" /></svg>
+          <span>Dashboard</span>
+        </label>
+      </nav>
+
+      <div class="zijbalk-voet">
+        <details id="wolkMenu" class="menu">
+          <summary class="zijknop">
+            <span class="wolk-icoon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 18a4.5 4.5 0 0 1-.6-8.96A6 6 0 0 1 18 9.5a4.25 4.25 0 0 1-.5 8.5H7Z" /></svg><span id="wolkStip" class="wolk-stip"></span></span><span>Online opslag</span>
+          </summary>
+          <div class="menu-lijst wolk-lijst">
+            <p id="wolkStatus" class="wolk-status muted" role="status">Uit: alles staat alleen in deze browser.</p>
+            <form id="wolkForm">
+              <p class="muted">Bewaar je leads versleuteld in een geheime GitHub Gist, zodat je op elk apparaat dezelfde gegevens hebt. GitHub ziet alleen versleutelde tekst.</p>
+              <p><a href="https://github.com/settings/tokens/new?scopes=gist&amp;description=OpportunityScanner" target="_blank" rel="noopener">Maak een GitHub-token</a> met alleen het recht <code>gist</code> en plak hem hier.</p>
+              <input id="wolkToken" class="wolk-invoer" type="password" placeholder="ghp_…" autocomplete="off" spellcheck="false" aria-label="GitHub-token">
+              <button id="wolkKoppel" type="submit">Koppelen</button>
+            </form>
+            <div id="wolkActies" hidden>
+              <button id="wolkNu" type="button">Nu synchroniseren</button>
+              <button id="wolkOntkoppel" type="button">Ontkoppelen in deze browser</button>
+            </div>
           </div>
-        </div>
-      </details>
-      <details id="backupMenu" class="menu">
-        <summary class="knop secundair klein">Backup</summary>
-        <div class="menu-lijst">
-          <button id="backupKnop" type="button">Backup downloaden</button>
-          <label>Backup terugzetten<input id="backupBestand" type="file" accept=".json,application/json" hidden></label>
-          <p class="muted">Versleuteld met je wachtwoord. Gebruik dit om je leads naar een ander apparaat of browser over te zetten.</p>
-        </div>
-      </details>
-      <button id="uitlogKnop" type="button" class="knop secundair klein">Vergrendelen</button>
-    </div>
-  </header>
-
-  <main>
-    <section class="hero wrap">
-      <div class="hero-tekst">
-        <span class="pil in" style="--d: 0ms"><span class="live"></span>Live · via OpenStreetMap</span>
-        <h1 class="in" style="--d: 80ms">Vind klanten die nog <span class="verloop">geen website</span> hebben.</h1>
-        <p class="lead in" style="--d: 160ms">Scan een stad op bedrijven zonder eigen site, mét openbaar e-mailadres. Klaar om te benaderen.</p>
-
-        <form id="scanForm" class="kaartje formulier in" style="--d: 240ms">
-          <label class="veld">
-            <span class="label">Waar wil je zoeken?</span>
-            <span class="invoer">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z" /><circle cx="12" cy="9.5" r="2.5" /></svg>
-              <input id="plaatsen" type="text" placeholder="Zwolle, Kampen, Deventer" required autocomplete="off">
-            </span>
-          </label>
-
-          <fieldset class="veld">
-            <legend class="label">Welke branches? <small>niets gekozen = alles</small></legend>
-            <div id="categorieen" class="chips"></div>
-          </fieldset>
-
-          <button id="scanKnop" class="knop" type="submit">
-            <span class="knop-tekst">Start scan</span>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-          </button>
-        </form>
+        </details>
+        <details id="backupMenu" class="menu">
+          <summary class="zijknop">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14" /></svg><span>Backup</span>
+          </summary>
+          <div class="menu-lijst">
+            <button id="backupKnop" type="button">Backup downloaden</button>
+            <label>Backup terugzetten<input id="backupBestand" type="file" accept=".json,application/json" hidden></label>
+            <p class="muted">Versleuteld met je wachtwoord. Gebruik dit om je leads naar een ander apparaat of browser over te zetten.</p>
+          </div>
+        </details>
+        <button id="uitlogKnop" type="button" class="zijknop">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg><span>Vergrendelen</span>
+        </button>
       </div>
+    </aside>
 
-      <div class="radar-kolom in" style="--d: 200ms">
-        <div id="radar" class="radar" aria-hidden="true">
-          <span class="ring r1"></span><span class="ring r2"></span><span class="ring r3"></span>
-          <span class="kruis"></span>
-          <span class="sweep"></span>
-          <div id="blips" class="blips"></div>
-          <span class="kern"></span>
-        </div>
-        <p id="status" class="status" role="status">Klaar om te scannen</p>
-      </div>
-    </section>
-
-    <section id="resultaten" class="wrap resultaten" hidden>
-      <div class="sectie-kop">
+    <main class="werkvlak">
+      <header class="paginakop">
         <div>
-          <h2>Resultaten</h2>
+          <h1 id="paginaTitel">Leads</h1>
           <p id="resultaatInfo" class="muted"></p>
         </div>
         <div class="kop-acties">
-          <div class="segment weergaven" role="tablist" aria-label="Weergave">
-            <label><input type="radio" name="weergave" value="lijst" checked><span>Lijst</span></label>
-            <label><input type="radio" name="weergave" value="pipeline"><span>Pipeline</span></label>
-            <label><input type="radio" name="weergave" value="dashboard"><span>Dashboard</span></label>
-          </div>
           <button id="exportKnop" type="button" class="knop secundair">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14" /></svg>
-            CSV
+            Exporteer CSV
+          </button>
+          <button id="nieuweScanKnop" type="button" class="knop">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+            Nieuwe scan
           </button>
         </div>
-      </div>
+      </header>
 
-      <div id="stats" class="stats"></div>
+      <section id="paginaScan" class="pagina" hidden>
+        <div class="scan-raster">
+          <form id="scanForm" class="kaartje formulier">
+            <label class="veld">
+              <span class="label">Plaatsen</span>
+              <span class="invoer">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z" /><circle cx="12" cy="9.5" r="2.5" /></svg>
+                <input id="plaatsen" type="text" placeholder="Zwolle, Kampen, Deventer" required autocomplete="off">
+              </span>
+              <small class="hulp">Meerdere plaatsen scheiden met een komma.</small>
+            </label>
 
-      <section id="opvolgBalk" class="opvolg kaartje" hidden aria-labelledby="opvolgTitel">
-        <div class="opvolg-kop">
-          <h3 id="opvolgTitel"><span class="opvolg-stip" aria-hidden="true"></span>Vandaag opvolgen</h3>
-          <button id="opvolgAlles" type="button" class="link-knop">Toon alle in de lijst</button>
+            <fieldset class="veld">
+              <legend class="label">Branches <small>niets gekozen = alles</small></legend>
+              <div id="categorieen" class="chips"></div>
+            </fieldset>
+
+            <button id="scanKnop" class="knop groot" type="submit"><span class="knop-tekst">Start scan</span></button>
+          </form>
+
+          <div class="kaartje radar-kaart">
+            <div id="radar" class="radar" aria-hidden="true">
+              <span class="ring r1"></span><span class="ring r2"></span><span class="ring r3"></span>
+              <span class="kruis"></span>
+              <span class="sweep"></span>
+              <div id="blips" class="blips"></div>
+              <span class="kern"></span>
+            </div>
+            <p id="status" class="status" role="status">Klaar om te scannen</p>
+            <p class="muted bron">Bron: OpenStreetMap · alleen bedrijven met een openbaar e-mailadres</p>
+          </div>
         </div>
-        <ul id="opvolgLijst" class="opvolg-lijst"></ul>
+
+        <section id="hoe" class="hoe" aria-labelledby="hoeTitel">
+          <h2 id="hoeTitel">Zo werkt het</h2>
+          <ol class="stappen">
+            <li class="stap"><span class="stap-nr">1</span><div><h3>Kies je gebied</h3><p class="muted">Vul één of meer plaatsen in en kies de branches waar je klanten zoekt.</p></div></li>
+            <li class="stap"><span class="stap-nr">2</span><div><h3>Scan de kaart</h3><p class="muted">We zoeken bedrijven zonder eigen website, mét openbaar e-mailadres. Ketens slaan we over.</p></div></li>
+            <li class="stap"><span class="stap-nr">3</span><div><h3>Benader en volg op</h3><p class="muted">Mail vanuit de app, houd de status bij in de pipeline en krijg een seintje als je moet opvolgen.</p></div></li>
+          </ol>
+        </section>
       </section>
 
-      <div id="leeg" class="kaartje leeg" hidden>
-        <div class="leeg-icoon" aria-hidden="true"><span></span></div>
-        <h3>Nog geen leads</h3>
-        <p class="muted">Er zijn nog geen bedrijven zonder website met een openbaar e-mailadres gevonden. Probeer een grotere plaats, meerdere plaatsen tegelijk, of laat de branches leeg om alles te doorzoeken. Alles wat je vindt, wordt versleuteld bewaard in deze browser.</p>
-      </div>
+      <section id="resultaten" class="pagina">
+        <div id="stats" class="stats"></div>
 
-      <div id="inhoud">
+        <section id="opvolgBalk" class="opvolg kaartje" hidden aria-labelledby="opvolgTitel">
+          <div class="opvolg-kop">
+            <h3 id="opvolgTitel"><span class="opvolg-stip" aria-hidden="true"></span>Vandaag opvolgen</h3>
+            <button id="opvolgAlles" type="button" class="link-knop">Toon alle in de lijst</button>
+          </div>
+          <ul id="opvolgLijst" class="opvolg-lijst"></ul>
+        </section>
 
-        <div class="filters">
-          <span class="invoer zoekveld">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" /><path d="m20 20-4.2-4.2" /></svg>
-            <input id="zoek" type="search" placeholder="Zoek op naam of adres">
-          </span>
-          <select id="filterGebied" aria-label="Plaats"></select>
-          <select id="filterCategorie" aria-label="Branche"></select>
-          <select id="filterType" aria-label="Soort lead">
-            <option value="">Alle leads</option>
-            <option value="kans">Beste kansen (geen eigen domein)</option>
-            <option value="domein">Waarschijnlijk wél website</option>
-            <option value="geen_website">Geen website in OSM</option>
-            <option value="alleen_social">Alleen social media</option>
-          </select>
-          <select id="filterStatus" aria-label="Status"></select>
+        <div id="leeg" class="kaartje leeg" hidden>
+          <span class="leeg-icoon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg></span>
+          <h3>Nog geen leads</h3>
+          <p class="muted">Start een scan om bedrijven zonder website te vinden. Probeer een grotere plaats, meerdere plaatsen tegelijk, of laat de branches leeg om alles te doorzoeken.</p>
+          <button type="button" class="knop" data-naar="scan">Start een scan</button>
         </div>
 
-        <p id="aantal" class="aantal muted"></p>
+        <div id="inhoud">
+          <div class="filters">
+            <span class="invoer zoekveld">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" /><path d="m20 20-4.2-4.2" /></svg>
+              <input id="zoek" type="search" placeholder="Zoek op naam, adres of notitie">
+            </span>
+            <select id="filterGebied" aria-label="Plaats"></select>
+            <select id="filterCategorie" aria-label="Branche"></select>
+            <select id="filterType" aria-label="Soort lead">
+              <option value="">Alle leads</option>
+              <option value="kans">Beste kansen (geen eigen domein)</option>
+              <option value="domein">Waarschijnlijk wél website</option>
+              <option value="geen_website">Geen website in OSM</option>
+              <option value="alleen_social">Alleen social media</option>
+            </select>
+            <select id="filterStatus" aria-label="Status"></select>
+          </div>
 
-        <div id="weergaveLijst">
-          <div id="kaart" class="kaart kaartje"></div>
-          <div id="lijst" class="lijst"></div>
-          <div id="meer" class="meer" hidden><button id="meerKnop" type="button" class="knop secundair">Toon meer</button></div>
+          <p id="aantal" class="aantal muted"></p>
+
+          <div id="weergaveLijst">
+            <div id="kaart" class="kaart kaartje"></div>
+            <div id="lijst" class="lijst"></div>
+            <div id="meer" class="meer" hidden><button id="meerKnop" type="button" class="knop secundair">Toon meer</button></div>
+          </div>
+
+          <div id="weergavePipeline" class="bord" hidden></div>
+
+          <div id="weergaveDashboard" class="dashboard" hidden></div>
         </div>
+      </section>
 
-        <div id="weergavePipeline" class="bord" hidden></div>
-
-        <div id="weergaveDashboard" class="dashboard" hidden></div>
-      </div>
-    </section>
-
-    <section id="hoe" class="wrap hoe">
-      <h2 class="onthul">Zo werkt het</h2>
-      <div class="stappen">
-        <article class="kaartje stap onthul" style="--d: 0ms">
-          <span class="stap-nr">01</span>
-          <h3>Kies je gebied</h3>
-          <p class="muted">Vul één of meer plaatsen in en kies de branches waar je klanten zoekt.</p>
-        </article>
-        <article class="kaartje stap onthul" style="--d: 100ms">
-          <span class="stap-nr">02</span>
-          <h3>Scan de kaart</h3>
-          <p class="muted">We doorzoeken OpenStreetMap op bedrijven zonder eigen website, met openbaar e-mailadres. Ketens slaan we over.</p>
-        </article>
-        <article class="kaartje stap onthul" style="--d: 200ms">
-          <span class="stap-nr">03</span>
-          <h3>Benader en volg op</h3>
-          <p class="muted">Check elke lead via Google Maps, kopieer het e-mailadres en houd per bedrijf je status bij.</p>
-        </article>
-      </div>
-    </section>
-  </main>
+      <footer class="voet">
+        <p>Data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap-bijdragers</a>. OpenStreetMap is niet volledig: controleer elke lead voor je contact opneemt.</p>
+        <p>Eenmanszaken mag je zonder toestemming geen ongevraagde reclame mailen (Telecommunicatiewet art. 11.7). Leads, statussen en mails worden versleuteld bewaard in deze browser (en optioneel online); maak af en toe een backup.</p>
+      </footer>
+    </main>
+  </div>
 
   <dialog id="mailDialoog" class="dialoog" aria-labelledby="mailTitel">
     <div class="dialoog-inhoud">
@@ -314,11 +329,6 @@
 
   <div id="tooltip" class="tooltip" role="tooltip" hidden></div>
 
-  <footer class="wrap voet">
-    <p>Data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap-bijdragers</a>. OpenStreetMap is niet volledig: controleer elke lead voor je contact opneemt.</p>
-    <p>Let op: eenmanszaken mag je zonder toestemming geen ongevraagde reclame mailen (Telecommunicatiewet art. 11.7). Leads, statussen en mails worden versleuteld bewaard in deze browser (en optioneel online); maak af en toe een backup.</p>
-  </footer>
-  </div>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 

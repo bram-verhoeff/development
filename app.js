@@ -102,6 +102,8 @@ async function naOntgrendelen() {
     toast(err.message, true);
   }
   laadUitOpslag();
+  // Nog niets gevonden: meteen naar het scanscherm
+  if (!leads.length) kiesWeergave("scan");
   toonResultaten(true);
 }
 
@@ -172,8 +174,10 @@ $("#scanForm").addEventListener("submit", async (e) => {
       "klaar",
     );
     // Eén plaats gescand: meteen op die plaats filteren.
+    // Klaar: door naar de gevonden leads (bij één plaats meteen op die plaats gefilterd)
+    if (res.leads.length) kiesWeergave("lijst");
     toonResultaten(true, plaatsen.length === 1 ? plaatsen[0] : "");
-    $("#resultaten").scrollIntoView({ behavior: MINDER_BEWEGING ? "auto" : "smooth" });
+    if (res.leads.length) scrollTo({ top: 0, behavior: "instant" });
   } catch (err) {
     zetStatus(err.message, "fout");
     renderLijst();
@@ -220,7 +224,8 @@ function tekenBlips(lijst) {
 
 // --- Filters ---
 const PAGINA = 60; // zoveel lead-kaartjes per keer, zodat duizenden leads vlot blijven
-const WEERGAVEN = ["lijst", "pipeline", "dashboard"];
+const WEERGAVEN = ["scan", "lijst", "pipeline", "dashboard"];
+const TITELS = { scan: "Nieuwe scan", lijst: "Leads", pipeline: "Pipeline", dashboard: "Dashboard" };
 let weergave = WEERGAVEN.includes(laad("os-weergave", "lijst")) ? laad("os-weergave", "lijst") : "lijst";
 let getoond = PAGINA;
 let huidigeLijst = [];
@@ -290,8 +295,37 @@ document.querySelectorAll('input[name="weergave"]').forEach((r) => {
     weergave = r.value;
     bewaar("os-weergave", weergave);
     renderLijst(true);
+    scrollTo({ top: 0, behavior: "instant" });
   });
 });
+
+// Knoppen elders op de pagina die naar een onderdeel springen (bijv. "Start een scan")
+document.addEventListener("click", (e) => {
+  const naar = e.target.closest("[data-naar]")?.dataset.naar;
+  if (!naar) return;
+  kiesWeergave(naar);
+  renderLijst(true);
+  scrollTo({ top: 0, behavior: "instant" });
+});
+$("#nieuweScanKnop").dataset.naar = "scan";
+
+/** Laat het gekozen onderdeel zien, met de juiste titel en knoppen. */
+function toonPagina() {
+  const scan = weergave === "scan";
+  $("#paginaScan").hidden = !scan;
+  $("#resultaten").hidden = scan;
+  $("#paginaTitel").textContent = TITELS[weergave];
+  $("#resultaatInfo").textContent = scan ? "Zoek bedrijven zonder eigen website, met een openbaar e-mailadres." : resultaatInfo();
+  $("#exportKnop").hidden = scan || !leads.length;
+  $("#nieuweScanKnop").hidden = scan;
+}
+
+function resultaatInfo() {
+  if (!leads.length) return "Nog geen leads gevonden.";
+  const gebieden = new Set(leads.map((l) => l.gebied));
+  return `${leads.length} leads in ${gebieden.size} ${gebieden.size === 1 ? "plaats" : "plaatsen"}` +
+    (laatstePlaatsen ? ` · laatste scan: ${laatstePlaatsen}` : "");
+}
 
 function kiesWeergave(nieuw) {
   weergave = nieuw;
@@ -301,14 +335,10 @@ function kiesWeergave(nieuw) {
 
 // --- Resultaten ---
 function toonResultaten(nieuweScan, gebied, zoom = true) {
-  $("#resultaten").hidden = !leads.length && !laatstePlaatsen;
   $("#leeg").hidden = leads.length > 0;
   $("#inhoud").hidden = leads.length === 0;
-  $("#exportKnop").hidden = leads.length === 0;
+  $("#stats").hidden = leads.length === 0;
   const gebieden = new Set(leads.map((l) => l.gebied));
-  $("#resultaatInfo").textContent =
-    `${leads.length} leads in ${gebieden.size} ${gebieden.size === 1 ? "plaats" : "plaatsen"}` +
-    (laatstePlaatsen ? ` · laatste scan: ${laatstePlaatsen}` : "");
 
   vulSelect("#filterGebied", "Alle plaatsen", leads.map((l) => l.gebied));
   vulSelect("#filterCategorie", "Alle branches", leads.map((l) => l.categorie), label);
@@ -347,7 +377,11 @@ function telOp(el, doel) {
 }
 
 function renderLijst(zoomKaart = false) {
+  toonPagina();
   renderOpvolgen();
+  // Kerncijfers en opvolgen horen bij Leads; pipeline en dashboard krijgen de ruimte
+  $("#stats").hidden = weergave !== "lijst" || !leads.length;
+  if (weergave === "scan") return tekenBlips(leads);
   // De statusfilter hoort bij de lijst; pipeline en dashboard laten juist alle statussen zien
   $("#filterStatus").hidden = weergave !== "lijst";
   $("#weergaveLijst").hidden = weergave !== "lijst";
@@ -494,7 +528,10 @@ $("#lijst").addEventListener("change", (e) => {
 // --- Vandaag opvolgen ---
 function renderOpvolgen() {
   const lijst = leads.filter(moetOpvolgen).sort((a, b) => a.opvolgen.localeCompare(b.opvolgen));
-  $("#opvolgBalk").hidden = !lijst.length;
+  $("#navOpvolg").hidden = !lijst.length;
+  $("#navOpvolg").textContent = lijst.length;
+  $("#navOpvolg").title = `${lijst.length} op te volgen`;
+  $("#opvolgBalk").hidden = !lijst.length || weergave !== "lijst";
   if (!lijst.length) return;
   $("#opvolgTitel").innerHTML = `<span class="opvolg-stip" aria-hidden="true"></span>Vandaag opvolgen <span class="teller">${lijst.length}</span>`;
   $("#opvolgAlles").hidden = lijst.length <= 5;
