@@ -589,6 +589,9 @@ select:focus { outline: 0; border-color: var(--accent); box-shadow: 0 0 0 3px va
 /* ---------- Voet ---------- */
 .voet { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--rand); color: var(--muted); font-size: 0.78rem; }
 .voet p { margin: 0 0 6px; }
+.voet .maker { color: var(--tekst); font-weight: 500; margin-bottom: 10px; }
+.login-kaart .maker { margin: 18px 0 0; padding-top: 14px; border-top: 1px solid var(--rand); font-size: 0.78rem; color: var(--muted); }
+.maker strong { font-weight: 600; color: var(--tekst); }
 
 /* ---------- Responsief ---------- */
 @media (max-width: 1080px) {

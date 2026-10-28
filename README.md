@@ -60,3 +60,6 @@ en open `http://localhost:8000` (direct openen als bestand werkt niet: ES-module
 3. Doe hetzelfde op je andere apparaten (zelfde wachtwoord, zelfde of nieuwe token).
 
 Elke wijziging gaat na ruim een seconde automatisch online; bij terugkeren naar het tabblad worden wijzigingen van andere apparaten opgehaald. Per lead wint de laatst gewijzigde versie, dus wijzigingen op twee apparaten gaan niet verloren. De gist bevat alleen versleutelde tekst; de token staat versleuteld in je browser.
+
+---
+OpportunityScanner is een product van **Agevo** · KvK 42160840
