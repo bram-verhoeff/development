@@ -4,7 +4,7 @@
 // Scans, kaarttegels en GitHub gaan altijd gewoon over het netwerk.
 // Lukt de cache niet (volle of geblokkeerde opslag), dan werkt alles gewoon via het netwerk.
 
-const CACHE = "opportunityscanner-v2";
+const CACHE = "opportunityscanner-v3";
 const APP = [
   "./",
   "index.html",
@@ -65,7 +65,9 @@ async function uitCache(request) {
 
 async function netwerkEerst(request) {
   try {
-    const antwoord = await fetch(request);
+    // no-cache: altijd bij de server navragen of er een nieuwere versie is (niet de 10 minuten browsercache)
+    // (nieuw verzoek op basis van de URL: een navigatie-verzoek mag je geen opties meegeven)
+    const antwoord = await fetch(new Request(request.url, { cache: "no-cache", credentials: "same-origin" }));
     if (antwoord.ok) bewaar(request, antwoord.clone());
     return antwoord;
   } catch (fout) {

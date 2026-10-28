@@ -1330,7 +1330,15 @@ document.querySelectorAll(".onthul").forEach((el) => waarnemer.observe(el));
 
 // --- App: installeerbaar en offline bruikbaar ---
 if ("serviceWorker" in navigator && location.protocol === "https:") {
-  navigator.serviceWorker.register("sw.js").catch(() => {});
+  // Nieuwe versie online gezet: zodra de nieuwe service worker het overneemt, één keer herladen
+  const hadVersie = Boolean(navigator.serviceWorker.controller);
+  let herladen = false;
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (!hadVersie || herladen) return;
+    herladen = true;
+    location.reload();
+  });
+  navigator.serviceWorker.register("sw.js", { updateViaCache: "none" }).catch(() => {});
 }
 
 tekenBlips([]);
