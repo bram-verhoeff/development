@@ -282,7 +282,10 @@
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
         </a>
       </div>
-      <p class="muted klein-noot">Bij openen wordt de mail vastgelegd en de status op "Benaderd" gezet.</p>
+      <label class="gemaild-vink mail-vink">
+        <input id="mailGemaild" type="checkbox" data-gemaild="@mail">
+        <span>Ik heb deze lead gemaild <span class="muted">vink dit zelf aan na het versturen</span></span>
+      </label>
     </div>
   </dialog>
 
@@ -310,6 +313,7 @@
           </div>
         </div>
       </div>
+      <div id="leadGemaild"></div>
       <label class="veld klein-veld">
         <span class="label">Notities <small>wordt vanzelf opgeslagen</small></span>
         <textarea id="leadNotitie" rows="5" placeholder="Bijv. gebeld, terugbellen na de vakantie, wil een webshop…"></textarea>

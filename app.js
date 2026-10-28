@@ -463,14 +463,10 @@ function leadKaart(l, vertraging, animeer = true) {
     </div>
     <div class="extra">${extra.join("")}</div>
     ${l.notitie ? `<p class="notitie-kort">${esc(l.notitie)}</p>` : ""}
-    ${
-      l.laatstGemaild || (l.opvolgen && !afgerond(l))
-        ? `<div class="lead-meta">
-            ${l.laatstGemaild ? `<span class="gemaild">✓ Gemaild op ${esc(datum(l.laatstGemaild))}</span>` : ""}
-            ${l.opvolgen && !afgerond(l) ? `<span class="opvolg-chip${moetOpvolgen(l) ? " nu" : ""}">Opvolgen ${esc(opvolgLabel(l.opvolgen))}</span>` : ""}
-          </div>`
-        : ""
-    }
+    <div class="lead-meta">
+      ${gemaildVink(l, l.id)}
+      ${l.opvolgen && !afgerond(l) ? `<span class="opvolg-chip${moetOpvolgen(l) ? " nu" : ""}">Opvolgen ${esc(opvolgLabel(l.opvolgen))}</span>` : ""}
+    </div>
     <div class="lead-voet">
       <button class="mail-knop" type="button" data-mail="${esc(l.id)}">
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></svg>
@@ -484,6 +480,14 @@ function leadKaart(l, vertraging, animeer = true) {
       </div>
     </div>
   </article>`;
+}
+
+/** Vinkje "Gemaild", met de datum erbij als het aangevinkt is. */
+function gemaildVink(l, doel) {
+  return `<label class="gemaild-vink${l.laatstGemaild ? " aan" : ""}">
+    <input type="checkbox" data-gemaild="${esc(doel)}"${l.laatstGemaild ? " checked" : ""}>
+    <span>Gemaild${l.laatstGemaild ? ` <span class="muted">op ${esc(datum(l.laatstGemaild))}</span>` : ""}</span>
+  </label>`;
 }
 
 /** Eén kaartje opnieuw tekenen zonder de hele lijst te laten animeren. */
@@ -741,7 +745,11 @@ function conversieTabel(titel, kolom, lijst, sleutel, naam = (w) => w) {
 
 function renderDashboard(lijst) {
   const ids = new Set(lijst.map((l) => l.id));
-  const mails = opslag.mails().filter((m) => ids.has(m.id));
+  // Mails = eerder vastgelegde mails + elke keer dat je "Gemaild" aanvinkte
+  const mails = [
+    ...opslag.mails().filter((m) => ids.has(m.id)),
+    ...lijst.flatMap((l) => (l.historie || []).filter((h) => h.status === opslag.GEMAILD)),
+  ];
   const benaderd = lijst.filter(ooitBenaderd).length;
   const gesprek = lijst.filter(ooitInGesprek).length;
   const klanten = lijst.filter((l) => l.status === "klant").length;
@@ -831,9 +839,10 @@ function vulLead() {
     .join("");
   $("#leadStatus").value = l.status || "";
   $("#leadOpvolgen").value = l.opvolgen || "";
+  $("#leadGemaild").innerHTML = gemaildVink(l, "@venster");
   if (document.activeElement !== $("#leadNotitie")) $("#leadNotitie").value = l.notitie || "";
   const items = [
-    ...(l.historie || []).map((h) => ({ tekst: `Status: ${STATUSSEN[h.status] ?? h.status}`, tijd: h.tijd })),
+    ...(l.historie || []).map((h) => ({ tekst: h.status === opslag.GEMAILD ? "Gemaild aangevinkt" : `Status: ${STATUSSEN[h.status] ?? h.status}`, tijd: h.tijd })),
     ...opslag.mails().filter((m) => m.id === l.id).map((m) => ({ tekst: `Mail: ${m.onderwerp}`, tijd: m.tijd })),
     { tekst: "Gevonden bij een scan", tijd: l.gevondenOp },
   ]
@@ -957,6 +966,7 @@ function openMail(lead) {
       <a href="https://${esc(lead.eigenDomein)}" target="_blank" rel="noopener">${esc(lead.eigenDomein)} ↗</a> al een website heeft.`;
   }
   vulMail();
+  $("#mailGemaild").checked = Boolean(lead.laatstGemaild);
   $("#mailDialoog").showModal();
 }
 
@@ -1019,17 +1029,29 @@ $("#mailKopieer").addEventListener("click", async (e) => {
 for (const sel of ["#mailOpen", "#mailGmail"]) {
   // Niet blokkeren: de link opent gewoon, het vastleggen gebeurt op de achtergrond.
   $(sel).addEventListener("click", () => {
-    const lead = mail.lead;
-    if (["", "interessant"].includes(lead.status || "")) zetLeadStatus(lead, "benaderd");
-    else if (!opslag.AFGEROND.includes(lead.status || "")) bewerkLead(lead, { opvolgen: opslag.overDagen(7) });
-    opslag.logMail(lead, $("#mailOnderwerp").value, $("#mailTekst").value)
-      .then((tijd) => {
-        verversLead(lead);
-        toast("Mail vastgelegd");
-      })
-      .catch((err) => toast(`Mail niet vastgelegd: ${err.message}`, true));
+    // Bewust niets automatisch vastleggen: "Gemaild" vink je zelf aan
   });
 }
+
+// --- Gemaild: handmatig aanvinken op het kaartje, in het lead-venster of in het mailvenster ---
+async function zetLeadGemaild(lead, gemaild) {
+  try {
+    await opslag.zetGemaild(lead.id, gemaild);
+    toast(gemaild ? `${lead.naam}: gemaild` : `${lead.naam}: niet gemaild`);
+  } catch (err) {
+    toast(`Niet opgeslagen: ${err.message}`, true);
+  }
+  verversLead(lead);
+  if (mail.lead?.id === lead.id) $("#mailGemaild").checked = Boolean(lead.laatstGemaild);
+}
+
+document.addEventListener("change", (e) => {
+  const vink = e.target.closest("[data-gemaild]");
+  if (!vink) return;
+  const id = vink.dataset.gemaild === "@venster" ? actieveLead?.id : vink.dataset.gemaild === "@mail" ? mail.lead?.id : vink.dataset.gemaild;
+  const lead = leads.find((l) => l.id === id);
+  if (lead) zetLeadGemaild(lead, vink.checked);
+});
 for (const dialoog of ["#mailDialoog", "#leadDialoog"]) {
   $(dialoog).addEventListener("click", (e) => {
     // Sluiten via de knop of door naast het venster te klikken.

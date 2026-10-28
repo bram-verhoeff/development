@@ -4,7 +4,8 @@ Webapp die bedrijven zoekt zonder eigen website (maar mét openbaar e-mailadres)
 
 - **Scannen** via OpenStreetMap (gratis, geen API-key), per plaats en branche.
 - **Wachtwoord** voor de hele site.
-- **Opslag** versleuteld in de browser: leads stapelen op over scans; status, verstuurde mails en afzender blijven bewaard.
+- **Opslag** versleuteld in de browser: leads stapelen op over scans; status, notities en afzender blijven bewaard.
+- **Gemaild** vink je zelf aan per lead (op het kaartje, in het lead-venster of in het mailvenster); de app zet dit nooit automatisch.
 - **Pipeline**: sleep leads tussen Nieuw, Interessant, Benaderd, In gesprek, Klant en Afgevallen (op mobiel: tik op een kaart).
 - **Opvolgen**: notities en een opvolgdatum per lead. Wie je op *Benaderd* zet, komt na een week vanzelf in **Vandaag opvolgen**.
 - **Dashboard**: trechter van lead naar klant, mails en nieuwe leads per week, en conversie per branche en plaats.

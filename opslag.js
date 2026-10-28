@@ -183,6 +183,28 @@ export async function zetStatus(id, status) {
   await schrijf();
 }
 
+/**
+ * Gemaild aan- of uitvinken (alleen handmatig). Elke aanvinking komt in de geschiedenis van de lead;
+ * uitvinken draait de laatste aanvinking terug. Zo blijft het per lead synchroniseren tussen apparaten.
+ */
+export async function zetGemaild(id, gemaild) {
+  const lead = staat.leads.find((l) => l.id === id);
+  if (!lead) return;
+  const historie = lead.historie || [];
+  if (gemaild) {
+    const tijd = nu();
+    lead.historie = [...historie, { status: GEMAILD, tijd }];
+    lead.laatstGemaild = tijd;
+  } else {
+    const laatste = historie.map((h) => h.status).lastIndexOf(GEMAILD);
+    lead.historie = historie.filter((_, i) => i !== laatste);
+    lead.laatstGemaild = [...lead.historie].reverse().find((h) => h.status === GEMAILD)?.tijd ?? null;
+  }
+  lead.gewijzigd = nu();
+  await schrijf();
+}
+export const GEMAILD = "@gemaild";
+
 /** Notitie en opvolgdatum van een lead bijwerken. */
 export async function werkLeadBij(id, velden) {
   const lead = staat.leads.find((l) => l.id === id);

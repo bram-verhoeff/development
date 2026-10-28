@@ -443,7 +443,14 @@ select:focus { outline: 0; border-color: var(--accent); box-shadow: 0 0 0 3px va
   background: var(--accent-zacht); border-radius: 8px;
 }
 .lead-meta { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; }
-.gemaild { font-size: 0.8rem; font-weight: 600; color: var(--goed); }
+.gemaild-vink {
+  display: inline-flex; align-items: center; gap: 7px; width: fit-content;
+  font-size: 0.82rem; font-weight: 600; cursor: pointer; user-select: none;
+}
+.gemaild-vink input { width: 16px; height: 16px; margin: 0; accent-color: var(--goed); cursor: pointer; }
+.gemaild-vink .muted { font-weight: 500; }
+.gemaild-vink.aan > span { color: var(--goed); }
+.mail-vink { padding: 10px 12px; width: 100%; border-radius: 10px; background: var(--surface-2); }
 .opvolg-chip {
   display: inline-flex; align-items: center; gap: 5px; width: fit-content;
   font-size: 0.76rem; font-weight: 600; color: var(--muted);
